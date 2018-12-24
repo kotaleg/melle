@@ -1,0 +1,14 @@
+{
+    "codename": "pro_related_shuffle",
+    "version": "1.0.0",
+    "name": "Related product shuffle PRO",
+    "description": "Related product shuffle PRO",
+    "author": {
+        "name": "PRO Hamster",
+        "url": "https://prohamster.com/"
+    },
+    "require": {
+        "pro_patch": ">= 1.0.0",
+        "pro_style": ">= 1.0.0"
+    }
+}

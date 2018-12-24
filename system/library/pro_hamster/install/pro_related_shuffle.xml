@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>pro_related_shuffle</name>
+    <code>pro_related_shuffle</code>
+    <description>PRO Related Product Shuffle</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="admin/model/catalog/product.php">
+        <operation error="skip">
+            <search><![CDATA[return $product_id;]]></search>
+            <add position="before"><![CDATA[
+                // PRO_RELATED_SHUFFLE START
+                $this->load->model('extension/module/pro_related_shuffle');
+                $this->model_extension_module_pro_related_shuffle->shuffleRelatedForOneProduct($product_id);
+                // PRO_RELATED_SHUFFLE END
+            ]]></add>
+        </operation>
+    </file>
+
+
+</modification>
