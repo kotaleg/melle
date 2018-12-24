@@ -1,0 +1,39 @@
+{
+  "name": "melle",
+  "version": "1.0.0",
+  "description": "Melle",
+  "main": "index.js",
+  "author": "Ivan St. <brokeyourbike@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "npm run development -- --watch",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch-admin": "npm run watch -- --env.mixfile=webpack.admin.mix",
+    "prod-admin": "npm run production -- --env.mixfile=webpack.admin.mix"
+  },
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.1.3",
+    "cross-env": "^5.2.0",
+    "es6-promise": "^4.2.4",
+    "laravel-mix": "^2.1.11",
+    "lodash": "^4.17.10",
+    "purify-css": "^1.2.5",
+    "purifycss-webpack": "^0.7.0",
+    "typicons.font": "^2.0.9",
+    "vee-validate": "^2.1.0-beta.6",
+    "vue": "^2.5.16",
+    "vue-good-table": "^2.12.2",
+    "vue-js-modal": "^1.3.16",
+    "vue-js-toggle-button": "^1.2.3",
+    "vue-loading-overlay": "^2.1.0",
+    "vue-notification": "^1.3.12",
+    "vue-progress": "^0.2.1",
+    "vuex": "^3.0.1"
+  }
+}
