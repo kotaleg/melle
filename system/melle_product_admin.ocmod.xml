@@ -22,14 +22,14 @@
         <operation error="skip">
             <search><![CDATA[date_modified = NOW()");]]></search>
             <add position="replace"><![CDATA[
-                date_modified = NOW(), `den` = '".(int)$data['den']."', `sostav` = '".$this->db->escape($data['sostav'])."'");
+                date_modified = NOW(), `den` = '".(int)$data['den']."', `sostav` = '".$this->db->escape($data['sostav'])."', `znachek` = '".$this->db->escape($data['znachek'])."'");
             ]]></add>
         </operation>
 
         <operation error="skip">
             <search><![CDATA[date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");]]></search>
             <add position="replace"><![CDATA[
-                date_modified = NOW(), `den` = '".(int)$data['den']."', `sostav` = '".$this->db->escape($data['sostav'])."' WHERE product_id = '" . (int)$product_id . "'");
+                date_modified = NOW(), `den` = '".(int)$data['den']."', `sostav` = '".$this->db->escape($data['sostav'])."', `znachek` = '".$this->db->escape($data['znachek'])."' WHERE product_id = '" . (int)$product_id . "'");
             ]]></add>
         </operation>
 
@@ -62,10 +62,22 @@
                     $data['sostav'] = '';
                 }
 
+                if (isset($this->request->post['znachek'])) {
+                    $data['znachek'] = $this->request->post['znachek'];
+                } elseif (!empty($product_info)) {
+                    $data['znachek'] = $product_info['znachek'];
+                } else {
+                    $data['znachek'] = '';
+                }
+
                 $data['entry_small_description'] = $this->language->get('entry_small_description');
                 $data['entry_h1'] = $this->language->get('entry_h1');
                 $data['entry_den'] = $this->language->get('entry_den');
                 $data['entry_sostav'] = $this->language->get('entry_sostav');
+                $data['entry_znachek'] = $this->language->get('entry_znachek');
+
+                $this->load->model('extension/module/pro_znachek');
+                $data['znachki'] = $this->model_extension_module_pro_znachek->getZnachki();
                 /* IVAN MOD END */
             ]]></add>
         </operation>
@@ -80,6 +92,7 @@
                 $_['entry_h1'] = 'H1';
                 $_['entry_den'] = 'Ден';
                 $_['entry_sostav'] = 'Состав';
+                $_['entry_znachek'] = 'Новинка / Акция / Хит';
                 /* IVAN MOD END */
             ]]></add>
         </operation>
@@ -129,11 +142,30 @@
                   <!-- IVAN MOD END -->
             ]]></add>
         </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>]]></search>
+            <add position="before" offset="1"><![CDATA[
+                  <!-- IVAN MOD START -->
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-znachek">{{ entry_znachek }}</label>
+                    <div class="col-sm-10">
+                      <select name="znachek" id="input-znachek" class="form-control">
+                        <option value="0">{{ text_none }}</option>
+                        {% for zkey, z in znachki %}
+                        {% if zkey == znachek %}
+                        <option value="{{ zkey }}" selected="selected">{{ z }}</option>
+                        {% else %}
+                        <option value="{{ zkey }}">{{ z }}</option>
+                        {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <!-- IVAN MOD END -->
+            ]]></add>
+        </operation>
     </file>
-
-
-
-
 
 
 </modification>
