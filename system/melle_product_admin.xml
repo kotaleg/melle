@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_product_admin</name>
+    <code>melle_product_admin</code>
+    <description>Melle Product Admin</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="admin/model/catalog/product.php">
+        <operation error="skip">
+            <search><![CDATA['tag'              => $result['tag']]]></search>
+            <add position="replace"><![CDATA[
+                // IVAN MOD START
+                'tag'               => $result['tag'],
+                'small_description' => $result['small_description'],
+                'h1'                => $result['h1'],
+                // IVAN MOD END
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[date_modified = NOW()");]]></search>
+            <add position="replace"><![CDATA[
+                date_modified = NOW(), `den` = '".(int)$data['den']."', `sostav` = '".$this->db->escape($data['sostav'])."'");
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");]]></search>
+            <add position="replace"><![CDATA[
+                date_modified = NOW(), `den` = '".(int)$data['den']."', `sostav` = '".$this->db->escape($data['sostav'])."' WHERE product_id = '" . (int)$product_id . "'");
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[, meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "'");]]></search>
+            <add position="replace"><![CDATA[
+                , meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "', `small_description` = '".$this->db->escape($value['small_description'])."', `h1` = '".$this->db->escape($value['h1'])."'");
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/catalog/product.php">
+        <operation error="skip">
+            <search><![CDATA[$this->load->model('localisation/length_class');]]></search>
+            <add position="before"><![CDATA[
+                // IVAN MOD START
+                if (isset($this->request->post['den'])) {
+                    $data['den'] = $this->request->post['den'];
+                } elseif (!empty($product_info)) {
+                    $data['den'] = $product_info['den'];
+                } else {
+                    $data['den'] = '';
+                }
+
+                if (isset($this->request->post['sostav'])) {
+                    $data['sostav'] = $this->request->post['sostav'];
+                } elseif (!empty($product_info)) {
+                    $data['sostav'] = $product_info['sostav'];
+                } else {
+                    $data['sostav'] = '';
+                }
+
+                $data['entry_small_description'] = $this->language->get('entry_small_description');
+                $data['entry_h1'] = $this->language->get('entry_h1');
+                // IVAN MOD END
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/en-gb/catalog/product.php">
+        <operation error="skip">
+            <search regex="true" limit="1"><![CDATA[($)]]></search>
+            <add position="before"><![CDATA[
+                /* IVAN MOD START */
+                $_['entry_small_description'] = 'Краткое описание';
+                $_['entry_h1'] = 'H1';
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/catalog/product_form.twig">
+        <operation error="skip">
+            <search><![CDATA[<div class="tab-pane" id="language{{ language.language_id }}">]]></search>
+            <add position="after"><![CDATA[
+                  <!-- IVAN MOD START -->
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-h1{{ language.language_id }}">{{ entry_h1 }}</label>
+                    <div class="col-sm-10">
+                      <textarea name="product_description[{{ language.language_id }}][h1]" placeholder="{{ entry_h1 }}" id="input-h1{{ language.language_id }}" data-toggle="summernote" data-lang="{{ summernote }}" class="form-control">{{ product_description[language.language_id] ? product_description[language.language_id].h1 }}</textarea>
+                    </div>
+                  </div>
+                  <!-- IVAN MOD END -->
+
+                  <!-- IVAN MOD START -->
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-small-description{{ language.language_id }}">{{ entry_small_description }}</label>
+                    <div class="col-sm-10">
+                      <textarea name="product_description[{{ language.language_id }}][small_description]" placeholder="{{ entry_small_description }}" id="input-small-description{{ language.language_id }}" data-toggle="summernote" data-lang="{{ summernote }}" class="form-control">{{ product_description[language.language_id] ? product_description[language.language_id].small_description }}</textarea>
+                    </div>
+                  </div>
+                  <!-- IVAN MOD END -->
+            ]]></add>
+        </operation>
+    </file>
+
+
+
+
+
+
+</modification>
