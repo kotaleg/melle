@@ -54,6 +54,7 @@ class ControllerCommonDeveloper extends Controller {
         if (!$this->user->hasPermission('modify', 'common/developer')) {
             $json['error'] = $this->language->get('error_permission');
         } else {
+            $this->load->model('tool/help');
             $directories = glob(DIR_CACHE . '*', GLOB_ONLYDIR);
 
             if ($directories) {
@@ -67,7 +68,7 @@ class ControllerCommonDeveloper extends Controller {
                     }
 
                     if (is_dir($directory)) {
-                        rmdir($directory);
+                        $this->model_tool_help->rrmdir($directory);
                     }
                 }
             }
