@@ -7,6 +7,7 @@ use Sabre\Xml\Reader;
 use Sabre\Xml\Deserializer;
 use Sabre\Xml\XmlDeserializable;
 
+use import_1c\helper;
 use import_1c\map\offers\info;
 use import_1c\map\offers\classificator;
 use import_1c\map\offers\offers_pack;
@@ -24,6 +25,7 @@ use import_1c\map\offers\specification;
 class offers_file_map
 {
     private static $namespace;
+    private static $only_changes = null;
 
     public static function mapXml(Service $service, $namespace)
     {
@@ -35,6 +37,9 @@ class offers_file_map
                 $children = $reader->parseInnerTree();
                 foreach($children as $child) {
                     if ($child['value'] instanceof offers_pack) {
+                        if (array_key_exists('СодержитТолькоИзменения', $child['attributes'])) {
+                            self::$only_changes = helper::parseBool($child['attributes']['СодержитТолькоИзменения']);
+                        }
                         $info->offers_pack = $child['value'];
                     }
                     if ($child['value'] instanceof classificator) {
@@ -62,7 +67,7 @@ class offers_file_map
                     $option->id = $keyValue['Ид'];
                 }
                 if (isset($keyValue['ДляПредложений'])) {
-                    $option->for_offers = self::getBool($keyValue['ДляПредложений']);
+                    $option->for_offers = helper::parseBool($keyValue['ДляПредложений']);
                 }
                 if (isset($keyValue['Наименование'])) {
                     $option->name = $keyValue['Наименование'];
@@ -120,6 +125,7 @@ class offers_file_map
                         }
                     }
                 }
+                $offers_pack->only_changes = self::$only_changes;
                 return $offers_pack;
             },
             '{'.self::$namespace.'}ТипЦены' => function(Reader $reader) {
@@ -147,10 +153,10 @@ class offers_file_map
                     $tax->name = $keyValue['Наименование'];
                 }
                 if (isset($keyValue['Акциз'])) {
-                    $tax->excise = self::getBool($keyValue['Акциз']);
+                    $tax->excise = helper::parseBool($keyValue['Акциз']);
                 }
                 if (isset($keyValue['УчтеноВСумме'])) {
-                    $tax->included_in_sum = self::getBool($keyValue['УчтеноВСумме']);
+                    $tax->included_in_sum = helper::parseBool($keyValue['УчтеноВСумме']);
                 }
                 return $tax;
             },
@@ -260,8 +266,5 @@ class offers_file_map
         return $service;
     }
 
-    private static function getBool($value)
-    {
-        return (strcmp(strtolower($value), 'true') === 0) ? true : false;
-    }
+
 }

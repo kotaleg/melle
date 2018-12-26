@@ -7,6 +7,7 @@ use Sabre\Xml\Reader;
 use Sabre\Xml\Deserializer;
 use Sabre\Xml\XmlDeserializable;
 
+use import_1c\helper;
 use import_1c\map\import\info;
 use import_1c\map\import\classificator;
 use import_1c\map\import\catalog;
@@ -24,6 +25,7 @@ use import_1c\map\import\p_tax_rate;
 class import_file_map
 {
     private static $namespace;
+    private static $only_changes = null;
 
     public static function mapXml(Service $service, $namespace)
     {
@@ -35,6 +37,9 @@ class import_file_map
                 $children = $reader->parseInnerTree();
                 foreach($children as $child) {
                     if ($child['value'] instanceof catalog) {
+                        if (array_key_exists('СодержитТолькоИзменения', $child['attributes'])) {
+                            self::$only_changes = helper::parseBool($child['attributes']['СодержитТолькоИзменения']);
+                        }
                         $info->catalog = $child['value'];
                     }
                     if ($child['value'] instanceof classificator) {
@@ -155,6 +160,7 @@ class import_file_map
                         }
                     }
                 }
+                $catalog->only_changes = self::$only_changes;
                 return $catalog;
             },
             '{'.self::$namespace.'}Товар' => function(Reader $reader) {

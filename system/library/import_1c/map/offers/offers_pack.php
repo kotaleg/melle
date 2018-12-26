@@ -6,4 +6,5 @@ class offers_pack {
     public $price_type;
     public $stock;
     public $offers = array();
+    public $only_changes;
 }
