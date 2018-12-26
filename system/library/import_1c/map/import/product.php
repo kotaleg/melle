@@ -12,4 +12,5 @@ class product {
     public $tax_rate;
     public $compositions;
     public $requisits;
+    public $options;
 }

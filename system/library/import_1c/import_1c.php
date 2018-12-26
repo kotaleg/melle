@@ -9,6 +9,7 @@ use Sabre\Xml\Deserializer;
 use Sabre\Xml\XmlDeserializable;
 
 use \import_1c\map\import_file_map;
+use \import_1c\map\offers_file_map;
 
 class import_1c
 {
@@ -60,7 +61,7 @@ class import_1c
     {
         $result = $this->service->expect("{{$this->namespace}}КоммерческаяИнформация", $this->handle);
 
-        echo "<pre>"; print_r($result->classificator); echo "</pre>";exit;
+        // echo "<pre>"; print_r($result->offers_pack->offers[0]); echo "</pre>";exit;
         // echo "<pre>"; print_r($result->catalog->products); echo "</pre>";exit;
 
         // echo "<pre>"; print_r($result); echo "</pre>";
