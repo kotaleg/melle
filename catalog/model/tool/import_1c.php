@@ -23,7 +23,7 @@ class ModelToolImport1C extends Model
     public function test()
     {
         $this->import_1c->openFile("{$this->exchange_path}import.xml");
-        $this->import_1c->mapXml();
+        // $this->import_1c->openFile("{$this->exchange_path}offers.xml");
         $this->import_1c->test();
     }
 
