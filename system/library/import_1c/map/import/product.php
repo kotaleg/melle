@@ -9,4 +9,7 @@ class product {
     public $picture;
     public $description;
     public $den;
+    public $tax_rate;
+    public $compositions;
+    public $requisits;
 }

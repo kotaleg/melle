@@ -11,25 +11,22 @@ use Sabre\Xml\XmlDeserializable;
 use import_1c\map\import\info;
 use import_1c\map\import\classificator;
 use import_1c\map\import\catalog;
-use import_1c\map\import\groups_container;
 use import_1c\map\import\group;
-use import_1c\map\import\products_container;
 use import_1c\map\import\product;
-use import_1c\map\import\materials_container;
 use import_1c\map\import\material;
-use import_1c\map\import\producers_container;
 use import_1c\map\import\producer;
-use import_1c\map\import\options_container;
 use import_1c\map\import\option;
-use import_1c\map\import\option_variants_container;
 use import_1c\map\import\handbook;
-use import_1c\map\import\compositions_container;
 use import_1c\map\import\composition;
+use import_1c\map\import\p_option;
+use import_1c\map\import\p_requisit;
+use import_1c\map\import\p_tax_rate;
 
 class import_1c
 {
     private $service;
     private $handle;
+    private $namespace = 'urn:1C.ru:commerceml_2';
 
     function __construct()
     {
@@ -48,7 +45,7 @@ class import_1c
     public function mapXml()
     {
         $this->service->elementMap = array(
-            '{urn:1C.ru:commerceml_2}КоммерческаяИнформация' => function(Reader $reader) {
+            "{{$this->namespace}}КоммерческаяИнформация" => function(Reader $reader) {
                 $info = new info();
                 $children = $reader->parseInnerTree();
                 foreach($children as $child) {
@@ -61,39 +58,42 @@ class import_1c
                 }
                 return $info;
             },
-            '{urn:1C.ru:commerceml_2}Классификатор' => function(Reader $reader) {
+            "{{$this->namespace}}Классификатор" => function(Reader $reader) {
                 $classificator = new classificator();
-                $children = $reader->parseInnerTree();
-                foreach($children as $child) {
-                    if ($child['value'] instanceof groups_container) {
-                        $classificator->groups_container = $child['value'];
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
+                if (isset($keyValue['Группы']) && is_array($keyValue['Группы'])) {
+                    foreach ($keyValue['Группы'] as $child) {
+                        if ($child['value'] instanceof group) {
+                            $classificator->groups[] = $child['value'];
+                        }
                     }
-                    if ($child['value'] instanceof materials_container) {
-                        $classificator->materials_container = $child['value'];
+                }
+                if (isset($keyValue['Материалы']) && is_array($keyValue['Материалы'])) {
+                    foreach ($keyValue['Материалы'] as $child) {
+                        if ($child['value'] instanceof material) {
+                            $classificator->materials[] = $child['value'];
+                        }
                     }
-                    if ($child['value'] instanceof producers_container) {
-                        $classificator->producers_container = $child['value'];
+                }
+                if (isset($keyValue['Изготовители']) && is_array($keyValue['Изготовители'])) {
+                    foreach ($keyValue['Изготовители'] as $child) {
+                        if ($child['value'] instanceof producer) {
+                            $classificator->producers[] = $child['value'];
+                        }
                     }
-                    if ($child['value'] instanceof options_container) {
-                        $classificator->options_container = $child['value'];
+                }
+                if (isset($keyValue['Свойства']) && is_array($keyValue['Свойства'])) {
+                    foreach ($keyValue['Свойства'] as $child) {
+                        if ($child['value'] instanceof option) {
+                            $classificator->options[] = $child['value'];
+                        }
                     }
                 }
                 return $classificator;
             },
-
-            '{urn:1C.ru:commerceml_2}Группы' => function(Reader $reader) {
-                $groups_container = new groups_container();
-                $children = $reader->parseInnerTree();
-                foreach($children as $child) {
-                    if ($child['value'] instanceof group) {
-                        $groups_container->groups[] = $child['value'];
-                    }
-                }
-                return $groups_container;
-            },
-            '{urn:1C.ru:commerceml_2}Группа' => function(Reader $reader) {
+            "{{$this->namespace}}Группа" => function(Reader $reader) {
                 $group = new group();
-                $keyValue = Deserializer\keyValue($reader, 'urn:1C.ru:commerceml_2');
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
                 if (isset($keyValue['Ид'])) {
                     $group->id = $keyValue['Ид'];
                 }
@@ -102,20 +102,9 @@ class import_1c
                 }
                 return $group;
             },
-
-            '{urn:1C.ru:commerceml_2}Материалы' => function(Reader $reader) {
-                $materials_container = new materials_container();
-                $children = $reader->parseInnerTree();
-                foreach($children as $child) {
-                    if ($child['value'] instanceof material) {
-                        $materials_container->materials[] = $child['value'];
-                    }
-                }
-                return $materials_container;
-            },
-            '{urn:1C.ru:commerceml_2}Материал' => function(Reader $reader) {
+            "{{$this->namespace}}Материал" => function(Reader $reader) {
                 $material = new material();
-                $keyValue = Deserializer\keyValue($reader, 'urn:1C.ru:commerceml_2');
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
                 if (isset($keyValue['Ид'])) {
                     $material->id = $keyValue['Ид'];
                 }
@@ -124,20 +113,9 @@ class import_1c
                 }
                 return $material;
             },
-
-            '{urn:1C.ru:commerceml_2}Изготовители' => function(Reader $reader) {
-                $producers_container = new producers_container();
-                $children = $reader->parseInnerTree();
-                foreach($children as $child) {
-                    if ($child['value'] instanceof producer) {
-                        $producers_container->producers[] = $child['value'];
-                    }
-                }
-                return $producers_container;
-            },
-            '{urn:1C.ru:commerceml_2}Изготовитель' => function(Reader $reader) {
+            "{{$this->namespace}}Изготовитель" => function(Reader $reader) {
                 $producer = new producer();
-                $keyValue = Deserializer\keyValue($reader, 'urn:1C.ru:commerceml_2');
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
                 if (isset($keyValue['Ид'])) {
                     $producer->id = $keyValue['Ид'];
                 }
@@ -146,20 +124,9 @@ class import_1c
                 }
                 return $producer;
             },
-
-            '{urn:1C.ru:commerceml_2}Свойства' => function(Reader $reader) {
-                $options_container = new options_container();
-                $children = $reader->parseInnerTree();
-                foreach($children as $child) {
-                    if ($child['value'] instanceof option) {
-                        $options_container->options[] = $child['value'];
-                    }
-                }
-                return $options_container;
-            },
-            '{urn:1C.ru:commerceml_2}Свойство' => function(Reader $reader) {
+            "{{$this->namespace}}Свойство" => function(Reader $reader) {
                 $option = new option();
-                $keyValue = Deserializer\keyValue($reader, 'urn:1C.ru:commerceml_2');
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
                 if (isset($keyValue['Ид'])) {
                     $option->id = $keyValue['Ид'];
                 }
@@ -170,26 +137,19 @@ class import_1c
                     $option->type = $keyValue['ТипЗначений'];
                 }
                 if (isset($keyValue['ТипЗначений']) && $keyValue['ТипЗначений'] == 'Справочник') {
-                    if (isset($keyValue['ВариантыЗначений'])
-                    && $keyValue['ВариантыЗначений'] instanceof option_variants_container) {
-                        $option->option_variants_container = $keyValue['ВариантыЗначений'];
+                    if (isset($keyValue['ВариантыЗначений']) && is_array($keyValue['ВариантыЗначений'])) {
+                        foreach ($keyValue['ВариантыЗначений'] as $child) {
+                            if ($child['value'] instanceof handbook) {
+                                $option->variants[] = $child['value'];
+                            }
+                        }
                     }
                 }
                 return $option;
             },
-            '{urn:1C.ru:commerceml_2}ВариантыЗначений' => function(Reader $reader) {
-                $option_variants_container = new option_variants_container();
-                $children = $reader->parseInnerTree();
-                foreach($children as $child) {
-                    if ($child['value'] instanceof handbook) {
-                        $option_variants_container->variants[] = $child['value'];
-                    }
-                }
-                return $option_variants_container;
-            },
-            '{urn:1C.ru:commerceml_2}Справочник' => function(Reader $reader) {
+            "{{$this->namespace}}Справочник" => function(Reader $reader) {
                 $handbook = new handbook();
-                $keyValue = Deserializer\keyValue($reader, 'urn:1C.ru:commerceml_2');
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
                 if (isset($keyValue['ИдЗначения'])) {
                     $handbook->id = $keyValue['ИдЗначения'];
                 }
@@ -199,29 +159,22 @@ class import_1c
                 return $handbook;
             },
 
-            '{urn:1C.ru:commerceml_2}Каталог' => function(Reader $reader) {
+            /* CATALOG */
+            "{{$this->namespace}}Каталог" => function(Reader $reader) {
                 $catalog = new catalog();
-                $children = $reader->parseInnerTree();
-                foreach($children as $child) {
-                    if ($child['value'] instanceof products_container) {
-                        $catalog->products_container = $child['value'];
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
+                if (isset($keyValue['Товары']) && is_array($keyValue['Товары'])) {
+                    foreach ($keyValue['Товары'] as $child) {
+                        if ($child['value'] instanceof product) {
+                            $catalog->products[] = $child['value'];
+                        }
                     }
                 }
                 return $catalog;
             },
-            '{urn:1C.ru:commerceml_2}Товары' => function(Reader $reader) {
-                $products_container = new products_container();
-                $children = $reader->parseInnerTree();
-                foreach($children as $child) {
-                    if ($child['value'] instanceof product) {
-                        $products_container->products[] = $child['value'];
-                    }
-                }
-                return $products_container;
-            },
-            '{urn:1C.ru:commerceml_2}Товар' => function(Reader $reader) {
+            "{{$this->namespace}}Товар" => function(Reader $reader) {
                 $product = new product();
-                $keyValue = Deserializer\keyValue($reader, 'urn:1C.ru:commerceml_2');
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
                 if (isset($keyValue['Ид'])) {
                     $product->id = $keyValue['Ид'];
                 }
@@ -240,26 +193,65 @@ class import_1c
                 if (isset($keyValue['КоличествоДен'])) {
                     $product->den = $keyValue['КоличествоДен'];
                 }
-                if (isset($keyValue['Состав'])
-                && $keyValue['Состав'] instanceof compositions_container) {
-                    $product->compositions_container = $keyValue['Состав'];
+                if (isset($keyValue['Группы']) && is_array($keyValue['Группы'])) {
+                    // в примере только одна группа
+                    foreach ($keyValue['Группы'] as $v) {
+                        if (isset($v['name']) && $v['name'] == "{{$this->namespace}}Ид") {
+                            $group = new group();
+                            $group->id = $v['value'];
+                            $product->group = $group;
+                            break;
+                        }
+                    }
+                }
+                if (isset($keyValue['Изготовитель'])
+                && $keyValue['Изготовитель'] instanceof producer) {
+                    $product->producer = $keyValue['Изготовитель'];
+                }
+                if (isset($keyValue['Состав']) && is_array($keyValue['Состав'])) {
+                    foreach ($keyValue['Состав'] as $child) {
+                        if ($child['value'] instanceof composition) {
+                            $product->compositions[] = $child['value'];
+                        }
+                    }
+                }
+                if (isset($keyValue['ЗначенияСвойств'])) {
+                    foreach ($keyValue['ЗначенияСвойств'] as $child) {
+                        if ($child['value'] instanceof p_option) {
+                            $product->options[] = $child['value'];
+                        }
+                    }
+                }
+                if (isset($keyValue['ЗначенияРеквизитов'])) {
+                    foreach ($keyValue['ЗначенияРеквизитов'] as $child) {
+                        if ($child['value'] instanceof p_requisit) {
+                            $product->requisits[] = $child['value'];
+                        }
+                    }
+                }
+                if (isset($keyValue['СтавкиНалогов'])) {
+                    foreach ($keyValue['СтавкиНалогов'] as $child) {
+                        if ($child['value'] instanceof p_tax_rate) {
+                            $product->tax_rate = $child['value'];
+                        }
+                    }
                 }
                 return $product;
             },
-
-            '{urn:1C.ru:commerceml_2}Состав' => function(Reader $reader) {
-                $compositions_container = new compositions_container();
-                $children = $reader->parseInnerTree();
-                foreach($children as $child) {
-                    if ($child['value'] instanceof composition) {
-                        $compositions_container->values[] = $child['value'];
-                    }
+            "{{$this->namespace}}ЗначенияСвойства" => function(Reader $reader) {
+                $p_option = new p_option();
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
+                if (isset($keyValue['Ид'])) {
+                    $p_option->id = $keyValue['Ид'];
                 }
-                return $compositions_container;
+                if (isset($keyValue['Значение'])) {
+                    $p_option->value = $keyValue['Значение'];
+                }
+                return $p_option;
             },
-            '{urn:1C.ru:commerceml_2}СтрокаСостава' => function(Reader $reader) {
+            "{{$this->namespace}}СтрокаСостава" => function(Reader $reader) {
                 $composition = new composition();
-                $keyValue = Deserializer\keyValue($reader, 'urn:1C.ru:commerceml_2');
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
                 if (isset($keyValue['Ид'])) {
                     $composition->id = $keyValue['Ид'];
                 }
@@ -271,14 +263,37 @@ class import_1c
                 }
                 return $composition;
             },
+            "{{$this->namespace}}ЗначениеРеквизита" => function(Reader $reader) {
+                $p_requisit = new p_requisit();
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
+                if (isset($keyValue['Наименование'])) {
+                    $p_requisit->name = $keyValue['Наименование'];
+                }
+                if (isset($keyValue['Значение'])) {
+                    $p_requisit->value = $keyValue['Значение'];
+                }
+                return $p_requisit;
+            },
+            "{{$this->namespace}}СтавкаНалога" => function(Reader $reader) {
+                $p_tax_rate = new p_tax_rate();
+                $keyValue = Deserializer\keyValue($reader, $this->namespace);
+                if (isset($keyValue['Наименование'])) {
+                    $p_tax_rate->name = $keyValue['Наименование'];
+                }
+                if (isset($keyValue['Значение'])) {
+                    $p_tax_rate->value = $keyValue['Значение'];
+                }
+                return $p_tax_rate;
+            },
         );
     }
 
     public function test()
     {
-        $result = $this->service->expect('{urn:1C.ru:commerceml_2}КоммерческаяИнформация', $this->handle);
+        $result = $this->service->expect("{{$this->namespace}}КоммерческаяИнформация", $this->handle);
 
-        echo "<pre>"; print_r($result->catalog->products_container->products[0]); echo "</pre>";exit;
+        // echo "<pre>"; print_r($result->classificator); echo "</pre>";exit;
+        // echo "<pre>"; print_r($result->catalog->products); echo "</pre>";exit;
 
         // echo "<pre>"; print_r($result); echo "</pre>";
     }
