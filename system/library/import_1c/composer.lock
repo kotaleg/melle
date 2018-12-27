@@ -4,8 +4,47 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5073079723b3b7cbd699a59eee71d769",
+    "content-hash": "4775eeb603e3684a99f6166789b9ebdd",
     "packages": [
+        {
+            "name": "crysalead/dir",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crysalead/dir.git",
+                "reference": "bb91ed1e8d2db50ac88a62b8ba7b2afdbf94af97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crysalead/dir/zipball/bb91ed1e8d2db50ac88a62b8ba7b2afdbf94af97",
+                "reference": "bb91ed1e8d2db50ac88a62b8ba7b2afdbf94af97",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "kahlan/kahlan": "~3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lead\\Dir\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Recursive directory scanner to locate directories and/or files in a file system",
+            "keywords": [
+                "Directory Scanner",
+                "directory",
+                "file",
+                "file system"
+            ],
+            "time": "2016-10-15T10:16:17+00:00"
+        },
         {
             "name": "sabre/uri",
             "version": "2.1.1",

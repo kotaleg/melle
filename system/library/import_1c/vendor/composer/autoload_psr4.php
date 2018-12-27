@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'Sabre\\Xml\\' => array($vendorDir . '/sabre/xml/lib'),
     'Sabre\\Uri\\' => array($vendorDir . '/sabre/uri/lib'),
+    'Lead\\Dir\\' => array($vendorDir . '/crysalead/dir/src'),
 );

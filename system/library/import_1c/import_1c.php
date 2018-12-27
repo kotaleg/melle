@@ -7,6 +7,7 @@ use Sabre\Xml\Service;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Deserializer;
 use Sabre\Xml\XmlDeserializable;
+use Lead\Dir\Dir;
 
 use \import_1c\map\import_file_map;
 use \import_1c\map\offers_file_map;
@@ -65,5 +66,26 @@ class import_1c
         // echo "<pre>"; print_r($result->catalog->products); echo "</pre>";exit;
 
         // echo "<pre>"; print_r($result); echo "</pre>";
+    }
+
+    public function createDir($path)
+    {
+        return Dir::make($path,
+            array(
+                'mode'      => 0755,
+                'recursive' => true,
+            )
+        );
+    }
+
+    public function clearDir($path, $exclude = array())
+    {
+        return Dir::remove($path,
+            array(
+                'followSymlinks' => false,
+                'recursive'      => true,
+                'exclude'        => $exclude,
+            )
+        );
     }
 }

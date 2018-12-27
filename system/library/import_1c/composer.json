@@ -1,5 +1,6 @@
 {
     "require": {
-        "sabre/xml": "^2.1"
+        "sabre/xml": "^2.1",
+        "crysalead/dir": "^2.0"
     }
 }

@@ -18,6 +18,10 @@ class ComposerStaticInit28f133442856b33703119e2ebf1f092c
             'Sabre\\Xml\\' => 10,
             'Sabre\\Uri\\' => 10,
         ),
+        'L' => 
+        array (
+            'Lead\\Dir\\' => 9,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -29,27 +33,10 @@ class ComposerStaticInit28f133442856b33703119e2ebf1f092c
         array (
             0 => __DIR__ . '/..' . '/sabre/uri/lib',
         ),
-    );
-
-    public static $classMap = array (
-        'Sabre\\Uri\\InvalidUriException' => __DIR__ . '/..' . '/sabre/uri/lib/InvalidUriException.php',
-        'Sabre\\Uri\\Version' => __DIR__ . '/..' . '/sabre/uri/lib/Version.php',
-        'Sabre\\Xml\\ContextStackTrait' => __DIR__ . '/..' . '/sabre/xml/lib/ContextStackTrait.php',
-        'Sabre\\Xml\\Element' => __DIR__ . '/..' . '/sabre/xml/lib/Element.php',
-        'Sabre\\Xml\\Element\\Base' => __DIR__ . '/..' . '/sabre/xml/lib/Element/Base.php',
-        'Sabre\\Xml\\Element\\Cdata' => __DIR__ . '/..' . '/sabre/xml/lib/Element/Cdata.php',
-        'Sabre\\Xml\\Element\\Elements' => __DIR__ . '/..' . '/sabre/xml/lib/Element/Elements.php',
-        'Sabre\\Xml\\Element\\KeyValue' => __DIR__ . '/..' . '/sabre/xml/lib/Element/KeyValue.php',
-        'Sabre\\Xml\\Element\\Uri' => __DIR__ . '/..' . '/sabre/xml/lib/Element/Uri.php',
-        'Sabre\\Xml\\Element\\XmlFragment' => __DIR__ . '/..' . '/sabre/xml/lib/Element/XmlFragment.php',
-        'Sabre\\Xml\\LibXMLException' => __DIR__ . '/..' . '/sabre/xml/lib/LibXMLException.php',
-        'Sabre\\Xml\\ParseException' => __DIR__ . '/..' . '/sabre/xml/lib/ParseException.php',
-        'Sabre\\Xml\\Reader' => __DIR__ . '/..' . '/sabre/xml/lib/Reader.php',
-        'Sabre\\Xml\\Service' => __DIR__ . '/..' . '/sabre/xml/lib/Service.php',
-        'Sabre\\Xml\\Version' => __DIR__ . '/..' . '/sabre/xml/lib/Version.php',
-        'Sabre\\Xml\\Writer' => __DIR__ . '/..' . '/sabre/xml/lib/Writer.php',
-        'Sabre\\Xml\\XmlDeserializable' => __DIR__ . '/..' . '/sabre/xml/lib/XmlDeserializable.php',
-        'Sabre\\Xml\\XmlSerializable' => __DIR__ . '/..' . '/sabre/xml/lib/XmlSerializable.php',
+        'Lead\\Dir\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/crysalead/dir/src',
+        ),
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -57,7 +44,6 @@ class ComposerStaticInit28f133442856b33703119e2ebf1f092c
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit28f133442856b33703119e2ebf1f092c::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit28f133442856b33703119e2ebf1f092c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit28f133442856b33703119e2ebf1f092c::$classMap;
 
         }, null, ClassLoader::class);
     }
