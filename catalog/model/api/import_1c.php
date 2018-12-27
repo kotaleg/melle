@@ -23,11 +23,63 @@ class ModelApiImport1C extends Model
         );
     }
 
+    public function actionCatalogInit()
+    {
+        if (is_dir($this->exchange_path)) {
+            $this->import_1c->clearDir("{$this->exchange_path}", array(
+                '*.gitignore',
+                '*/import_files/*.jpg',
+                '*/import_files/*.png',
+            ));
+        }
+        sleep(3);
+    }
+
+    public function actionCatalogFile($filename)
+    {
+        $json = array();
+        if (empty($filename)) {
+            $json['error'][] = 'Невереный filename';
+            return $json;
+        }
+
+        try {
+            $path = "{$this->exchange_path}{$filename}";
+            $this->import_1c->createDir(dirname($path));
+
+            $in = fopen('php://input', 'rb');
+            $out = fopen($path, 'a');
+            while (!feof($in)) {
+                fwrite($out, fread($in, 8192));
+            }
+            fclose($in);
+            fclose($out);
+            $json['success'] = true;
+        } catch (\Exception $e) {
+            $json['error'][] = 'Ошибка при сохраненнии файла';
+        }
+
+        return $json;
+    }
+
+    public function actionCatalogImport($filename)
+    {
+        $json = array();
+        $json['continue'] = true;
+        $json['success'] = true;
+
+        if (rand(1,4) == 2) {
+            $json['continue'] = false;
+        }
+
+        return $json;
+    }
+
     public function test()
     {
         // $this->import_1c->openFile("{$this->exchange_path}import.xml");
-        $this->import_1c->openFile("{$this->exchange_path}offers.xml");
-        $this->import_1c->test();
+        // $this->import_1c->openFile("{$this->exchange_path}offers.xml");
+        // $this->import_1c->test();
     }
 
     private function getRootPath()

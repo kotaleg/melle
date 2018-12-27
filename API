@@ -1,0 +1,47 @@
+Пример обращений к API:
+
+
+LOGIN TO API:
+--> REQUEST:
+curl --request POST \
+  --url 'http://localhost/302/melle/index.php?route=api/login' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --header 'cache-control: no-cache' \
+  --header 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  --form username=exchange \
+  --form key=2atiDdY41SV34RnD8vtOMVM1D12mRlGneusf4CwINCrh0t1aCxWZuVgdKMzWrZBBJhyYPdoBFP4FTuF6ULHbKSbsPnzeZhXSOvEltfbnqgybLeY2UZFNHCk43Wrd7wTi8QLyRFHFtJ78nCiIc2YRumW48zVzg7X5VQzbOkE8KZ2BRPiVVbh7sZymiAgS4svEq5V7eKw0x1NJBx6vNNvXmvn6W8UDoY2VTuTuszACy0hgxN2is0uSIf2jw1kNbVw2
+
+--> RESPONSE:
+{"success":true,"api_token":"2e0c4417c29eca370856d86a8e"}
+
+username ? == имя пользователя при логине
+key ? == ключ при логине
+api_token ? == токен после авторизации, используется в каждом запросе
+
+
+UPLOAD FILE:
+--> REQUEST:
+curl -X GET \
+  'http://localhost/302/melle/index.php?route=api/import_1c&api_token=2e0c4417c29eca370856d86a8e&type=catalog&mode=file&filename=test.xml' \
+  -H 'cache-control: no-cache'
+
+--> RESPONSE:
+{
+    "success": true,
+}
+
+
+USE API:
+--> REQUEST:
+curl -X GET \
+  'http://localhost/302/melle/index.php?route=api/import_1c&api_token=2e0c4417c29eca370856d86a8e&type=catalog&mode=import&filename=test.xml' \
+  -H 'cache-control: no-cache'
+
+--> RESPONSE:
+{
+    "continue": true,
+    "success": true,
+}
+
+continue ? == продолжать ли запросы (для импорта)
+success ? == успех операции
