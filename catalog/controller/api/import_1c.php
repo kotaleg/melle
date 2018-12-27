@@ -1,5 +1,5 @@
 <?php
-class ControllerToolImport1C extends Controller
+class ControllerApiImport1C extends Controller
 {
     private $codename = 'import_1c';
     private $route = 'tool/import_1c';
