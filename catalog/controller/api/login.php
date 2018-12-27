@@ -1,5 +1,6 @@
 <?php
-class ControllerApiLogin extends Controller {
+class ControllerApiLogin extends Controller
+{
     public function index() {
         $this->load->language('api/login');
 
@@ -27,7 +28,7 @@ class ControllerApiLogin extends Controller {
             if (!$json) {
                 $json['success'] = $this->language->get('text_success');
 
-                $session = new Session($config->get('session_engine'), $registry);
+                $session = new Session($this->config->get('session_engine'), $this->registry);
                 $session->start();
 
                 $this->model_account_api->addApiSession($api_info['api_id'], $session->getId(), $this->request->server['REMOTE_ADDR']);
