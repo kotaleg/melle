@@ -45,7 +45,13 @@ class ModelApiImport1C extends Model
 
         try {
             $path = "{$this->exchange_path}{$filename}";
-            $this->import_1c->createDir(dirname($path));
+            if (!is_dir(dirname($path))) {
+                $this->import_1c->createDir(dirname($path));
+            }
+
+            if (is_file($path)) {
+                unlink($path);
+            }
 
             $in = fopen('php://input', 'rb');
             $out = fopen($path, 'a');
