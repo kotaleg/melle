@@ -2,10 +2,10 @@
 /*
  *  location: admin/controller
  */
-class ControllerExtensionModuleImport1C extends Controller
+class ControllerExtensionModuleSuperOffers extends Controller
 {
-    private $codename = 'import_1c';
-    private $route = 'extension/module/import_1c';
+    private $codename = 'super_offers';
+    private $route = 'extension/module/super_offers';
     private $type = 'module';
 
     private $store_id = 0;
@@ -21,7 +21,6 @@ class ControllerExtensionModuleImport1C extends Controller
         $this->load->model($this->route);
         $this->load->model('extension/pro_patch/url');
         $this->load->model('extension/pro_patch/load');
-        $this->load->model('extension/pro_patch/json');
         $this->load->model('extension/pro_patch/user');
         $this->load->model('extension/pro_patch/setting');
         $this->load->model('extension/pro_patch/permission');

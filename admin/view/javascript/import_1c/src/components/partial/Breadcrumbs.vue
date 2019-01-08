@@ -11,15 +11,13 @@
 </template>
 
 <script type="text/javascript">
-    export default {
-        props: {
-            crumbs: {
-                type: Object,
-                required: false,
-                default() {
-
-                }
-            }
-        }
-    }
+export default {
+    props: {
+        crumbs: {
+            // type: Array,
+            required: false,
+            default() {},
+        },
+    },
+}
 </script>

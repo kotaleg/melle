@@ -1,0 +1,14 @@
+{
+    "codename": "import_1C",
+    "version": "1.0.0",
+    "name": "Import 1C",
+    "description": "Import 1C",
+    "author": {
+        "name": "PRO Hamster",
+        "url": "https://prohamster.com/"
+    },
+    "require": {
+        "pro_patch": ">= 1.0.0",
+        "pro_style": ">= 1.0.0"
+    }
+}

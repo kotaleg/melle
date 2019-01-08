@@ -19,15 +19,15 @@
 <script type="text/javascript">
 export default {
     props: {
-        'title': {
+        title: {
             type: String,
             required: false,
-            default: ''
+            default: '',
         },
-        'extra': {
+        extra: {
             type: String,
             required: false,
-            default: ''
+            default: '',
         },
     },
 }

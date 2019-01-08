@@ -12,6 +12,10 @@ class ModelExtensionModuleImport1C extends Model
         parent::__construct($registry);
 
         $this->load->model('extension/pro_patch/setting');
+        $this->load->model('extension/pro_patch/json');
+        $this->load->model('extension/pro_patch/db');
+
+        $this->setting = $this->model_extension_pro_patch_setting->getSetting($this->codename);
     }
 
     public function createTables()
@@ -26,21 +30,13 @@ class ModelExtensionModuleImport1C extends Model
 
     public function getScriptFiles()
     {
+        if (isset($this->setting['debug']) && $this->setting['debug']) {
+            $rand = '?'.rand(777, 999);
+        } else { $rand = ''; }
+
         $scripts = array();
-        $scripts[] = "view/javascript/{$this->codename}/dist/js/{$this->codename}-vendors.js";
-        $scripts[] = "view/javascript/{$this->codename}/dist/js/{$this->codename}-main.js";
+        $scripts[] = "view/javascript/{$this->codename}/dist/{$this->codename}.js{$rand}";
 
         return $scripts;
-    }
-
-    public function parseJson($json)
-    {
-        $parsed = @json_decode($json, true);
-
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            return array('error' => 'Parse error.');
-        }
-
-        return $parsed === null ? array() : $parsed;
     }
 }

@@ -20,6 +20,7 @@ $_['text_status']           = 'Статус';
 $_['text_cancel']           = 'Отмена';
 $_['text_warning']          = 'Внимание!';
 $_['text_access_code']      = 'Код доступа';
+$_['text_success']          = 'Успех!';
 
 // HELP
 $_['help_status']           = 'Статус модуля';

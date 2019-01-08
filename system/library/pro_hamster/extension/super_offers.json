@@ -1,0 +1,14 @@
+{
+    "codename": "super_offers",
+    "version": "1.0.0",
+    "name": "Super Offers",
+    "description": "Super Offers",
+    "author": {
+        "name": "PRO Hamster",
+        "url": "https://prohamster.com/"
+    },
+    "require": {
+        "pro_patch": ">= 1.0.0",
+        "pro_style": ">= 1.0.0"
+    }
+}

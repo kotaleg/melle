@@ -20,6 +20,9 @@ const state = {
 
     text_edit: '',
     text_preparing: '',
+    text_enabled: '',
+    text_disabled: '',
+    text_success: '',
 
     cancel: '',
     save: '',

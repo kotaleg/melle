@@ -19,13 +19,13 @@ export default {
         title: {
             type: String,
             required: false,
-            default: ''
+            default: '',
         },
         version: {
             type: String,
             required: false,
-            default: ''
+            default: '',
         },
-    }
+    },
 }
 </script>
