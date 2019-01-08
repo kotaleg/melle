@@ -1,0 +1,51 @@
+{
+    "codename": "d_bootstrap_tagsinput",
+    "version": "0.8.0",
+    "name": "Bootstrap Tags Input JS library",
+    "description": "Adds bootstrap tags input js library to catalog/view/javascript/library/.",
+   
+    "author": {
+        "name": "Dreamvention",
+        "email": "info@dreamvention.com",
+        "url": "https://dreamvention.com"
+    },
+    "opencart_version": [
+        "2.0.0.0",
+        "2.0.1.0",
+        "2.0.1.1",
+        "2.0.2.0",
+        "2.0.3.1",
+        "2.1.0.1",
+        "2.1.0.2",
+        "2.2.0.0",
+        "2.3.0.0",
+        "2.3.0.1",
+        "2.3.0.2",
+        "3.0.0.0",
+        "3.0.1.1",
+        "3.0.1.2",
+        "3.0.2.0"
+    ],
+    "type": "library",
+    "license": {
+        "type": "free",
+        "url": "https://shopunity.net/licenses/free"
+    },
+    "support": {
+        "email": "support@dreamvention.com",
+        "url": "https:/dreamvention.com/support"
+    },
+    "files": [
+        "system/library/d_shopunity/extension/d_bootstrap_tagsinput.json"
+            ],
+    "dirs": [
+        "admin/view/javascript/d_bootstrap_tagsinput",
+        "catalog/view/javascript/d_bootstrap_tagsinput"
+    ],
+    "changelog": [
+        {
+            "version": "0.8.0",
+            "change": ""
+        }
+    ]
+}
