@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>super_offers</name>
+    <code>super_offers</code>
+    <description>Комбинации опций</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="admin/controller/catalog/product.php">
+        <operation error="skip">
+            <search><![CDATA[if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {]]></search>
+            <add position="before"><![CDATA[
+                // SUPER OFFERS
+                if ((in_array(__FUNCTION__, array('edit')))
+                && ($this->request->server['REQUEST_METHOD'] == 'POST') && isset($this->request->get['dpo_save'])
+                && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/super_offers.json')) {
+
+                    if (!$this->validateForm()) {
+                        $json_ = array();
+                        $json_['error'] = (isset($this->error['warning']))
+                            ? $this->error['warning'] : $this->language->get('error_warning');
+                        return $this->response->setOutput(json_encode($json_));
+                    }
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+
+</modification>
