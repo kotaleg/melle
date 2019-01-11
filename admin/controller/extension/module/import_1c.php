@@ -43,7 +43,7 @@ class ControllerExtensionModuleImport1C extends Controller
 
         // STATE
         $data['codename'] = $this->codename;
-        $data['state'] = $this->getState();
+        $data['state'] = json_encode($this->getState());
 
         $data['pro_scripts'] = $this->extension_model->getScriptFiles();
 

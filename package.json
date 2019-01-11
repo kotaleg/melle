@@ -15,8 +15,10 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch-import1c": "npm run watch -- --env.mixfile=webpack.import-1c.mix",
     "prod-import1c": "npm run production -- --env.mixfile=webpack.import-1c.mix",
-    "watch-offers": "npm run watch -- --env.mixfile=webpack.offers.mix",
-    "prod-offers": "npm run production -- --env.mixfile=webpack.offers.mix"
+    "watch-offersadmin": "npm run watch -- --env.mixfile=webpack.offers.mix",
+    "prod-offersadmin": "npm run production -- --env.mixfile=webpack.offers.mix",
+    "watch-offers": "npm run watch -- --env.mixfile=webpack.offers-real.mix",
+    "prod-offers": "npm run production -- --env.mixfile=webpack.offers-real.mix"
   },
   "devDependencies": {
     "axios": "^0.18.0",

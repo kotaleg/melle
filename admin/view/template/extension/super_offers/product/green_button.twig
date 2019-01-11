@@ -1,0 +1,47 @@
+<button id="so-save-and-stay" data-toggle="tooltip" title="{{ button_save_and_stay }}" class="btn btn-success"><i class="fa fa-save"></i></button>
+
+<!-- TODO: replace with vue implementation -->
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/themes/default.min.css"/>
+
+<script>
+function _isUndefined(value) {
+  return value === undefined;
+}
+</script>
+
+
+<script type="text/javascript">
+    $(function() {
+        $('body').on('click', '#so-save-and-stay', function(){
+            $.ajax( {
+                type: 'post',
+                url: $('#form-product').attr('action') + "&so_save=1",
+                data: $('#form-product').serialize(),
+                dataType: 'json',
+                complete: function(json) {
+                    setTimeout(function() {
+
+                        console.log(json);
+
+                        if (!_isUndefined(json) && !_isUndefined(json.responseJSON) && !_isUndefined(json.responseJSON.error)) {
+                            alertify.error(json.responseJSON.error);
+                        } else {
+                            $('#trigger_so_update').click();
+                            alertify.success('{{ success_product_saved }}');
+                        }
+
+                    }, 100);
+                },
+                success: function(json) { }
+            });
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(function() {
+        $('button[form="form-product"]').css('display', 'none');
+    });
+</script>

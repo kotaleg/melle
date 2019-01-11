@@ -11,9 +11,9 @@
         <operation error="skip">
             <search><![CDATA[if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {]]></search>
             <add position="before"><![CDATA[
-                // SUPER OFFERS
+                // SUPER OFFERS START
                 if ((in_array(__FUNCTION__, array('edit')))
-                && ($this->request->server['REQUEST_METHOD'] == 'POST') && isset($this->request->get['dpo_save'])
+                && ($this->request->server['REQUEST_METHOD'] == 'POST') && isset($this->request->get['so_save'])
                 && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/super_offers.json')) {
 
                     if (!$this->validateForm()) {
@@ -23,6 +23,7 @@
                         return $this->response->setOutput(json_encode($json_));
                     }
                 }
+                // SUPER OFFERS END
             ]]></add>
         </operation>
     </file>

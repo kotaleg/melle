@@ -1,16 +1,11 @@
-{# location: admin/view #}
-{{ header }}{{ column_left }}
-
-<div id="content">
+<div class="tab-pane" id="tab-super-offers">
     <div id="{{codename}}"></div>
 </div>
 
 <script type="text/javascript">
-window.__{{ codename }}__ = {{state}};
+window.__{{codename}}__ = {{state}};
 </script>
 
 {% for script in pro_scripts %}
 <script type="text/javascript" src="{{ script }}?{{ random(777) }}"></script>
 {% endfor %}
-
-{{ footer }}
