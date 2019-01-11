@@ -39,11 +39,9 @@
 
                             <input type="hidden" name="combination" :value="id">
 
-                            <td v-for="(ac, k) in active_columns" :key="k+'-acu'" v-if="ac.active && isUndefined(ac.code)">
-                                <so_custom :combid="id" :colid="k" />
-                            </td>
-
-                            <td v-for="(ac, k) in active_columns" :key="k+'-acnu'" if="ac.active && !isUndefined(ac.code)">
+                            <td v-for="(ac, k) in active_columns" :key="k+'-acv'"
+                                v-if="ac.active && (isUndefined(ac.code) || !isUndefined(ac.code))">
+                                <so_custom v-if="isUndefined(ac.code)" :combid="id" :colid="k" />
                                 <so_model v-if="ac.code == 'model'" :combid="id" :colid="k" />
                                 <so_price v-if="ac.code == 'price'" :combid="id" :colid="k" />
                                 <so_quantity v-if="ac.code == 'quantity'" :combid="id" :colid="k" />
@@ -61,7 +59,7 @@
                     <tfoot>
                         <tr id="so-not-found"
                             :class="[{'hide': !combinations || !options}]"
-                            <td :colspan="full_colspan" class="text-center"><span v-if="!options">{{text_no_options}}</span><span v-else>{{text_no_combinations}}</span></td>
+                            <td :colspan="full_colspan" class="text-center"><span v-if="!options">{{text_no_options}}</span><span v-if="options && !combinations">{{text_no_combinations}}</span></td>
                         </tr>
                         <tr v-if="options">
                             <td id="so-colspan" :colspan="full_colspan - 1"></td>
@@ -113,7 +111,6 @@ export default {
 
             'button_add_option',
         ]),
-
     },
     created() {
         this.$store.dispatch('shop/initData')

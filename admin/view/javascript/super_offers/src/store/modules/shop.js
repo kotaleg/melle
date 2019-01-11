@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isNaN, isArray } from 'lodash'
+import { isUndefined, isNaN, isArray, isEmpty,  forEach } from 'lodash'
 
 import shop from '../../api/shop'
 
@@ -47,43 +47,43 @@ const getters = {
     },
     getNextCombinationIndex: (state) => {
         let index = 0
-        if (isArray(state.combinations)) {
-            state.combinations.forEach((element, i) => {
-                let cleared = parseInt(i);
-                if (!isNaN(cleared) && (cleared >= index)) {
-                    index = cleared
-                }
-            })
+        forEach(state.combinations, (element, i) => {
+            let cleared = parseInt(i);
+            if (!isNaN(cleared) && (cleared >= index)) {
+                index = cleared
+            }
+        })
+        if (!isEmpty(state.combinations)) {
+            index++
         }
-        index++
         return index
     },
     getDefaultCombination: (state) => {
         let combination = {}
-        if (isArray(state.options)) {
-            state.options.forEach((element, i) => {
-                let pov = false
-                if (isArray(element.product_option_value)) {
-                    let first_val = Object.keys(element.product_option_value)[0]
-                    if (!isUndefined(first_val)) {
-                        pov = first_val
-                    }
+        forEach(state.options, (element, i) => {
+            let pov = false
+            if (isArray(element.product_option_value)) {
+                let first_val = Object.keys(element.product_option_value)[0]
+                if (!isUndefined(first_val)) {
+                    pov = first_val
                 }
-                combination[i] = pov
-            })
-        }
+            }
+            combination[i] = pov
+        })
         return combination
     },
     getDefaultCombinationData: (state) => {
         let combination_data = {}
-        if (isArray(state.default_active_columns)) {
-            state.default_active_columns.forEach((element, i) => {
-                if (element.active) {
-                    combination_data[index] = element.default
-                }
-            })
-        }
+        forEach(state.default_active_columns, (element, i) => {
+            if (element.active) {
+                combination_data[i] = element.default
+            }
+        })
         return combination_data
+    },
+
+    getCombinationDataValue: (state) => (combination_id, key) => {
+        return state.combinations_data[combination_id][key]
     },
 }
 
@@ -102,19 +102,22 @@ const actions = {
         let c = getters.getDefaultCombination
         let cd = getters.getDefaultCombinationData
 
-        console.log(key);
-        console.log(c);
-        console.log(cd);
+        console.log('KEY: '+key);
+        // console.log(c);
+        // console.log(cd);
 
         commit('addCombination', {key, value: c})
         commit('addCombinationData', {key, value: cd})
     },
     updateCombinationActiveOptionCodename({ commit }, payload) {
         commit('updateCombinationActiveOptionCodename', {
-            combination_id: this.combid,
-            active_option_id: this.acOptionId,
-            codename: codename,
+            combination_id: payload.combid,
+            active_option_id: payload.acOptionId,
+            codename: payload.codename,
         })
+    },
+    updateCombinationValue({ commit }, payload) {
+        commit('updateCombinationValue', payload)
     },
 }
 
@@ -138,7 +141,7 @@ const mutations = {
         Vue.set(state.combinations[combination_id], active_option_id, codename)
     },
     updateCombinationValue(state, {combination_id, key, value}) {
-        Vue.set(state.combinations[combination_id], key, value)
+        Vue.set(state.combinations_data[combination_id], key, value)
     },
 }
 

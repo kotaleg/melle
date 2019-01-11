@@ -8,7 +8,7 @@
 </template>
 
 <script type="text/javascript">
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
     props: {
@@ -21,13 +21,15 @@ export default {
         ...mapState('shop', [
             'text_yes',
             'text_no',
-            'combinations_data',
+        ]),
+        ...mapGetters('shop', [
+            'getCombinationDataValue',
         ]),
         getInputName() {
             return 'so_combination['+this.combid+'][subtract]'
         },
         getInputValue() {
-            return this.combinations_data[this.combid].subtract
+            return this.getCombinationDataValue(this.combid, 'subtract')
         },
     },
     methods: {

@@ -40,14 +40,14 @@ class ModelExtensionModuleSuperOffers extends Model
 
         // DEFAULT ACTIVE COLUMNS
         $this->default_active_columns = array(
-            self::MODEL         => array('name' => False, 'active' => False, 'code' => self::MODEL),
-            self::PRODUCT_CODE  => array('name' => False, 'active' => False, 'code' => self::PRODUCT_CODE),
-            self::QUANTITY      => array('name' => False, 'active' => True, 'code' => self::QUANTITY, 'default' => ''),
-            self::SUBTRACT      => array('name' => False, 'active' => True, 'code' => self::SUBTRACT, 'default' => False),
-            self::PRICE         => array('name' => False, 'active' => True, 'code' => self::PRICE),
-            self::SPECIAL       => array('name' => False, 'active' => False, 'code' => self::SPECIAL),
-            self::REWARD        => array('name' => False, 'active' => False, 'code' => self::REWARD),
-            self::WEIGHT        => array('name' => False, 'active' => False, 'code' => self::WEIGHT),
+            self::MODEL         => array('name' => false, 'active' => false, 'code' => self::MODEL, 'default' => ''),
+            self::PRODUCT_CODE  => array('name' => false, 'active' => false, 'code' => self::PRODUCT_CODE, 'default' => ''),
+            self::QUANTITY      => array('name' => false, 'active' => true, 'code' => self::QUANTITY, 'default' => ''),
+            self::SUBTRACT      => array('name' => false, 'active' => true, 'code' => self::SUBTRACT, 'default' => true),
+            self::PRICE         => array('name' => false, 'active' => true, 'code' => self::PRICE, 'default' => ''),
+            self::SPECIAL       => array('name' => false, 'active' => false, 'code' => self::SPECIAL, 'default' => ''),
+            self::REWARD        => array('name' => false, 'active' => false, 'code' => self::REWARD, 'default' => ''),
+            self::WEIGHT        => array('name' => false, 'active' => false, 'code' => self::WEIGHT, 'default' => ''),
         );
 
         // SUPPORTED OPTION TYPES
@@ -105,8 +105,8 @@ class ModelExtensionModuleSuperOffers extends Model
 
     public function dropTables()
     {
-        // $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`");
-        // $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`");
+        $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`");
+        $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`");
         $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . $this->db->escape(self::OPTION_SETTING) ."`");
     }
 
@@ -135,7 +135,7 @@ class ModelExtensionModuleSuperOffers extends Model
         $this->load->model('catalog/option');
         $product_options = $this->model_catalog_product->getProductOptions($product_id);
 
-        $data['product_options'] = False;
+        $data['product_options'] = false;
 
         $po = 0;
         foreach ($product_options as $product_option) {
@@ -177,7 +177,7 @@ class ModelExtensionModuleSuperOffers extends Model
             $po++;
         }
 
-        $data['option_values'] = False;
+        $data['option_values'] = false;
 
         if (is_array($data['product_options'])) {
 
@@ -207,7 +207,7 @@ class ModelExtensionModuleSuperOffers extends Model
 
     public function activeColumnsFiller($state)
     {
-        $active_columns = False;
+        $active_columns = false;
 
         if (isset($state['options']) && is_array($state['options'])) {
 
@@ -216,7 +216,7 @@ class ModelExtensionModuleSuperOffers extends Model
                 $active_columns[] = array(
                     'name'      => $option['name'],
                     'option_id' => $k,
-                    'active'    => True
+                    'active'    => true
                 );
                 $i++;
             }
@@ -301,17 +301,17 @@ class ModelExtensionModuleSuperOffers extends Model
                 'product_id'        => $data[0],
                 'quantity'          => (isset($c['quantity'])) ? $c['quantity'] : self::NULL_VALUE,
                 'subtract'          => (isset($c['subtract'])) ? $c['subtract'] : false,
-                'price'             => False,
+                'price'             => false,
                 'price_prefix'      => '+',
-                'points'            => False,
+                'points'            => false,
                 'points_prefix'     => '+',
-                'weight'            => False,
+                'weight'            => false,
                 'weight_prefix'     => '+',
-                'model'             => False,
-                'product_code'      => False,
-                'special_price'     => False,
-                'special_price_start' => False,
-                'special_price_end' => False,
+                'model'             => false,
+                'product_code'      => false,
+                'special_price'     => false,
+                'special_price_start' => false,
+                'special_price_end' => false,
             );
 
             $combination_id = $this->_addCombination($comb_data);
@@ -336,7 +336,7 @@ class ModelExtensionModuleSuperOffers extends Model
         }
     }
 
-    public function getCombinations($state, $get_data = False)
+    public function getCombinations($state, $get_data = false)
     {
         $combinations = array();
 
@@ -403,12 +403,14 @@ class ModelExtensionModuleSuperOffers extends Model
     {
         $combinations_data = array();
         if (!is_array($state['combinations'])) { return $combinations_data; }
-        $combinations_extended = $this->getCombinations($state, True);
+        $combinations_extended = $this->getCombinations($state, true);
 
         foreach ($state['combinations'] as $combination_key => $combination_value) {
 
             $q = '';
-            $s = False;
+            $s = false;
+            $p = '';
+            $m = '';
 
             if (array_key_exists($combination_key, $combinations_extended)) {
 
@@ -416,13 +418,17 @@ class ModelExtensionModuleSuperOffers extends Model
                     $q = $combinations_extended[$combination_key]['quantity'];
                 }
 
-                $s = ($combinations_extended[$combination_key]['subtract']) ? True : False;
+                $s = ($combinations_extended[$combination_key]['subtract']) ? true : false;
+                $p = $combinations_extended[$combination_key]['price'];
+                $m = $combinations_extended[$combination_key]['model'];
             }
 
             $combinations_data[$combination_key] = array(
                 'quantity'  => $q,
                 'subtract'  => $s,
-                'hided_by_filter' => False
+                'price'     => $p,
+                'model'     => $m,
+                'hided_by_filter' => false,
             );
         }
 

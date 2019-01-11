@@ -8,7 +8,7 @@
 </template>
 
 <script type="text/javascript">
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
     props: {
@@ -20,13 +20,15 @@ export default {
     computed: {
         ...mapState('shop', [
             'text_quantity',
-            'combinations_data',
+        ]),
+        ...mapGetters('shop', [
+            'getCombinationDataValue',
         ]),
         getInputName() {
             return 'so_combination['+this.combid+'][quantity]'
         },
         getInputValue() {
-            return this.combinations_data[this.combid].quantity
+            return this.getCombinationDataValue(this.combid, 'quantity')
         },
     },
     methods: {
