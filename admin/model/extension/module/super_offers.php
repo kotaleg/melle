@@ -301,7 +301,7 @@ class ModelExtensionModuleSuperOffers extends Model
                 'product_id'        => $data[0],
                 'quantity'          => (isset($c['quantity'])) ? $c['quantity'] : self::NULL_VALUE,
                 'subtract'          => (isset($c['subtract'])) ? $c['subtract'] : false,
-                'price'             => false,
+                'price'             => (isset($c['price'])) ? $c['price'] : '',
                 'price_prefix'      => '+',
                 'points'            => false,
                 'points_prefix'     => '+',

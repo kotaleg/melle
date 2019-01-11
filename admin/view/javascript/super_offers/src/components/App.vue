@@ -20,12 +20,12 @@
                 <table class="table table-striped table-bordered table-hover">
 
                     <thead>
-                        <tr v-if="combinations">
+                        <tr v-if="isCombinations">
                             <td v-for="(ac, k) in active_columns"
                                 :key="k+'-ac'"
                                 v-if="ac.active && (isUndefined(ac.code) || !isUndefined(ac.code))"
                                 class="text-left">
-                                <input type="hidden" name="so_columns[{k}]" value="{(ac.active) ? '1' : '0'}">
+                                <input type="hidden" :name="columnName(k)" :value="columnValue(ac.active)">
                                 {{ac.name}}
                             </td>
                             <td v-if="active_columns"></td>
@@ -35,6 +35,7 @@
                     <tbody>
                         <tr v-for="(option, id) in combinations"
                             :key="id+'-combination'"
+                            v-if="!isUndefined(option)"
                             :class="[{'hide': !isUndefined(combinations_data[id]) && combinations_data[id].hided_by_filter}]">
 
                             <input type="hidden" name="combination" :value="id">
@@ -49,7 +50,7 @@
                             </td>
 
                             <td>
-                                <div @click="deleteCombination" class="btn btn-danger">
+                                <div @click="deleteCombinationAndData(id)" class="btn btn-danger">
                                     <i class="fa fa-minus-circle"></i>
                                 </div>
                             </td>
@@ -58,8 +59,8 @@
 
                     <tfoot>
                         <tr id="so-not-found"
-                            :class="[{'hide': !combinations || !options}]"
-                            <td :colspan="full_colspan" class="text-center"><span v-if="!options">{{text_no_options}}</span><span v-if="options && !combinations">{{text_no_combinations}}</span></td>
+                            :class="[{'hide': !isCombinations || !options}]"
+                            <td :colspan="full_colspan" class="text-center"><span v-if="!options">{{text_no_options}}</span><span v-if="options && !isCombinations">{{text_no_combinations}}</span></td>
                         </tr>
                         <tr v-if="options">
                             <td id="so-colspan" :colspan="full_colspan - 1"></td>
@@ -73,7 +74,7 @@
             </div>
         </div>
 
-        <div @click="updateTrigger" id="trigger_so_update" style="display: none;"></div>
+        <div @click="fetchCombinations" id="trigger_so_update" style="display: none;"></div>
     </div>
 </template>
 
@@ -111,6 +112,9 @@ export default {
 
             'button_add_option',
         ]),
+        ...mapGetters('shop', [
+            'isCombinations',
+        ]),
     },
     created() {
         this.$store.dispatch('shop/initData')
@@ -119,19 +123,21 @@ export default {
         ...mapActions('shop', [
             'setLoadingStatus',
             'addCombination',
+            'deleteCombinationAndData',
+            'fetchCombinations',
         ]),
 
         openOriginalOptions() {
             $('a[href$="#tab-option"]').click();
         },
-        deleteCombination(id) {
-
-        },
-        updateTrigger() {
-
-        },
         isUndefined(value) {
             return isUndefined(value)
+        },
+        columnName(id) {
+            return 'so_columns['+id+']'
+        },
+        columnValue(active) {
+            return (active) ? '1' : '0'
         },
     }
 }

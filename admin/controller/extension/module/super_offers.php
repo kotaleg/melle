@@ -193,7 +193,7 @@ class ControllerExtensionModuleSuperOffers extends Controller
     {
         $data = array();
         $data['button_save_and_stay'] = $this->language->get('button_save_and_stay');
-        $data['success_product_saved'] = $this->language->get('text_success');
+        $data['success_product_saved'] = $this->language->get('success_product_saved');
         return $this->model_extension_pro_patch_load->view('extension/super_offers/product/green_button', $data);
     }
 

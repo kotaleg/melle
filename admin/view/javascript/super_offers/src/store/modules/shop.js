@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isNaN, isArray, isEmpty,  forEach } from 'lodash'
+import { isUndefined, isNaN, isArray, isEmpty,  forEach, clone } from 'lodash'
 
 import shop from '../../api/shop'
 
@@ -85,6 +85,18 @@ const getters = {
     getCombinationDataValue: (state) => (combination_id, key) => {
         return state.combinations_data[combination_id][key]
     },
+
+    isCombinations: (state) => {
+        let status = false
+        if (isArray(state.combinations) && !isEmpty(state.combinations)) {
+            state.combinations.forEach((element, i) => {
+                if (!isUndefined(element)) {
+                    status = true
+                }
+            })
+        }
+        return status
+    },
 }
 
 // actions
@@ -99,15 +111,21 @@ const actions = {
     },
     addCombination({ commit, getters }) {
         let key = getters.getNextCombinationIndex
-        let c = getters.getDefaultCombination
-        let cd = getters.getDefaultCombinationData
-
-        console.log('KEY: '+key);
-        // console.log(c);
-        // console.log(cd);
+        let c = clone(getters.getDefaultCombination)
+        let cd = clone(getters.getDefaultCombinationData)
 
         commit('addCombination', {key, value: c})
         commit('addCombinationData', {key, value: cd})
+
+        console.log('CREATED WITH KEY: '+key);
+        // console.log(c);
+        // console.log(cd);
+    },
+    deleteCombinationAndData({ commit, getters }, id) {
+        commit('deleteCombination', id)
+        commit('deleteCombinationData', id)
+
+        console.log('DELETE: '+id);
     },
     updateCombinationActiveOptionCodename({ commit }, payload) {
         commit('updateCombinationActiveOptionCodename', {
@@ -118,6 +136,10 @@ const actions = {
     },
     updateCombinationValue({ commit }, payload) {
         commit('updateCombinationValue', payload)
+    },
+
+    fetchCombinations({ commit }) {
+
     },
 }
 
@@ -133,6 +155,14 @@ const mutations = {
     },
     addCombination(state, {key, value}) {
         Vue.set(state.combinations, key, value)
+    },
+    deleteCombination(state, id) {
+        delete state.combinations[id]
+        Vue.delete(state.combinations, id)
+    },
+    deleteCombinationData(state, id) {
+        delete state.combinations_data[id]
+        Vue.delete(state.combinations_data, id)
     },
     addCombinationData(state, {key, value}) {
         Vue.set(state.combinations_data, key, value)
