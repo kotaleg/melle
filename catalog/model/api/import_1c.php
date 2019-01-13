@@ -10,29 +10,53 @@ class ModelApiImport1C extends Model
     const OFFERS_GROUP = '1c_offers_group';
     const OFFERS = '1c_offers';
 
+    const PRODUCT_TABLE = 'product';
+    const CATEGORY_TABLE = 'category';
+    const MANUFACTURER_TABLE = 'manufacturer';
+    const ATTRIBUTE_TABLE = 'attribute';
+    const ATTRIBUTE_GROUP_TABLE = 'attribute_group';
+
+    const IMPORT_FIELD = 'import_id';
+
     function __construct($registry)
     {
         parent::__construct($registry);
+
+        $this->load->model('extension/pro_patch/db');
+        $this->load->model('extension/module/super_offers');
 
         $this->import_1c = new \import_1c\import_1c();
         $this->exchange_path = $this->getRootPath() . 'protected/runtime/exchange/';
 
         $this->files = array(
-            'import.xml',
-            'offers.xml',
+            'import*.xml',
+            'offers*.xml',
         );
     }
 
     public function actionCatalogInit()
     {
-        if (is_dir($this->exchange_path)) {
-            $this->import_1c->clearDir("{$this->exchange_path}", array(
-                '*.gitignore',
-                '*/import_files/*.jpg',
-                '*/import_files/*.png',
-            ));
+        // if (is_dir($this->exchange_path)) {
+        //     $this->import_1c->clearDir("{$this->exchange_path}", array(
+        //         '*.gitignore',
+        //         '*/import_files/*.jpg',
+        //         '*/import_files/*.png',
+        //     ));
+        // }
+
+        $tables = array(
+            self::PRODUCT_TABLE,
+            self::CATEGORY_TABLE,
+            self::MANUFACTURER_TABLE,
+        );
+
+        // ADD IMPORT FIELD ID TO THE TABLES
+        foreach ($tables as $tn) {
+            if (!$this->model_extension_pro_patch_db->isColumnExist($tn, self::IMPORT_FIELD)) {
+                $this->db->query("ALTER TABLE `". DB_PREFIX . $this->db->escape($tn) . "`
+                    ADD COLUMN `". $this->db->escape(self::IMPORT_FIELD) . "` VARCHAR(255) NOT NULL;");
+            }
         }
-        sleep(3);
     }
 
     public function actionCatalogFile($filename)
@@ -74,18 +98,67 @@ class ModelApiImport1C extends Model
         $json['continue'] = true;
         $json['success'] = true;
 
-        if (rand(1,4) == 2) {
+        if (empty($filename)) {
+            $json['error'][] = 'Невереный filename';
             $json['continue'] = false;
+            $json['success'] = false;
+            return $json;
         }
+
+        $realpath = "{$this->exchange_path}{$filename}";
+
+        if (!is_file($realpath) || !is_readable($realpath)) {
+            $json['error'][] = 'Filename не существует';
+            $json['continue'] = false;
+            $json['success'] = false;
+            return $json;
+        }
+
+        $this->import_1c->openFile($realpath);
+        $parsed = $this->import_1c->parse();
+
+        // LANGUAGES
+        $this->load->model('api/import_1c/language');
+        $languages = $this->model_api_import_1c_language->getLanguages();
+
+        // PRODUCERS
+        $this->load->model('api/import_1c/producer');
+        $this->model_api_import_1c_producer->action($parsed);
+
+        // GROUP
+        $this->load->model('api/import_1c/group');
+        $this->model_api_import_1c_group->action('Группа', $languages);
+
+        // DEN
+        $this->load->model('api/import_1c/group');
+        $this->model_api_import_1c_group->action('Ден', $languages);
+
+        // SOSTAV
+        $this->load->model('api/import_1c/group');
+        $this->model_api_import_1c_group->action('Состав', $languages);
+
+        // OPTION
+        $this->load->model('api/import_1c/option');
+        $this->model_api_import_1c_option->action($parsed, $languages);
+
+        // PRODUCTS
+        $this->load->model('api/import_1c/product');
+        $this->model_api_import_1c_product->action($parsed, $languages);
+
+        echo "<pre>"; print_r($parsed->classificator->options); echo "</pre>";exit;
 
         return $json;
     }
 
-    public function test()
+    public function actionCatalogDelete()
     {
-        // $this->import_1c->openFile("{$this->exchange_path}import.xml");
-        // $this->import_1c->openFile("{$this->exchange_path}offers.xml");
-        // $this->import_1c->test();
+        $json = array();
+
+        $this->load->model('api/import_1c/product');
+        $this->model_api_import_1c_product->deleteAllProducts();
+
+        $json['success'] = true;
+        return $json;
     }
 
     private function getRootPath()
@@ -122,11 +195,13 @@ class ModelApiImport1C extends Model
 
     private function disableAllProducts()
     {
-        //
+        $this->db->query("UPDATE `". DB_PREFIX ."product`
+            SET `status` = '".(bool)false."'");
     }
 
     private function disableAllCategories()
     {
-        //
+        $this->db->query("UPDATE `". DB_PREFIX ."category`
+            SET `status` = '".(bool)false."'");
     }
 }

@@ -286,6 +286,7 @@ class ModelExtensionModuleSuperOffers extends Model
         return $this->db->getLastId();
     }
 
+    /* TODO: save option order in save process */
     public function saveCombinations($data)
     {
         // CLEAR DATA BEFORE SAVE

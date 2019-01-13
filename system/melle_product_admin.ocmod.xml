@@ -22,14 +22,14 @@
         <operation error="skip">
             <search><![CDATA[date_modified = NOW()");]]></search>
             <add position="replace"><![CDATA[
-                date_modified = NOW(), `den` = '".(int)$data['den']."', `sostav` = '".$this->db->escape($data['sostav'])."', `znachek` = '".$this->db->escape($data['znachek'])."'");
+                date_modified = NOW(), `znachek` = '".$this->db->escape($data['znachek'])."'");
             ]]></add>
         </operation>
 
         <operation error="skip">
             <search><![CDATA[date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");]]></search>
             <add position="replace"><![CDATA[
-                date_modified = NOW(), `den` = '".(int)$data['den']."', `sostav` = '".$this->db->escape($data['sostav'])."', `znachek` = '".$this->db->escape($data['znachek'])."' WHERE product_id = '" . (int)$product_id . "'");
+                date_modified = NOW(), `znachek` = '".$this->db->escape($data['znachek'])."' WHERE product_id = '" . (int)$product_id . "'");
             ]]></add>
         </operation>
 
@@ -46,22 +46,6 @@
             <search><![CDATA[$this->load->model('localisation/length_class');]]></search>
             <add position="before"><![CDATA[
                 /* IVAN MOD START */
-                if (isset($this->request->post['den'])) {
-                    $data['den'] = $this->request->post['den'];
-                } elseif (!empty($product_info)) {
-                    $data['den'] = $product_info['den'];
-                } else {
-                    $data['den'] = '';
-                }
-
-                if (isset($this->request->post['sostav'])) {
-                    $data['sostav'] = $this->request->post['sostav'];
-                } elseif (!empty($product_info)) {
-                    $data['sostav'] = $product_info['sostav'];
-                } else {
-                    $data['sostav'] = '';
-                }
-
                 if (isset($this->request->post['znachek'])) {
                     $data['znachek'] = $this->request->post['znachek'];
                 } elseif (!empty($product_info)) {
@@ -90,8 +74,6 @@
                 /* IVAN MOD START */
                 $_['entry_small_description'] = 'Краткое описание';
                 $_['entry_h1'] = 'H1';
-                $_['entry_den'] = 'Ден';
-                $_['entry_sostav'] = 'Состав';
                 $_['entry_znachek'] = 'Новинка / Акция / Хит';
                 /* IVAN MOD END */
             ]]></add>
@@ -116,27 +98,6 @@
                     <label class="col-sm-2 control-label" for="input-small-description{{ language.language_id }}">{{ entry_small_description }}</label>
                     <div class="col-sm-10">
                       <textarea name="product_description[{{ language.language_id }}][small_description]" placeholder="{{ entry_small_description }}" id="input-small-description{{ language.language_id }}" rows="5" data-toggle="summernote" data-lang="{{ summernote }}" class="form-control">{{ product_description[language.language_id] ? product_description[language.language_id].small_description }}</textarea>
-                    </div>
-                  </div>
-                  <!-- IVAN MOD END -->
-            ]]></add>
-        </operation>
-
-        <operation error="skip">
-            <search><![CDATA[<label class="col-sm-2 control-label" for="input-sku"><span data-toggle="tooltip" title="{{ help_sku }}">{{ entry_sku }}</span></label>]]></search>
-            <add position="before" offset="1"><![CDATA[
-                  <!-- IVAN MOD START -->
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label" for="input-den"><span data-toggle="tooltip" title="{{ entry_den }}">{{ entry_den }}</span></label>
-                    <div class="col-sm-10">
-                      <input type="text" name="den" value="{{ den }}" placeholder="{{ entry_den }}" id="input-den" class="form-control" />
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label" for="input-sostav"><span data-toggle="tooltip" title="{{ entry_sostav }}">{{ entry_sostav }}</span></label>
-                    <div class="col-sm-10">
-                      <input type="text" name="sostav" value="{{ sostav }}" placeholder="{{ entry_sostav }}" id="input-sostav" class="form-control" />
                     </div>
                   </div>
                   <!-- IVAN MOD END -->

@@ -32,14 +32,14 @@ class ControllerApiImport1C extends Controller
                 $filename = isset($this->request->get['filename']) ?
                     $this->db->escape(trim($this->request->get['filename'])) : null;
 
-                try {
+                // try {
                     $result = $this->extension_model->{$process}($filename);
                     if (is_array($result)) {
                         $json = array_merge_recursive($json, $result);
                     }
-                } catch (\Exception $e) {
-                    $json['error'][] = $this->language->get('error_action');
-                }
+                // } catch (\Exception $e) {
+                //     $json['error'][] = $this->language->get('error_action');
+                // }
             } else {
                 $json['error'][] = $this->language->get('error_no_data');
             }

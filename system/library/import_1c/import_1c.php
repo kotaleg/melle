@@ -18,8 +18,8 @@ class import_1c
     private $handle;
     private $namespace = 'urn:1C.ru:commerceml_2';
 
-    const IMPORT_FILE = 'import.xml';
-    const OFFERS_FILE = 'offers.xml';
+    const IMPORT_FILE = 'import';
+    const OFFERS_FILE = 'offers';
 
     function __construct()
     {
@@ -47,25 +47,24 @@ class import_1c
     private function mapXml($path)
     {
         $basename = basename($path);
+        $basename = str_replace('.xml', '', $basename);
+        preg_match('/(?<name>[a-z]+)/', $basename, $matches);
 
-        switch ($basename) {
-            case self::IMPORT_FILE:
-                $this->service = import_file_map::mapXml($this->service, $this->namespace);
-                break;
-            case self::OFFERS_FILE:
-                $this->service = offers_file_map::mapXml($this->service, $this->namespace);
-                break;
+        if (isset($matches['name'])) {
+            switch ($matches['name']) {
+                case self::IMPORT_FILE:
+                    $this->service = import_file_map::mapXml($this->service, $this->namespace);
+                    break;
+                case self::OFFERS_FILE:
+                    $this->service = offers_file_map::mapXml($this->service, $this->namespace);
+                    break;
+            }
         }
     }
 
-    public function test()
+    public function parse()
     {
-        $result = $this->service->expect("{{$this->namespace}}КоммерческаяИнформация", $this->handle);
-
-        // echo "<pre>"; print_r($result->offers_pack->offers[0]); echo "</pre>";exit;
-        // echo "<pre>"; print_r($result->catalog->products); echo "</pre>";exit;
-
-        // echo "<pre>"; print_r($result); echo "</pre>";
+        return $this->service->expect("{{$this->namespace}}КоммерческаяИнформация", $this->handle);
     }
 
     public function createDir($path)

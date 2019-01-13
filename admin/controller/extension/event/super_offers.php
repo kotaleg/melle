@@ -23,6 +23,8 @@ class ControllerExtensionEventSuperOffers extends Controller
         $json = $this->model_extension_pro_patch_permission->validateRoute('catalog/option');
         if (isset($json['error'])) { return; }
 
+        if (!isset($this->request->get['product_id'])) { return; }
+
         $html_dom = new d_simple_html_dom();
         $html_dom->load($output, $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
 
