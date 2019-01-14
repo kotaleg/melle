@@ -29,31 +29,36 @@ class ModelApiImport1COption extends Model
                 switch (trim($option->name)) {
                     case self::CATEGORY:
                         foreach ($option->variants as $k => $item) {
+
+                            $cd = array();
+                            foreach ($languages as $l) {
+                                $cd[$l] = array(
+                                    'name'  => trim($item->value),
+                                    'description' => '',
+                                    'meta_title' => trim($item->value),
+                                    'meta_description' => '',
+                                    'meta_keyword' => '',
+                                );
+                            }
+
+                            $d_ = array(
+                                'import_id' => $item->id,
+                                'parent_id' => 0,
+                                'column' => 1,
+                                'sort_order' => $k,
+                                'status' => 1,
+                                'category_description' => $cd,
+                                'category_store' => array(
+                                    0 => $this->config->get('config_store_id'),
+                                ),
+                            );
+
                             if (!$this->model_api_import_1c_helper->isImportRecordExist(
                                 self::CATEGORY_TABLE, $item->id)) {
-
-                                $cd = array();
-                                foreach ($languages as $l) {
-                                    $cd[$l] = array(
-                                        'name'  => trim($item->value),
-                                        'description' => '',
-                                        'meta_title' => trim($item->value),
-                                        'meta_description' => '',
-                                        'meta_keyword' => '',
-                                    );
-                                }
-
-                                $this->addCategory(array(
-                                    'import_id' => $item->id,
-                                    'parent_id' => 0,
-                                    'column' => 1,
-                                    'sort_order' => $k,
-                                    'status' => 1,
-                                    'category_description' => $cd,
-                                    'category_store' => array(
-                                        0 => $this->config->get('config_store_id'),
-                                    ),
-                                ));
+                                $this->addCategory($d_);
+                            } else {
+                                // TODO: edit category?
+                                // $this->editCategory($item->id, $d_);
                             }
                         }
                         break;
@@ -81,7 +86,7 @@ class ModelApiImport1COption extends Model
             status = '" . (int)$data['status'] . "',
             date_modified = NOW(),
             date_added = NOW(),
-            `import_id` = '" . $this->db->escape($data['import_id']) . "',");
+            `import_id` = '" . $this->db->escape($data['import_id']) . "'");
 
         $category_id = $this->db->getLastId();
 

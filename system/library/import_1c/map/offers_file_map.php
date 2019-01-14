@@ -25,7 +25,6 @@ use import_1c\map\offers\specification;
 class offers_file_map
 {
     private static $namespace;
-    private static $only_changes = null;
 
     public static function mapXml(Service $service, $namespace)
     {
@@ -38,7 +37,7 @@ class offers_file_map
                 foreach($children as $child) {
                     if ($child['value'] instanceof offers_pack) {
                         if (array_key_exists('СодержитТолькоИзменения', $child['attributes'])) {
-                            self::$only_changes = helper::parseBool($child['attributes']['СодержитТолькоИзменения']);
+                            $info->only_changes = helper::parseBool($child['attributes']['СодержитТолькоИзменения']);
                         }
                         $info->offers_pack = $child['value'];
                     }
@@ -125,7 +124,6 @@ class offers_file_map
                         }
                     }
                 }
-                $offers_pack->only_changes = self::$only_changes;
                 return $offers_pack;
             },
             '{'.self::$namespace.'}ТипЦены' => function(Reader $reader) {

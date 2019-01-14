@@ -31,170 +31,197 @@ class ModelApiImport1CProduct extends Model
         $this->load->model('api/import_1c/group');
     }
 
-    public function action($parsed, $languages)
+    public function action($parsed, $languages, $exchange_path)
     {
         if (isset($parsed->catalog->products)) {
             foreach ($parsed->catalog->products as $product) {
 
-                if (!$this->model_api_import_1c_helper->isImportRecordExist(self::PRODUCT_TABLE, $product->id)) {
-                    $d_ = array(
-                        'import_id' => $product->id,
-                        'model' => (empty($product->artikul)) ? '--' : $product->artikul,
-                        'sku' => $product->artikul,
-                        'upc' => '',
-                        'ean' => '',
-                        'jan' => '',
-                        'isbn' => '',
-                        'mpn' => '',
-                        'location' => '',
-                        'quantity' => 0,
-                        'minimum' => 1,
-                        'subtract' => 1,
-                        'stock_status_id' => 0,
-                        'date_available' => '',
-                        'shipping' => 1,
-                        'price' => 0,
-                        'points' => 0,
-                        'weight' => 0,
-                        'weight_class_id' => $this->config->get('config_weight_class_id'),
-                        'length_class_id' => $this->config->get('config_length_class_id'),
-                        'status' => 1,
-                        'tax_class_id' => 0,
-                        'sort_order' => 0,
+                $d_ = array(
+                    'import_id' => $product->id,
+                    'model' => (empty($product->artikul)) ? '--' : $product->artikul,
+                    'sku' => $product->artikul,
+                    'upc' => '',
+                    'ean' => '',
+                    'jan' => '',
+                    'isbn' => '',
+                    'mpn' => '',
+                    'location' => '',
+                    'quantity' => 0,
+                    'minimum' => 1,
+                    'subtract' => 1,
+                    'stock_status_id' => 0,
+                    'date_available' => '',
+                    'shipping' => 1,
+                    'price' => 0,
+                    'points' => 0,
+                    'weight' => 0,
+                    'weight_class_id' => $this->config->get('config_weight_class_id'),
+                    'length_class_id' => $this->config->get('config_length_class_id'),
+                    'status' => 1,
+                    'tax_class_id' => 0,
+                    'sort_order' => 0,
 
-                        'import_id' => $product->id,
+                    'import_id' => $product->id,
 
-                        'length' => '',
-                        'height' => '',
-                        'width' => '',
-                        'manufacturer_id' => '',
-                    );
+                    'length' => '',
+                    'height' => '',
+                    'width' => '',
+                    'manufacturer_id' => '',
+                );
 
-                    // SOSTAV
-                    $sostav = $this->prepareSostav($product->compositions);
+                // IMAGE
+                if ($product->picture) {
+                    $img = $this->moveImage($exchange_path, $product->picture);
+                    if ($img) { $d_['image'] = $img; }
+                }
+
+                // SOSTAV
+                $sostav = $this->prepareSostav($product->compositions);
+                $attr = $this->model_api_import_1c_group->prepareProductAttribute(
+                    self::A_SOSTAV, $sostav, $languages);
+                if ($attr) {
+                    $d_['product_attribute'][] = $attr;
+                }
+                unset($sostav, $group, $attr);
+
+                // DEN
+                if (isset($product->group) && $product->group) {
                     $attr = $this->model_api_import_1c_group->prepareProductAttribute(
-                        self::A_SOSTAV, $sostav, $languages);
+                        self::A_DEN, $product->den, $languages);
                     if ($attr) {
                         $d_['product_attribute'][] = $attr;
                     }
-                    unset($sostav, $group, $attr);
-
-                    // DEN
-                    if (isset($product->group) && $product->group) {
-                        $attr = $this->model_api_import_1c_group->prepareProductAttribute(
-                            self::A_DEN, $product->den, $languages);
-                        if ($attr) {
-                            $d_['product_attribute'][] = $attr;
-                        }
-                        unset($group, $attr);
-                    }
-
-                    $title = '';
-                    $title_h1 = '';
-                    $description = '';
-                    $keywords = '';
-
-                    if (is_array($product->options)) {
-                        foreach ($product->options as $option) {
-                            $option_data = $this->getOptionData($parsed, $option);
-
-                            switch ($option_data['name']) {
-                                case self::LENGTH:
-                                    $d_['length'] = $option_data['value'];
-                                    break;
-                                case self::HEIGTH:
-                                    $d_['height'] = $option_data['value'];
-                                    break;
-                                case self::WIDTH:
-                                    $d_['width'] = $option_data['value'];
-                                    break;
-                                case self::TITLE:
-                                    $title = $option_data['value'];
-                                    break;
-                                case self::TITLE_H1:
-                                    $title_h1 = $option_data['value'];
-                                    break;
-                                case self::DESCRIPTION:
-                                    $description = $option_data['value'];
-                                    break;
-                                case self::KEYWORDS:
-                                    $keywords = $option_data['value'];
-                                    break;
-
-                                case self::CATEGORY:
-                                    $category_id = $this->getCategoryByImportId($option_data['import_id']);
-                                    if ($category_id) {
-                                        $d_['product_category'] = array(
-                                            0 => $category_id,
-                                        );
-                                    }
-                                    unset($category_id);
-                                    break;
-
-                                case self::COLLECTION:
-                                    $attr = $this->model_api_import_1c_group->prepareProductAttribute(
-                                        self::COLLECTION, $option_data['value'], $languages);
-                                    if ($attr) {
-                                        $d_['product_attribute'][] = $attr;
-                                    }
-                                    unset($attr);
-                                    break;
-
-                                case self::MATERIAL:
-                                    $attr = $this->model_api_import_1c_group->prepareProductAttribute(
-                                        self::MATERIAL, $option_data['value'], $languages);
-                                    if ($attr) {
-                                        $d_['product_attribute'][] = $attr;
-                                    }
-                                    unset($attr);
-                                    break;
-                            }
-                        }
-                    }
-
-                    // DESCRIPTION
-                    if (empty($title)) { $title = $product->name; }
-
-                    foreach ($languages as $l) {
-                        $d_['product_description'][$l] = array(
-                            'name' => $product->name,
-                            'description' => $product->description,
-                            'tag' => '',
-                            'meta_title' => $title,
-                            'meta_description' => $description,
-                            'meta_keyword' => $keywords,
-                            'small_description' => $description,
-                            'h1' => $title_h1,
-                        );
-                    }
-
-                    // STORE
-                    $d_['product_store'] = array(
-                        0 => $this->config->get('config_store_id'),
-                    );
-
-                    // GROUP
-                    if (isset($product->group->id)) {
-                        $group = $this->getGroupData($parsed, $product->group);
-                        $attr = $this->model_api_import_1c_group->prepareProductAttribute(
-                            self::A_GROUP, $group['name'], $languages);
-                        if ($attr) {
-                            $d_['product_attribute'][] = $attr;
-                        }
-                        unset($group, $attr);
-                    }
-
-                    // PRODUCER
-                    if (isset($product->producer->id)) {
-                        $manufacturer_id = $this->getManufacturerByImportId($product->producer->id);
-                        if ($manufacturer_id) {
-                            $d_['manufacturer_id'] = $manufacturer_id;
-                        }
-                        unset($manufacturer_id);
-                    }
-
-                    $this->addProduct($d_);
+                    unset($group, $attr);
                 }
+
+                $title = '';
+                $title_h1 = '';
+                $description = '';
+                $keywords = '';
+
+                if (is_array($product->options)) {
+                    foreach ($product->options as $option) {
+                        $option_data = $this->getOptionData($parsed, $option);
+
+                        switch ($option_data['name']) {
+                            case self::LENGTH:
+                                $d_['length'] = $option_data['value'];
+                                break;
+                            case self::HEIGTH:
+                                $d_['height'] = $option_data['value'];
+                                break;
+                            case self::WIDTH:
+                                $d_['width'] = $option_data['value'];
+                                break;
+                            case self::TITLE:
+                                $title = $option_data['value'];
+                                break;
+                            case self::TITLE_H1:
+                                $title_h1 = $option_data['value'];
+                                break;
+                            case self::DESCRIPTION:
+                                $description = $option_data['value'];
+                                break;
+                            case self::KEYWORDS:
+                                $keywords = $option_data['value'];
+                                break;
+
+                            case self::CATEGORY:
+                                $category_id = $this->getCategoryByImportId($option_data['import_id']);
+                                if ($category_id) {
+                                    $d_['product_category'] = array(
+                                        0 => $category_id,
+                                    );
+                                }
+                                unset($category_id);
+                                break;
+
+                            case self::COLLECTION:
+                                $attr = $this->model_api_import_1c_group->prepareProductAttribute(
+                                    self::COLLECTION, $option_data['value'], $languages);
+                                if ($attr) {
+                                    $d_['product_attribute'][] = $attr;
+                                }
+                                unset($attr);
+                                break;
+
+                            case self::MATERIAL:
+                                $attr = $this->model_api_import_1c_group->prepareProductAttribute(
+                                    self::MATERIAL, $option_data['value'], $languages);
+                                if ($attr) {
+                                    $d_['product_attribute'][] = $attr;
+                                }
+                                unset($attr);
+                                break;
+                        }
+                    }
+                }
+
+                // DESCRIPTION
+                if (empty($title)) { $title = $product->name; }
+
+                foreach ($languages as $l) {
+                    $d_['product_description'][$l] = array(
+                        'name' => $product->name,
+                        'description' => $product->description,
+                        'tag' => '',
+                        'meta_title' => $title,
+                        'meta_description' => $description,
+                        'meta_keyword' => $keywords,
+                        'small_description' => $description,
+                        'h1' => $title_h1,
+                    );
+                }
+
+                // STORE
+                $d_['product_store'] = array(
+                    0 => $this->config->get('config_store_id'),
+                );
+
+                // GROUP
+                if (isset($product->group->id)) {
+                    $group = $this->getGroupData($parsed, $product->group);
+                    $attr = $this->model_api_import_1c_group->prepareProductAttribute(
+                        self::A_GROUP, $group['name'], $languages);
+                    if ($attr) {
+                        $d_['product_attribute'][] = $attr;
+                    }
+                    unset($group, $attr);
+                }
+
+                // PRODUCER
+                if (isset($product->producer->id)) {
+                    $manufacturer_id = $this->getManufacturerByImportId($product->producer->id);
+                    if ($manufacturer_id) {
+                        $d_['manufacturer_id'] = $manufacturer_id;
+                    }
+                    unset($manufacturer_id);
+                }
+
+                if (!$this->model_api_import_1c_helper->isImportRecordExist(
+                    self::PRODUCT_TABLE, $product->id)) {
+                    $this->addProduct($d_);
+                } else {
+                    $product_id = $this->getProductByImportId($product->id);
+                    $this->editProduct($product_id, $d_);
+                }
+            }
+        }
+    }
+
+    private function moveImage($exchange_path, $picture)
+    {
+        $current_path = "{$exchange_path}{$picture}";
+
+        if (is_file($current_path) && is_readable($current_path)) {
+            $new_path = DIR_IMAGE.'catalog/'.$product->picture;
+
+            if (!is_dir(dirname($new_path))) {
+                \import_1c\import_1c_dir\createDir(dirname($new_path));
+            }
+
+            if (rename($current_path, $new_path)) {
+                return 'catalog/'.$product->picture;
             }
         }
     }
@@ -235,6 +262,16 @@ class ModelApiImport1CProduct extends Model
             WHERE `import_id` = '".$this->db->escape($import_id)."'");
         if ($query->row) {
             return $query->row['manufacturer_id'];
+        }
+    }
+
+    private function getProductByImportId($import_id)
+    {
+        $query = $this->db->query("SELECT `product_id`
+            FROM `". DB_PREFIX ."product`
+            WHERE `import_id` = '".$this->db->escape($import_id)."'");
+        if ($query->row) {
+            return $query->row['product_id'];
         }
     }
 
@@ -368,7 +405,7 @@ class ModelApiImport1CProduct extends Model
         if (isset($data['product_option'])) {
             foreach ($data['product_option'] as $product_option) {
                 if ($product_option['type'] == 'select' || $product_option['type'] == 'radio'
-                    || $product_option['type'] == 'checkbox' || $product_option['type'] == 'image') {
+                || $product_option['type'] == 'checkbox' || $product_option['type'] == 'image') {
 
                     if (isset($product_option['product_option_value'])) {
                         $this->db->query("INSERT INTO " . DB_PREFIX . "product_option
@@ -414,6 +451,98 @@ class ModelApiImport1CProduct extends Model
 
         $this->cache->delete('product');
         return $product_id;
+    }
+
+    public function editProduct($product_id, $data)
+    {
+        $this->db->query("UPDATE " . DB_PREFIX . "product
+            SET model = '" . $this->db->escape($data['model']) . "',
+                `import_id` = '" . $this->db->escape($data['import_id']) . "',
+                sku = '" . $this->db->escape($data['sku']) . "',
+                upc = '" . $this->db->escape($data['upc']) . "',
+                ean = '" . $this->db->escape($data['ean']) . "',
+                jan = '" . $this->db->escape($data['jan']) . "',
+                isbn = '" . $this->db->escape($data['isbn']) . "',
+                mpn = '" . $this->db->escape($data['mpn']) . "',
+                location = '" . $this->db->escape($data['location']) . "',
+                quantity = '" . (int)$data['quantity'] . "',
+                minimum = '" . (int)$data['minimum'] . "',
+                subtract = '" . (int)$data['subtract'] . "',
+                stock_status_id = '" . (int)$data['stock_status_id'] . "',
+                date_available = '" . $this->db->escape($data['date_available']) . "',
+                manufacturer_id = '" . (int)$data['manufacturer_id'] . "',
+                shipping = '" . (int)$data['shipping'] . "',
+                price = '" . (float)$data['price'] . "',
+                points = '" . (int)$data['points'] . "',
+                weight = '" . (float)$data['weight'] . "',
+                weight_class_id = '" . (int)$data['weight_class_id'] . "',
+                length = '" . (float)$data['length'] . "',
+                width = '" . (float)$data['width'] . "',
+                height = '" . (float)$data['height'] . "',
+                length_class_id = '" . (int)$data['length_class_id'] . "',
+                status = '" . (int)$data['status'] . "',
+                tax_class_id = '" . (int)$data['tax_class_id'] . "',
+                sort_order = '" . (int)$data['sort_order'] . "',
+                date_modified = NOW()
+            WHERE product_id = '" . (int)$product_id . "'");
+
+        if (isset($data['image'])) {
+            $this->db->query("UPDATE " . DB_PREFIX . "product
+                SET image = '" . $this->db->escape($data['image']) . "'
+                WHERE product_id = '" . (int)$product_id . "'");
+        }
+
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_description
+            WHERE product_id = '" . (int)$product_id . "'");
+
+        foreach ($data['product_description'] as $language_id => $value) {
+            $this->db->query("INSERT INTO " . DB_PREFIX . "product_description
+                SET product_id = '" . (int)$product_id . "',
+                    language_id = '" . (int)$language_id . "',
+                    name = '" . $this->db->escape($value['name']) . "',
+                    description = '" . $this->db->escape($value['description']) . "',
+                    tag = '" . $this->db->escape($value['tag']) . "',
+                    meta_title = '" . $this->db->escape($value['meta_title']) . "',
+                    meta_description = '" . $this->db->escape($value['meta_description']) . "',
+                    meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "',
+                    small_description = '" . $this->db->escape($value['small_description']) . "',
+                    h1 = '" . $this->db->escape($value['h1']) . "'");
+        }
+
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_to_store
+            WHERE product_id = '" . (int)$product_id . "'");
+
+        if (isset($data['product_store'])) {
+            foreach ($data['product_store'] as $store_id) {
+                $this->db->query("INSERT INTO " . DB_PREFIX . "product_to_store
+                    SET product_id = '" . (int)$product_id . "',
+                        store_id = '" . (int)$store_id . "'");
+            }
+        }
+
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_attribute
+            WHERE product_id = '" . (int)$product_id . "'");
+
+        if (!empty($data['product_attribute'])) {
+            foreach ($data['product_attribute'] as $product_attribute) {
+                if ($product_attribute['attribute_id']) {
+                    // Removes duplicates
+                    $this->db->query("DELETE FROM " . DB_PREFIX . "product_attribute
+                        WHERE product_id = '" . (int)$product_id . "'
+                        AND attribute_id = '" . (int)$product_attribute['attribute_id'] . "'");
+
+                    foreach ($product_attribute['product_attribute_description'] as $language_id => $product_attribute_description) {
+                        $this->db->query("INSERT INTO " . DB_PREFIX . "product_attribute
+                            SET product_id = '" . (int)$product_id . "',
+                                attribute_id = '" . (int)$product_attribute['attribute_id'] . "',
+                                language_id = '" . (int)$language_id . "',
+                                text = '" .  $this->db->escape($product_attribute_description['text']) . "'");
+                    }
+                }
+            }
+        }
+
+        $this->cache->delete('product');
     }
 
     public function deleteAllProducts()

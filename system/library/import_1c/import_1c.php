@@ -16,6 +16,7 @@ class import_1c
 {
     private $service;
     private $handle;
+    private $filetype;
     private $namespace = 'urn:1C.ru:commerceml_2';
 
     const IMPORT_FILE = 'import';
@@ -44,6 +45,16 @@ class import_1c
         );
     }
 
+    public function getImportFileType()
+    {
+        return self::IMPORT_FILE;
+    }
+
+    public function getOffersFileType()
+    {
+        return self::OFFERS_FILE;
+    }
+
     private function mapXml($path)
     {
         $basename = basename($path);
@@ -53,13 +64,20 @@ class import_1c
         if (isset($matches['name'])) {
             switch ($matches['name']) {
                 case self::IMPORT_FILE:
+                    $this->filetype = self::IMPORT_FILE;
                     $this->service = import_file_map::mapXml($this->service, $this->namespace);
                     break;
                 case self::OFFERS_FILE:
+                    $this->filetype = self::OFFERS_FILE;
                     $this->service = offers_file_map::mapXml($this->service, $this->namespace);
                     break;
             }
         }
+    }
+
+    public function getFileType()
+    {
+        return $this->filetype;
     }
 
     public function parse()
@@ -67,24 +85,9 @@ class import_1c
         return $this->service->expect("{{$this->namespace}}КоммерческаяИнформация", $this->handle);
     }
 
-    public function createDir($path)
+    public function done()
     {
-        return Dir::make($path,
-            array(
-                'mode'      => 0755,
-                'recursive' => true,
-            )
-        );
-    }
-
-    public function clearDir($path, $exclude = array())
-    {
-        return Dir::remove($path,
-            array(
-                'followSymlinks' => false,
-                'recursive'      => true,
-                'exclude'        => $exclude,
-            )
-        );
+        $this->service = null;
+        return fclose($this->handle);
     }
 }

@@ -25,6 +25,11 @@ class ModelApiImport1CProducer extends Model
                         'import_id'     => $producer->id,
                         'sort_order'    => $k,
                     ));
+                } else {
+                    $this->editManufacturer($producer->id, array(
+                        'name'          => $producer->name,
+                        'sort_order'    => $k,
+                    ));
                 }
             }
 
@@ -38,5 +43,13 @@ class ModelApiImport1CProducer extends Model
             SET `name` = '". $this->db->escape($data['name']) ."',
                 `import_id` = '". $this->db->escape($data['import_id']) ."',
                 `sort_order` = '". (int)$data['sort_order'] ."'");
+    }
+
+    private function editManufacturer($import_id, $data)
+    {
+        $this->db->query("UPDATE `". DB_PREFIX ."manufacturer`
+            SET `name` = '". $this->db->escape($data['name']) ."',
+                `sort_order` = '". (int)$data['sort_order'] ."'
+            WHERE `import_id` = '". $this->db->escape($import_id) ."'");
     }
 }

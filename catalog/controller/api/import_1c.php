@@ -32,6 +32,15 @@ class ControllerApiImport1C extends Controller
                 $filename = isset($this->request->get['filename']) ?
                     $this->db->escape(trim($this->request->get['filename'])) : null;
 
+                // SAVE PROGRESS AND LOG ACTION
+                $this->extension_model->initProgress(
+                    $this->request->get['api_token'], array(
+                        'type'  => $type,
+                        'mode'  => $mode,
+                        'filename'  => $filename,
+                        'extra'  => array(),
+                ));
+
                 // try {
                     $result = $this->extension_model->{$process}($filename);
                     if (is_array($result)) {

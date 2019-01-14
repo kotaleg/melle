@@ -7,9 +7,11 @@ class ModelApiImport1C extends Model
 
     private $exchange_path;
 
-    const OFFERS_GROUP = '1c_offers_group';
-    const OFFERS = '1c_offers';
+    private $progress_id;
+    private $action_id;
+    private $extra;
 
+    // STORE TABLES
     const PRODUCT_TABLE = 'product';
     const CATEGORY_TABLE = 'category';
     const MANUFACTURER_TABLE = 'manufacturer';
@@ -24,6 +26,7 @@ class ModelApiImport1C extends Model
 
         $this->load->model('extension/pro_patch/db');
         $this->load->model('extension/module/super_offers');
+        $this->load->model('api/import_1c/progress');
 
         $this->import_1c = new \import_1c\import_1c();
         $this->exchange_path = $this->getRootPath() . 'protected/runtime/exchange/';
@@ -32,12 +35,24 @@ class ModelApiImport1C extends Model
             'import*.xml',
             'offers*.xml',
         );
+
+        $this->progress_id = (isset($this->session->data['import_1c_progress_id'])) ?
+            $this->session->data['import_1c_progress_id'] : false;
+        $this->action_id = (isset($this->session->data['import_1c_action_id'])) ?
+            $this->session->data['import_1c_action_id'] : false;
+
+        $this->extra = $this->model_api_import_1c_progress->getExtra($this->progress_id);
+    }
+
+    private function getRootPath()
+    {
+        return dirname(DIR_SYSTEM).'/';
     }
 
     public function actionCatalogInit()
     {
         // if (is_dir($this->exchange_path)) {
-        //     $this->import_1c->clearDir("{$this->exchange_path}", array(
+        //     \import_1c\import_1c_dir\clearDir("{$this->exchange_path}", array(
         //         '*.gitignore',
         //         '*/import_files/*.jpg',
         //         '*/import_files/*.png',
@@ -59,18 +74,38 @@ class ModelApiImport1C extends Model
         }
     }
 
+    public function initProgress($api_token, $data)
+    {
+        $progress_id = $this->model_api_import_1c_progress->isProgress($api_token);
+
+        if (!$progress_id) {
+            $this->progress_id = $this->model_api_import_1c_progress->initProgress($api_token, $data);
+        } else {
+            $this->progress_id = $progress_id;
+        }
+
+        $this->session->data['import_1c_progress_id'] = $this->progress_id;
+
+        $this->session->data['import_1c_action_id'] =
+            $this->model_api_import_1c_progress->saveAction($this->progress_id, $data);
+    }
+
     public function actionCatalogFile($filename)
     {
         $json = array();
         if (empty($filename)) {
             $json['error'][] = 'Невереный filename';
+
+            // SAVE TO LOG
+            $this->model_api_import_1c_progress->parseJson(
+                $this->progress_id, $json, $this->action_id);
             return $json;
         }
 
         try {
             $path = "{$this->exchange_path}{$filename}";
             if (!is_dir(dirname($path))) {
-                $this->import_1c->createDir(dirname($path));
+                \import_1c\import_1c_dir\createDir(dirname($path));
             }
 
             if (is_file($path)) {
@@ -89,19 +124,26 @@ class ModelApiImport1C extends Model
             $json['error'][] = 'Ошибка при сохраненнии файла';
         }
 
+        // SAVE TO LOG
+        $this->model_api_import_1c_progress->parseJson(
+                $this->progress_id, $json, $this->action_id);
+
         return $json;
     }
 
     public function actionCatalogImport($filename)
     {
         $json = array();
-        $json['continue'] = true;
-        $json['success'] = true;
+        $json['continue'] = false;
 
         if (empty($filename)) {
             $json['error'][] = 'Невереный filename';
             $json['continue'] = false;
             $json['success'] = false;
+
+            // SAVE TO LOG
+            $this->model_api_import_1c_progress->parseJson(
+                $this->progress_id, $json, $this->action_id);
             return $json;
         }
 
@@ -111,11 +153,92 @@ class ModelApiImport1C extends Model
             $json['error'][] = 'Filename не существует';
             $json['continue'] = false;
             $json['success'] = false;
+
+            // SAVE TO LOG
+            $this->model_api_import_1c_progress->parseJson(
+                $this->progress_id, $json, $this->action_id);
             return $json;
         }
 
+        // OPEN AND MAP THE FILE
         $this->import_1c->openFile($realpath);
-        $parsed = $this->import_1c->parse();
+        $filetype = $this->import_1c->getFileType();
+
+        if ($filetype) {
+
+            $this->extra[$filetype] = array(
+                'filename' => $filename,
+            );
+
+            // PARSE XML TO OBJECTS
+            $parsed = $this->import_1c->parse();
+
+            switch ($filetype) {
+                case $this->import_1c->getImportFileType():
+                    $result = $this->_importRoutine($parsed);
+                    break;
+
+                case $this->import_1c->getOffersFileType():
+                    $result = $this->_offersRoutine($parsed);
+                    break;
+
+                default:
+                    $json['success'] = false;
+                    $json['error'][] = 'Тип файла не распознан.';
+                    break;
+            }
+
+            if (isset($result)) {
+                $this->extra[$filetype]['result'] = $result;
+            }
+
+            if (isset($result) && $result === true) {
+                if ($this->import_1c->done() !== true) {
+                    $json['success'] = false;
+                    $json['error'][] = 'Не удалось закрыть файл.';
+                }
+
+                if (!isset($json['success']) || $json['success'] != false) {
+                    if ($this->markFileFinished($realpath) === true) {
+                        $this->extra[$filetype]['finished'] = true;
+                        $json['success'] = true;
+                    } else {
+                        $json['success'] = false;
+                        $json['error'][] = 'Не удалось переименовать файл.';
+                    }
+                }
+            } else {
+                $json['success'] = true;
+                $json['continue'] = true;
+                // TODO: save progress and continue
+            }
+        }
+
+        // SAVE TO LOG
+        $this->model_api_import_1c_progress->parseJson(
+                $this->progress_id, $json, $this->action_id);
+
+        // UPDATE EXTRA
+        $this->model_api_import_1c_progress->updateExtra(
+                $this->progress_id, $this->extra);
+
+        // FINISHED
+        if (isset($this->extra[$this->import_1c->getImportFileType()]['finished'])
+        && $this->extra[$this->import_1c->getImportFileType()]['finished'] === true
+        && isset($this->extra[$this->import_1c->getOffersFileType()]['finished'])
+        && $this->extra[$this->import_1c->getOffersFileType()]['finished'] === true) {
+            $this->model_api_import_1c_progress->finishImport($this->progress_id);
+        }
+
+        return $json;
+    }
+
+    private function _importRoutine($parsed)
+    {
+        // DISABLE ALL PRODUCTS IF FULL IMPORT
+        if (!$parsed->only_changes) {
+            $this->disableAllProducts();
+        }
 
         // LANGUAGES
         $this->load->model('api/import_1c/language');
@@ -143,11 +266,24 @@ class ModelApiImport1C extends Model
 
         // PRODUCTS
         $this->load->model('api/import_1c/product');
-        $this->model_api_import_1c_product->action($parsed, $languages);
+        $this->model_api_import_1c_product->action($parsed, $languages, $this->exchange_path);
 
-        echo "<pre>"; print_r($parsed->classificator->options); echo "</pre>";exit;
+        return true;
+    }
 
-        return $json;
+    private function _offersRoutine()
+    {
+        // LANGUAGES
+        $this->load->model('api/import_1c/language');
+        $languages = $this->model_api_import_1c_language->getLanguages();
+
+        return true;
+    }
+
+    private function markFileFinished($path)
+    {
+        $renamed = dirname($path).DIRECTORY_SEPARATOR.basename($path).'__FINISHED';
+        return rename($path, $renamed);
     }
 
     public function actionCatalogDelete()
@@ -158,39 +294,12 @@ class ModelApiImport1C extends Model
         $this->model_api_import_1c_product->deleteAllProducts();
 
         $json['success'] = true;
+
+        // SAVE TO LOG
+        $this->model_api_import_1c_progress->parseJson(
+                $this->progress_id, $json, $this->action_id);
+
         return $json;
-    }
-
-    private function getRootPath()
-    {
-        return dirname(DIR_SYSTEM).'/';
-    }
-
-    private function createTables()
-    {
-        $this->db->query("CREATE TABLE IF NOT EXISTS `". DB_PREFIX .$this->db->escape(self::OFFERS_GROUP) ."` (
-            `_id` int(11) NOT NULL AUTO_INCREMENT,
-
-            `c_id` varchar(255) NOT NULL,
-            `name` varchar(64) NOT NULL,
-
-            PRIMARY KEY (`_id`),
-            UNIQUE KEY `no_duplicate` (`c_id`)
-        )
-        COLLATE='utf8_general_ci'
-        ENGINE=MyISAM;");
-
-        $this->db->query("CREATE TABLE IF NOT EXISTS `". DB_PREFIX .$this->db->escape(self::OFFERS) ."` (
-            `_id` int(11) NOT NULL AUTO_INCREMENT,
-
-            `c_id` varchar(255) NOT NULL,
-            `name` varchar(64) NOT NULL,
-
-            PRIMARY KEY (`_id`),
-            UNIQUE KEY `no_duplicate` (`c_id`)
-        )
-        COLLATE='utf8_general_ci'
-        ENGINE=MyISAM;");
     }
 
     private function disableAllProducts()
