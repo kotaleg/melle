@@ -265,7 +265,7 @@ class ModelApiImport1CProduct extends Model
         }
     }
 
-    private function getProductByImportId($import_id)
+    public function getProductByImportId($import_id)
     {
         $query = $this->db->query("SELECT `product_id`
             FROM `". DB_PREFIX ."product`
@@ -578,5 +578,11 @@ class ModelApiImport1CProduct extends Model
         $this->db->query("DELETE FROM " . DB_PREFIX . "coupon_product WHERE product_id = '" . (int)$product_id . "'");
 
         $this->cache->delete('product');
+    }
+
+    public function deleteProductOptions($product_id)
+    {
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_option WHERE product_id = '" . (int)$product_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_option_value WHERE product_id = '" . (int)$product_id . "'");
     }
 }

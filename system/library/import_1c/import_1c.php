@@ -37,7 +37,7 @@ class import_1c
         }
     }
 
-    public function getFiles()
+    public function getFileTypes()
     {
         return array(
             self::IMPORT_FILE,

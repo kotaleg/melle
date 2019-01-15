@@ -4,20 +4,27 @@ class ModelApiImport1COption extends Model
     private $codename = 'option';
     private $route = 'api/import_1c/option';
 
-    const CATEGORY = 'Категория';
-    const COLLECTION = 'Коллекция';
-    const MATERIAL = 'Материал';
+    const OPTION_TABLE = 'option';
+    const OPTION_VALUE_TABLE = 'option_value';
 
-    const CATEGORY_TABLE = 'category';
+    const O_SIZE = 'Размер';
+    const O_COLOR = 'Цвет';
 
-    const IMPORT_FIELD = 'import_id';
+    const TYPE = 'radio';
 
     function __construct($registry)
     {
         parent::__construct($registry);
 
         $this->load->model('api/import_1c/helper');
-        $this->load->model('api/import_1c/group');
+    }
+
+    private function getAllowedOptions()
+    {
+        return array(
+            self::O_SIZE,
+            self::O_COLOR,
+        );
     }
 
     public function action($parsed, $languages)
@@ -26,110 +33,110 @@ class ModelApiImport1COption extends Model
             && is_array($parsed->classificator->options)) {
 
             foreach ($parsed->classificator->options as $option) {
-                switch (trim($option->name)) {
-                    case self::CATEGORY:
-                        foreach ($option->variants as $k => $item) {
+                if (in_array(trim($option->name), $this->getAllowedOptions())) {
 
-                            $cd = array();
+                    $od = array();
+                    foreach ($languages as $l) {
+                        $od[$l] = array(
+                            'name' => trim($option->name),
+                        );
+                    }
+
+                    $d_ = array(
+                        'type' => self::TYPE,
+                        'import_id' => $option->id,
+                        'sort_order' => 0,
+                        'option_description' => $od,
+                    );
+
+                    if (!$this->model_api_import_1c_helper->isImportRecordExist(
+                        self::OPTION_TABLE, $option->id)) {
+                        $option_id = $this->addOption($d_);
+                    } else {
+                        $option_id = $this->getOptionByImportId($option->id);
+                        $this->deleteOldValues($option_id);
+                    }
+
+
+                    if (isset($option->variants) && is_array($option->variants)) {
+                        $option_values = array();
+                        foreach ($option->variants as $k => $variant) {
+                            $ovd = array();
                             foreach ($languages as $l) {
-                                $cd[$l] = array(
-                                    'name'  => trim($item->value),
-                                    'description' => '',
-                                    'meta_title' => trim($item->value),
-                                    'meta_description' => '',
-                                    'meta_keyword' => '',
+                                $ovd[$l] = array(
+                                    'name' => trim($variant->value),
                                 );
                             }
 
-                            $d_ = array(
-                                'import_id' => $item->id,
-                                'parent_id' => 0,
-                                'column' => 1,
-                                'sort_order' => $k,
-                                'status' => 1,
-                                'category_description' => $cd,
-                                'category_store' => array(
-                                    0 => $this->config->get('config_store_id'),
-                                ),
+                            $option_values[] = array(
+                                'image' => '',
+                                'sort_order' => 0,
+                                'import_id' => $variant->id,
+                                'option_value_description' => $ovd,
                             );
-
-                            if (!$this->model_api_import_1c_helper->isImportRecordExist(
-                                self::CATEGORY_TABLE, $item->id)) {
-                                $this->addCategory($d_);
-                            } else {
-                                // TODO: edit category?
-                                // $this->editCategory($item->id, $d_);
-                            }
                         }
-                        break;
 
-                    case self::COLLECTION:
-                        $this->model_api_import_1c_group->action(
-                            trim($option->name), $languages);
-                        break;
-
-                    case self::MATERIAL:
-                        $this->model_api_import_1c_group->action(
-                            trim($option->name), $languages);
-                        break;
+                        $this->addOptionValues($option_id, $option_values);
+                    }
                 }
             }
         }
     }
 
-    public function addCategory($data) {
-        $this->db->query("INSERT INTO " . DB_PREFIX . "category
-            SET parent_id = '" . (int)$data['parent_id'] . "',
-            `top` = '" . (isset($data['top']) ? (int)$data['top'] : 0) . "',
-            `column` = '" . (int)$data['column'] . "',
-            sort_order = '" . (int)$data['sort_order'] . "',
-            status = '" . (int)$data['status'] . "',
-            date_modified = NOW(),
-            date_added = NOW(),
-            `import_id` = '" . $this->db->escape($data['import_id']) . "'");
+    private function getOptionByImportId($import_id)
+    {
+        $query = $this->db->query("SELECT `option_id`
+            FROM `". DB_PREFIX ."option`
+            WHERE `import_id` = '".$this->db->escape($import_id)."'");
+        if ($query->row) {
+            return $query->row['option_id'];
+        }
+    }
 
-        $category_id = $this->db->getLastId();
+    private function addOption($data) {
+        $this->db->query("INSERT INTO `" . DB_PREFIX . "option`
+            SET type = '" . $this->db->escape($data['type']) . "',
+                sort_order = '" . (int)$data['sort_order'] . "',
+                `import_id` = '" . $this->db->escape($data['import_id']) . "'");
 
-        foreach ($data['category_description'] as $language_id => $value) {
-            $this->db->query("INSERT INTO " . DB_PREFIX . "category_description
-                SET category_id = '" . (int)$category_id . "',
+        $option_id = $this->db->getLastId();
+
+        foreach ($data['option_description'] as $language_id => $value) {
+            $this->db->query("INSERT INTO " . DB_PREFIX . "option_description
+                SET option_id = '" . (int)$option_id . "',
                     language_id = '" . (int)$language_id . "',
-                    name = '" . $this->db->escape($value['name']) . "',
-                    description = '" . $this->db->escape($value['description']) . "',
-                    meta_title = '" . $this->db->escape($value['meta_title']) . "',
-                    meta_description = '" . $this->db->escape($value['meta_description']) . "',
-                    meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "'");
+                    name = '" . $this->db->escape($value['name']) . "'");
         }
 
-        // MySQL Hierarchical Data Closure Table Pattern
-        $level = 0;
+        return $option_id;
+    }
 
-        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "category_path`
-            WHERE category_id = '" . (int)$data['parent_id'] . "'
-            ORDER BY `level` ASC");
+    private function addOptionValues($option_id, $option_values)
+    {
+        if (isset($option_values)) {
+            foreach ($option_values as $option_value) {
+                $this->db->query("INSERT INTO " . DB_PREFIX . "option_value
+                    SET option_id = '" . (int)$option_id . "',
+                        image = '" . $this->db->escape(html_entity_decode($option_value['image'], ENT_QUOTES, 'UTF-8')) . "',
+                        sort_order = '" . (int)$option_value['sort_order'] . "',
+                        `import_id` = '" . $this->db->escape($option_value['import_id']) . "'");
 
-        foreach ($query->rows as $result) {
-            $this->db->query("INSERT INTO `" . DB_PREFIX . "category_path`
-                SET `category_id` = '" . (int)$category_id . "',
-                    `path_id` = '" . (int)$result['path_id'] . "',
-                    `level` = '" . (int)$level . "'");
-            $level++;
-        }
+                $option_value_id = $this->db->getLastId();
 
-        $this->db->query("INSERT INTO `" . DB_PREFIX . "category_path`
-            SET `category_id` = '" . (int)$category_id . "',
-                `path_id` = '" . (int)$category_id . "',
-                `level` = '" . (int)$level . "'");
-
-        if (isset($data['category_store'])) {
-            foreach ($data['category_store'] as $store_id) {
-                $this->db->query("INSERT INTO " . DB_PREFIX . "category_to_store
-                    SET category_id = '" . (int)$category_id . "',
-                        store_id = '" . (int)$store_id . "'");
+                foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
+                    $this->db->query("INSERT INTO " . DB_PREFIX . "option_value_description
+                        SET option_value_id = '" . (int)$option_value_id . "',
+                            language_id = '" . (int)$language_id . "',
+                            option_id = '" . (int)$option_id . "',
+                            name = '" . $this->db->escape($option_value_description['name']) . "'");
+                }
             }
         }
+    }
 
-        $this->cache->delete('category');
-        return $category_id;
+    private function deleteOldValues($option_id)
+    {
+        $this->db->query("DELETE FROM " . DB_PREFIX . "option_value WHERE option_id = '" . (int)$option_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "option_value_description WHERE option_id = '" . (int)$option_id . "'");
     }
 }

@@ -7,8 +7,6 @@ class ModelApiImport1C extends Model
 
     private $exchange_path;
 
-    private $progress_id;
-    private $action_id;
     private $extra;
 
     // STORE TABLES
@@ -17,6 +15,8 @@ class ModelApiImport1C extends Model
     const MANUFACTURER_TABLE = 'manufacturer';
     const ATTRIBUTE_TABLE = 'attribute';
     const ATTRIBUTE_GROUP_TABLE = 'attribute_group';
+    const OPTION_TABLE = 'option';
+    const OPTION_VALUE_TABLE = 'option_value';
 
     const IMPORT_FIELD = 'import_id';
 
@@ -25,7 +25,6 @@ class ModelApiImport1C extends Model
         parent::__construct($registry);
 
         $this->load->model('extension/pro_patch/db');
-        $this->load->model('extension/module/super_offers');
         $this->load->model('api/import_1c/progress');
 
         $this->import_1c = new \import_1c\import_1c();
@@ -36,12 +35,7 @@ class ModelApiImport1C extends Model
             'offers*.xml',
         );
 
-        $this->progress_id = (isset($this->session->data['import_1c_progress_id'])) ?
-            $this->session->data['import_1c_progress_id'] : false;
-        $this->action_id = (isset($this->session->data['import_1c_action_id'])) ?
-            $this->session->data['import_1c_action_id'] : false;
-
-        $this->extra = $this->model_api_import_1c_progress->getExtra($this->progress_id);
+        $this->extra = $this->model_api_import_1c_progress->getExtra();
     }
 
     private function getRootPath()
@@ -51,18 +45,14 @@ class ModelApiImport1C extends Model
 
     public function actionCatalogInit()
     {
-        // if (is_dir($this->exchange_path)) {
-        //     \import_1c\import_1c_dir\clearDir("{$this->exchange_path}", array(
-        //         '*.gitignore',
-        //         '*/import_files/*.jpg',
-        //         '*/import_files/*.png',
-        //     ));
-        // }
+        // TODO: remove previous files
 
         $tables = array(
             self::PRODUCT_TABLE,
             self::CATEGORY_TABLE,
             self::MANUFACTURER_TABLE,
+            self::OPTION_TABLE,
+            self::OPTION_VALUE_TABLE,
         );
 
         // ADD IMPORT FIELD ID TO THE TABLES
@@ -79,15 +69,13 @@ class ModelApiImport1C extends Model
         $progress_id = $this->model_api_import_1c_progress->isProgress($api_token);
 
         if (!$progress_id) {
-            $this->progress_id = $this->model_api_import_1c_progress->initProgress($api_token, $data);
-        } else {
-            $this->progress_id = $progress_id;
+            $progress_id = $this->model_api_import_1c_progress->initProgress($api_token, $data);
         }
 
-        $this->session->data['import_1c_progress_id'] = $this->progress_id;
+        $this->session->data['import_1c_progress_id'] = $progress_id;
 
         $this->session->data['import_1c_action_id'] =
-            $this->model_api_import_1c_progress->saveAction($this->progress_id, $data);
+            $this->model_api_import_1c_progress->saveAction($data);
     }
 
     public function actionCatalogFile($filename)
@@ -97,8 +85,7 @@ class ModelApiImport1C extends Model
             $json['error'][] = 'Невереный filename';
 
             // SAVE TO LOG
-            $this->model_api_import_1c_progress->parseJson(
-                $this->progress_id, $json, $this->action_id);
+            $this->model_api_import_1c_progress->parseJson($json);
             return $json;
         }
 
@@ -121,12 +108,12 @@ class ModelApiImport1C extends Model
             fclose($out);
             $json['success'] = true;
         } catch (\Exception $e) {
+            $json['success'] = false;
             $json['error'][] = 'Ошибка при сохраненнии файла';
         }
 
         // SAVE TO LOG
-        $this->model_api_import_1c_progress->parseJson(
-                $this->progress_id, $json, $this->action_id);
+        $this->model_api_import_1c_progress->parseJson($json);
 
         return $json;
     }
@@ -142,8 +129,7 @@ class ModelApiImport1C extends Model
             $json['success'] = false;
 
             // SAVE TO LOG
-            $this->model_api_import_1c_progress->parseJson(
-                $this->progress_id, $json, $this->action_id);
+            $this->model_api_import_1c_progress->parseJson($json);
             return $json;
         }
 
@@ -155,8 +141,7 @@ class ModelApiImport1C extends Model
             $json['success'] = false;
 
             // SAVE TO LOG
-            $this->model_api_import_1c_progress->parseJson(
-                $this->progress_id, $json, $this->action_id);
+            $this->model_api_import_1c_progress->parseJson($json);
             return $json;
         }
 
@@ -199,13 +184,13 @@ class ModelApiImport1C extends Model
                 }
 
                 if (!isset($json['success']) || $json['success'] != false) {
-                    if ($this->markFileFinished($realpath) === true) {
+                    // if ($this->markFileFinished($realpath) === true) {
                         $this->extra[$filetype]['finished'] = true;
                         $json['success'] = true;
-                    } else {
-                        $json['success'] = false;
-                        $json['error'][] = 'Не удалось переименовать файл.';
-                    }
+                    // } else {
+                    //     $json['success'] = false;
+                    //     $json['error'][] = 'Не удалось переименовать файл.';
+                    // }
                 }
             } else {
                 $json['success'] = true;
@@ -215,19 +200,21 @@ class ModelApiImport1C extends Model
         }
 
         // SAVE TO LOG
-        $this->model_api_import_1c_progress->parseJson(
-                $this->progress_id, $json, $this->action_id);
+        $this->model_api_import_1c_progress->parseJson($json);
 
         // UPDATE EXTRA
-        $this->model_api_import_1c_progress->updateExtra(
-                $this->progress_id, $this->extra);
+        $this->model_api_import_1c_progress->updateExtra($this->extra);
 
         // FINISHED
-        if (isset($this->extra[$this->import_1c->getImportFileType()]['finished'])
-        && $this->extra[$this->import_1c->getImportFileType()]['finished'] === true
-        && isset($this->extra[$this->import_1c->getOffersFileType()]['finished'])
-        && $this->extra[$this->import_1c->getOffersFileType()]['finished'] === true) {
-            $this->model_api_import_1c_progress->finishImport($this->progress_id);
+        $check = true;
+        foreach ($this->import_1c->getFileTypes() as $type) {
+            if (isset($this->extra[$type]['finished'])
+            && $this->extra[$type]['finished'] === true) {
+                $check = false;
+            }
+        }
+        if ($check === true) {
+            $this->model_api_import_1c_progress->finishImport();
         }
 
         return $json;
@@ -244,9 +231,9 @@ class ModelApiImport1C extends Model
         $this->load->model('api/import_1c/language');
         $languages = $this->model_api_import_1c_language->getLanguages();
 
-        // PRODUCERS
-        $this->load->model('api/import_1c/producer');
-        $this->model_api_import_1c_producer->action($parsed);
+        // MANUFACTURERS
+        $this->load->model('api/import_1c/manufacturer');
+        $this->model_api_import_1c_manufacturer->action($parsed);
 
         // GROUP
         $this->load->model('api/import_1c/group');
@@ -260,9 +247,9 @@ class ModelApiImport1C extends Model
         $this->load->model('api/import_1c/group');
         $this->model_api_import_1c_group->action('Состав', $languages);
 
-        // OPTION
-        $this->load->model('api/import_1c/option');
-        $this->model_api_import_1c_option->action($parsed, $languages);
+        // CATEGORY
+        $this->load->model('api/import_1c/category');
+        $this->model_api_import_1c_category->action($parsed, $languages);
 
         // PRODUCTS
         $this->load->model('api/import_1c/product');
@@ -271,11 +258,19 @@ class ModelApiImport1C extends Model
         return true;
     }
 
-    private function _offersRoutine()
+    private function _offersRoutine($parsed)
     {
         // LANGUAGES
         $this->load->model('api/import_1c/language');
         $languages = $this->model_api_import_1c_language->getLanguages();
+
+        // OPTIONS
+        $this->load->model('api/import_1c/option');
+        $this->model_api_import_1c_option->action($parsed, $languages);
+
+        // OFFERS
+        $this->load->model('api/import_1c/offer');
+        $this->model_api_import_1c_offer->action($parsed, $languages);
 
         return true;
     }
@@ -296,8 +291,7 @@ class ModelApiImport1C extends Model
         $json['success'] = true;
 
         // SAVE TO LOG
-        $this->model_api_import_1c_progress->parseJson(
-                $this->progress_id, $json, $this->action_id);
+        $this->model_api_import_1c_progress->parseJson($json);
 
         return $json;
     }

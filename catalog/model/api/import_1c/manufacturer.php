@@ -1,8 +1,8 @@
 <?php
-class ModelApiImport1CProducer extends Model
+class ModelApiImport1CManufacturer extends Model
 {
-    private $codename = 'producer';
-    private $route = 'api/import_1c/producer';
+    private $codename = 'manufacturer';
+    private $route = 'api/import_1c/manufacturer';
 
     const MANUFACTURER_TABLE = 'manufacturer';
 

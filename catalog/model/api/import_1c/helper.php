@@ -16,5 +16,4 @@ class ModelApiImport1CHelper extends Model
         }
     }
 
-
 }
