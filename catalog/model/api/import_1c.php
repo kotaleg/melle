@@ -92,7 +92,9 @@ class ModelApiImport1C extends Model
         try {
             $path = "{$this->exchange_path}{$filename}";
             if (!is_dir(dirname($path))) {
-                \import_1c\import_1c_dir\createDir(dirname($path));
+                $d = new \import_1c\import_1c_dir;
+                $d::createDir(dirname($path));
+                unset($d);
             }
 
             if (is_file($path)) {

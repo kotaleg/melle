@@ -217,7 +217,9 @@ class ModelApiImport1CProduct extends Model
             $new_path = DIR_IMAGE.'catalog/'.$product->picture;
 
             if (!is_dir(dirname($new_path))) {
-                \import_1c\import_1c_dir\createDir(dirname($new_path));
+                $d = new \import_1c\import_1c_dir;
+                $d::createDir(dirname($new_path));
+                unset($d);
             }
 
             if (rename($current_path, $new_path)) {

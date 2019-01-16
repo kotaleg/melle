@@ -7,7 +7,6 @@ use Sabre\Xml\Service;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Deserializer;
 use Sabre\Xml\XmlDeserializable;
-use Lead\Dir\Dir;
 
 use \import_1c\map\import_file_map;
 use \import_1c\map\offers_file_map;

@@ -2,6 +2,8 @@
 namespace import_1c;
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Lead\Dir\Dir;
+
 class import_1c_dir
 {
     public static function createDir($path)
