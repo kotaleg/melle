@@ -33,7 +33,8 @@ class ControllerApiImport1C extends Controller
                     $this->db->escape(trim($this->request->get['filename'])) : null;
 
                 // SAVE PROGRESS AND LOG ACTION
-                $this->extension_model->initProgress(
+                $this->load->model('api/import_1c/progress');
+                $this->model_api_import_1c_progress->_init(
                     $this->request->get['api_token'], array(
                         'type'  => $type,
                         'mode'  => $mode,
@@ -41,14 +42,20 @@ class ControllerApiImport1C extends Controller
                         'extra'  => array(),
                 ));
 
-                // try {
+                try {
                     $result = $this->extension_model->{$process}($filename);
                     if (is_array($result)) {
                         $json = array_merge_recursive($json, $result);
                     }
-                // } catch (\Exception $e) {
-                //     $json['error'][] = $this->language->get('error_action');
-                // }
+                } catch (\Exception $e) {
+                    $json['error'][] = $this->language->get('error_action');
+                }
+
+                // echo "<pre>"; print_r($json); echo "</pre>";exit;
+
+                // SAVE TO LOG
+                $this->model_api_import_1c_progress->parseJson($json);
+
             } else {
                 $json['error'][] = $this->language->get('error_no_data');
             }

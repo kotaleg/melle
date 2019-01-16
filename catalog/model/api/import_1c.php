@@ -45,7 +45,23 @@ class ModelApiImport1C extends Model
 
     public function actionCatalogInit()
     {
-        // TODO: remove previous files
+        $json = array();
+
+        // REMOVE OLD ONES
+        foreach (glob("{$this->exchange_path}*{__OLD*, __FINISHED*}", GLOB_BRACE) as $file) {
+            if (is_file($file)) {
+                @unlink($file);
+                $json['message'][] = 'Файл `'.basename($file).'` удален';
+            }
+        }
+
+        // MARK AS OLD (PREVIOUS FILES)
+        foreach (glob("{$this->exchange_path}*.xml") as $file) {
+            if (is_file($file)) {
+                $this->renameFile($file, '__OLD');
+                $json['message'][] = 'Файл `'.basename($file).'` помечен как старый.';
+            }
+        }
 
         $tables = array(
             self::PRODUCT_TABLE,
@@ -62,20 +78,8 @@ class ModelApiImport1C extends Model
                     ADD COLUMN `". $this->db->escape(self::IMPORT_FIELD) . "` VARCHAR(255) NOT NULL;");
             }
         }
-    }
 
-    public function initProgress($api_token, $data)
-    {
-        $progress_id = $this->model_api_import_1c_progress->isProgress($api_token);
-
-        if (!$progress_id) {
-            $progress_id = $this->model_api_import_1c_progress->initProgress($api_token, $data);
-        }
-
-        $this->session->data['import_1c_progress_id'] = $progress_id;
-
-        $this->session->data['import_1c_action_id'] =
-            $this->model_api_import_1c_progress->saveAction($data);
+        return $json;
     }
 
     public function actionCatalogFile($filename)
@@ -83,9 +87,6 @@ class ModelApiImport1C extends Model
         $json = array();
         if (empty($filename)) {
             $json['error'][] = 'Невереный filename';
-
-            // SAVE TO LOG
-            $this->model_api_import_1c_progress->parseJson($json);
             return $json;
         }
 
@@ -114,9 +115,6 @@ class ModelApiImport1C extends Model
             $json['error'][] = 'Ошибка при сохраненнии файла';
         }
 
-        // SAVE TO LOG
-        $this->model_api_import_1c_progress->parseJson($json);
-
         return $json;
     }
 
@@ -129,9 +127,6 @@ class ModelApiImport1C extends Model
             $json['error'][] = 'Невереный filename';
             $json['continue'] = false;
             $json['success'] = false;
-
-            // SAVE TO LOG
-            $this->model_api_import_1c_progress->parseJson($json);
             return $json;
         }
 
@@ -141,9 +136,6 @@ class ModelApiImport1C extends Model
             $json['error'][] = 'Filename не существует';
             $json['continue'] = false;
             $json['success'] = false;
-
-            // SAVE TO LOG
-            $this->model_api_import_1c_progress->parseJson($json);
             return $json;
         }
 
@@ -186,13 +178,14 @@ class ModelApiImport1C extends Model
                 }
 
                 if (!isset($json['success']) || $json['success'] != false) {
-                    // if ($this->markFileFinished($realpath) === true) {
-                        $this->extra[$filetype]['finished'] = true;
+                    if ($this->renameFile($realpath) === true) {
                         $json['success'] = true;
-                    // } else {
-                    //     $json['success'] = false;
-                    //     $json['error'][] = 'Не удалось переименовать файл.';
-                    // }
+                        $this->extra[$filetype]['finished'] = true;
+                        $json['success'][] = "Файл `{$filename}` обработан.";
+                    } else {
+                        $json['success'] = false;
+                        $json['error'][] = 'Не удалось переименовать файл.';
+                    }
                 }
             } else {
                 $json['success'] = true;
@@ -200,9 +193,6 @@ class ModelApiImport1C extends Model
                 // TODO: save progress and continue
             }
         }
-
-        // SAVE TO LOG
-        $this->model_api_import_1c_progress->parseJson($json);
 
         // UPDATE EXTRA
         $this->model_api_import_1c_progress->updateExtra($this->extra);
@@ -277,9 +267,11 @@ class ModelApiImport1C extends Model
         return true;
     }
 
-    private function markFileFinished($path)
+    private function renameFile($path, $postfix = '__FINISHED')
     {
-        $renamed = dirname($path).DIRECTORY_SEPARATOR.basename($path).'__FINISHED';
+        $progress_id = $this->model_api_import_1c_progress->getProgressId();
+
+        $renamed = dirname($path).DIRECTORY_SEPARATOR.basename($path).$postfix.$progress_id;
         return rename($path, $renamed);
     }
 
@@ -291,9 +283,6 @@ class ModelApiImport1C extends Model
         $this->model_api_import_1c_product->deleteAllProducts();
 
         $json['success'] = true;
-
-        // SAVE TO LOG
-        $this->model_api_import_1c_progress->parseJson($json);
 
         return $json;
     }

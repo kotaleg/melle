@@ -22,6 +22,23 @@ class ModelApiImport1CProgress extends Model
             $this->session->data['import_1c_action_id'] : false;
     }
 
+    public function getProgressId()
+    {
+        return $this->progress_id;
+    }
+
+    public function _init($api_token, $data)
+    {
+        $progress_id = $this->isProgress($api_token);
+
+        if (!$progress_id) {
+            $progress_id = $this->initProgress($api_token, $data);
+        }
+
+        $this->session->data['import_1c_progress_id'] = $progress_id;
+        $this->session->data['import_1c_action_id'] = $this->saveAction($data);
+    }
+
     public function isProgress($api_token)
     {
         $query = $this->db->query("SELECT `progress_id`
@@ -144,19 +161,19 @@ class ModelApiImport1CProgress extends Model
 
         if (isset($json['success']) && is_array($json['success'])) {
             foreach ($json['success'] as $m) {
-                $this->addLog($progress_id, self::SUCCESS_MESSAGE, $m, $action_id);
+                $this->addLog(self::SUCCESS_MESSAGE, $m);
             }
         }
 
         if (isset($json['error']) && is_array($json['error'])) {
             foreach ($json['error'] as $m) {
-                $this->addLog($progress_id, self::ERROR_MESSAGE, $m, $action_id);
+                $this->addLog(self::ERROR_MESSAGE, $m);
             }
         }
 
         if (isset($json['message']) && is_array($json['message'])) {
             foreach ($json['message'] as $m) {
-                $this->addLog($progress_id, self::INFO_MESSAGE, $m, $action_id);
+                $this->addLog(self::INFO_MESSAGE, $m);
             }
         }
     }
