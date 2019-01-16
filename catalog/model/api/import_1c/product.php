@@ -214,7 +214,7 @@ class ModelApiImport1CProduct extends Model
         $current_path = "{$exchange_path}{$picture}";
 
         if (is_file($current_path) && is_readable($current_path)) {
-            $new_path = DIR_IMAGE.'catalog/'.$product->picture;
+            $new_path = DIR_IMAGE.'catalog/'.$picture;
 
             if (!is_dir(dirname($new_path))) {
                 $d = new \import_1c\import_1c_dir;
@@ -223,7 +223,7 @@ class ModelApiImport1CProduct extends Model
             }
 
             if (rename($current_path, $new_path)) {
-                return 'catalog/'.$product->picture;
+                return 'catalog/'.$picture;
             }
         }
     }
