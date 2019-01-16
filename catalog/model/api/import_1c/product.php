@@ -29,12 +29,15 @@ class ModelApiImport1CProduct extends Model
 
         $this->load->model('api/import_1c/helper');
         $this->load->model('api/import_1c/group');
+        $this->load->model('api/import_1c/progress');
     }
 
     public function action($parsed, $languages, $exchange_path)
     {
         if (isset($parsed->catalog->products)) {
             foreach ($parsed->catalog->products as $product) {
+
+                $json = array();
 
                 $d_ = array(
                     'import_id' => $product->id,
@@ -72,7 +75,15 @@ class ModelApiImport1CProduct extends Model
                 // IMAGE
                 if ($product->picture) {
                     $img = $this->moveImage($exchange_path, $product->picture);
-                    if ($img) { $d_['image'] = $img; }
+                    if ($img) {
+                        $d_['image'] = $img;
+                    } else {
+                        // CHECK IF IMAGE ALREADY EXIST
+                        if (is_readable($this->newImagePath($product->picture))) {
+                            $json['message'][] = "Image already moved = {$product->picture}";
+                            $d_['image'] = $this->newImagePath($product->picture, false);
+                        }
+                    }
                 }
 
                 // SOSTAV
@@ -205,8 +216,16 @@ class ModelApiImport1CProduct extends Model
                     $product_id = $this->getProductByImportId($product->id);
                     $this->editProduct($product_id, $d_);
                 }
+
+                // SAVE TO LOG
+                $this->model_api_import_1c_progress->parseJson($json);
             }
         }
+    }
+
+    private function newImagePath($picture, $full = true)
+    {
+        return ($full) ? DIR_IMAGE : '' . 'catalog/' . $picture;
     }
 
     private function moveImage($exchange_path, $picture)
@@ -214,7 +233,7 @@ class ModelApiImport1CProduct extends Model
         $current_path = "{$exchange_path}{$picture}";
 
         if (is_file($current_path) && is_readable($current_path)) {
-            $new_path = DIR_IMAGE.'catalog/'.$picture;
+            $new_path = $this->newImagePath($picture);
 
             if (!is_dir(dirname($new_path))) {
                 $d = new \import_1c\import_1c_dir;
@@ -223,7 +242,7 @@ class ModelApiImport1CProduct extends Model
             }
 
             if (rename($current_path, $new_path)) {
-                return 'catalog/'.$picture;
+                return $this->newImagePath($picture, false);
             }
         }
     }

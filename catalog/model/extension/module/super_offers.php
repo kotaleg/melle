@@ -48,7 +48,8 @@ class ModelExtensionModuleSuperOffers extends Model
         $sql = "INSERT INTO `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
             (`product_id`, `quantity`, `subtract`, `price`, `price_prefix`,
                 `points`, `points_prefix`, `weight`, `weight_prefix`, `model`,
-                `product_code`, `special_price`, `special_price_start`, `special_price_end`)
+                `product_code`, `special_price`, `special_price_start`, `special_price_end`,
+                `import_id`)
             VALUES(
                 '" . (int)$data['product_id'] . "',
                 '" . $this->db->escape($data['quantity']) . "',
@@ -63,7 +64,8 @@ class ModelExtensionModuleSuperOffers extends Model
                 '" . $this->db->escape($data['product_code']) . "',
                 '" . $this->db->escape($data['special_price']) . "',
                 '" . $this->db->escape($data['special_price_start']) . "',
-                '" . $this->db->escape($data['special_price_end']) . "');";
+                '" . $this->db->escape($data['special_price_end']) . "',
+                '" . $this->db->escape($data['import_id']) . "' );";
 
         $this->db->query($sql);
         return $this->db->getLastId();
@@ -89,10 +91,11 @@ class ModelExtensionModuleSuperOffers extends Model
                 'weight'            => false,
                 'weight_prefix'     => '+',
                 'model'             => false,
-                'product_code'      => false,
+                'product_code'      => (isset($c['product_code'])) ? $c['product_code'] : '',
                 'special_price'     => false,
                 'special_price_start' => false,
                 'special_price_end' => false,
+                'import_id'         => (isset($c['import_id'])) ? $c['import_id'] : '',
             );
 
             $combination_id = $this->_addCombination($comb_data);

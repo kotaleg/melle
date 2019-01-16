@@ -15,6 +15,8 @@ class ModelApiImport1COffer extends Model
         $this->load->model('api/import_1c/helper');
         $this->load->model('extension/module/super_offers');
         $this->load->model('api/import_1c/product');
+        $this->load->model('api/import_1c/progress');
+        $this->load->model('api/import_1c/option');
     }
 
     public function action($parsed, $languages)
@@ -22,9 +24,16 @@ class ModelApiImport1COffer extends Model
         if (isset($parsed->offers_pack->offers)
             && is_array($parsed->offers_pack->offers)) {
 
+            $prepared = array();
+
             foreach ($parsed->offers_pack->offers as $offer) {
 
                 $json = array();
+                $save = array(
+                    'options' => array(),
+                    'options_full' => array(),
+                    'combinations' => array(),
+                );
 
                 $ex = explode('#', $offer->id);
                 if (!isset($ex[0]) && !isset($ex[1])) {
@@ -46,37 +55,116 @@ class ModelApiImport1COffer extends Model
                     continue;
                 }
 
-                // CLEAR OLD OPTIONS
-                $this->model_api_import_1c_product->deleteProductOptions($product_id);
-                $this->model_extension_module_super_offers->clearForProduct($product_id);
+                if (isset($prepared[$product_id])) {
+                    $save = $prepared[$product_id];
+                }
 
-                // SUPER OFFERS DATA
-                $so_data = array(
-                    'name' => $offer->name,
-                    'quantity' => $offer->quantity,
-                    'price' => $offer->price->price,
-                    'currency' => $offer->price->currency,
-                );
-
+                // PREPARE OPTIONS FOR COMBINATION
                 $product_options = array();
 
                 foreach ($offer->options as $option) {
                     $option_data = $this->prepareOptionData($parsed, $option);
-                    if ($option_data['value'] !== null) {
-                        // $po = $this->addProductOption($product_id, array(
-                        //     'option_id' => ,
-                        //     'required' => true,
-                        // ));
-                    }
+                    if (isset($option_data['import_id']) && $option_data['import_id'] !== null) {
 
-                    // echo "<pre>"; print_r($option_data); echo "</pre>";exit;
+                        $ov = $this->model_api_import_1c_option->getOptionValueByImportId(
+                            $option_data['import_id']);
+
+                        if ($ov && $ov['option_id'] && $ov['option_value_id']) {
+
+                            if (!in_array($ov['option_id'], $save['options'])) {
+                                $save['options'][] = $ov['option_id'];
+                            }
+
+                            $check = false;
+                            foreach ($save['options_full'] as $o) {
+                                if ($o['option_id'] == $ov['option_id']
+                                && $o['option_value_id'] == $ov['option_value_id']) {
+                                    $check = true;
+                                }
+                            }
+
+                            if ($check === false) {
+                                $save['options_full'][] = $ov;
+                            }
+
+
+                            $product_options[] = array(
+                                'option_id' => $ov['option_id'],
+                                'option_value_id' => $ov['option_value_id'],
+                            );
+                        }
+                    }
                 }
 
-                // echo "<pre>"; print_r($offer); echo "</pre>";exit;
+                // SAVE COMBINATION
+                $combination = array();
 
+                if ($product_options) {
+                    $combination = array(
+                        'quantity' => $offer->quantity,
+                        'subtract' => true,
+                        'price' => $offer->price->price,
+                        'currency' => $offer->price->currency,
+                        'product_code' => $offer->name,
+                        'import_id' => $offer_import_id,
+                    );
+
+                    foreach ($product_options as $k => $v) {
+                        $combination["{$k}__{$v['option_id']}"] = $v['option_value_id'];
+                    }
+                }
+
+                if ($combination) {
+                    $save['combinations'][] = $combination;
+                }
+
+                $prepared[$product_id] = $save;
 
                 // SAVE TO LOG
                 $this->model_api_import_1c_progress->parseJson($json);
+            }
+
+            // USE PREPARED DATA
+            foreach ($prepared as $product_id => $data) {
+
+                // CLEAR OLD OPTIONS
+                $this->model_api_import_1c_product->deleteProductOptions($product_id);
+                $this->model_extension_module_super_offers->clearForProduct($product_id);
+
+                foreach ($data['options'] as $option_id) {
+
+                    // ASSIGN OPTIONS TO PRODUCT
+                    $po = $this->addProductOption($product_id, array(
+                        'option_id' => $option_id,
+                        'required' => true,
+                    ));
+
+                    foreach ($data['options_full'] as $of) {
+                        if ($of['option_id'] == $option_id) {
+                            $pov = $this->addProductOptionValue($product_id, array(
+                                'option_id' => $option_id,
+                                'product_option_id' => $po,
+                                'option_value_id' => $of['option_value_id'],
+                                'quantity' => 0,
+                                'subtract' => true,
+                                'price' => 0,
+                                'price_prefix' => '+',
+                                'points' => 0,
+                                'points_prefix' => '+',
+                                'weight' => 0,
+                                'weight_prefix' => '+',
+                            ));
+                        }
+                    }
+
+                }
+
+                // ADD COMBINATIONS
+                if ($data['combinations']) {
+                    $this->model_extension_module_super_offers->saveCombinations(
+                        $product_id, $data['combinations']);
+                }
+
             }
 
         }
@@ -109,6 +197,19 @@ class ModelApiImport1COffer extends Model
         return $result;
     }
 
+    private function isProductOption($product_id, $option_id)
+    {
+        $query = $this->db->query("SELECT `product_option_id`
+            FROM `". DB_PREFIX ."product_option`
+            WHERE `product_id` = '".$this->db->escape($product_id)."'
+            AND `option_id` = '".$this->db->escape($option_id)."'");
+        if ($query->row) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private function addProductOption($product_id, $product_option)
     {
         $this->db->query("INSERT INTO ". DB_PREFIX ."product_option
@@ -116,26 +217,40 @@ class ModelApiImport1COffer extends Model
                 option_id = '" . (int)$product_option['option_id'] . "',
                 required = '" . (int)$product_option['required'] . "'");
 
-        $product_option_id = $this->db->getLastId();
+        return $this->db->getLastId();
     }
 
-    private function addProductOptionvalues($product_id, $product_option_id, $product_option_values)
+    private function isProductOptionValue($product_id, $data)
     {
-        foreach ($product_option_values as $product_option_value) {
-            $this->db->query("INSERT INTO ". DB_PREFIX ."product_option_value
-                SET product_option_value_id = '" . (int)$product_option_value['product_option_value_id'] . "',
-                    product_option_id = '" . (int)$product_option_id . "',
-                    product_id = '" . (int)$product_id . "',
-                    option_id = '" . (int)$product_option['option_id'] . "',
-                    option_value_id = '" . (int)$product_option_value['option_value_id'] . "',
-                    quantity = '" . (int)$product_option_value['quantity'] . "',
-                    subtract = '" . (int)$product_option_value['subtract'] . "',
-                    price = '" . (float)$product_option_value['price'] . "',
-                    price_prefix = '" . $this->db->escape($product_option_value['price_prefix']) . "',
-                    points = '" . (int)$product_option_value['points'] . "',
-                    points_prefix = '" . $this->db->escape($product_option_value['points_prefix']) . "',
-                    weight = '" . (float)$product_option_value['weight'] . "',
-                    weight_prefix = '" . $this->db->escape($product_option_value['weight_prefix']) . "'");
+        $query = $this->db->query("SELECT `product_option_id`
+            FROM `". DB_PREFIX ."product_option_value`
+            WHERE `product_id` = '".$this->db->escape($product_id)."'
+            AND `option_id` = '".$this->db->escape($data['option_id'])."'
+            AND `product_option_id` = '".$this->db->escape($data['product_option_id'])."'
+            AND `option_value_id` = '".$this->db->escape($data['option_value_id'])."'");
+        if ($query->row) {
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    private function addProductOptionValue($product_id, $data)
+    {
+        $this->db->query("INSERT INTO ". DB_PREFIX ."product_option_value
+            SET product_option_id = '" . (int)$data['product_option_id'] . "',
+                product_id = '" . (int)$product_id . "',
+                option_id = '" . (int)$data['option_id'] . "',
+                option_value_id = '" . (int)$data['option_value_id'] . "',
+                quantity = '" . (int)$data['quantity'] . "',
+                subtract = '" . (int)$data['subtract'] . "',
+                price = '" . (float)$data['price'] . "',
+                price_prefix = '" . $this->db->escape($data['price_prefix']) . "',
+                points = '" . (int)$data['points'] . "',
+                points_prefix = '" . $this->db->escape($data['points_prefix']) . "',
+                weight = '" . (float)$data['weight'] . "',
+                weight_prefix = '" . $this->db->escape($data['weight_prefix']) . "'");
+
+        return $this->db->getLastId();
     }
 }

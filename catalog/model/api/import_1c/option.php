@@ -83,7 +83,7 @@ class ModelApiImport1COption extends Model
         }
     }
 
-    private function getOptionByImportId($import_id)
+    public function getOptionByImportId($import_id)
     {
         $query = $this->db->query("SELECT `option_id`
             FROM `". DB_PREFIX ."option`
@@ -109,6 +109,16 @@ class ModelApiImport1COption extends Model
         }
 
         return $option_id;
+    }
+
+    public function getOptionValueByImportId($import_id)
+    {
+        $query = $this->db->query("SELECT `option_value_id`, `option_id`
+            FROM `". DB_PREFIX ."option_value`
+            WHERE `import_id` = '".$this->db->escape($import_id)."'");
+        if ($query->row) {
+            return $query->row;
+        }
     }
 
     private function addOptionValues($option_id, $option_values)
