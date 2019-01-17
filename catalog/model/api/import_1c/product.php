@@ -225,7 +225,8 @@ class ModelApiImport1CProduct extends Model
 
     private function newImagePath($picture, $full = true)
     {
-        return ($full) ? DIR_IMAGE : '' . 'catalog/' . $picture;
+        $pre = ($full) ? DIR_IMAGE : '';
+        return $pre . 'catalog/' . $picture;
     }
 
     private function moveImage($exchange_path, $picture)
@@ -241,7 +242,7 @@ class ModelApiImport1CProduct extends Model
                 unset($d);
             }
 
-            if (rename($current_path, $new_path)) {
+            if (@rename($current_path, $new_path) === true) {
                 return $this->newImagePath($picture, false);
             }
         }
