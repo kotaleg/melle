@@ -30,6 +30,7 @@ class ModelApiImport1CProduct extends Model
         $this->load->model('api/import_1c/helper');
         $this->load->model('api/import_1c/group');
         $this->load->model('api/import_1c/progress');
+        $this->load->model('extension/module/super_offers');
     }
 
     public function action($parsed, $languages, $exchange_path)
@@ -80,7 +81,7 @@ class ModelApiImport1CProduct extends Model
                     } else {
                         // CHECK IF IMAGE ALREADY EXIST
                         if (is_readable($this->newImagePath($product->picture))) {
-                            $json['message'][] = "Image already moved = {$product->picture}";
+                            // $json['message'][] = "Image already moved = {$product->picture}";
                             $d_['image'] = $this->newImagePath($product->picture, false);
                         }
                     }
@@ -573,6 +574,7 @@ class ModelApiImport1CProduct extends Model
 
         foreach ($query->rows as $product) {
             $this->deleteProduct($product['product_id']);
+            $this->model_extension_module_super_offers->clearForProduct($product['product_id']);
         }
     }
 

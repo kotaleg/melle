@@ -13,10 +13,10 @@ class ModelApiImport1COffer extends Model
         parent::__construct($registry);
 
         $this->load->model('api/import_1c/helper');
-        $this->load->model('extension/module/super_offers');
         $this->load->model('api/import_1c/product');
         $this->load->model('api/import_1c/progress');
         $this->load->model('api/import_1c/option');
+        $this->load->model('extension/module/super_offers');
     }
 
     public function action($parsed, $languages)

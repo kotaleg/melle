@@ -51,8 +51,6 @@ class ControllerApiImport1C extends Controller
                     $json['error'][] = $this->language->get('error_action');
                 }
 
-                // echo "<pre>"; print_r($json); echo "</pre>";exit;
-
                 // SAVE TO LOG
                 $this->model_api_import_1c_progress->parseJson($json);
 

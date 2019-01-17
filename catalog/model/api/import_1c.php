@@ -48,7 +48,7 @@ class ModelApiImport1C extends Model
         $json = array();
 
         // REMOVE OLD ONES
-        foreach (glob("{$this->exchange_path}*{__OLD*, __FINISHED*}", GLOB_BRACE) as $file) {
+        foreach (glob("{$this->exchange_path}*{__OLD*,__FINISHED*}", GLOB_BRACE) as $file) {
             if (is_file($file)) {
                 @unlink($file);
                 $json['message'][] = 'Файл `'.basename($file).'` удален';
