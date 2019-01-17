@@ -86,7 +86,8 @@ class ModelExtensionModuleImport1C extends Model
         $progresses = array();
         $query = $this->db->query("SELECT DISTINCT `progress_id`
             FROM `". DB_PREFIX . $this->db->escape(self::ACTION_TABLE) ."`
-            WHERE `create_date` >= DATE_SUB(NOW(), INTERVAL 1 HOUR)");
+            WHERE `create_date` >= DATE_SUB(NOW(), INTERVAL 1 HOUR)
+            ORDER BY `progress_id` DESC");
 
         foreach ($query->rows as $v) {
             $progresses[] = $v['progress_id'];
