@@ -1,0 +1,209 @@
+.panel-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  line-height: 1;
+  .main-phone {
+    display: none;
+  }
+  @include mobile {
+    // justify-content: space-between;
+    justify-content: flex-end;
+    .main-phone {
+      display: flex;
+      &__link {
+        svg {
+          margin-right: 0;
+        }
+        span {
+          display: none;
+        }
+      }
+    }
+  }
+  &--sidebar {
+    align-items: flex-start;
+    margin-bottom: 55px;
+  }
+  &--sidebar svg {
+    fill: #6a6969;
+  }
+  &--sidebar a {
+    @include link {
+      color: #2b2a29!important;
+    }
+    &:hover {
+      &>svg {
+        fill: #000;
+      }
+    }
+  }
+  &>div {
+    &:not(:last-child) {
+      margin-right: 7%;
+      @include mobile {
+        margin-right: 25px;
+      }
+      @include tablet {
+        margin-right: 30px;
+      }
+    }
+
+  }
+  a {
+    @include link {
+      color: #b7b6b5;
+      font-size: 13px;
+    }
+  }
+  &__delivery {
+    display: flex;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__mail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__mail-link {
+    display: inline-block;
+    line-height: 1;
+    position: relative;
+    top: 1px;
+    &>svg {
+      fill: #9d9d9d;
+    }
+    &>span {
+      display: none;
+    }
+    &:hover {
+      &>svg {
+        fill: #fff;
+      }
+    }
+  }
+  &__search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__search-link {
+    display: inline-block;
+    position: relative;
+    top: 1px;
+    left: 2px;
+    &>svg {
+      fill: #9d9d9d;
+    }
+    &>span {
+      display: none;
+    }
+    &:hover {
+      &>svg {
+        fill: #fff;
+      }
+    }
+  }
+  &__auth-links {
+    display: flex;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    &>span {
+      margin: 0 15px;
+      vertical-align: bottom;
+      color: #b7b6b5;
+      font-size: 13px;
+      @include mobile {
+        display: none;
+      }
+      @include tablet {
+        display: none;
+      }
+    }
+  }
+  &__login a {
+    &>svg {
+      display: none;
+      fill: #9d9d9d;
+    }
+    &:hover {
+      color: #fff;
+    }
+    @include mobile {
+      display: inline-block;
+      &>svg {
+        display: block;
+        fill: #9d9d9d;
+      }
+      & span {
+        display: none;
+      }
+    }
+    @include tablet {
+      display: inline-block;
+      &>svg {
+        display: block;
+        fill: #9d9d9d;
+      }
+      & span {
+        display: none;
+      }
+    }
+  }
+  &__reg {
+    @include mobile {
+      display: none;
+    }
+    @include tablet {
+      display: none;
+    }
+    a {
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+  &__basket {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__basket-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    &>svg {
+      flex-shrink: 0;
+      fill: #9d9d9d;
+    }
+    &>span {
+      display: none;
+    }
+    &:hover {
+      text-decoration: none;
+      &>svg {
+        fill: #fff;
+      }
+    }
+  }
+  &__basket i {
+    margin-left: 5px;
+    font-size: 13px;
+    font-style: normal;
+    line-height: 1;
+    position: relative;
+    bottom: -1px;
+  }
+}
+.itemCartCountD {
+  @include mobile {
+    display: none;
+  }
+  @include tablet {
+    display: none;
+  }
+}

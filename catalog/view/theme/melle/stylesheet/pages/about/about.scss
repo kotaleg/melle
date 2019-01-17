@@ -1,0 +1,37 @@
+.about {
+  &__container {
+    @include clearfix;
+    padding-bottom: vw_(50px);
+    p {
+      color: #2b2a29;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+  }
+  &__title {
+    float: left;
+    width: 100%;
+    margin-bottom: 40px;
+    color: #2b2a29;
+    font-size: 24px;
+  }
+  &__img {
+    float: right;
+    width: 555px;
+    height: auto;
+    margin-bottom: 40px;
+    margin-left: 30px;
+    @include mobile {
+      float: none;
+      height: auto;
+      margin-left: 0;
+      widows: 100%;
+    }
+  }
+  &__description {
+    margin-top: 0;
+    margin-bottom: 40px;
+    color: #2b2a29;
+  }
+}

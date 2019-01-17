@@ -1,0 +1,445 @@
+.v-select.unsearchable input[type="search"]::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: black;
+}
+.filter__buttons{
+    margin-left: -35px;
+}
+.select2-results {
+  &__option {
+    &--highlighted {
+        background: white;
+      @include tablet {
+        font-size: 10px;
+      }
+    }
+  }
+}
+.filter-cat {
+  &-mobile {
+    display: none;
+    font-size: 14px;
+    @include mobile {
+      display: contents;
+      & > summary {
+        background: #e8e8e8;
+        width: 286px;
+        height: 25px;
+        padding: 5px 86px;
+        margin-bottom: 20px;
+        color: #878b96;
+      }
+    }
+    @include tablet {
+      display: contents;
+      & > summary {
+        background: #e8e8e8;
+        color: #878b96;
+        position: relative;
+        height: 30px;
+        cursor: pointer;
+        font-size: 0.97222vw;
+        padding: 8px 5px;
+        border: 0px;
+        margin: 0px;
+        width: 195px;
+        text-align: center;
+      }
+    }
+  }
+  form {
+    display: flex;
+    align-items: center;
+    @include mobile {
+
+      flex-direction: column;
+    }
+  }
+  &__brand {
+    margin: 0px auto;
+    display: none;
+    width: 33%;
+    @include mobile {
+      width: 77%;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+    .filter {
+      &__select-category {
+        text-align: center;
+      }
+      &__select-label {
+        span.select2 {
+          width: vw_(170px) !important;
+          display: inline-block;
+          vertical-align: bottom;
+          @include tablet {
+            width: vw_(300px) !important;
+          }
+          @include mobile {
+            width: 80% !important;
+          }
+        }
+        .select2-selection {
+          &__choice {
+            display: none;
+          }
+          &__rendered {
+            background: #e8e8e8;
+            position: relative;
+            z-index: 10;
+            .select2-search {
+              display: block;
+              &__field {
+                width: 105% !important;
+                font-size: vw_(13px);
+                padding-left: 15px;
+                height: vw_(30px);
+                margin: 0px;
+                @include tablet {
+                  height: 30px;
+                  font-size: 12px;
+                  padding-left: 0px;
+                }
+                @include mobile {
+                  height: 30px;
+                  font-size: 12px;
+                  padding-left: 0px;
+                }
+              }
+            }
+          }
+          &--multiple{
+            &:after{
+              border-width: 5px 4px 0 !important
+            }
+            background-color: white;
+            border: 0px solid;
+            font-size: 0px;
+            height: vw_(30px);
+            @include tablet {
+              height: 30px;
+              min-height: 30px;
+            }
+            @include mobile {
+              height: 30px;
+              min-height: 30px;
+            }
+            min-height: vw_(30px);
+          }
+        }
+        .ButtonBrand {
+          position: relative;
+          height: vw_(30px);
+          cursor: pointer;
+          font-size: vw_(14px);
+          padding: 0px 5px;
+          border: 0px;
+          margin: 0px;
+          background-color: #dbdbdb;
+          @include tablet {
+            height: 30px;
+          }
+          @include mobile {
+            font-size: 8px;
+            height: 30px;
+          }
+        }
+      }
+    }
+  }
+  &__name {
+    margin-right: vw_(20px);
+    @include tablet {
+      margin-right: 20px;
+    }
+    @include mobile {
+      &.desktop {
+        display: none;
+      }
+      margin-right: 0px;
+      margin-bottom: 25px;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      color: #807f7d;
+      font-size: vw_(14px);
+      @include tablet {
+        font-size: 14px;
+      }
+      @include mobile {
+        font-size: 12px;
+      }
+    }
+    select {
+      width: vw_(155px);
+      height: vw_(30px);
+      margin-left: vw_(20px);
+      @include tablet {
+        width: 155px;
+        height: 30px;
+        margin-left: 20px;
+      }
+      @include mobile {
+        width: 155px;
+        height: 30px;
+        margin-left: 20px;
+      }
+      &+span {
+        width: vw_(155px)!important;
+        height: vw_(30px)!important;
+        @include tablet {
+          width: 155px!important;
+          height: 30px!important;
+        }
+        @include mobile {
+          width: 155px!important;
+          height: 30px!important;
+        }
+      }
+    }
+    span.select2 {
+      margin-left: vw_(20px);
+      @include tablet {
+        margin-left: 20px;
+      }
+      @include mobile {
+        margin-left: 20px;
+      }
+      .select2-selection__rendered {
+        font-size: vw_(12px);
+        color: #6d6b6a;
+        line-height: vw_(28px);
+        text-transform: none;
+        padding: 0px;
+        @include tablet {
+          font-size: 12px;
+          line-height: 28px;
+        }
+        @include mobile {
+          font-size: 12px;
+          line-height: 28px;
+        }
+      }
+      .select2-selection {
+        border: 0px;
+        background-color: white;
+        padding: 0px vw_(15px);
+        outline: none;
+        border-radius: 0px;
+        height: vw_(30px);
+        @include tablet {
+          padding: 0px 15px;
+          height: 30px;
+        }
+        @include mobile {
+          padding: 0px 15px;
+          height: 30px;
+        }
+      }
+      .select2-selection__placeholder {
+        font-size: vw_(12px);
+        color: #6d6b6a;
+        text-transform: none;
+        @include tablet {
+          font-size: 12px;
+        }
+        @include mobile {
+          font-size: 12px;
+        }
+      }
+      .select2-selection__arrow {
+        top: vw_(1px);
+        right: vw_(1px);
+        width: vw_(20px);
+        height: vw_(26px);
+        @include tablet {
+          top: 1px;
+          right: 1px;
+          width: 20px;
+          height: 26px;
+        }
+        @include mobile {
+          top: 1px;
+          right: 1px;
+          width: 20px;
+          height: 26px;
+        }
+        &>b {
+          margin-top: vw_(-2px);
+          margin-left: vw_(-4px);
+          border-width: vw_(5px) vw_(4px) 0;
+          @include tablet {
+            margin-top: -2px;
+            margin-left: -4px;
+            border-width: 5px 4px 0;
+          }
+          @include mobile {
+            margin-top: -2px;
+            margin-left: -4px;
+            border-width: 5px 4px 0;
+          }
+        }
+      }
+      &.select2-container--open {
+        .select2-selection__arrow {
+          &>b {
+            border-width: 0 vw_(4px) vw_(5px);
+            @include tablet {
+              border-width: 0 4px 5px;
+            }
+            @include mobile {
+              border-width: 0 4px 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+  &__mobile {
+    display: none;
+    font-size: 14px;
+    @include mobile {
+      display: block;
+    }
+
+    & > summary {
+      background: #e8e8e8;
+      width: 286px;
+      height: 25px;
+      padding: 5px 86px;
+      margin-bottom: 20px;
+      color: #878b96;
+    }
+  }
+  &__button {
+    @include mobile {
+      &.desktop {
+        display: none;
+      }
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    @include tablet {
+      text-align: center;
+    }
+    svg {
+      transform: rotate(90deg);
+      fill: #979491;
+      width: vw_(20px)!important;
+      height: vw_(20px)!important;
+      @include tablet {
+        width: 20px!important;
+        height: 20px!important;
+      }
+      @include mobile {
+        width: 20px!important;
+        height: 20px!important;
+      }
+    }
+    label {
+      @include mobile {
+        display: block;
+      }
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    button {
+      border: 0px;
+      background: transparent;
+      color: #2b2a29;
+      font-size: vw_(14px);
+      margin-left: vw_(10px);
+      cursor: pointer;
+      @include tablet {
+        font-size: 14px;
+      }
+      @include mobile {
+        font-size: 14px;
+      }
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  &__number {
+    display: none;
+    margin-left: auto;
+    //display: flex;
+    align-items: center;
+    @include mobile {
+      margin-left: 0px;
+    }
+    &>span {
+      color: #807f7d;
+      font-size: vw_(14px);
+      margin-right: vw_(20px);
+      @include tablet {
+        font-size: 14px;
+        margin-right: 20px;
+      }
+      @include mobile {
+        font-size: 14px;
+        margin-right: 20px;
+      }
+    }
+    label {
+      display: inline-block;
+      @include not-last {
+        margin-right: vw_(3px);
+        @include tablet {
+          margin-right: 3px;
+        }
+        @include mobile {
+          margin-right: 3px;
+        }
+      }
+      &>input {
+        display: none;
+        &:checked+span {
+          background-color: #dcdcdc;
+        }
+      }
+      &>span {
+        display: inline-block;
+        width: vw_(35px);
+        height: vw_(30px);
+        border: 1px solid #dcdcdc;
+        background-color: #fff;
+        color: #2b2a29;
+        font-size: vw_(13px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        @include tablet {
+          width: 35px;
+          height: 30px;
+          font-size: 13px;
+        }
+        @include mobile {
+          width: 35px;
+          height: 30px;
+          font-size: 13px;
+        }
+        &:hover {
+          background-color: #f8f8f8;
+        }
+      }
+    }
+  }
+  & ul>li.select2-results__option {
+    padding: vw_(10px) vw_(15px);
+    @include tablet {
+      padding: 10px 15px;
+    }
+    @include mobile {
+      padding: 10px 15px;
+    }
+  }
+}
+#select2-sort-1b-results{
+    display: none;
+    background-color: white !important;
+}

@@ -1,0 +1,60 @@
+.contacts {
+  &__title {
+    margin-bottom: 40px;
+    color: #2b2a29;
+    font-size: 24px;
+  }
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0;
+  }
+  &__item {
+    display: inline-block;
+    width: 30%;
+    margin-bottom: 40px;
+    vertical-align: top;
+    font-size: 14px;
+
+    @include mobile {
+      width: 100%;
+    }
+    @include tablet {
+      width: 48%;
+      &:not(:nth-child(2n+2)) {
+        margin-right: 4%;
+      }
+    }
+    @include desktophd {
+      &:not(:nth-child(3n+3)) {
+        margin-right: 5%;
+      }
+    }
+    &-inner {
+      margin-bottom: 28px;
+    }
+    &-shop-center {
+      margin-bottom: 14px;
+      color: #2b2a29;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    &-address {
+      display: block;
+      margin-bottom: 16px;
+      color: #807f7d;
+      font-size: 12px;
+    }
+    &-phone {
+      font-size: 12px;
+
+      @include link {
+        color: #2b2a29;
+      }
+    }
+    &-map {
+      max-height: 200px;
+    }
+  }
+}

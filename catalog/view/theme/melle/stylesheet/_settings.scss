@@ -1,0 +1,111 @@
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #000;
+  background-color: $body-color;
+  font-family: $font-normal;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.2;
+  -webkit-font-smoothing: antialiased;
+}
+
+header,
+footer {
+  flex: 0 0 auto;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+* {
+  box-sizing: border-box;
+  margin-top: 0;
+  outline: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+h1 {
+  color: #202020;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+h2 {
+  color: #202020;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+h3 {
+  color: #202020;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+h4 {
+  color: #202020;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+p {
+  margin-bottom: 10px;
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+a {
+  text-decoration: none;
+  &:link,
+  &:visited,
+  &:active,
+  &:hover {
+    color: #000;
+    font-size: 14px;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: 100%;
+}
+
+.container {
+  position: relative;
+  // margin: 0 vw_(150px);
+  margin: 0 1.41667vw;
+  @media (max-width: 1439px) {
+    margin: 0 auto;
+//    width: 1140px;
+  }
+  @include tablet {
+    width: auto;
+    margin: 0 15px;
+  }
+  @include mobile {
+    width: auto;
+    margin: 0 15px;
+  }
+}

@@ -1,0 +1,250 @@
+.other-prod {
+
+
+
+
+
+  margin-bottom: 35px;
+  ul {
+    padding: 0;
+  }
+  &__title {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    color: #2b2a29;
+    font-size: 24px;
+  }
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0;
+  }
+  &__item {
+    position: relative;
+    display: inline-block;
+    width: 22%;
+    margin-bottom: 30px;
+    vertical-align: top;
+    @include tablet {
+      width: 48%;
+      &:not(:nth-child(2n+2)) {
+        margin-right: 4%!important;
+      }
+    }
+    @include mobile {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+
+  /* IVAN SECTION START */
+  &__item-ivaninfo {
+    text-align: center;
+
+    .ivanitemtitle {
+      margin-bottom: 15px;
+      margin-top: 11px;
+      font-weight: bold;
+
+    }
+
+    .ivanbuybutton {
+      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      background-color: #2b2a29;
+      text-decoration: none;
+      color: #fff;
+
+      width: 75px;
+      height: 20px;
+      width: 4.30833vw;
+      height: 1.58889vw;
+
+      &:hover {
+        background-color: #000;
+      }
+
+      font-weight: 800;
+      font-size: 0.67222vw;
+      @include tablet {
+        font-size: 12px;
+        width: 75px;
+        height: 20px;
+      }
+      @include mobile {
+        font-size: 12px;
+        width: 75px;
+        height: 20px;
+      }
+    }
+  }
+  /* IVAN SECTION END */
+
+
+  &__item:not(:nth-child(4n+4)) {
+    margin-right: 4%;
+    @include tablet {
+      margin-right: 0;
+    }
+  }
+  &__item>a>img {
+    // width: 100%;
+    max-height: 100%;
+    height: auto;
+      @include mobile {
+        width: 100%;
+        max-height: initial;
+      }
+  }
+  &__item>a {
+    @include mobile {
+      height: 100%;
+    }
+  }
+  &__item.new {
+    &:after {
+      position: absolute;
+      top: 155px;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: vw_(60px);
+      height: vw_(30px);
+      content: "NEW";
+      color: #fff;
+      background-color: #2b2a29;
+      @include tablet {
+        top: 155px;
+        width: 80px;
+        height: 40px;
+        font-size: 24px;
+      }
+      @include mobile {
+        top: 155px;
+        width: 80px;
+        height: 40px;
+        font-size: 24px;
+      }
+      font-size: vw_(18px);
+    }
+  }
+  &__item.hit {
+    &:after {
+      position: absolute;
+      top: 155px;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: vw_(60px);
+      height: vw_(30px);
+      content: "HIT";
+      color: #fff;
+      background-color: #2b2a29;
+      @include tablet {
+        top: 155px;
+        width: 80px;
+        height: 40px;
+        font-size: 24px;
+      }
+      @include mobile {
+        top: 155px;
+        width: 80px;
+        height: 40px;
+        font-size: 24px;
+      }
+      font-size: vw_(18px);
+    }
+  }
+  &__item-link {
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    height: vw_(278px);
+    @include mobile {
+      height: 400px;
+    }
+    @include tablet {
+      height: 400px;
+    }
+  }
+  &__item-price {
+    position: absolute;
+    top: vw_(65px);
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: vw_(60px);
+    height: vw_(30px);
+    // padding-right: vw_(10px);
+    color: #2b2a29;
+    background-color: #e7e7e7;
+    @include tablet {
+      top: 90px;
+      width: 80px;
+      height: 40px;
+      padding-right: 15px;
+    }
+    @include mobile {
+      top: 90px;
+      width: 80px;
+      height: 40px;
+      padding-right: 15px;
+    }
+  }
+  &__item-price-old {
+    margin-bottom: vw_(5px);
+    text-decoration: line-through;
+    font-size: vw_(20px);
+    @include tablet {
+      margin-bottom: 5px;
+      font-size: 11px;
+    }
+    @include mobile {
+      margin-bottom: 5px;
+      font-size: 11px;
+    }
+  }
+  &__item-price-default {
+    font-size: vw_(18px);
+    @include tablet {
+      font-size: 14px;
+    }
+    @include mobile {
+      font-size: 14px;
+    }
+  }
+  &__item-title {
+    display: inline-block;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-top: 25px;
+    padding-right: 20px;
+    padding-left: 20px;
+    text-align: center;
+    color: #2b2a29;
+    font-size: 14px;
+    font-weight: 700;
+    font-size: vw_(14px);
+    @include tablet {
+      font-size: 14px;
+    }
+    @include mobile {
+      font-size: 14px;
+    }
+  }
+}
+.oldPrice{
+    text-decoration: line-through;
+    font-size: vw_(12px);
+
+}

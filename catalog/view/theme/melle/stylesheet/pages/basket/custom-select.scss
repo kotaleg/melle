@@ -1,0 +1,34 @@
+.basket-form {
+  span.select2 {
+    .select2-selection__rendered {
+      color: #6d6b6a;
+      text-transform: none;
+      font-size: 12px;
+      line-height: 28px;
+    }
+    .select2-selection {
+      border: 0px;
+      background-color: #e7e7e7;
+      outline: none;
+      border-radius: 0px;
+      padding: 0px 25px;
+      padding-right: 20px;
+      height: 30px;
+    }
+    .select2-selection__placeholder {
+      color: #6d6b6a;
+      text-transform: none;
+      font-size: 12px
+    }
+    .select2-selection__rendered {
+      color: #6d6b6a;
+      padding: 0px;
+      height: 100%;
+      &>span {
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}

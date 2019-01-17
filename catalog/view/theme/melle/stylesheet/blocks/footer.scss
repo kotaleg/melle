@@ -1,0 +1,295 @@
+.footer-page {
+  color: #8a857f;
+  background-color: #e7e7e7;
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 27px;
+    padding-bottom: 40px;
+    border-top: 1px solid #d2d1cf;
+  }
+}
+
+.main-nav {
+  width: 100%;
+  text-align: center;
+}
+
+.main-nav>a {
+  display: inline-block;
+  margin-bottom: 35px;
+  padding: 0 vw_(30px);
+  text-transform: uppercase;
+  font-size: 14px;
+  @include mobile {
+    width: 100%;
+    padding: 0;
+  }
+  @include tablet {
+    padding: 0 8px;
+    font-size: 11px;
+  }
+  @include link {
+    color: #2b2a29;
+  }
+  &:last-child {
+    padding-right: 0;
+  }
+  &:first-child {
+    padding-left: 0;
+  }
+}
+
+.nav-main {
+  &__full-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    @include mobile {
+      flex-direction: column;
+    }
+  }
+  &__full-item {
+    margin-bottom: 35px;
+  }
+  &__full-item>a {
+    display: inline-block;
+    padding: 0 vw_(30px);
+    text-transform: uppercase;
+    font-size: 14px;
+    @include mobile {
+      width: 100%;
+      padding: 0;
+    }
+    @include tablet {
+      padding: 0 8px;
+      font-size: 11px;
+    }
+    @include link {
+      color: #2b2a29;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+    &:first-child {
+      padding-left: 0;
+    }
+  }
+}
+
+.copyright {
+  font-size: 12px;
+  margin-right: auto;
+  width: 130px;
+  @include mobile {
+    width: 100%;
+    text-align: center;
+  }
+  @include tablet {
+    width: 50%;
+    margin-bottom: 35px;
+  }
+}
+
+.counts {
+  margin: 0 auto;
+}
+
+.footer-politic {
+  a {
+    font-size: 12px;
+    color: #8a857f;
+
+    &:hover {
+      color: #8a857f;
+    }
+  }
+}
+
+.copyright p {
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
+.copyright a {
+  font-size: 12px;
+  @include link {
+    text-decoration: underline;
+    color: #8a857f;
+  }
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.socials__list {
+  display: flex;
+  margin: 0;
+  margin-right: 30px;
+  margin-left: auto;
+  padding: 0;
+  @include mobile {
+    justify-content: center;
+    width: 100%;
+    margin-top: 40px;
+    margin-right: 0;
+    margin-bottom: 40px;
+    margin-left: 0;
+  }
+  @include tablet {
+    justify-content: flex-end;
+    width: 50%;
+    margin-right: 0;
+    margin-bottom: 35px;
+    margin-left: 0;
+    margin-top: -2px;
+  }
+}
+
+.socials__list>.socials__item {
+  list-style: none;
+  height: 25px;
+  &>a {
+    &>span {
+      display: none;
+    }
+  }
+  &:not(:last-child) {
+    margin-right: vw_(30px);
+    @include mobile {
+      margin-right: 30px;
+    }
+  }
+  &--fb {
+    &>a {
+      display: inline-block;
+      &>svg {
+        fill: #918d8a;
+      }
+    }
+  }
+  &--in {
+    &>a {
+      display: inline-block;
+      &>svg {
+        fill: #918d8a;
+      }
+    }
+  }
+}
+
+.subscribe {
+  margin-right: vw_(80px);
+  @include mobile {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 40px;
+  }
+  @include tablet {
+    width: 70%;
+    margin-right: 0;
+  }
+  &__input {
+    width: 100%;
+    height: 35px;
+    padding: 0 10px;
+    color: #6d6b6a;
+    border: 1px solid #918d8a;
+    outline: 0;
+    background-color: #e7e7e7;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  &__send {
+    width: vw_(255px);
+    height: 35px;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: #6d6b6a;
+    border: 0;
+    outline: 0;
+    background-color: #cfcdcc;
+    @include mobile {
+      width: 100%;
+      font-size: 14px;
+    }
+    @include tablet {
+      width: 48%;
+      font-size: 12px;
+    }
+    font-size: vw_(14px);
+    &:hover {
+      background-color: darken(#cfcdcc, 5%);
+    }
+  }
+}
+
+.subscribe>form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  color: #6d6b6a;
+  font-size: 14px;
+  @include tablet {
+    width: 100%;
+  }
+  &>div {
+    width: vw_(245px);
+    margin-right: 10px;
+    @include mobile {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 15px;
+      // margin-bottom: 30px;
+    }
+    @include tablet {
+      width: 48%;
+      margin-right: 4%;
+    }
+  }
+}
+
+.comp-dev {
+  text-align: right;
+  @include mobile {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.comp-dev>span {
+  display: block;
+  font-size: 12px;
+}
+
+.comp-dev>span>a {
+  display: block;
+  @include link {
+    color: #8a857f;
+  }
+}
+
+.up {
+  display: none;
+  cursor: pointer;
+  @include mobile {
+    display: none;
+  }
+  @include tablet {
+    display: none;
+  }
+  svg {
+    fill: #c8c6c4;
+  }
+  &:hover {
+    & svg {
+      fill: #9c9895;
+    }
+  }
+}

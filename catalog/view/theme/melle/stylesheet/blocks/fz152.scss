@@ -1,0 +1,80 @@
+.c-fz152__block {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #d2d1cf;
+  border-radius: 2px;
+  box-shadow: 1px 1px 5px #aaa;
+  z-index: 100500;
+}
+
+.c-fz152__buttons {
+  padding-left: 10px;
+}
+
+.c-fz152__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.c-fz152__content {
+  font-size: 13px;
+}
+
+.c-fz152__button {
+  width: 155px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  cursor: pointer;
+  text-transform: uppercase;
+  color: #fff;
+  border: 0;
+  background-color: #2b2a29;
+  font-size: 14px;
+  margin: 10px auto;
+}
+
+/*.c-fz152__button--confirm {
+  background-color: #46ed46;
+  color: #0c3b0c;
+}*/
+
+.c-fz152__button--confirm:hover,
+.c-fz152__button--confirm:focus,
+.c-fz152__button--confirm:active {
+  opacity: .8;
+}
+
+.c-fz152__button--cancel {
+  background-color: #eee;
+  color: #444;
+}
+
+.c-fz152__button--cancel:hover,
+.c-fz152__button--cancel:focus,
+.c-fz152__button--cancel:active {
+  background-color: #cec7c7;
+}
+
+@media (max-width: 400px) {
+  .c-fz152__block {
+    padding: 5px 10px;
+  }
+
+  .c-fz152__content {
+    font-size: 12px;
+    line-height: 1em;
+    padding-bottom: 5px;
+  }
+
+  .c-fz152__container {
+    flex-direction: column;
+  }
+}

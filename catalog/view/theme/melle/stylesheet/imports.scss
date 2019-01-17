@@ -1,0 +1,45 @@
+//Блоки
+@import 'blocks/sidebar.scss';
+@import 'blocks/breadcrumbs.scss';
+@import 'blocks/lk-sidebar.scss';
+@import 'blocks/lk.scss';
+@import 'blocks/other-prod.scss';
+@import 'blocks/pagination.scss';
+@import 'blocks/panel-buttons.scss';
+@import 'blocks/reviews.scss';
+@import 'blocks/star-rating.scss';
+@import 'blocks/fz152.scss';
+//Модалки
+@import 'blocks/modal/auth.scss';
+@import 'blocks/modal/basket-modal.scss';
+@import 'blocks/modal/mail-us.scss';
+@import 'blocks/modal/main-menu-big.scss';
+@import 'blocks/modal/pas-rec.scss';
+@import 'blocks/modal/reg.scss';
+@import 'blocks/modal/search.scss';
+@import 'blocks/modal/fast-order.scss';
+//Страницы
+@import 'pages/about/about.scss';
+@import 'pages/basket/basket-form.scss';
+@import 'pages/basket/basket-orders.scss';
+@import 'pages/basket/custom-select.scss';
+@import 'pages/catalog/catalog-list.scss';
+@import 'pages/catalog/catalog-col.scss';
+@import 'pages/catalog/filter.scss';
+@import 'pages/catalog/panel-grid.scss';
+@import 'pages/contacts/contacts.scss';
+@import 'pages/error-page/error-page.scss';
+@import 'pages/index/description.scss';
+@import 'pages/lk-data/lk-data.scss';
+@import 'pages/lk-history/lk-history.scss';
+@import 'pages/lk-order/lk-order.scss';
+@import 'pages/news/news.scss';
+@import 'pages/news-one/news-one.scss';
+@import 'pages/prod-card/prod-card.scss';
+@import 'pages/search/search-form.scss';
+@import 'pages/search/search.scss';
+//header and footer
+@import 'pages/home/reset.scss';
+@import 'pages/home/style.scss';
+@import 'pages/home/mmenu.all.scss';
+@import 'pages/home/media.scss';

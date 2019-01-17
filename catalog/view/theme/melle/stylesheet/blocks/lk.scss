@@ -1,0 +1,32 @@
+.lk {
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__sidebar {
+    margin-right: 90px;
+    @include tablet {
+      margin-right: 60px;
+      margin-bottom: 30px;
+    }
+    @include mobile {
+      margin-right: 0px;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+  }
+  &__content {
+    flex-grow: 1;
+    @include mobile {
+      width: 100%;
+    }
+  }
+  &__title {
+    color: #2b2a29;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 24px;
+    margin-bottom: 35px;
+    width: 100%;
+  }
+}
