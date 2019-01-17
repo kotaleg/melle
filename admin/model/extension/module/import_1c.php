@@ -80,4 +80,114 @@ class ModelExtensionModuleImport1C extends Model
 
         return $scripts;
     }
+
+    public function getRunningProgresses()
+    {
+        $progresses = array();
+        $query = $this->db->query("SELECT DISTINCT `progress_id`
+            FROM `". DB_PREFIX . $this->db->escape(self::ACTION_TABLE) ."`
+            WHERE `create_date` >= DATE_SUB(NOW(), INTERVAL 1 HOUR)");
+
+        foreach ($query->rows as $v) {
+            $progresses[] = $v['progress_id'];
+        }
+
+        return $progresses;
+    }
+
+    public function getProgress($progress_id)
+    {
+        $query = $this->db->query("SELECT *
+            FROM `". DB_PREFIX . $this->db->escape(self::PROGRESS_TABLE) ."`
+            WHERE `progress_id` = '". (int)$progress_id ."'");
+
+        if ($query->num_rows) {
+            return array(
+                'progress_id' => $query->row['progress_id'],
+                'api_token' => $query->row['api_token'],
+                'progress' => $query->row['progress'],
+                'extra' => json_decode($query->row['extra'], true),
+            );
+        }
+    }
+
+    public function getLogs($progress_id)
+    {
+        $logs = array();
+        $query = $this->db->query("SELECT *
+            FROM `". DB_PREFIX . $this->db->escape(self::LOG_TABLE) ."`
+            WHERE `progress_id` = '". (int)$progress_id ."'
+            ORDER BY `log_id` DESC LIMIT 10");
+
+        foreach ($query->rows as $l) {
+
+            $type = $l['type'];
+            if (strcmp($type, 'error') === 0) {
+                $type = 'danger';
+            }
+
+            $logs[] = array(
+                'type' => $type,
+                'message' => $l['message'],
+                'create_date' => $l['create_date'],
+            );
+        }
+
+        return $logs;
+    }
+
+    public function getActions($progress_id)
+    {
+        $actions = array();
+        $query = $this->db->query("SELECT *
+            FROM `". DB_PREFIX . $this->db->escape(self::ACTION_TABLE) ."`
+            WHERE `progress_id` = '". (int)$progress_id ."'
+            ORDER BY `action_id` DESC LIMIT 10");
+
+        foreach ($query->rows as $l) {
+            $actions[] = array(
+                'type' => $l['type'],
+                'mode' => $l['mode'],
+                'filename' => $l['filename'],
+                'create_date' => $l['create_date'],
+            );
+        }
+
+        return $actions;
+    }
+
+    public function getRunningImports()
+    {
+        $imports = array();
+
+        $progresses = $this->getRunningProgresses();
+        foreach ($progresses as $progress_id) {
+
+            $progress = $this->getProgress($progress_id);
+            if (!$progress) { continue; }
+
+            $files_uploaded = 0;
+            $files_processed = 0;
+
+            if (isset($progress['extra']['files_uploaded'])) {
+                $files_uploaded = (int)$progress['extra']['files_uploaded'];
+            }
+
+            if (isset($progress['extra']['files_precessed'])) {
+                $files_precessed = (int)$progress['extra']['files_precessed'];
+            }
+
+            $d = array(
+                'id' => $progress_id,
+                'files_uploaded' => $files_uploaded,
+                'files_processed' => $files_processed,
+                'logs' => $this->getLogs($progress_id),
+                'actions' => $this->getActions($progress_id),
+            );
+
+            $imports[] = $d;
+        }
+
+        return $imports;
+    }
 }

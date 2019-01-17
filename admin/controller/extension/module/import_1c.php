@@ -98,6 +98,7 @@ class ControllerExtensionModuleImport1C extends Controller
         $state['cancel'] = $this->model_extension_pro_patch_url->getExtensionAjax('module');
         $state['get_cancel'] = $this->model_extension_pro_patch_url->getExtensionAjax('module');
         $state['save'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/save");
+        $state['get_running_imports'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/get_running_imports");
 
         // SETTING
         $state['setting'] = $this->setting;
@@ -107,6 +108,13 @@ class ControllerExtensionModuleImport1C extends Controller
 
         // SET STATE
         return $state;
+    }
+
+    public function get_running_imports()
+    {
+        $json['imports'] = $this->extension_model->getRunningImports();
+
+        $this->response->setOutput(json_encode($json));
     }
 
     public function save()

@@ -1,5 +1,8 @@
+import Vue from 'vue'
+import { isUndefined, isEmpty } from 'lodash'
+
 import shop from '../../api/shop'
-import {isUndefined} from 'lodash'
+import notify from '../../components/partial/notify'
 
 // initial state
 const state = {
@@ -26,9 +29,11 @@ const state = {
 
     cancel: '',
     save: '',
-    somethingLoading: false,
-    loading_progress: 0,
-    loading_message: '',
+    get_running_imports: '',
+    is_loading: false,
+    is_updating: false,
+
+    imports: [],
 }
 
 // getters
@@ -51,28 +56,47 @@ const actions = {
             commit('setData', data)
         })
     },
+    updateSetting({ commit }, payload) {
+        commit('updateSetting', payload)
+    },
+    setLoadingStatus({ commit }, status) {
+        commit('setLoadingStatus', status)
+    },
+    fetchImports({ commit }) {
+        commit('setUpdateStatus', true)
+        shop.makeRequest(
+            {
+                url: state.get_running_imports,
+            },
+            res => {
+                commit('setUpdateStatus', false)
+                if (!isUndefined(res.data.imports)) {
+                    commit('updateImports', res.data.imports)
+                }
+                notify.messageHandler(res.data)
+            }
+        )
+    },
 }
 
 // mutations
 const mutations = {
     setData (state, data) {
         for (let d in data) {
-            state[d] = data[d];
+            Vue.set(state, d, data[d])
         }
     },
-    updateSetting(state, {index, value}) {
-        state.setting[index] = value
-    },
     setLoadingStatus(state, status) {
-        state.somethingLoading = status
+        Vue.set(state, 'is_loading', status)
     },
-    setLoadingProgress(state, progress_data) {
-        state.loading_progress = progress_data.progress
-        state.loading_message = progress_data.message
+    setUpdateStatus(state, status) {
+        Vue.set(state, 'is_updating', status)
     },
-    clearLoadingProgress(state) {
-        state.loading_progress = 0
-        state.loading_message = ''
+    updateSetting(state, {index, value}) {
+        Vue.set(state.setting, index, value)
+    },
+    updateImports(state, imports) {
+        Vue.set(state, 'imports', imports)
     },
 }
 

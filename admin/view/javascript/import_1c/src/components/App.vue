@@ -4,6 +4,10 @@
             :group="this.$codename"
             position="bottom right"/>
 
+        <loading
+            :active.sync="is_loading"
+            :is-full-page="true" />
+
         <page-header
             :title="heading_title"
             :version="version">
@@ -53,14 +57,61 @@
                     </div>
                 </form>
 
-                <!-- <hr v-if="somethingLoading"> -->
+                <div v-if="imports">
+                    <hr>
 
-                <!-- <div v-if="somethingLoading">
-                    <progress-bar
-                        size="large"
-                        :val="loading_progress"
-                        :text="loading_message" />
-                </div> -->
+                    <div v-for="(imp, k) in imports" class="import-box">
+                        <div class="col-sm-12 imp-head">
+                            <h3>Прогресс № {{ imp.id }} <i v-if="is_updating" class="fa fa-cog fa-spin fa-fw"></i></h3>
+                            <span>Загружено файлов: {{ imp.files_uploaded }}</span>
+                            <span>Обработано файлов: {{ imp.files_processed }}</span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h4>Вызовы:</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th>Тип</th>
+                                        <th>Режим</th>
+                                        <th>Файл</th>
+                                        <th>Дата</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(act) in imp.actions">
+                                            <td>{{ act.type }}</td>
+                                            <td>{{ act.mode }}</td>
+                                            <td>{{ act.filename }}</td>
+                                            <td>{{ act.create_date }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col-md-6">
+                            <h4>Логи:</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th>Сообщение</th>
+                                        <th>Дата</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(log) in imp.logs" :class="log.type">
+                                            <td>{{ log.message }}</td>
+                                            <td>{{ log.create_date }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </panel-default>
         </div>
@@ -70,18 +121,21 @@
 
 <script>
 import { isUndefined, extend } from 'lodash'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.min.css'
 import ProgressBar from 'vue-simple-progress'
+
+import shop from '../api/shop'
+import notify from './partial/notify'
 import PageHeader from './partial/PageHeader.vue'
 import Breadcrumbs from './partial/Breadcrumbs.vue'
 import Panel from './partial/Panel.vue'
 
-import shop from '../api/shop'
-import notify from './partial/notify'
-
 export default {
     components: {
         ProgressBar,
+        Loading,
         'page-header': PageHeader,
         'breadcrumbs': Breadcrumbs,
         'panel-default': Panel,
@@ -101,16 +155,15 @@ export default {
             'text_close',
             'text_cancel',
             'text_warning',
-            'text_product_number',
-            'text_proceed_count',
-            'text_are_you_sure',
+            'text_logs',
+            'text_actions',
 
             'cancel',
             'save',
             'setting',
-            'somethingLoading',
-            'loading_progress',
-            'loading_message',
+            'is_loading',
+            'is_updating',
+            'imports',
         ]),
         ...mapGetters('shop', [
             'getToggleStates',
@@ -121,16 +174,23 @@ export default {
             set (value) { this.updateSetting({index: 'status', value}) }
         },
     },
-    created() {
-        this.$store.dispatch('shop/initData')
+    data () {
+        return {
+            polling: null
+        }
     },
     methods: {
-        ...mapMutations('shop', [
+        ...mapActions('shop', [
             'updateSetting',
             'setLoadingStatus',
-            'setLoadingProgress',
-            'clearLoadingProgress',
+            'fetchImports',
         ]),
+
+        pollData () {
+            this.polling = setInterval(() => {
+                this.fetchImports()
+            }, 3000)
+        },
 
         saveAndStay() {
             this.setLoadingStatus(true)
@@ -152,7 +212,14 @@ export default {
                 }, 1500)
             })
         },
-    }
+    },
+    created() {
+        this.$store.dispatch('shop/initData')
+        this.pollData()
+    },
+    beforeDestroy () {
+        clearInterval(this.polling)
+    },
 }
 </script>
 
@@ -164,5 +231,12 @@ export default {
 
     .mt-30 {
         margin-top: 30px;
+    }
+
+    .import-box {
+        .imp-head {
+            margin-bottom: 20px;
+        }
+        margin-bottom: 50px;
     }
 </style>

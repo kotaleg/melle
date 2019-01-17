@@ -79,6 +79,8 @@ class ModelApiImport1C extends Model
             }
         }
 
+        $json['success'] = true;
+
         return $json;
     }
 
@@ -115,6 +117,17 @@ class ModelApiImport1C extends Model
             $json['error'][] = 'Ошибка при сохраненнии файла';
         }
 
+        if ($json['success']) {
+            if (!isset($this->extra['files_uploaded'])) {
+                $this->extra['files_uploaded'] = 0;
+            }
+
+            $this->extra['files_uploaded']++;
+        }
+
+        // UPDATE EXTRA
+        $this->model_api_import_1c_progress->updateExtra($this->extra);
+
         return $json;
     }
 
@@ -124,7 +137,7 @@ class ModelApiImport1C extends Model
         $json['continue'] = false;
 
         if (empty($filename)) {
-            $json['error'][] = 'Невереный filename';
+            $json['error'][] = "Невереное имя файла = `{$filename}`";
             $json['continue'] = false;
             $json['success'] = false;
             return $json;
@@ -133,7 +146,7 @@ class ModelApiImport1C extends Model
         $realpath = "{$this->exchange_path}{$filename}";
 
         if (!is_file($realpath) || !is_readable($realpath)) {
-            $json['error'][] = 'Filename не существует';
+            $json['error'][] = "`{$filename}` не существует";
             $json['continue'] = false;
             $json['success'] = false;
             return $json;
@@ -181,7 +194,7 @@ class ModelApiImport1C extends Model
                     if ($this->renameFile($realpath) === true) {
                         $json['success'] = true;
                         $this->extra[$filetype]['finished'] = true;
-                        $json['success'][] = "Файл `{$filename}` обработан.";
+                        $json['message'][] = "Файл `{$filename}` обработан.";
                     } else {
                         $json['success'] = false;
                         $json['error'][] = 'Не удалось переименовать файл.';
@@ -192,6 +205,14 @@ class ModelApiImport1C extends Model
                 $json['continue'] = true;
                 // TODO: save progress and continue
             }
+        }
+
+        if ($json['success']) {
+            if (!isset($this->extra['files_precessed'])) {
+                $this->extra['files_precessed'] = 0;
+            }
+
+            $this->extra['files_precessed']++;
         }
 
         // UPDATE EXTRA
