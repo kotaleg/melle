@@ -259,8 +259,8 @@
     display: flex;
     width: vw_(75px);
     color: #6d6b6a;
-    // background-color: #e7e7e7;
-    font-size: vw_(14x);
+    background-color: #e7e7e7;
+    font-size: vw_(14px);
     @include tablet {
       width: 75px;
       font-size: 14px;
