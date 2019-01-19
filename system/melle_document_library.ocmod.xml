@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_document_library</name>
+    <code>melle_document_library</code>
+    <description>Melle Document [Library]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="system/library/document.php">
+        <operation error="skip">
+            <search><![CDATA[private $scripts = array();]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                private $states = array();
+
+                public function addState($codename, $json)
+                {
+                    $this->states[$codename] = array(
+                        'codename' => $codename,
+                        'json' => $json,
+                    );
+                }
+
+                public function getStates()
+                {
+                    return $this->states;
+                }
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

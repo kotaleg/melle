@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_header_catalog</name>
+    <code>melle_header_catalog</code>
+    <description>Melle Header [Catalog]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/common/header.php">
+        <operation error="skip">
+            <search><![CDATA[$data['title'] = $this->document->getTitle();]]></search>
+            <add position="before"><![CDATA[
+                /* IVAN MOD START */
+                $this->load->model('tool/base');
+
+                // OLD SCRIPTS
+                $this->document->addScript('catalog/view/javascript/melle/query/script.js');
+                $this->document->addScript('catalog/view/javascript/melle/query/old.js');
+
+                $data['og'] = array();
+                $data['og']['image'] = $this->model_tool_base->getOgImage();
+
+                $this->load->controller('extension/module/melle/initHeader');
+                $this->load->controller('extension/module/melle/initCart');
+
+                // STATES
+                $data['states'] = $this->document->getStates();
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>
