@@ -68,7 +68,7 @@
                 </li>
             </ul>
             <div class="basket-modal__footer">
-                <div v-if="hasProducts" class="basket-modal__clean"><a :href="cart_link">Оформить заказ</a><span v-if="!hasProducts">корзина пуста</span></div>
+                <div class="basket-modal__clean"><a v-if="hasProducts" :href="cart_link">Оформить заказ</a><span v-if="!hasProducts">корзина пуста</span></div>
                 <div class="basket-modal__full-price"><span>ИТОГО: </span><span class="boldPrice">{{ total }} <span class="ruble-sign">Р</span></span></div>
             </div>
             <div data-ng-show="cart.products" class="basket-modal__buttons">
