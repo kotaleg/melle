@@ -24,6 +24,8 @@
                 $this->load->controller('extension/module/melle/initHeader');
                 $this->load->controller('extension/module/melle/initCart');
 
+                $data['melle_mobile_menu'] = $this->load->controller('extension/module/melle/mobile_menu');
+
                 // STATES
                 $data['states'] = $this->document->getStates();
                 /* IVAN MOD END */

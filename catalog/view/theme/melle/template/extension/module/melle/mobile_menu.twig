@@ -1,0 +1,18 @@
+<nav style="display: none;" id="menu">
+    <ul>
+        {% for item in menu  %}
+        <li><a onclick="triggerLink($(this).prev('a').attr('aria-owns'), event)"
+               href="{{ item.url }}">
+                {{ item.title }}
+            </a>
+            {% if item.children is not null %}
+            <ul>
+                {% for item in item.children %}
+                    <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</nav>

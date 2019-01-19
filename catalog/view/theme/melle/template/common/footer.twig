@@ -1,52 +1,55 @@
-<footer>
-  <div class="container">
-    <div class="row">
-      {% if informations %}
-      <div class="col-sm-3">
-        <h5>{{ text_information }}</h5>
-        <ul class="list-unstyled">
-         {% for information in informations %}
-          <li><a href="{{ information.href }}">{{ information.title }}</a></li>
-          {% endfor %}
-        </ul>
+
+</section> <!-- END MAIN SECTION -->
+
+<section class="section section-5 fp-auto-height" data-anchor="section-5">
+   <footer>
+      <div class="footer-menu-block">
+         <ul class="footer-menu">
+            <li><a href="/color_map">Карта цветов</a></li>
+            <li><a href="/shops">Магазины</a></li>
+            <li><a href="/news">Блог</a></li>
+            <li><a href="/delivery">Доставка и оплата</a></li>
+            <li><a href="/konfidentsialnost">Конфиденциальность</a></li>
+            <li><a href="/public_offer">Публичная оферта</a></li>
+            <li><a target="_blank" rel="nofollow" href="https://kolgotkimoscow.ru/">Оптовый сайт</a></li>
+            <li><a href="/kartyi_loyalnosti">Карты лояльности</a></li>
+         </ul>
+         <div itemscope="" itemtype="http://schema.org/Organization" style="font-size:0;">
+            <span itemprop="name">Интернет магазин Mademoiselle</span>
+            Контакты:
+            <div itemprop="address" itemscope="" itemtype="http://schema.org/PostalAddress">
+               Адрес:
+               <span itemprop="streetAddress">ул. Профсоюзая, 83, кв.2</span><span itemprop="addressLocality">Москва</span>,
+            </div>
+            Телефон:<span itemprop="telephone">8-800-777-21-73</span>,
+            Электронная почта: <span itemprop="email">info@melle.online</span>
+         </div>
+
+         <div class="subscribe-block">
+            <p class="made-in made-in-mob">Разработка сайта: <a href="#">google.com</a></p>
+            <div class="counts">
+
+            </div>
+            <a target="_blank" rel="nofollow" class="insta" href="https://www.instagram.com/melle.online/"><i class="fa fa-instagram" aria-hidden="true"></i></a><a target="_blank" rel="nofollow" class="button" href="https://cp.unisender.com/ru/v5/subscribe-form/view/6mpq1gouefnwzjbc5q17gmz46w96jotoumxxbpfy"><span>Подписаться на рассылку</span></a><a target="_blank" rel="nofollow" class="fb" href="https://www.facebook.com/melle.online/"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
+         </div>
+
+         <p class="made-in made-in-desc">Разработка сайта: <a href="#">google.com</a></p>
       </div>
-      {% endif %}
-      <div class="col-sm-3">
-        <h5>{{ text_service }}</h5>
-        <ul class="list-unstyled">
-          <li><a href="{{ contact }}">{{ text_contact }}</a></li>
-          <li><a href="{{ return }}">{{ text_return }}</a></li>
-          <li><a href="{{ sitemap }}">{{ text_sitemap }}</a></li>
-        </ul>
+   </footer>
+</section>
+
+<div class="c-fz152__block js-cookie--modal" style="display: none;">
+   <div class="container">
+      <div class="c-fz152__container">
+         <div class="c-fz152__content">
+            <p>На нашем сайте используются файлы cookie. Продолжая пользоваться сайтом, вы выражаете согласие на использование нами данных файлов. Подробнее&nbsp;вы можете прочитать в разделе "Политика конфиденциальности".</p>
+         </div>
       </div>
-      <div class="col-sm-3">
-        <h5>{{ text_extra }}</h5>
-        <ul class="list-unstyled">
-          <li><a href="{{ manufacturer }}">{{ text_manufacturer }}</a></li>
-          <li><a href="{{ voucher }}">{{ text_voucher }}</a></li>
-          <li><a href="{{ affiliate }}">{{ text_affiliate }}</a></li>
-          <li><a href="{{ special }}">{{ text_special }}</a></li>
-        </ul>
-      </div>
-      <div class="col-sm-3">
-        <h5>{{ text_account }}</h5>
-        <ul class="list-unstyled">
-          <li><a href="{{ account }}">{{ text_account }}</a></li>
-          <li><a href="{{ order }}">{{ text_order }}</a></li>
-          <li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>
-          <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>
-        </ul>
-      </div>
-    </div>
-    <hr>
-    <p>{{ powered }}</p>
-  </div>
-</footer>
+   </div>
+   <div class="c-fz152__buttons"><button class="c-fz152__button c-fz152__button--confirm js-confirm">ОК</button></div>
+</div>
+
 {% for script in scripts %}
 <script src="{{ script }}" type="text/javascript"></script>
 {% endfor %}
-<!--
-OpenCart is open source software and you are free to remove the powered by OpenCart if you want, but its generally accepted practise to make a small donation.
-Please donate via PayPal to donate@opencart.com
-//-->
 </body></html>
