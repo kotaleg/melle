@@ -9,7 +9,6 @@ import Errors from '../../components/partial/errors'
 const state = {
     form: {
         email: '',
-        password: '',
     },
     errors: new Errors(),
 }
@@ -32,24 +31,29 @@ const actions = {
     updateFormValue({ commit }, payload) {
         commit('updateFormValue', payload)
     },
-    loginRequest({ commit, state, rootState, dispatch }) {
-        this.dispatch('header/setSidebarLoadingStatus', true)
-        shop.makeRequest(
-            {
-                url: rootState.header.login_link,
-                email: state.form.email,
-                password: state.form.password,
-            },
-            res => {
-                this.dispatch('header/setSidebarLoadingStatus', false)
+    sendRequest({ commit, state, rootState, dispatch }) {
+        return new Promise((resolve, reject) => {
+            this.dispatch('header/setSidebarLoadingStatus', true)
+            shop.makeRequest(
+                {
+                    url: rootState.header.forgotten_link,
+                    email: state.form.email,
+                },
+                res => {
+                    this.dispatch('header/setSidebarLoadingStatus', false)
 
-                if (has(res.data, 'redirect') && res.data.redirect !== false) {
-                    window.location = res.data.redirect
+                    if (has(res.data, 'redirect') && res.data.redirect !== false) {
+                        window.location = res.data.redirect
+                    }
+
+                    notify.messageHandler(res.data, '_sidebar')
+
+                    if (has(res.data, 'sent') && res.data.sent === true) {
+                        resolve(true)
+                    }
                 }
-
-                notify.messageHandler(res.data, '_sidebar')
-            }
-        )
+            )
+        })
     },
 }
 

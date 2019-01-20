@@ -5,6 +5,7 @@ import header from './modules/header'
 import cart from './modules/cart'
 import mail_us from './modules/mail_us'
 import login from './modules/login'
+import forgotten from './modules/forgotten'
 
 
 Vue.use(Vuex)
@@ -17,6 +18,7 @@ export default new Vuex.Store({
         cart,
         login,
         mail_us,
+        forgotten,
     },
     strict: debug,
 })

@@ -17,6 +17,7 @@ const state = {
         register: false,
         filter: false,
         cart: false,
+        forgotten: false,
     },
 
     is_logged: false,

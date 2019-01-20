@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_forgotten_catalog</name>
+    <code>melle_forgotten_catalog</code>
+    <description>Melle Forgotten [Catalog]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/account/forgotten.php">
+        <operation error="skip">
+            <search><![CDATA[protected function validate() {]]></search>
+            <add position="before"><![CDATA[
+                /* IVAN MOD START */
+                public function melle_forgotten()
+                {
+                    $this->load->model('account/customer');
+                    $this->load->model('extension/pro_patch/url');
+                    $this->load->model('extension/pro_patch/user');
+                    $this->load->model('extension/pro_patch/json');
+
+                    $this->load->language('account/forgotten');
+
+                    $json['redirect'] = false;
+                    $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+                    if ($this->customer->isLogged()) {
+                        $json['redirect'] = $this->model_extension_pro_patch_url->ajax('account/account', '', true);
+                    }
+
+                    if ($json['redirect'] === false) {
+                        if (isset($parsed['email'])) {
+                            $this->request->post['email'] = $parsed['email'];
+
+                            if ($this->validate()) {
+                                $this->model_account_customer->editCode($this->request->post['email'], token(40));
+                                $json['sent'] = true;
+                            } else {
+                                if (is_array($this->error)) {
+                                    foreach ($this->error as $k => $err) {
+                                        $json['error'][] = $err;
+                                    }
+                                }
+                            }
+
+                            // unset($this->request->post['email']);
+                        } else {
+                            $json['error'][] = $this->language->get('error_no_fields');
+                        }
+                    }
+
+                    $this->response->setOutput(json_encode($json));
+                }
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

@@ -89,6 +89,7 @@
                 <h-login v-if="isElementActive('login')" />
                 <h-register v-if="isElementActive('register')" />
                 <h-mail-us v-if="isElementActive('mail_us')" />
+                <h-forgotten v-if="isElementActive('forgotten')" />
             </header-sidebar>
         </transition>
     </header>
@@ -104,6 +105,7 @@ import Cart from './Cart.vue'
 import Login from './Login.vue'
 import Register from './Register.vue'
 import MailUs from './MailUs.vue'
+import Forgotten from './Forgotten.vue'
 
 
 export default {
@@ -114,6 +116,7 @@ export default {
         'h-login': Login,
         'h-register': Register,
         'h-cart': Cart,
+        'h-forgotten': Forgotten,
     },
     computed: {
         ...mapState('header', [
