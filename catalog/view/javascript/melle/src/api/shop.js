@@ -13,12 +13,16 @@ export default {
         }
     },
     postSettingData(data, cb) {
-        Vue.prototype.$http.post(data.url, data).then(response => {
+        let url = data.url
+        delete data.url
+        Vue.prototype.$http.post(url, data).then(response => {
             cb(response)
         })
     },
     makeRequest(data, cb) {
-        Vue.prototype.$http.post(data.url, data).then(response => {
+        let url = data.url
+        delete data.url
+        Vue.prototype.$http.post(url, data).then(response => {
             cb(response)
         })
     },

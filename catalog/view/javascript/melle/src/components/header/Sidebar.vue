@@ -3,7 +3,16 @@
         <div ref="sidebarPopupContent"
             :class="['sidebar-popup__content', {nameClass}]" :style="sidebarContentStyle"
             v-click-outside="configCO">
+            <notifications
+                :group="this.$codename+'_sidebar'"
+                position="bottom right"/>
+
+            <loading
+                :active.sync="is_sidebar_loading"
+                :is-full-page="false" />
+
             <slot/>
+
             <button @click="openSidebar(false)"
                 class="sidebar-popup__button"
                 :style="sidebarButtonStyle" />
@@ -14,6 +23,8 @@
 <script>
 import { has } from 'lodash'
 import { mapState, mapActions } from 'vuex'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.min.css'
 
 export default {
     props: {
@@ -28,9 +39,13 @@ export default {
             default: 'right',
         },
     },
+    components: {
+        Loading,
+    },
     computed: {
         ...mapState('header', [
             'sidebar_opened',
+            'is_sidebar_loading',
         ]),
         sidebarStyle() {
             let styles = {
@@ -112,5 +127,8 @@ export default {
 </script>
 
 <style lang="scss">
-
+// NOTIFICATION
+.vue-notification {
+    font-size: 14px;
+}
 </style>

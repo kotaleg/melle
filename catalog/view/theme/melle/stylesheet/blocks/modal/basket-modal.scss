@@ -1,5 +1,5 @@
 .basket-modal {
-  display: none;
+  // display: none;
   width: 410px;
   color: #807f7d;
   @include mobile {
@@ -271,4 +271,11 @@ body .alert-success {
 }
 .item_plus{
     color: black !important;
+}
+.empty_basket {
+    color: black;
+    padding-bottom: 15px;
+    margin-left: 40px;
+    font-size: 20px;
+    font-weight: bolder;
 }

@@ -30,7 +30,7 @@ class ControllerExtensionModuleMelle extends Controller
         ///
     }
 
-    public function mobile_menu()
+    public function getMobileMenu()
     {
         // MOBILE MENU
         $this->document->addScript('catalog/view/javascript/melle/query/mmenu-old/jquery.mmenu.all.js');
@@ -44,6 +44,11 @@ class ControllerExtensionModuleMelle extends Controller
     {
         // VARIABLE
         $state['id'] = "{$this->codename}_header";
+
+        $lng = array(
+            'text_success', 'text_warning',
+        );
+        for ($i = 0; $i < sizeof($lng); $i++) { $state[$lng[$i]] = $this->language->get($lng[$i]); }
 
         $state['base'] = $this->model_tool_base->getBase();
         $state['phone'] = '8 800 777 21 73';
@@ -63,7 +68,18 @@ class ControllerExtensionModuleMelle extends Controller
             'register' => false,
             'filter' => false,
             'cart' => false,
+            'forgot' => false,
         );
+
+        $state['is_loading'] = false;
+        $state['is_sidebar_loading'] = false;
+        $state['is_logged'] = $this->customer->isLogged();
+
+        $state['login_link'] = $this->model_extension_pro_patch_url->ajax('account/login/melle_login', '', true);
+        $state['logout_link'] = $this->model_extension_pro_patch_url->ajax('account/logout', '', true);
+        $state['register_link'] = $this->model_extension_pro_patch_url->ajax('account/register', '', true);
+        $state['forgotten_link'] = $this->model_extension_pro_patch_url->ajax('account/forgotten', '', true);
+        $state['account_link'] = $this->model_extension_pro_patch_url->ajax('account/account', '', true);
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
@@ -212,8 +228,6 @@ class ControllerExtensionModuleMelle extends Controller
                 'text'  => $this->currency->format($total['value'], $this->session->data['currency'])
             );
         }
-
-
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));

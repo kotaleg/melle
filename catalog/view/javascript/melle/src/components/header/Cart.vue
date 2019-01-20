@@ -1,6 +1,6 @@
 <template>
     <section class="basket-modal">
-        <div class="panel-buttons">
+        <div class="panel-buttons panel-buttons--sidebar">
             <div class="main-phone">
                 <a :href="phoneLink" class="main-phone__link">
                     <svg viewBox="0 0 32 32" width="20" height="20">
@@ -12,7 +12,7 @@
                 </a>
             </div>
             <div class="panel-buttons__mail">
-                <a @click="enableElement('mail_us')" href="#" class="panel-buttons__mail-link cursorred">
+                <a @click="enableElement('mail_us')" href="#" class="panel-buttons__mail-link">
                     <svg viewBox="0 0 612.074 612.074" width="19" height="19">
                         <path d="M612.074,132.141v-2.38c0-8.849-4.016-19.26-11.229-26.473l-0.818-0.818c0,0-0.818,0-0.818-0.818c-1.636-1.636-3.198-2.38-4.833-4.016c-0.818,0-0.818-0.818-1.636-0.818c-1.636-0.818-4.016-1.636-5.652-2.38c-0.818,0-0.818-0.818-1.636-0.818c-2.38-0.818-4.833-1.636-7.213-1.636c-0.818,0-0.818,0-1.636,0c-2.38,0-5.651-0.818-8.849-0.818H43.427c-3.198,0-6.395,0-9.667,0.818c-0.818,0-1.636,0-2.38,0.818c-2.38,0.818-4.834,0.818-6.395,1.636c-0.818,0-0.818,0.818-1.636,0.818c-1.636,0.818-4.016,1.636-5.652,2.38l-0.818,0.818c-1.636,0.818-3.198,2.38-4.834,3.198c-0.818,0.818-1.636,1.636-2.38,2.38C4.016,110.428,0.818,117.715,0,125.746c0,0.818,0,0.818,0,1.636v357.384c0,0.818,0,0.818,0,1.636c1.636,11.229,7.213,20.896,15.244,26.473c7.213,4.833,16.062,8.031,26.473,8.031H569.39c0,0,0,0,0.818,0l0,0c2.38,0,5.651,0,8.031-0.818c0.818,0,0.818,0,1.636,0c2.38-0.818,4.834-0.818,6.395-1.636h0.818c17.698-6.395,24.911-21.714,24.911-36.14v-2.38v-0.818v-0.818V134.521c0-0.818,0-0.818,0-1.636C612.074,132.959,612.074,132.959,612.074,132.141z M560.69,120.913l-252.98,246.51l-57.854-56.218l0,0L51.459,120.838H560.69V120.913z M29.819,475.099V140.991l187.095,179.882L29.819,475.099z M299.679,491.905H56.292l182.336-149.393l58.597,57.036c2.38,2.38,4.834,3.198,7.213,4.016h0.818c0.818,0,0.818,0,1.636,0l0,0c0.818,0,1.636,0,1.636,0h0.818c2.38-0.818,5.651-1.636,7.213-4.016l55.4-53.838l183.079,146.196H299.679z M582.329,475.843L394.417,324.07L582.329,140.99V475.843z"></path>
                     </svg>
@@ -21,7 +21,7 @@
             </div>
             <div class="panel-buttons__auth-links">
                 <div class="panel-buttons__login">
-                    <a @click="enableElement('login')" href="#" class="panel-buttons__login-link cursorred">
+                    <a @click="enableElement('login')" href="#" class="panel-buttons__login-link">
                         <svg viewBox="0 0 16 20" width="16px" height="20px">
                             <path d="M15.9894459,19.4710744 L15.9894459,16.6694215 C15.9894459,13.2024793 13.6675462,10.2561983 10.4717678,9.23966942 C12.0084433,8.39256198 13.0511873,6.78099174 13.0511873,4.9338843 C13.0511873,2.21487603 10.7883905,-1.7616762e-15 8.01055409,-1.7616762e-15 C5.23271768,-1.7616762e-15 2.96992084,2.21487603 2.96992084,4.9338843 C2.96992084,6.78099174 4.01266491,8.39256198 5.54934037,9.23966942 C2.34934037,10.2561983 0.0316622691,13.2024793 0.0316622691,16.6694215 L0.0316622691,19.4710744 C0.0316622691,19.7520661 0.263852243,19.9793388 0.550923483,19.9793388 L15.478628,19.9793388 C15.7572559,19.9752066 15.9894459,19.7520661 15.9894459,19.4710744 Z M4,4.9338843 C4,2.77272727 5.79841689,1.01239669 8.00633245,1.01239669 C10.214248,1.01239669 12.0126649,2.77272727 12.0126649,4.9338843 C12.0126649,7.09504132 10.214248,8.8553719 8.00633245,8.8553719 C5.79841689,8.8553719 4,7.09504132 4,4.9338843 Z M14.9551451,18.9628099 L1.05751979,18.9628099 L1.05751979,16.6652893 C1.05751979,12.9173554 4.17308707,9.86363636 8.00633245,9.86363636 C11.8395778,9.86363636 14.9551451,12.9132231 14.9551451,16.6652893 L14.9551451,18.9628099 Z" id="Shape"></path>
                         </svg>
@@ -29,7 +29,7 @@
                     </a>
                 </div>
                 <span>/</span>
-                <div class="panel-buttons__reg"><a @click="enableElement('register')" class="panel-buttons__reg-link cursorred"><span>Регистрация</span></a></div>
+                <div class="panel-buttons__reg"><a @click="enableElement('register')" href="#" class="panel-buttons__reg-link"><span>Регистрация</span></a></div>
             </div>
             <div class="panel-buttons__basket shop-cart-container">
                 <a href="#" class="panel-buttons__basket-link">
@@ -68,8 +68,15 @@
                 </li>
             </ul>
             <div class="basket-modal__footer">
-                <div class="basket-modal__clean"><a v-if="hasProducts" :href="cart_link">Оформить заказ</a><span v-if="!hasProducts">корзина пуста</span></div>
-                <div class="basket-modal__full-price"><span>ИТОГО: </span><span class="boldPrice">{{ total }} <span class="ruble-sign">Р</span></span></div>
+                <div class="basket-modal__clean">
+                    <a v-if="hasProducts" :href="cart_link">Оформить заказ</a>
+                </div>
+                <div class="basket-modal__full-price">
+                    <span>ИТОГО: </span><span class="boldPrice">{{ total }} <span class="ruble-sign">Р</span></span>
+                </div>
+                <div v-if="!hasProducts" class="empty_basket">
+                    <span class="">корзина пуста</span>
+                </div>
             </div>
             <div data-ng-show="cart.products" class="basket-modal__buttons">
                 <a v-if="hasProducts" :href="catalog_link">
@@ -112,7 +119,7 @@ export default {
         ...mapGetters('header', [
             'phoneLink',
         ]),
-        ...mapGetters('header', [
+        ...mapGetters('cart', [
             'hasProducts',
         ]),
     },

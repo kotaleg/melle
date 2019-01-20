@@ -18,6 +18,16 @@ const state = {
         filter: false,
         cart: false,
     },
+
+    is_logged: false,
+    is_loading: false,
+    is_sidebar_loading: false,
+
+    login_link: '',
+    logout_link: '',
+    register_link: '',
+    forgotten_link: '',
+    account_link: '',
 }
 
 // getters
@@ -38,6 +48,12 @@ const actions = {
             commit('setData', data)
         })
     },
+    setLoadingStatus({ commit }, status) {
+        commit('setLoadingStatus', status)
+    },
+    setSidebarLoadingStatus({ commit }, status) {
+        commit('setSidebarLoadingStatus', status)
+    },
     openSidebar({ commit, dispatch, state }, status) {
         commit('openSidebar', status)
         if (status === false) {
@@ -47,7 +63,8 @@ const actions = {
     menuHandler({ commit }, payload) {
         commit('setMenuItemStatus', payload)
     },
-    enableElement({ commit, dispatch }, index) {
+    enableElement({ commit, dispatch, state }, index) {
+        if (state.elements[index] === true) { return }
         dispatch('disableAllElements')
         commit('setElementStatus', {i:index, status: true})
         commit('openSidebar', true)
@@ -65,6 +82,12 @@ const mutations = {
         for (let d in data) {
             Vue.set(state, d, data[d])
         }
+    },
+    setLoadingStatus(state, status) {
+        Vue.set(state, 'is_loading', status)
+    },
+    setSidebarLoadingStatus(state, status) {
+        Vue.set(state, 'is_sidebar_loading', status)
     },
     openSidebar(state, status) {
         Vue.set(state, 'sidebar_opened', status)
