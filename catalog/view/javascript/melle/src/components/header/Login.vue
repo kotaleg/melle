@@ -10,12 +10,10 @@
             <form class="auth__form form-vertical" id="yw1" method="post" v-on:submit.prevent="loginRequest()">
                 <div class="auth__form-group">
                     <label class="auth__form-label">Ваш e-mail</label>
-                    <div v-if="fieldHasError('email')" class="help-block error" id="CabinetLoginForm_email_em_">{{ getFieldError('email') }}</div>
                     <input placeholder="Example@example.com" class="auth__form-input" id="CabinetLoginForm_email" type="text" v-model="email">
                 </div>
                 <div class="auth__form-group">
                     <label class="auth__form-label">Пароль</label>
-                    <div v-if="fieldHasError('password')" class="help-block error" id="CabinetLoginForm_password_em_">{{ getFieldError('password') }}</div>
                     <input placeholder="Пароль" class="auth__form-input" id="CabinetLoginForm_password" type="password" v-model="password">
                 </div>
                 <div class="auth__form-group">
@@ -38,16 +36,8 @@ export default {
         'sidebar-buttons': SidebarButtons,
     },
     computed: {
-        ...mapState('header', [
-            'phone',
-        ]),
-        ...mapGetters('header', [
-            'phoneLink',
-        ]),
         ...mapGetters('login', [
             'getFormValue',
-            'fieldHasError',
-            'getFieldError',
         ]),
 
         email: {
@@ -60,12 +50,12 @@ export default {
         },
     },
     methods: {
-        ...mapActions('header', [
-            'enableElement',
-        ]),
         ...mapActions('login', [
             'updateFormValue',
             'loginRequest',
+        ]),
+        ...mapActions('header', [
+            'enableElement',
         ]),
     },
     created() {

@@ -1,7 +1,8 @@
 import Vue from 'vue'
-import { isUndefined, isEmpty } from 'lodash'
+import { isUndefined, isEmpty, has } from 'lodash'
 
 import shop from '../../api/shop'
+import notify from '../../components/partial/notify'
 
 // initial state
 const state = {
@@ -20,6 +21,10 @@ const state = {
         forgotten: false,
     },
 
+    captcha: {
+        sitekey: '',
+    },
+
     is_logged: false,
     is_loading: false,
     is_sidebar_loading: false,
@@ -29,6 +34,8 @@ const state = {
     register_link: '',
     forgotten_link: '',
     account_link: '',
+    captcha_link: '',
+    mail_us_link: '',
 }
 
 // getters
@@ -39,6 +46,12 @@ const getters = {
     phoneLink: state => {
         let phone = 'tel:'+state.phone
         return phone.replace(/\s/g,'')
+    },
+    isCaptcha: state => {
+        return !isEmpty(state.captcha.sitekey)
+    },
+    captchaKey: state => {
+        return state.captcha.sitekey
     },
 }
 
@@ -74,6 +87,27 @@ const actions = {
         for (let e in state.elements) {
             commit('setElementStatus', {i:e, status: false})
         }
+    },
+
+    captchaRequest({ commit, state, dispatch }, recaptchaToken) {
+        return new Promise((resolve, reject) => {
+            dispatch('setSidebarLoadingStatus', true)
+            shop.makeRequest(
+                {
+                    url: state.captcha_link,
+                    recaptchaToken: recaptchaToken,
+                },
+                res => {
+                    dispatch('setSidebarLoadingStatus', false)
+                    notify.messageHandler(res.data, '_sidebar')
+
+                    if (has(res.data, 'validated')
+                    && res.data.validated === true) {
+                        resolve(true)
+                    }
+                }
+            )
+        })
     },
 }
 

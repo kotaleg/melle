@@ -17,19 +17,19 @@ const state = {
 
 // getters
 const getters = {
-
+    hasProducts: state => {
+        return this.count > 0 ? true : false
+    },
 }
 
 // actions
 const actions = {
     initData({ commit, state }) {
-        shop.getInlineState('_header', data => {
+        shop.getInlineState('_cart', data => {
             commit('setData', data)
         })
     },
-    hasProducts: state => {
-        return this.count > 0 ? true : false
-    },
+
 }
 
 // mutations

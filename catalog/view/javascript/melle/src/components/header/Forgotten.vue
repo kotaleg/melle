@@ -41,9 +41,6 @@ export default {
         },
     },
     methods: {
-        ...mapActions('header', [
-            'enableElement',
-        ]),
         ...mapActions('forgotten', [
             'updateFormValue',
             'sendRequest',
