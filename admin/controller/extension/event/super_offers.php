@@ -70,4 +70,44 @@ class ControllerExtensionEventSuperOffers extends Controller
             }
         }
     }
+
+    public function list_products_before(&$route, &$data)
+    {
+        if (isset($data['products']) && is_array($data['products'])) {
+            foreach ($data['products'] as $k => $product) {
+
+                $state['product_id'] = (int)$product['product_id'];
+
+                $oav = $this->extension_model->getOptionsAndValues((int)$product['product_id']);
+                $state['options'] = $oav['product_options'];
+                $state['option_values'] = $oav['option_values'];
+
+                $state['combinations'] = $this->extension_model->getCombinations($state);
+                $state['combinations_data'] = $this->extension_model->getCombinationsData($state);
+
+                $q = 0;
+                $p_min = 0;
+                $p_max = 0;
+
+                foreach ($state['combinations_data'] as $cd) {
+                    $q += $cd['quantity'];
+                    if ($cd['price'] > $p_max) {
+                        $p_max = $cd['price'];
+                    }
+                    if ($cd['price'] < $p_min) {
+                        $p_min = $cd['price'];
+                    }
+                }
+
+                $data['products'][$k]['quantity'] = $q;
+                if ($p_min === $p_max || $p_min === 0) {
+                    $data['products'][$k]['price'] = $this->currency->format($p_max, $this->config->get('config_currency'));
+                } else {
+                    $p_min = $this->currency->format($p_min, $this->config->get('config_currency'));
+                    $p_max = $this->currency->format($p_max, $this->config->get('config_currency'));
+                    $data['products'][$k]['price'] = "{$p_min} - {$p_max}";
+                }
+            }
+        }
+    }
 }
