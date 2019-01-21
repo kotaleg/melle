@@ -58,9 +58,6 @@ export default {
             'enableElement',
         ]),
     },
-    created() {
-
-    },
 }
 </script>
 

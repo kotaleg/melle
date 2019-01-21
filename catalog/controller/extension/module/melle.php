@@ -76,7 +76,8 @@ class ControllerExtensionModuleMelle extends Controller
         );
 
         if ($this->config->get('captcha_' . $this->config->get('config_captcha') . '_status')) {
-            $state['captcha']['sitekey'] = $this->load->controller("extension/captcha/{$this->config->get('config_captcha')}/getKey");
+            $state['captcha']['sitekey'] = $this->load->controller(
+                "extension/captcha/{$this->config->get('config_captcha')}/getKey");
         }
 
         $state['is_loading'] = false;
@@ -89,7 +90,8 @@ class ControllerExtensionModuleMelle extends Controller
         $state['forgotten_link'] = $this->model_extension_pro_patch_url->ajax('account/forgotten/melle_forgotten', '', true);
         $state['account_link'] = $this->model_extension_pro_patch_url->ajax('account/account', '', true);
         $state['mail_us_link'] = $this->model_extension_pro_patch_url->ajax('information/contact/melle_mail_us', '', true);
-        $state['captcha_link'] = $this->model_extension_pro_patch_url->ajax("extension/captcha/{$this->config->get('config_captcha')}/melle_validate", '', true);
+        $state['captcha_link'] = $this->model_extension_pro_patch_url->ajax(
+            "extension/captcha/{$this->config->get('config_captcha')}/melle_validate", '', true);
 
         $state['konfidentsialnost_link'] = $this->model_extension_pro_patch_url->ajax('account/login/melle_login', '', true);
         $state['public_offer_link'] = $this->model_extension_pro_patch_url->ajax('account/login/melle_login', '', true);

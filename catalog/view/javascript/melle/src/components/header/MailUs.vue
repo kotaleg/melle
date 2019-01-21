@@ -40,7 +40,7 @@
 
                 <div v-if="isCaptcha" class="mail-us__form-group js-mail-us__form-group--captcha">
                     <vue-recaptcha
-                        ref="mailus_recaptcha"
+                        ref="register_recaptcha"
                         @verify="onCaptchaVerified"
                         @expired="onCaptchaExpired"
                         size="invisible"
@@ -50,7 +50,7 @@
                 <div style="margin-bottom: 25px;">
                     <label for="AbstractForm_politic">
                         <p-check name="agree" v-model="agree"></p-check>
-                        <span class="label-content">Я принимаю условия<a href="konfidentsialnost" target="_blank"> политики конфиденциальности </a>и политики обработки персональных данных</span>
+                        <span class="label-content">Я принимаю условия<a :href="konfidentsialnost_link" target="_blank"> политики конфиденциальности </a>и политики обработки персональных данных</span>
                     </label>
                     <div v-show="fieldHasError('agree')" class="help-block error" id="AbstractForm_politic_em_">{{ getFieldError('agree') }}</div>
                 </div>
@@ -81,6 +81,10 @@ export default {
             'getFormValue',
             'fieldHasError',
             'getFieldError',
+        ]),
+        ...mapState('header', [
+            'konfidentsialnost_link',
+            'public_offer_link',
         ]),
 
         name: {
@@ -114,10 +118,10 @@ export default {
         ]),
 
         mailUs() {
-            this.$refs.mailus_recaptcha.execute();
+            this.$refs.register_recaptcha.execute();
         },
         onCaptchaVerified(recaptchaToken) {
-            this.$refs.mailus_recaptcha.reset();
+            this.$refs.register_recaptcha.reset();
 
             this.captchaRequest(recaptchaToken)
                 .then(captcha_res => {
@@ -134,19 +138,12 @@ export default {
                 })
         },
         onCaptchaExpired() {
-            this.$refs.mailus_recaptcha.reset();
+            this.$refs.register_recaptcha.reset();
         },
-    },
-    data() {
-        return {
-            sent: false,
-        }
     },
 }
 </script>
 
 <style lang="scss">
-.pretty {
-    margin-right: 0.1em;
-}
+
 </style>

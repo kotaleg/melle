@@ -10,6 +10,8 @@ mix.sass(path.join(CATALOG_CSS_PATH, 'main.scss'), CODENAME+'.css');
 
 mix.setPublicPath(path.join(CATALOG_JS_PATH, 'dist/'))
 
+// mix.extract(['vue', 'vuex', 'lodash', 'axios'])
+
 mix.options({
     // extractVueStyles: true,
     // purifyCss: true,
