@@ -162,6 +162,7 @@ class ControllerExtensionModuleMelle extends Controller
                     'option'    => $option_data,
                     'recurring' => $recurring,
                     'quantity'  => $product['quantity'],
+                    'max_quantity' => 0,
                     'stock'     => $product['stock'] ? true : !(!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')),
                     'reward'    => ($product['reward'] ? sprintf($this->language->get('text_points'), $product['reward']) : ''),
                     'price'     => $price,
