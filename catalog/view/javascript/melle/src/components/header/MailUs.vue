@@ -40,7 +40,7 @@
 
                 <div v-if="isCaptcha" class="mail-us__form-group js-mail-us__form-group--captcha">
                     <vue-recaptcha
-                        ref="register_recaptcha"
+                        ref="mailus_recaptcha"
                         @verify="onCaptchaVerified"
                         @expired="onCaptchaExpired"
                         size="invisible"
@@ -84,7 +84,6 @@ export default {
         ]),
         ...mapState('header', [
             'konfidentsialnost_link',
-            'public_offer_link',
         ]),
 
         name: {
@@ -118,10 +117,10 @@ export default {
         ]),
 
         mailUs() {
-            this.$refs.register_recaptcha.execute();
+            this.$refs.mailus_recaptcha.execute();
         },
         onCaptchaVerified(recaptchaToken) {
-            this.$refs.register_recaptcha.reset();
+            this.$refs.mailus_recaptcha.reset();
 
             this.captchaRequest(recaptchaToken)
                 .then(captcha_res => {
@@ -138,7 +137,7 @@ export default {
                 })
         },
         onCaptchaExpired() {
-            this.$refs.register_recaptcha.reset();
+            this.$refs.mailus_recaptcha.reset();
         },
     },
 }

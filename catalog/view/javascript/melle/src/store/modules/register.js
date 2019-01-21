@@ -11,7 +11,11 @@ const state = {
         name: '',
         email: '',
         phone: '',
-        message: '',
+        password: '',
+        confirm: '',
+        birth: '',
+        discount_card: '',
+        newsletter: false,
         agree: false,
     },
     errors: new Errors(),
@@ -35,18 +39,17 @@ const actions = {
     updateFormValue({ commit }, payload) {
         commit('updateFormValue', payload)
     },
-    mailUsRequest({ commit, state, rootState, dispatch }) {
+    registerRequest({ commit, state, rootState, dispatch }) {
         return new Promise((resolve, reject) => {
             commit('clearFormErrors')
             this.dispatch('header/setSidebarLoadingStatus', true)
             shop.makeRequest(
                 {
-                    url: rootState.header.mail_us_link,
+                    url: rootState.header.register_link,
                     form: state.form,
                 },
                 res => {
                     this.dispatch('header/setSidebarLoadingStatus', false)
-                    notify.messageHandler(res.data, '_sidebar')
 
                     if (has(res.data, 'form_error')) {
                         commit('setFormErrors', res.data.form_error)
@@ -55,6 +58,8 @@ const actions = {
                     if (has(res.data, 'sent') && res.data.sent === true) {
                         resolve(true)
                     }
+
+                    notify.messageHandler(res.data, '_sidebar')
                 }
             )
         })

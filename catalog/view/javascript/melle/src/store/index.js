@@ -6,6 +6,7 @@ import cart from './modules/cart'
 import mail_us from './modules/mail_us'
 import login from './modules/login'
 import forgotten from './modules/forgotten'
+import register from './modules/register'
 
 
 Vue.use(Vuex)
@@ -19,6 +20,7 @@ export default new Vuex.Store({
         login,
         mail_us,
         forgotten,
+        register,
     },
     strict: debug,
 })
