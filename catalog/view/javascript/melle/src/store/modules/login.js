@@ -56,7 +56,7 @@ const actions = {
 // mutations
 const mutations = {
     updateFormValue(state, { k, v }) {
-        state.form[k] = v
+        Vue.set(state.form, k, v)
     },
 }
 

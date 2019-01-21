@@ -67,7 +67,7 @@
         </operation>
     </file>
 
-    <file path="admin/language/en-gb/catalog/product.php">
+    <file path="admin/language/*/catalog/product.php">
         <operation error="skip">
             <search regex="true" limit="1"><![CDATA[($)]]></search>
             <add position="before"><![CDATA[

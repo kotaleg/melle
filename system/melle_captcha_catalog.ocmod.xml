@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_captcha_catalog</name>
+    <code>melle_captcha_catalog</code>
+    <description>Melle Captcha [Catalog]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/extension/captcha/google.php">
+        <operation error="skip">
+            <search><![CDATA[public function validate() {]]></search>
+            <add position="before"><![CDATA[
+                /* IVAN MOD START */
+                public function getKey()
+                {
+                    return $this->config->get('captcha_google_key');
+                }
+
+                public function melle_validate()
+                {
+                    $this->load->model('extension/pro_patch/url');
+                    $this->load->model('extension/pro_patch/json');
+
+                    $json['validated'] = false;
+                    $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+                    if (isset($parsed['recaptchaToken'])) {
+                        $recaptcha = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($this->config->get('captcha_google_secret')) . '&response=' . $parsed['recaptchaToken'] . '&remoteip=' . $this->request->server['REMOTE_ADDR']);
+                        $recaptcha = json_decode($recaptcha, true);
+
+                        if (isset($recaptcha['success']) && $recaptcha['success']) {
+                            $json['validated'] = true;
+                        }
+                    }
+
+                    $this->response->setOutput(json_encode($json));
+                }
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>
