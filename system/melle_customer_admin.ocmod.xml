@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_customer_admin</name>
+    <code>melle_customer_admin</code>
+    <description>Melle Register [Admin]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="admin/controller/customer/customer.php">
+        <operation error="skip">
+            <search><![CDATA[$customer_info = $this->model_customer_customer->getCustomer($this->request->get['customer_id']);]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                if (isset($this->request->post['discount_card'])) {
+                    $data['discount_card'] = $this->request->post['discount_card'];
+                } elseif (!empty($customer_info)) {
+                    $data['discount_card'] = $customer_info['discount_card'];
+                } else {
+                    $data['discount_card'] = '';
+                }
+
+                if (isset($this->request->post['birth'])) {
+                    $data['birth'] = $this->request->post['birth'];
+                } elseif (!empty($customer_info)) {
+                    $data['birth'] = $customer_info['birth'];
+                } else {
+                    $data['birth'] = '';
+                }
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/model/customer/customer.php">
+        <operation error="skip">
+            <search><![CDATA[, safe = '" . (int)$data['safe'] . "', date_added = NOW()");]]></search>
+            <add position="replace"><![CDATA[, `discount_card` = '" . $this->db->escape(isset($data['discount_card']) ? $data['discount_card'] : '') . "', `birth` = '" . $this->db->escape(isset($data['birth']) ? $data['birth'] : '') . "', safe = '" . (int)$data['safe'] . "', date_added = NOW()");]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/model/customer/customer.php">
+        <operation error="skip">
+            <search><![CDATA[, safe = '" . (int)$data['safe'] . "' WHERE customer_id = '" . (int)$customer_id . "'");]]></search>
+            <add position="replace"><![CDATA[, `discount_card` = '" . $this->db->escape(isset($data['discount_card']) ? $data['discount_card'] : '') . "', `birth` = '" . $this->db->escape(isset($data['birth']) ? $data['birth'] : '') . "', safe = '" . (int)$data['safe'] . "' WHERE customer_id = '" . (int)$customer_id . "'");]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/customer/customer_form.twig">
+        <operation error="skip">
+            <search><![CDATA[<label class="col-sm-2 control-label" for="input-telephone">{{ entry_telephone }}</label>]]></search>
+            <add position="before" offset="1"><![CDATA[
+                <!-- IVAN MOD START -->
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-birth">Дата рождения</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="birth" value="{{ birth }}" placeholder="Дата рождения" id="input-birth" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-discount-card">Скидочная карта</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="discount_card" value="{{ discount_card }}" placeholder="Скидочная карта" id="input-discount-card" class="form-control" />
+                  </div>
+                </div>
+                <!-- IVAN MOD END -->
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

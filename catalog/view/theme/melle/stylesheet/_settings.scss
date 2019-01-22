@@ -44,26 +44,27 @@ h6 {
 
 h1 {
   color: #202020;
-  font-size: 24px;
-  font-weight: 400;
+  font-size: 24px !important;
+  font-weight: 400 !important;
+  padding-bottom: 10px !important;
 }
 
 h2 {
   color: #202020;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 20px !important;
+  font-weight: 400 !important;
 }
 
 h3 {
   color: #202020;
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 18px !important;
+  font-weight: 400 !important;
 }
 
 h4 {
   color: #202020;
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 16px !important;
+  font-weight: 400 !important;
 }
 
 p {

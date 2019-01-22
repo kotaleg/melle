@@ -1,25 +1,26 @@
 {{ header }}
-<div id="common-success" class="container">
-  <ul class="breadcrumb">
-    {% for breadcrumb in breadcrumbs %}
-    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-    {% endfor %}
-  </ul>
-  <div class="row">{{ column_left }}
-    {% if column_left and column_right %}
-    {% set class = 'col-sm-6' %}
-    {% elseif column_left or column_right %}
-    {% set class = 'col-sm-9' %}
-    {% else %}
-    {% set class = 'col-sm-12' %}
-    {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
-      <h1>{{ heading_title }}</h1>
-      {{ text_message }}
-      <div class="buttons">
-        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+<main class="main-page">
+   <section class="breadcrumbs">
+      <div class="breadcrumbs__container container">
+         <div class="breadcrumbs__inner">
+            {% for breadcrumb in breadcrumbs %}
+            {% if not loop.last %}
+            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
+            {% else %}
+            <span>{{ breadcrumb.text }}</span>
+            {% endif %}
+            {% endfor %}
+         </div>
       </div>
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
-</div>
+   </section>
+
+   <section class="catalog">
+      <div class="catalog__container container">
+
+         <h1>{{ heading_title }}</h1>
+         <p>{{ text_message }}</p>
+
+      </div>
+   </section>
+</main>
 {{ footer }}
