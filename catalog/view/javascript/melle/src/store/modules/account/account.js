@@ -28,14 +28,6 @@ const state = {
     is_logged: false,
     is_loading: false,
     is_sidebar_loading: false,
-
-    login_link: '',
-    logout_link: '',
-    register_link: '',
-    forgotten_link: '',
-    account_link: '',
-    captcha_link: '',
-    mail_us_link: '',
 }
 
 // getters

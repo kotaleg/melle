@@ -13,6 +13,8 @@ class ModelExtensionModuleMelle extends Controller
         parent::__construct($registry);
 
         $this->load->language($this->route);
+
+        $this->load->model('extension/pro_patch/url');
     }
 
     public function getMenu()
@@ -31,13 +33,13 @@ class ModelExtensionModuleMelle extends Controller
             foreach ($cc as $cat2) {
                 $children[] = array(
                     'title'     => $cat2['name'],
-                    'url'       => $this->url->link('product/category', 'path=' . $cat['category_id'] .'_'. $cat2['category_id']),
+                    'url'       => $this->model_extension_pro_patch_url->ajax('product/category', 'path=' . $cat['category_id'] .'_'. $cat2['category_id']),
                 );
             }
 
             $menu[] = array(
                 'title'     => $cat['name'],
-                'url'       => $this->url->link('product/category', 'path=' . $cat['category_id']),
+                'url'       => $this->model_extension_pro_patch_url->ajax('product/category', 'path=' . $cat['category_id']),
                 'children'  => $children,
                 'active'    => false,
             );

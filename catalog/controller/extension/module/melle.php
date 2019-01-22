@@ -95,6 +95,7 @@ class ControllerExtensionModuleMelle extends Controller
 
         $state['konfidentsialnost_link'] = $this->model_extension_pro_patch_url->ajax('account/login/melle_login', '', true);
         $state['public_offer_link'] = $this->model_extension_pro_patch_url->ajax('account/login/melle_login', '', true);
+        $state['delivery_link'] = $this->model_extension_pro_patch_url->ajax('information/information', '&information_id=8', true);
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));

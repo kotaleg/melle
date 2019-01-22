@@ -38,7 +38,7 @@
                          </svg>
                       </a>
                    </li>
-                   <li class="menu-pay"><a href="javascript:void(0)" class="cursorred">оплата и <br>доставка</a></li>
+                   <li class="menu-pay"><a :href="delivery_link" class="cursorred">оплата и <br>доставка</a></li>
                    <li class="menu-enter">
                       <a v-if="!is_logged" id="panel-buttons__login-link" @click="enableElement('login')" class="cursorred" href="javascript:void(0)">Вход</a>
                       <a v-if="!is_logged" id="panel-buttons__reg-link" @click="enableElement('register')" class="cursorred" href="javascript:void(0)">Регистрация</a>
@@ -129,6 +129,7 @@ export default {
             'is_loading',
             'logout_link',
             'account_link',
+            'delivery_link',
         ]),
         ...mapState('cart', {
             cartCount: 'count',
