@@ -158,7 +158,11 @@ export default {
         ]),
 
         register() {
-            this.$refs.register_recaptcha.execute();
+            if (this.isCaptcha) {
+                this.$refs.register_recaptcha.execute();
+            } else {
+                this.registerRequest()
+            }
         },
         onCaptchaVerified(recaptchaToken) {
             this.$refs.register_recaptcha.reset();
@@ -166,25 +170,13 @@ export default {
             this.captchaRequest(recaptchaToken)
                 .then(captcha_res => {
                     if (captcha_res === true) {
-
                         this.registerRequest()
-                            .then(res => {
-                                if (res === true) {
-                                    this.sent = true
-                                }
-                            })
-
                     }
                 })
         },
         onCaptchaExpired() {
             this.$refs.register_recaptcha.reset();
         },
-    },
-    data() {
-        return {
-            sent: false,
-        }
     },
 }
 </script>

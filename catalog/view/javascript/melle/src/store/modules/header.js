@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isEmpty, has } from 'lodash'
+import { isUndefined, has } from 'lodash'
 
 import shop from '../../api/shop'
 import notify from '../../components/partial/notify'
@@ -48,7 +48,7 @@ const getters = {
         return phone.replace(/\s/g,'')
     },
     isCaptcha: state => {
-        return !isEmpty(state.captcha.sitekey)
+        return !state.captcha.sitekey
     },
     captchaKey: state => {
         return state.captcha.sitekey

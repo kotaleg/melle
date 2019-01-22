@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isEmpty, has } from 'lodash'
+import { isUndefined, has } from 'lodash'
 
 import shop from '../../api/shop'
 import notify from '../../components/partial/notify'
@@ -55,8 +55,8 @@ const actions = {
                         commit('setFormErrors', res.data.form_error)
                     }
 
-                    if (has(res.data, 'sent') && res.data.sent === true) {
-                        resolve(true)
+                    if (has(res.data, 'redirect') && res.data.redirect !== false) {
+                        window.location = res.data.redirect
                     }
 
                     notify.messageHandler(res.data, '_sidebar')

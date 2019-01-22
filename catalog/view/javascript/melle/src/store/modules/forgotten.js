@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isEmpty, has } from 'lodash'
+import { isUndefined, has } from 'lodash'
 
 import shop from '../../api/shop'
 import notify from '../../components/partial/notify'

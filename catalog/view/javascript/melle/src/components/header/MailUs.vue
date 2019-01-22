@@ -117,7 +117,16 @@ export default {
         ]),
 
         mailUs() {
-            this.$refs.mailus_recaptcha.execute();
+            if (this.isCaptcha) {
+                this.$refs.mailus_recaptcha.execute();
+            } else {
+                this.mailUsRequest()
+                    .then(res => {
+                        if (res === true) {
+                            this.sent = true
+                        }
+                    })
+            }
         },
         onCaptchaVerified(recaptchaToken) {
             this.$refs.mailus_recaptcha.reset();
@@ -139,6 +148,11 @@ export default {
         onCaptchaExpired() {
             this.$refs.mailus_recaptcha.reset();
         },
+    },
+    data() {
+        return {
+            sent: false,
+        }
     },
 }
 </script>

@@ -86,7 +86,7 @@ class ControllerExtensionModuleMelle extends Controller
 
         $state['login_link'] = $this->model_extension_pro_patch_url->ajax('account/login/melle_login', '', true);
         $state['logout_link'] = $this->model_extension_pro_patch_url->ajax('account/logout', '', true);
-        $state['register_link'] = $this->model_extension_pro_patch_url->ajax('account/register', '', true);
+        $state['register_link'] = $this->model_extension_pro_patch_url->ajax('account/register/melle_register', '', true);
         $state['forgotten_link'] = $this->model_extension_pro_patch_url->ajax('account/forgotten/melle_forgotten', '', true);
         $state['account_link'] = $this->model_extension_pro_patch_url->ajax('account/account', '', true);
         $state['mail_us_link'] = $this->model_extension_pro_patch_url->ajax('information/contact/melle_mail_us', '', true);
