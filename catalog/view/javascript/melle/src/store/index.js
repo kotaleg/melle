@@ -1,12 +1,17 @@
 import 'es6-promise/auto'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import header from './modules/header'
-import cart from './modules/cart'
-import mail_us from './modules/mail_us'
-import login from './modules/login'
-import forgotten from './modules/forgotten'
-import register from './modules/register'
+
+// HEADER
+import header from './modules/header/header'
+import cart from './modules/header/cart'
+import mail_us from './modules/header/mail_us'
+import login from './modules/header/login'
+import forgotten from './modules/header/forgotten'
+import register from './modules/header/register'
+
+// ACCOUNT
+import account from './modules/account/account'
 
 
 Vue.use(Vuex)

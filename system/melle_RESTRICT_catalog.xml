@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_RESTRICT_catalog</name>
+    <code>melle_RESTRICT_catalog</code>
+    <description>Melle Rescrict Access [Catalog]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/account/address.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function add() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function edit() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function delete() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/affiliate.php">
+        <operation error="skip">
+            <search><![CDATA[public function add() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function edit() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function getForm() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/download.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function download() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/edit.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/forgotten.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/login.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/newsletter.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/password.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/recurring.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function info() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/register.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/return.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function info() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function add() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/reward.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/tracking.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/transaction.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/voucher.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function success() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/wishlist.php">
+        <operation error="skip">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[public function add() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return $this->response->redirect($this->url->link('common/home'));
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

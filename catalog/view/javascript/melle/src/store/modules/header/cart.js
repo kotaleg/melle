@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { isUndefined } from 'lodash'
 
-import shop from '../../api/shop'
+import shop from '../../../api/shop'
 
 // initial state
 const state = {

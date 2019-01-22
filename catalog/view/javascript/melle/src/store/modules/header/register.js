@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import { isUndefined, has } from 'lodash'
 
-import shop from '../../api/shop'
-import notify from '../../components/partial/notify'
-import Errors from '../../components/partial/errors'
+import shop from '../../../api/shop'
+import notify from '../../../components/partial/notify'
+import Errors from '../../../components/partial/errors'
 
 // initial state
 const state = {
@@ -11,7 +11,11 @@ const state = {
         name: '',
         email: '',
         phone: '',
-        message: '',
+        password: '',
+        confirm: '',
+        birth: '',
+        discount_card: '',
+        newsletter: false,
         agree: false,
     },
     errors: new Errors(),
@@ -35,26 +39,27 @@ const actions = {
     updateFormValue({ commit }, payload) {
         commit('updateFormValue', payload)
     },
-    mailUsRequest({ commit, state, rootState, dispatch }) {
+    registerRequest({ commit, state, rootState, dispatch }) {
         return new Promise((resolve, reject) => {
             commit('clearFormErrors')
             this.dispatch('header/setSidebarLoadingStatus', true)
             shop.makeRequest(
                 {
-                    url: rootState.header.mail_us_link,
+                    url: rootState.header.register_link,
                     form: state.form,
                 },
                 res => {
                     this.dispatch('header/setSidebarLoadingStatus', false)
-                    notify.messageHandler(res.data, '_sidebar')
 
                     if (has(res.data, 'form_error')) {
                         commit('setFormErrors', res.data.form_error)
                     }
 
-                    if (has(res.data, 'sent') && res.data.sent === true) {
-                        resolve(true)
+                    if (has(res.data, 'redirect') && res.data.redirect !== false) {
+                        window.location = res.data.redirect
                     }
+
+                    notify.messageHandler(res.data, '_sidebar')
                 }
             )
         })

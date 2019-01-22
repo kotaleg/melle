@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import { isUndefined, has } from 'lodash'
 
-import shop from '../../api/shop'
-import notify from '../../components/partial/notify'
+import shop from '../../../api/shop'
+import notify from '../../../components/partial/notify'
 
 // initial state
 const state = {
@@ -58,7 +58,7 @@ const getters = {
 // actions
 const actions = {
     initData({ commit, state }) {
-        shop.getInlineState('_header', data => {
+        shop.getInlineState('_account', data => {
             commit('setData', data)
         })
     },
