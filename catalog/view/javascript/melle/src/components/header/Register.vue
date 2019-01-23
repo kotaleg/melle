@@ -22,7 +22,7 @@
                 <div v-show="fieldHasError('phone')" class="help-block error" id="CabinetRegisterForm_phone_em_">{{ getFieldError('phone') }}</div>
                 <the-mask mask="+7 (###) ###-##-##"
                         v-model.trim="phone"
-                        type="tel" :masked="true"
+                        type="tel" :masked="false"
                         id="CabinetRegisterForm_phone"
                         placeholder="+7 (_ _ _) _ _ _-_ _-_ _"
                         class="reg__form-input" />
@@ -41,11 +41,11 @@
                 <label class="reg__form-label">Дата рождения</label>
                 <div v-show="fieldHasError('birth')" class="help-block error" id="CabinetRegisterForm_birth_em_">{{ getFieldError('birth') }}</div>
                 <the-mask mask="##.##.####"
-                        v-model.trim="birth"
-                        type="text" :masked="true"
-                        id="CabinetRegisterForm_birth"
-                        placeholder="дд.мм.гггг"
-                        class="reg__form-input" />
+                    v-model.trim="birth"
+                    type="text" :masked="true"
+                    id="CabinetRegisterForm_birth"
+                    placeholder="дд.мм.гггг"
+                    class="reg__form-input" />
             </div>
             <div class="reg__form-group">
                 <label class="reg__form-label">Скидочная карта (при наличии)</label>

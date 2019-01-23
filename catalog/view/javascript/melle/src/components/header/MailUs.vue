@@ -24,7 +24,7 @@
                     <label class="mail-us__form-label required" for="AbstractForm_field_7">Телефон <span class="required">*</span></label>
                     <the-mask mask="+7 (###) ###-##-##"
                         v-model.trim="phone"
-                        type="tel" :masked="true"
+                        type="tel" :masked="false"
                         id="AbstractForm_field_7"
                         placeholder="+7 (_ _ _) _ _ _-_ _-_ _"
                         class="mail-us__form-input" />

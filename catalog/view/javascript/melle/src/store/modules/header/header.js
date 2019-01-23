@@ -83,7 +83,7 @@ const actions = {
         commit('setElementStatus', {i:index, status: true})
         commit('openSidebar', true)
     },
-    disableAllElements({ commit }) {
+    disableAllElements({ commit, state }) {
         for (let e in state.elements) {
             commit('setElementStatus', {i:e, status: false})
         }

@@ -26,6 +26,8 @@ export default new Vuex.Store({
         mail_us,
         forgotten,
         register,
+
+        account,
     },
     strict: debug,
 })

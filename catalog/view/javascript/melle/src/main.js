@@ -18,6 +18,7 @@ Vue.component('p-check', PrettyCheck)
 
 
 Vue.component('melle-header', require('./components/header/Header.vue'))
+Vue.component('melle-account-edit', require('./components/account/AccountEdit.vue'))
 
 document.addEventListener('DOMContentLoaded', () => {
     new Vue({

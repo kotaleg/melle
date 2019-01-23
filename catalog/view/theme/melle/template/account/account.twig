@@ -1,62 +1,44 @@
 {{ header }}
-<div id="account-account" class="container">
-  <ul class="breadcrumb">
-    {% for breadcrumb in breadcrumbs %}
-    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-    {% endfor %}
-  </ul>
-  {% if success %}
-  <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
-  {% endif %}
-  <div class="row">{{ column_left }}
-    {% if column_left and column_right %}
-    {% set class = 'col-sm-6' %}
-    {% elseif column_left or column_right %}
-    {% set class = 'col-sm-9' %}
-    {% else %}
-    {% set class = 'col-sm-12' %}
-    {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
-      <h2>{{ text_my_account }}</h2>
-      <ul class="list-unstyled">
-        <li><a href="{{ edit }}">{{ text_edit }}</a></li>
-        <li><a href="{{ password }}">{{ text_password }}</a></li>
-        <li><a href="{{ address }}">{{ text_address }}</a></li>
-        <li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>
-      </ul>
-      {% if credit_cards %}
-      <h2>{{ text_credit_card }}</h2>
-      <ul class="list-unstyled">
-        {% for credit_card in credit_cards %}
-        <li><a href="{{ credit_card.href }}">{{ credit_card.name }}</a></li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-      <h2>{{ text_my_orders }}</h2>
-      <ul class="list-unstyled">
-        <li><a href="{{ order }}">{{ text_order }}</a></li>
-        <li><a href="{{ download }}">{{ text_download }}</a></li>
-        {% if reward %}
-        <li><a href="{{ reward }}">{{ text_reward }}</a></li>
-        {% endif %}
-        <li><a href="{{ return }}">{{ text_return }}</a></li>
-        <li><a href="{{ transaction }}">{{ text_transaction }}</a></li>
-        <li><a href="{{ recurring }}">{{ text_recurring }}</a></li>
-      </ul>
-      <h2>{{ text_my_affiliate }}</h2>
-      <ul class="list-unstyled">
-        {% if not tracking %}
-        <li><a href="{{ affiliate }}">{{ text_affiliate_add }}</a></li>
-        {% else %}
-        <li><a href="{{ affiliate }}">{{ text_affiliate_edit }}</a></li>
-        <li><a href="{{ tracking }}">{{ text_tracking }}</a></li>
-        {% endif %}
-      </ul>
-      <h2>{{ text_my_newsletter }}</h2>
-      <ul class="list-unstyled">
-        <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>
-      </ul>
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
-</div>
+<main class="main-page">
+   <section class="breadcrumbs">
+      <div class="breadcrumbs__container container">
+         <div class="breadcrumbs__inner">
+            {% for breadcrumb in breadcrumbs %}
+            {% if not loop.last %}
+            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
+            {% else %}
+            <span>{{ breadcrumb.text }}</span>
+            {% endif %}
+            {% endfor %}
+         </div>
+      </div>
+   </section>
+
+   <section class="lk">
+      <div class="lk__container container">
+         <div class="lk__title">Настройки</div>
+         <div class="lk__sidebar">
+            <section class="lk-sidebar">
+               <ul class="lk-sidebar__list">
+                  <li class="lk-sidebar__item on"><a href="/cabinet">Настройки</a></li>
+                  <li class="lk-sidebar__item"><a href="/cabinet/action.orders">Мои заказы</a></li>
+                  <li class="lk-sidebar__item">
+                     <a href="/cabinet/action.Logout">
+                        Выход
+                        <svg viewBox="0 0 384.971 384.971" height="14" width="14">
+                           <path d="M180.455,360.91H24.061V24.061h156.394c6.641,0,12.03-5.39,12.03-12.03s-5.39-12.03-12.03-12.03H12.03C5.39,0.001,0,5.39,0,12.031V372.94c0,6.641,5.39,12.03,12.03,12.03h168.424c6.641,0,12.03-5.39,12.03-12.03C192.485,366.299,187.095,360.91,180.455,360.91z"></path>
+                           <path d="M381.481,184.088l-83.009-84.2c-4.704-4.752-12.319-4.74-17.011,0c-4.704,4.74-4.704,12.439,0,17.179l62.558,63.46H96.279c-6.641,0-12.03,5.438-12.03,12.151c0,6.713,5.39,12.151,12.03,12.151h247.74l-62.558,63.46c-4.704,4.752-4.704,12.439,0,17.179c4.704,4.752,12.319,4.752,17.011,0l82.997-84.2C386.113,196.588,386.161,188.756,381.481,184.088z"></path>
+                        </svg>
+                     </a>
+                  </li>
+               </ul>
+            </section>
+         </div>
+         <div class="lk__content">
+            <melle-account-edit></melle-account-edit>
+         </div>
+      </div>
+   </section>
+
+</main>
 {{ footer }}

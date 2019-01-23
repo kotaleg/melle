@@ -249,4 +249,31 @@ class ControllerExtensionModuleMelle extends Controller
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
     }
+
+    public function initAccount()
+    {
+        // VARIABLE
+        $state['id'] = "{$this->codename}_account";
+
+        $this->load->model('account/customer');
+        $customer_info = $this->model_account_customer->getCustomer($this->customer->getId());
+
+        if ($customer_info) {
+            $state['form'] = array(
+                'name' => "{$customer_info['firstname']} {$customer_info['lastname']}",
+                'email' => $customer_info['email'],
+                'phone' => $customer_info['telephone'],
+                'password' => '',
+                'confirm' => '',
+                'birth' => $customer_info['birth'],
+                'discount_card' => $customer_info['discount_card'],
+                'newsletter' => ($customer_info['newsletter']) ? true : false,
+            );
+        }
+
+        $state['edit_link'] = $this->model_extension_pro_patch_url->ajax('account/edit/melle_edit', '', true);
+
+        // SET STATE
+        $this->document->addState($state['id'], json_encode($state));
+    }
 }

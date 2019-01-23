@@ -1,5 +1,10 @@
 <template>
     <header class="header-page">
+
+      <notifications
+        :group="this.$codename+'_header'"
+        position="bottom right"/>
+
         <div class="header-page__container">
             <a v-if="logo" class="header-page__logo" :href="base">
                 <img :src="logo" alt="logo">

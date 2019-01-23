@@ -3,47 +3,35 @@ import { isUndefined, has } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
+import Errors from '../../../components/partial/errors'
 
 // initial state
 const state = {
-    base: '',
-    logo: '',
-    phone: '',
-    menu: [],
-
-    sidebar_opened: false,
-    elements: {
-        mail_us: false,
-        login: false,
-        register: false,
-        filter: false,
-        cart: false,
-        forgotten: false,
+    form: {
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+        confirm: '',
+        birth: '',
+        discount_card: '',
+        newsletter: false,
     },
+    errors: new Errors(),
 
-    captcha: {
-        sitekey: '',
-    },
-
-    is_logged: false,
-    is_loading: false,
-    is_sidebar_loading: false,
+    edit_link: '',
 }
 
 // getters
 const getters = {
-    isElementActive: state => index => {
-        return state.elements[index]
+    getFormValue: state => index => {
+        return state.form[index]
     },
-    phoneLink: state => {
-        let phone = 'tel:'+state.phone
-        return phone.replace(/\s/g,'')
+    fieldHasError: state => field => {
+        return state.errors.has(field)
     },
-    isCaptcha: state => {
-        return !state.captcha.sitekey
-    },
-    captchaKey: state => {
-        return state.captcha.sitekey
+    getFieldError: state => field => {
+        return state.errors.first(field)
     },
 }
 
@@ -54,52 +42,31 @@ const actions = {
             commit('setData', data)
         })
     },
-    setLoadingStatus({ commit }, status) {
-        commit('setLoadingStatus', status)
+    updateFormValue({ commit }, payload) {
+        commit('updateFormValue', payload)
     },
-    setSidebarLoadingStatus({ commit }, status) {
-        commit('setSidebarLoadingStatus', status)
-    },
-    openSidebar({ commit, dispatch, state }, status) {
-        commit('openSidebar', status)
-        if (status === false) {
-            dispatch('disableAllElements')
-        }
-    },
-    menuHandler({ commit }, payload) {
-        commit('setMenuItemStatus', payload)
-    },
-    enableElement({ commit, dispatch, state }, index) {
-        if (state.elements[index] === true) { return }
-        dispatch('disableAllElements')
-        commit('setElementStatus', {i:index, status: true})
-        commit('openSidebar', true)
-    },
-    disableAllElements({ commit }) {
-        for (let e in state.elements) {
-            commit('setElementStatus', {i:e, status: false})
-        }
-    },
+    editRequest({ commit, state, rootState, dispatch }) {
+        commit('clearFormErrors')
+        this.dispatch('header/setLoadingStatus', true)
+        shop.makeRequest(
+            {
+                url: state.edit_link,
+                form: state.form,
+            },
+            res => {
+                this.dispatch('header/setLoadingStatus', false)
 
-    captchaRequest({ commit, state, dispatch }, recaptchaToken) {
-        return new Promise((resolve, reject) => {
-            dispatch('setSidebarLoadingStatus', true)
-            shop.makeRequest(
-                {
-                    url: state.captcha_link,
-                    recaptchaToken: recaptchaToken,
-                },
-                res => {
-                    dispatch('setSidebarLoadingStatus', false)
-                    notify.messageHandler(res.data, '_sidebar')
-
-                    if (has(res.data, 'validated')
-                    && res.data.validated === true) {
-                        resolve(true)
-                    }
+                if (has(res.data, 'form_error')) {
+                    commit('setFormErrors', res.data.form_error)
                 }
-            )
-        })
+
+                if (has(res.data, 'redirect') && res.data.redirect !== false) {
+                    window.location = res.data.redirect
+                }
+
+                notify.messageHandler(res.data, '_header')
+            }
+        )
     },
 }
 
@@ -110,20 +77,15 @@ const mutations = {
             Vue.set(state, d, data[d])
         }
     },
-    setLoadingStatus(state, status) {
-        Vue.set(state, 'is_loading', status)
+    updateFormValue(state, { k, v }) {
+        Vue.set(state.form, k, v)
+        state.errors.clear(k)
     },
-    setSidebarLoadingStatus(state, status) {
-        Vue.set(state, 'is_sidebar_loading', status)
+    clearFormErrors(state) {
+        state.errors.clear()
     },
-    openSidebar(state, status) {
-        Vue.set(state, 'sidebar_opened', status)
-    },
-    setMenuItemStatus(state, {i, status}) {
-        Vue.set(state.menu[i], 'active', status)
-    },
-    setElementStatus(state, {i, status}) {
-        Vue.set(state.elements, i, status)
+    setFormErrors(state, errors) {
+        state.errors.record(errors)
     },
 }
 

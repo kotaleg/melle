@@ -82,7 +82,7 @@
                                 'firstname' => $firstname,
                                 'lastname' => $lastname,
                                 'email' => $parsed['form']['email'],
-                                'telephone' => $parsed['form']['phone'],
+                                'telephone' => filter_var($parsed['form']['phone'], FILTER_SANITIZE_NUMBER_INT),
                                 'password' => $parsed['form']['password'],
                                 'newsletter' => $parsed['form']['newsletter'],
                                 'birth' => $parsed['form']['birth'],

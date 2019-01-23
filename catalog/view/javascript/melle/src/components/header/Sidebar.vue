@@ -127,8 +127,5 @@ export default {
 </script>
 
 <style lang="scss">
-// NOTIFICATION
-.vue-notification {
-    font-size: 14px;
-}
+
 </style>
