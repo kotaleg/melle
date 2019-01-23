@@ -87,10 +87,11 @@
                             'lastname' => $lastname,
                             'email' => $parsed['form']['email'],
                             'telephone' => filter_var($parsed['form']['phone'], FILTER_SANITIZE_NUMBER_INT),
-                            'newsletter' => $parsed['form']['newsletter'],
                             'birth' => $parsed['form']['birth'],
                             'discount_card' => $parsed['form']['discount_card'],
                         ));
+
+                        $this->model_account_customer->editNewsletter($parsed['form']['newsletter']);
 
                         $json['success'][] = $this->language->get('text_success');
 
