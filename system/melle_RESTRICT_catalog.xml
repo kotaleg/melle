@@ -34,15 +34,6 @@
                 /* IVAN MOD END */
             ]]></add>
         </operation>
-
-        <operation error="skip">
-            <search><![CDATA[public function delete() {]]></search>
-            <add position="after"><![CDATA[
-                /* IVAN MOD START */
-                return $this->response->redirect($this->url->link('common/home'));
-                /* IVAN MOD END */
-            ]]></add>
-        </operation>
     </file>
 
     <file path="catalog/controller/account/affiliate.php">

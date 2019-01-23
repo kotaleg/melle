@@ -13,6 +13,11 @@
             <add position="after"><![CDATA[
                 /* IVAN MOD START */
                 $this->load->controller('extension/module/melle/initAccount');
+
+                $data['account_link'] = $this->url->link('account/account', '', true);
+                $data['logout_link'] = $this->url->link('account/logout', '', true);
+                $data['address_link'] = $this->url->link('account/address', '', true);
+                $data['order_link'] = $this->url->link('account/order', '', true);
                 /* IVAN MOD END */
             ]]></add>
         </operation>

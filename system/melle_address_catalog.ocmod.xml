@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_address_catalog</name>
+    <code>melle_address_catalog</code>
+    <description>Melle Address [Catalog]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/account/address.php">
+        <operation error="skip">
+            <search><![CDATA[protected function getList() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                $data['text_empty'] = $this->language->get('text_empty');
+
+                $data['account_link'] = $this->url->link('account/account', '', true);
+                $data['logout_link'] = $this->url->link('account/logout', '', true);
+                $data['address_link'] = $this->url->link('account/address', '', true);
+                $data['order_link'] = $this->url->link('account/order', '', true);
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA['total'      => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),]]></search>
+            <add position="replace"><![CDATA[
+                /* IVAN MOD START */
+                'total'      => $result['total'],
+                'reorder'    => $this->url->link('account/order/reorder', 'order_id=' . $result['order_id'], true),
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA['address'    => str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format)))),]]></search>
+            <add position="replace"><![CDATA[
+                /* IVAN MOD START */
+                'address'    => trim(str_replace($find, $replace, $format)),
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+
+
+
+</modification>

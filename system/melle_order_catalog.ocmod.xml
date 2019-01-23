@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_order_catalog</name>
+    <code>melle_order_catalog</code>
+    <description>Melle Order [Catalog]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/account/order.php">
+        <operation error="skip">
+            <search><![CDATA[$this->load->language('account/order');]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                $data['text_empty'] = $this->language->get('text_empty');
+
+                $data['account_link'] = $this->url->link('account/account', '', true);
+                $data['logout_link'] = $this->url->link('account/logout', '', true);
+                $data['address_link'] = $this->url->link('account/address', '', true);
+                $data['order_link'] = $this->url->link('account/order', '', true);
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA['total'      => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),]]></search>
+            <add position="replace"><![CDATA[
+                /* IVAN MOD START */
+                'total'      => $result['total'],
+                'reorder'    => $this->url->link('account/order/reorder', 'order_id=' . $result['order_id'], true),
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+
+
+</modification>

@@ -153,15 +153,15 @@ body .basket-form span.select2 .select2-selection__rendered {
   color: #000;
 }
 
-body .alert-success [data-notify="message"] {
-  display: block;
-}
+// body .alert-success [data-notify="message"] {
+//   display: block;
+// }
 
-body {
-  .alert-success .close {
-    background: transparent;
-  }
-}
+// body {
+//   .alert-success .close {
+//     background: transparent;
+//   }
+// }
 
 .basket-modal__buttons {
   a:first-child:link, a:first-child:visited, a:first-child:active, a:first-child:hover {
