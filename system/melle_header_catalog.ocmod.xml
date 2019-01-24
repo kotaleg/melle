@@ -14,10 +14,6 @@
                 /* IVAN MOD START */
                 $this->load->model('tool/base');
 
-                // OLD SCRIPTS
-                $this->document->addScript('catalog/view/javascript/melle/query/script.js');
-                $this->document->addScript('catalog/view/javascript/melle/query/old.js');
-
                 $data['og'] = array();
                 $data['og']['image'] = $this->model_tool_base->getOgImage();
 

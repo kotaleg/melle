@@ -45,8 +45,8 @@
                    </li>
                    <li class="menu-pay"><a :href="delivery_link" class="cursorred">оплата и <br>доставка</a></li>
                    <li class="menu-enter">
-                      <a v-if="!is_logged" id="panel-buttons__login-link" @click="enableElement('login')" class="cursorred" href="javascript:void(0)">Вход</a>
-                      <a v-if="!is_logged" id="panel-buttons__reg-link" @click="enableElement('register')" class="cursorred" href="javascript:void(0)">Регистрация</a>
+                      <a v-if="!is_logged" id="panel-buttons__login-link" @click="enableElement('login')" href="javascript:void(0)">Вход</a>
+                      <a v-if="!is_logged" id="panel-buttons__reg-link" @click="enableElement('register')" href="javascript:void(0)">Регистрация</a>
                       <a v-if="is_logged" :href="account_link">Кабинет</a>
                       <a v-if="is_logged" :href="logout_link">Выход</a>
 
