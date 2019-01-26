@@ -263,7 +263,7 @@ class super_offers
                     );
                 }
 
-                $combination = $this->isActiveCombination($pd['product_id'], $active_options);
+                $combination = $this->getCombinationForActiveOptions($pd['product_id'], $active_options);
                 if ($combination !== null) {
                     $quantity = 0;
                     if ($combination['quantity'] != $this->getNullValue()) {
@@ -284,7 +284,7 @@ class super_offers
         return $products_data;
     }
 
-    public function isActiveCombination($product_id, $active_options)
+    public function getCombinationForActiveOptions($product_id, $active_options)
     {
         $comb_q = $this->db->query("SELECT * FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
             WHERE `product_id` = '". (int)$product_id ."'");

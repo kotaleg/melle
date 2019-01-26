@@ -56,4 +56,34 @@
         </operation>
     </file>
 
+    <file path="catalog/model/checkout/order.php">
+        <operation error="skip">
+            <search><![CDATA[if (in_array($order_info['order_status_id'], array_merge($this->config->get('config_processing_status'), $this->config->get('config_complete_status'))) && !in_array($order_status_id, array_merge($this->config->get('config_processing_status'), $this->config->get('config_complete_status')))) {]]></search>
+            <add position="after"><![CDATA[
+                // SUPER OFFERS START (INCREASE)
+                if ((in_array(__FUNCTION__, array('addOrderHistory')))
+                && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/super_offers.json')) {
+                    $this->load->model('extension/module/super_offers');
+                    $this->model_extension_module_super_offers->quantityHandler($order_id, '+');
+                }
+                // SUPER OFFERS END
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/checkout/order.php">
+        <operation error="skip">
+            <search><![CDATA[if (!in_array($order_info['order_status_id'], array_merge($this->config->get('config_processing_status'), $this->config->get('config_complete_status'))) && in_array($order_status_id, array_merge($this->config->get('config_processing_status'), $this->config->get('config_complete_status')))) {]]></search>
+            <add position="after"><![CDATA[
+                // SUPER OFFERS START (DECREASE)
+                if ((in_array(__FUNCTION__, array('addOrderHistory')))
+                && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/super_offers.json')) {
+                    $this->load->model('extension/module/super_offers');
+                    $this->model_extension_module_super_offers->quantityHandler($order_id, '-');
+                }
+                // SUPER OFFERS END
+            ]]></add>
+        </operation>
+    </file>
+
 </modification>

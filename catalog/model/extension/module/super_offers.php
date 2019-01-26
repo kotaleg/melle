@@ -275,4 +275,106 @@ class ModelExtensionModuleSuperOffers extends Model
     {
         return $this->super_offers->getMaxQuantity($product_id);
     }
+
+    /* ORDER FUNCTIONS */
+
+    public function quantityHandler($order_id, $prefix)
+    {
+        $order_data = $this->getOrderData($order_id);
+        foreach ($order_data as $product_data) {
+            if (isset($product_data['product_id']) && isset($product_data['options'])
+            && is_array($product_data['options']) && $product_data['options']) {
+                if (!$this->isOptionsForProduct($product_data['product_id'])) { continue; }
+
+                $combination = $this->super_offers->getCombinationForActiveOptions($product_data['product_id'], $product_data['options']);
+                if ($combination !== Null) {
+
+                    if ($combination['quantity'] != $this->super_offers->getNullValue()
+                    && $combination['subtract']) {
+                        $q = $this->_prefixHelper(intval($combination['quantity']), intval($product_data['quantity']), $prefix);
+                        $this->changeCombinationQuantity($combination['combination_id'], $q);
+                    }
+                }
+            }
+        }
+    }
+
+    private function getOrderData($order_id)
+    {
+        $order_data = array();
+        $order_products = $this->getOrderProducts($order_id);
+
+        foreach ($order_products as $order_product) {
+
+            $options = array();
+
+            $order_options = $this->getOrderOptions($order_id, $order_product['order_product_id']);
+            foreach ($order_options as $option) {
+
+                $real = $this->getRealOptionIds($option['product_option_id'], $option['product_option_value_id']);
+                if ($real['option_id'] !== False && $real['option_value_id'] !== False) {
+                    $options[] = array(
+                        'option_id'         => $real['option_id'],
+                        'option_value_id'   => $real['option_value_id']
+                    );
+                }
+            }
+
+            $order_data[] = array(
+                'product_id' => $order_product['product_id'],
+                'options'    => $options,
+                'quantity'   => $order_product['quantity']
+            );
+        }
+
+        return $order_data;
+    }
+
+    private function getOrderProducts($order_id)
+    {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_product`
+            WHERE `order_id` = '" . (int)$order_id . "'");
+        return $query->rows;
+    }
+
+    private function getOrderOptions($order_id, $order_product_id)
+    {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_option`
+            WHERE `order_id` = '" . (int)$order_id . "'
+            AND `order_product_id` = '" . (int)$order_product_id . "'");
+        return $query->rows;
+    }
+
+    private function getRealOptionIds($fake_option_id, $fake_option_value_id)
+    {
+        $query = $this->db->query("SELECT `option_id`, `option_value_id` FROM `" . DB_PREFIX . "product_option_value`
+            WHERE `product_option_id` = '" . (int)$fake_option_id . "'
+            AND `product_option_value_id` = '" . (int)$fake_option_value_id . "'");
+
+        return array(
+            'option_id'         => isset($query->row['option_id']) ? $query->row['option_id'] : false,
+            'option_value_id'   => isset($query->row['option_value_id']) ? $query->row['option_value_id'] : false,
+        );
+    }
+
+    private function _prefixHelper($value, $newvalue, $prefix)
+    {
+        switch ($prefix) {
+            case '+':
+                $value += $newvalue;
+                break;
+            case '-':
+                $value -= $newvalue;
+                break;
+        }
+
+        return $value;
+    }
+
+    private function changeCombinationQuantity($combination_id, $quantity)
+    {
+        $this->db->query("UPDATE `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+            SET `quantity` = '". $this->db->escape($quantity) ."'
+            WHERE `combination_id` = '". (int)$combination_id ."'");
+    }
 }

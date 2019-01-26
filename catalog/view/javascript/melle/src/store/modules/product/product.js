@@ -218,12 +218,6 @@ const actions = {
                 if (comb.active_option === active_option
                 && comb.active_option_value === active_option_value) {
 
-                    // console.log(comb.active_option);
-                    // console.log(comb.active_option_value);
-
-                    // console.log(active_option);
-                    // console.log(active_option_value);
-
                     comb.generated_statuses.forEach((g_option_value, g_o_key) => {
                         g_option_value.product_option_value.forEach((g_status, g_ov_key) => {
                             commit('setOptionDisabledStatus',
