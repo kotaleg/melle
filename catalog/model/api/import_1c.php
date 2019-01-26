@@ -79,6 +79,10 @@ class ModelApiImport1C extends Model
             }
         }
 
+        // CLEAR ELEMENTS WITHOUD DESCRIPTION
+        $this->load->model('api/import_1c/category');
+        $this->model_api_import_1c_category->clearCategoriesWithoutDescription();
+
         $json['success'] = true;
 
         return $json;

@@ -359,12 +359,12 @@
         position: absolute;
         opacity: 0;
 
-        &:checked ~ span {
+        &.check ~ span {
           border: 2px #22e8f5 solid;
           // border-radius: 4px;
         }
 
-        &:disabled ~ span {
+        &.disabled ~ span {
           opacity: 0.3;
         }
       }
@@ -398,11 +398,11 @@
         position: absolute;
         opacity: 0;
 
-        &:checked ~ span img {
+        &.check ~ span img {
           border: 2px #22e8f5 solid;
         }
 
-        &:disabled ~ span {
+        &.disabled ~ span {
           opacity: 0.3;
         }
       }

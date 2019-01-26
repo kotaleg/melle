@@ -18,7 +18,7 @@ const state = {
 // getters
 const getters = {
     hasProducts: state => {
-        return this.count > 0 ? true : false
+        return state.count > 0 ? true : false
     },
 }
 
@@ -30,11 +30,15 @@ const actions = {
         })
     },
 
+    updateDataRequest({ commit }) {
+
+    },
 }
 
 // mutations
 const mutations = {
     setData (state, data) {
+        console.log(data);
         for (let d in data) {
             Vue.set(state, d, data[d])
         }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_product_catalog</name>
+    <code>melle_product_catalog</code>
+    <description>Melle Product [Catalog]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/catalog/product.php">
+        <operation error="skip">
+            <search><![CDATA[protected function getList() {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+
+
+
+</modification>

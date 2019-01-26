@@ -4,23 +4,24 @@
 
         <h2 class="basket-modal__title">Ваша корзина</h2>
         <div id="cart-controller">
-            <ul class="basket-modal__list">
+
+            <ul v-if="hasProducts" class="basket-modal__list">
                 <li v-for="(p, i) in products" class="basket-modal__item">
                     <div class="basket-modal__item-left">
-                        <a :href="product.href"><img :src="product.thumb" class="basket-modal__prod-img"></a>
+                        <a :href="p.href"><img :src="p.thumb" class="basket-modal__prod-img"></a>
                     </div>
                     <div class="basket-modal__item-center">
                         <div class="basket-modal__prod-info">
-                            <div class="basket-modal__prod-title"><a :href="product.href">{{ product.name }}</a></div>
-                            <div v-if="product.options" v-for="(option) in p.options" class="basket-modal__prod-article">
-                                <span>{{ option.name }} </span><span>{{ option.value }}</span>
+                            <div class="basket-modal__prod-title"><a :href="p.href">{{ p.name }}</a></div>
+                            <div v-if="p.option" v-for="(o) in p.option" class="basket-modal__prod-article">
+                                <span>{{ o.name }}: </span><span>{{ o.value }}</span>
                             </div>
                         </div>
                         <div class="basket-modal__prod-count">
                             <button class="item_minus" role="button" @click="minusCount(p.cart_id)"><span>-</span></button>
-                            <input type="text" :value="product.quantity" @change="changeCount(p.cart_id)" class="item_col keyPressedNum boldCount">
+                            <input type="text" :value="p.quantity" @change="changeCount(p.cart_id)" class="item_col keyPressedNum boldCount">
                             <button class="item_plus" role="button" @click="plusCount(p.cart_id)"><span>+</span></button>
-                            <span v-show="product.quantity >= product.max_quantity" class="catalog__item-count_label">доступно:<span>{{ product.max_quantity }}</span></span>
+                            <span v-show="p.quantity >= p.max_quantity" class="catalog__item-count_label">доступно:<span>{{ p.max_quantity }}</span></span>
                         </div>
                     </div>
                     <div class="basket-modal__item-right">
@@ -32,11 +33,12 @@
                             </button>
                         </div>
                         <div class="basket-modal__price">
-                            <span class="basket-modal__price-default">{{ product.price }} <span class="ruble-sign">Р</span></span>
+                            <span class="basket-modal__price-default">{{ p.price }} <span class="ruble-sign">Р</span></span>
                         </div>
                     </div>
                 </li>
             </ul>
+
             <div class="basket-modal__footer">
                 <div class="basket-modal__clean">
                     <a v-if="hasProducts" :href="cart_link">Оформить заказ</a>
@@ -48,6 +50,7 @@
                     <span class="">корзина пуста</span>
                 </div>
             </div>
+
             <div v-if="hasProducts" class="basket-modal__buttons">
                 <a :href="catalog_link">
                     <svg viewBox="0 0 489.2 489.2" width="20" height="20">
@@ -62,9 +65,11 @@
                     </svg>
                 </a>
             </div>
-            <div i-if="!hasProducts" class="basket-modal__buttons basket-modal__buttons--empty">
+
+            <div v-if="!hasProducts" class="basket-modal__buttons basket-modal__buttons--empty">
                 <a :href="catalog_link">Начать покупки</a>
             </div>
+
         </div>
     </section>
 </template>

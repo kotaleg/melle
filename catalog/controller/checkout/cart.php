@@ -475,4 +475,54 @@ class ControllerCheckoutCart extends Controller {
         $this->response->addHeader('Content-Type: application/json');
         $this->response->setOutput(json_encode($json));
     }
+
+    public function melle_add()
+    {
+        $this->load->model('extension/pro_patch/url');
+        $this->load->model('extension/pro_patch/json');
+        $this->load->model('catalog/product');
+
+        $this->load->language('checkout/cart');
+
+        $json['added'] = false;
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        if (isset($parsed['product_id']) && isset($parsed['product_id']) && isset($parsed['options'])) {
+            $product_id = (int)$parsed['product_id'];
+            $quantity = (int)$parsed['quantity'];
+            $options = array_filter($parsed['options']);
+
+            $product_info = $this->model_catalog_product->getProduct($product_id);
+
+            if ($product_info) {
+                $product_options = $this->model_catalog_product->getProductOptions($product_id);
+
+                foreach ($product_options as $product_option) {
+                    if ($product_option['required'] && empty($options[$product_option['product_option_id']])) {
+                        $json['error'][] =
+                            sprintf($this->language->get('error_required'), $product_option['name']);
+                    }
+                }
+
+                if (!isset($json['error'])) {
+                    $this->cart->add($product_id, $quantity, $options);
+                    $json['added'] = true;
+
+                    $json['success'][] = sprintf($this->language->get('text_success'),
+                        $this->url->link('product/product', 'product_id=' . $product_id), $product_info['name'], $this->url->link('checkout/cart'));
+
+                    // Unset all shipping and payment methods
+                    unset($this->session->data['shipping_method']);
+                    unset($this->session->data['shipping_methods']);
+                    unset($this->session->data['payment_method']);
+                    unset($this->session->data['payment_methods']);
+                }
+            }
+        } else {
+            $json['error'][] = $this->language->get('error_no_fields');
+        }
+
+        $this->response->setOutput(json_encode($json));
+    }
+
 }

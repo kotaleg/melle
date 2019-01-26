@@ -49,7 +49,11 @@ class ModelCatalogProduct extends Model {
                 'status'           => $query->row['status'],
                 'date_added'       => $query->row['date_added'],
                 'date_modified'    => $query->row['date_modified'],
-                'viewed'           => $query->row['viewed']
+                'viewed'           => $query->row['viewed'],
+
+                'h1'                => $query->row['h1'],
+                'small_description' => $query->row['small_description'],
+                'znachek'           => $query->row['znachek'],
             );
         } else {
             return false;

@@ -86,7 +86,7 @@ class ModelApiImport1CCategory extends Model
             status = '" . (int)$data['status'] . "',
             date_modified = NOW(),
             date_added = NOW(),
-            `import_id` = '" . $this->db->escape($data['import_id']) . "'");
+            `import_id` = '". $this->db->escape($data['import_id']) ."'");
 
         $category_id = $this->db->getLastId();
 
@@ -132,4 +132,41 @@ class ModelApiImport1CCategory extends Model
         $this->cache->delete('category');
         return $category_id;
     }
+
+    public function deleteCategory($category_id)
+    {
+        $this->db->query("DELETE FROM " . DB_PREFIX . "category_path WHERE category_id = '" . (int)$category_id . "'");
+
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category_path WHERE path_id = '" . (int)$category_id . "'");
+
+        foreach ($query->rows as $result) {
+            $this->deleteCategory($result['category_id']);
+        }
+
+        $this->db->query("DELETE FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$category_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "category_description WHERE category_id = '" . (int)$category_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "category_filter WHERE category_id = '" . (int)$category_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "category_to_store WHERE category_id = '" . (int)$category_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_to_category WHERE category_id = '" . (int)$category_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "seo_url WHERE query = 'category_id=" . (int)$category_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "coupon_category WHERE category_id = '" . (int)$category_id . "'");
+
+        $this->cache->delete('category');
+    }
+
+    public function clearCategoriesWithoutDescription()
+    {
+        $query = $this->db->query("SELECT c.category_id, cd.name FROM " . DB_PREFIX . "category c
+            LEFT JOIN " . DB_PREFIX . "category_description cd
+            ON (c.category_id = cd.category_id)
+            ORDER BY c.sort_order, LCASE(cd.name)");
+
+        foreach ($query->rows as $cat) {
+            if (empty($cat['name'])) {
+                $this->deleteCategory($cat['category_id']);
+            }
+        }
+    }
+
 }

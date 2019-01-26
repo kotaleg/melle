@@ -13,6 +13,15 @@ class ModelExtensionModuleProZnachek extends Model
         return false;
     }
 
+    public function getZnachekClass($type)
+    {
+        if (!empty($type) && array_key_exists($type, $this->getZnachki())) {
+            return $type;
+        }
+
+        return '';
+    }
+
     public function getZnachki()
     {
         return array(

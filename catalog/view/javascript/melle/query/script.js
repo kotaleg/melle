@@ -38,47 +38,52 @@ document.addEventListener('DOMContentLoaded', () => {
     /* MMENU END */
 
     /* PRODUCT IMAGE START */
-    if($(window).width() > 1200) {
-        $(document).on('gallery.zoom.init', '.prod-card__item-big-photo', function () {
-            var self = $(this);
-            self.zoom();
-        });
+    if(jQuery().zoom) {
+        if($(window).width() > 1200) {
+            $(document).on('gallery.zoom.init', '.prod-card__item-big-photo', function () {
+                var self = $(this);
+                self.zoom();
+            });
 
-        if ($('.prod-card__item-big-photo').length > 0) {
-            $('.prod-card__item-big-photo').trigger('gallery.zoom.init');
+            if ($('.prod-card__item-big-photo').length > 0) {
+                $('.prod-card__item-big-photo').trigger('gallery.zoom.init');
+            }
         }
     }
 
-    $(".slider-for").slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        fade: true,
-        asNavFor: ".slider-nav"
-    });
+    if(jQuery().slick) {
+        $(".slider-for").slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+            fade: true,
+            asNavFor: ".slider-nav"
+        });
 
-    $(".slider-nav").slick({
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        asNavFor: ".slider-for",
-        dots: false,
-        focusOnSelect: true,
-        vertical: true,
-        adaptiveHeight: true,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
+        $(".slider-nav").slick({
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            asNavFor: ".slider-for",
+            dots: false,
+            focusOnSelect: true,
+            vertical: true,
+            adaptiveHeight: true,
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        vertical: false,
+                        arrows: false
+                    }
                 }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    vertical: false,
-                    arrows: false
-                }
-            }
-        ]
-    });
+            ]
+        });
+    }
+
     /* PRODUCT IMAGE END */
 });

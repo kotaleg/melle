@@ -28,5 +28,32 @@
         </operation>
     </file>
 
+    <file path="system/library/cart/cart.php">
+        <operation error="skip">
+            <search><![CDATA[$this->db = $registry->get('db');]]></search>
+            <add position="after"><![CDATA[
+                // SUPER OFFERS START
+                if ((in_array(__FUNCTION__, array('__construct'))) && !isset($this->super_offers)
+                && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/super_offers.json')) {
+                    $this->super_offers = new \super_offers($registry);
+                }
+                // SUPER OFFERS END
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="system/library/cart/cart.php">
+        <operation error="skip">
+            <search><![CDATA[return $product_data;]]></search>
+            <add position="before"><![CDATA[
+                // SUPER OFFERS START
+                if ((in_array(__FUNCTION__, array('getProducts'))) && isset($this->super_offers)
+                && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/super_offers.json')) {
+                    $product_data = $this->super_offers->fixProducts($product_data);
+                }
+                // SUPER OFFERS END
+            ]]></add>
+        </operation>
+    </file>
 
 </modification>

@@ -8,21 +8,6 @@ class ModelExtensionModuleSuperOffers extends Model
     const OPTION_CONNECTION = 'so_option_connection';
     const OPTION_SETTING = 'so_column_setting';
 
-    // COLUMNS
-    const MODEL = 'model';
-    const PRODUCT_CODE = 'product_code';
-    const QUANTITY = 'quantity';
-    const SUBTRACT = 'subtract';
-    const PRICE = 'price';
-    const SPECIAL = 'special';
-    const REWARD = 'reward';
-    const WEIGHT = 'weight';
-
-    const TYPE_SELECT = 'select';
-    const TYPE_RADIO = 'radio';
-    const TYPE_CHECKBOX = 'checkbox';
-    const TYPE_IMAGE = 'image';
-
     const NULL_VALUE = '--';
 
     private $codename = 'super_offers';
@@ -38,22 +23,8 @@ class ModelExtensionModuleSuperOffers extends Model
 
         $this->setting = $this->model_extension_pro_patch_setting->getSetting($this->codename);
 
-        // DEFAULT ACTIVE COLUMNS
-        $this->default_active_columns = array(
-            self::MODEL         => array('name' => false, 'active' => false, 'code' => self::MODEL, 'default' => ''),
-            self::PRODUCT_CODE  => array('name' => false, 'active' => false, 'code' => self::PRODUCT_CODE, 'default' => ''),
-            self::QUANTITY      => array('name' => false, 'active' => true, 'code' => self::QUANTITY, 'default' => ''),
-            self::SUBTRACT      => array('name' => false, 'active' => true, 'code' => self::SUBTRACT, 'default' => true),
-            self::PRICE         => array('name' => false, 'active' => true, 'code' => self::PRICE, 'default' => ''),
-            self::SPECIAL       => array('name' => false, 'active' => false, 'code' => self::SPECIAL, 'default' => ''),
-            self::REWARD        => array('name' => false, 'active' => false, 'code' => self::REWARD, 'default' => ''),
-            self::WEIGHT        => array('name' => false, 'active' => false, 'code' => self::WEIGHT, 'default' => ''),
-        );
-
-        // SUPPORTED OPTION TYPES
-        $this->supported_option_types = array(
-            self::TYPE_SELECT, self::TYPE_RADIO, self::TYPE_IMAGE,
-        );
+        if (!$this->super_offers) {
+            $this->super_offers = new \super_offers($registry); }
     }
 
     public function createTables()
@@ -126,11 +97,6 @@ class ModelExtensionModuleSuperOffers extends Model
         return $scripts;
     }
 
-    public function getDefaultActiveColumns()
-    {
-        return $this->default_active_columns;
-    }
-
     public function getOptionsAndValues($product_id)
     {
         $this->load->model('catalog/product');
@@ -142,7 +108,7 @@ class ModelExtensionModuleSuperOffers extends Model
         $po = 0;
         foreach ($product_options as $product_option) {
 
-            if (!in_array($product_option['type'], $this->supported_option_types)) {
+            if (!in_array($product_option['type'], $this->super_offers->getSupportedOptionTypes())) {
                 continue;
             }
 
@@ -225,7 +191,7 @@ class ModelExtensionModuleSuperOffers extends Model
         }
 
         if ($active_columns && $i > 0) {
-            foreach ($this->default_active_columns as $column) {
+            foreach ($this->super_offers->getDefaultActiveColumns() as $column) {
                 if (isset($state["text_{$column['code']}"])) {
                     $column['name'] = $state["text_{$column['code']}"];
                 }
@@ -239,107 +205,22 @@ class ModelExtensionModuleSuperOffers extends Model
 
     public function clearForProduct($product_id)
     {
-        $this->db->query("DELETE FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
-            WHERE `product_id` = '". (int)$product_id ."'");
-
-        $this->db->query("DELETE FROM `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
-            WHERE `product_id` = '". (int)$product_id ."'");
-
-        $this->db->query("DELETE FROM `". DB_PREFIX . $this->db->escape(self::OPTION_SETTING) ."`
-            WHERE `product_id` = '". (int)$product_id ."'");
+        return $this->super_offers->clearForProduct($product_id);
     }
 
-    private function _addConnection($data)
+    public function getDefaultActiveColumns()
     {
-        $sql = "INSERT INTO `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
-            (`option_a`, `option_value_a`, `product_id`, `combination_id`)
-            VALUES(
-                '" . $this->db->escape($data['option_a']) . "',
-                '" . $this->db->escape($data['option_value_a']) . "',
-                '" . $this->db->escape($data['product_id']) . "',
-                '" . $this->db->escape($data['combination_id']) . "');";
-
-        $this->db->query($sql);
-    }
-
-    private function _addCombination($data)
-    {
-        $sql = "INSERT INTO `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
-            (`product_id`, `quantity`, `subtract`, `price`, `price_prefix`,
-                `points`, `points_prefix`, `weight`, `weight_prefix`, `model`,
-                `product_code`, `special_price`, `special_price_start`, `special_price_end`,
-                `import_id`)
-            VALUES(
-                '" . (int)$data['product_id'] . "',
-                '" . $this->db->escape($data['quantity']) . "',
-                '" . $this->db->escape($data['subtract']) . "',
-                '" . $this->db->escape($data['price']) . "',
-                '" . $this->db->escape($data['price_prefix']) . "',
-                '" . $this->db->escape($data['points']) . "',
-                '" . $this->db->escape($data['points_prefix']) . "',
-                '" . $this->db->escape($data['weight']) . "',
-                '" . $this->db->escape($data['weight_prefix']) . "',
-                '" . $this->db->escape($data['model']) . "',
-                '" . $this->db->escape($data['product_code']) . "',
-                '" . $this->db->escape($data['special_price']) . "',
-                '" . $this->db->escape($data['special_price_start']) . "',
-                '" . $this->db->escape($data['special_price_end']) . "',
-                '" . $this->db->escape($data['import_id']) . "' );";
-
-        $this->db->query($sql);
-        return $this->db->getLastId();
+        return $this->super_offers->getDefaultActiveColumns();
     }
 
     /* TODO: save option order in save process */
     public function saveCombinations($data)
     {
-        // CLEAR DATA BEFORE SAVE
-        if (isset($data[0])) {
-            $this->clearForProduct($data[0]);
+        if (!isset($data[0]) || !isset($data[1]['so_combination'])) {
+            return;
         }
 
-        $so_combination = $data[1]['so_combination'];
-
-        foreach ($so_combination as $c) {
-
-            $comb_data = array(
-                'product_id'        => $data[0],
-                'quantity'          => (isset($c['quantity'])) ? $c['quantity'] : self::NULL_VALUE,
-                'subtract'          => (isset($c['subtract'])) ? $c['subtract'] : false,
-                'price'             => (isset($c['price'])) ? $c['price'] : '',
-                'price_prefix'      => '+',
-                'points'            => false,
-                'points_prefix'     => '+',
-                'weight'            => false,
-                'weight_prefix'     => '+',
-                'model'             => false,
-                'product_code'      => (isset($c['product_code'])) ? $c['product_code'] : '',
-                'special_price'     => false,
-                'special_price_start' => false,
-                'special_price_end' => false,
-                'import_id'         => (isset($c['import_id'])) ? $c['import_id'] : '',
-            );
-
-            $combination_id = $this->_addCombination($comb_data);
-
-            foreach ($c as $k => $v) {
-
-                $ex = explode("__", $k);
-                if (!isset($ex[1])) { continue; }
-
-                $oid = $ex[1];
-                $ovid = $v;
-
-                $conn_data = array(
-                    'option_a'          => $oid,
-                    'option_value_a'    => $ovid,
-                    'product_id'        => $data[0],
-                    'combination_id'    => $combination_id,
-                );
-
-                $this->_addConnection($conn_data);
-            }
-        }
+        return $this->super_offers->saveCombinations($data[0], $data[1]['so_combination']);
     }
 
     public function getCombinations($state, $get_data = false)
@@ -357,7 +238,7 @@ class ModelExtensionModuleSuperOffers extends Model
         foreach ($comb_q->rows as $combination) {
 
             if (!$get_data) {
-                $co = $this->_getConnectionsForCombination((int)$state['product_id'], (int)$combination['combination_id']);
+                $co = $this->super_offers->_getConnectionsForCombination((int)$state['product_id'], (int)$combination['combination_id']);
 
                 foreach ($co as $connection) {
 
@@ -394,15 +275,6 @@ class ModelExtensionModuleSuperOffers extends Model
         }
 
         return $combinations;
-    }
-
-    private function _getConnectionsForCombination($product_id, $combination_id)
-    {
-        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
-            WHERE `product_id` = '". (int)$product_id ."'
-            AND `combination_id` = '". (int)$combination_id ."'");
-
-        return $q->rows;
     }
 
     public function getCombinationsData($state)

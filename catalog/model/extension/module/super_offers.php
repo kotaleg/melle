@@ -8,116 +8,271 @@ class ModelExtensionModuleSuperOffers extends Model
     const OPTION_CONNECTION = 'so_option_connection';
     const OPTION_SETTING = 'so_column_setting';
 
-    const NULL_VALUE = '--';
-
     private $codename = 'super_offers';
     private $route = 'extension/module/super_offers';
 
     public function __construct($registry)
     {
         parent::__construct($registry);
+
+        $this->load->language('product/product');
+        $this->load->model('catalog/product');
+        $this->load->model('extension/pro_patch/url');
+
+        if (!$this->super_offers) {
+            $this->super_offers = new \super_offers($registry); }
+    }
+
+    public function isOptionsForProduct($product_id)
+    {
+        return $this->super_offers->isOptionsForProduct($product_id);
     }
 
     public function clearForProduct($product_id)
     {
-        $this->db->query("DELETE FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
-            WHERE `product_id` = '". (int)$product_id ."'");
-
-        $this->db->query("DELETE FROM `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
-            WHERE `product_id` = '". (int)$product_id ."'");
-
-        $this->db->query("DELETE FROM `". DB_PREFIX . $this->db->escape(self::OPTION_SETTING) ."`
-            WHERE `product_id` = '". (int)$product_id ."'");
-    }
-
-    private function _addConnection($data)
-    {
-        $sql = "INSERT INTO `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
-            (`option_a`, `option_value_a`, `product_id`, `combination_id`)
-            VALUES(
-                '" . $this->db->escape($data['option_a']) . "',
-                '" . $this->db->escape($data['option_value_a']) . "',
-                '" . $this->db->escape($data['product_id']) . "',
-                '" . $this->db->escape($data['combination_id']) . "');";
-
-        $this->db->query($sql);
-    }
-
-    private function _addCombination($data)
-    {
-        $sql = "INSERT INTO `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
-            (`product_id`, `quantity`, `subtract`, `price`, `price_prefix`,
-                `points`, `points_prefix`, `weight`, `weight_prefix`, `model`,
-                `product_code`, `special_price`, `special_price_start`, `special_price_end`,
-                `import_id`)
-            VALUES(
-                '" . (int)$data['product_id'] . "',
-                '" . $this->db->escape($data['quantity']) . "',
-                '" . $this->db->escape($data['subtract']) . "',
-                '" . $this->db->escape($data['price']) . "',
-                '" . $this->db->escape($data['price_prefix']) . "',
-                '" . $this->db->escape($data['points']) . "',
-                '" . $this->db->escape($data['points_prefix']) . "',
-                '" . $this->db->escape($data['weight']) . "',
-                '" . $this->db->escape($data['weight_prefix']) . "',
-                '" . $this->db->escape($data['model']) . "',
-                '" . $this->db->escape($data['product_code']) . "',
-                '" . $this->db->escape($data['special_price']) . "',
-                '" . $this->db->escape($data['special_price_start']) . "',
-                '" . $this->db->escape($data['special_price_end']) . "',
-                '" . $this->db->escape($data['import_id']) . "' );";
-
-        $this->db->query($sql);
-        return $this->db->getLastId();
+        return $this->super_offers->clearForProduct($product_id);
     }
 
     public function saveCombinations($product_id, $so_combination)
     {
-        // CLEAR DATA BEFORE SAVE
-        if (isset($product_id)) {
-            $this->clearForProduct($product_id);
-        }
-
-        foreach ($so_combination as $c) {
-
-            $comb_data = array(
-                'product_id'        => $product_id,
-                'quantity'          => (isset($c['quantity'])) ? $c['quantity'] : self::NULL_VALUE,
-                'subtract'          => (isset($c['subtract'])) ? $c['subtract'] : false,
-                'price'             => (isset($c['price'])) ? $c['price'] : '',
-                'price_prefix'      => '+',
-                'points'            => false,
-                'points_prefix'     => '+',
-                'weight'            => false,
-                'weight_prefix'     => '+',
-                'model'             => false,
-                'product_code'      => (isset($c['product_code'])) ? $c['product_code'] : '',
-                'special_price'     => false,
-                'special_price_start' => false,
-                'special_price_end' => false,
-                'import_id'         => (isset($c['import_id'])) ? $c['import_id'] : '',
-            );
-
-            $combination_id = $this->_addCombination($comb_data);
-
-            foreach ($c as $k => $v) {
-
-                $ex = explode("__", $k);
-                if (!isset($ex[1])) { continue; }
-
-                $oid = $ex[1];
-                $ovid = $v;
-
-                $conn_data = array(
-                    'option_a'          => $oid,
-                    'option_value_a'    => $ovid,
-                    'product_id'        => $product_id,
-                    'combination_id'    => $combination_id,
-                );
-
-                $this->_addConnection($conn_data);
-            }
-        }
+        return $this->super_offers->saveCombinations($product_id, $so_combination);
     }
 
+    public function getOptions($product_id)
+    {
+        $this->load->model('tool/image');
+        $po_data = array();
+
+        foreach ($this->model_catalog_product->getProductOptions($product_id) as $po) {
+
+            $name = mb_strtolower($po['name']);
+
+            $po_class = '';
+            switch ($name) {
+                case 'размер':
+                    $po_class = 'size';
+                    break;
+
+                case 'цвет':
+                    $po_class = 'color';
+                    break;
+            }
+
+            $po_value_data = array();
+
+            foreach ($po['product_option_value'] as $pov) {
+
+                $pov_image = $this->model_tool_image->resize($pov['image'], 50, 50);
+                if ($po_class !== 'color') {
+                    if (!is_file(DIR_IMAGE . $pov['image'])
+                    || substr(str_replace('\\', '/', realpath(DIR_IMAGE . $pov['image'])), 0, strlen(DIR_IMAGE)) != str_replace('\\', '/', DIR_IMAGE)) {
+                        $pov_image = false;
+                    }
+                }
+
+                $po_value_data[] = array(
+                    'product_option_value_id' => $pov['product_option_value_id'],
+                    'option_value_id'         => $pov['option_value_id'],
+                    'name'                    => $pov['name'],
+                    'image'                   => $pov_image,
+                    'quantity'                => 0,
+                    'subtract'                => 0,
+                    'price'                   => 0,
+                    'price_prefix'            => '+',
+                    'weight'                  => 0,
+                    'weight_prefix'           => '+',
+
+                    'selected'                => false,
+                    'disabled_by_selection'   => false,
+                );
+            }
+
+            if (!empty($po_value_data)) {
+                $po_data[] = array(
+                    'product_option_id'    => $po['product_option_id'],
+                    'product_option_value' => $po_value_data,
+                    'option_id'            => $po['option_id'],
+                    'name'                 => $name,
+                    'class'                => $po_class,
+                    'type'                 => $po['type'],
+                    'value'                => $po['value'],
+                    'required'             => ($po['required']) ? true : false,
+                );
+            }
+
+        }
+
+        return $po_data;
+    }
+
+    public function getCombinationsForOptions($product_id, $options)
+    {
+        $selection_combinations = array();
+        if (!is_array($options)) { return; }
+
+        foreach ($options as $option) {
+            if (isset($option['product_option_value'])
+            && is_array($option['product_option_value'])) {
+
+
+                foreach ($option['product_option_value'] as $option_value) {
+
+                    $generated_statuses = array();
+                    $connected_options = $this->getOptionsConnectedToOption(
+                        $product_id, $option['option_id'], $option_value['option_value_id']);
+
+
+                    foreach ($options as $o_k => $o_v) {
+                        if (isset($o_v['product_option_value'])
+                        && is_array($o_v['product_option_value'])) {
+                            foreach ($o_v['product_option_value'] as $ov_k => $ov_v) {
+
+                                $status = false;
+                                foreach ($connected_options as $co) {
+                                    if (($co['option_id'] == $o_v['option_id'])
+                                    && ($co['option_value_id'] == $ov_v['option_value_id'])) {
+                                        $status = true;
+                                    }
+                                }
+
+                                if ($status && !$this->allow_buy_with_zero_quantity) {
+                                    $only_fake_combination = $this->onlyFakeCombination($product_id,
+                                        array('option_id' => $option['option_id'], 'option_value_id' => $option_value['option_value_id']),
+                                        array('option_id' => $o_v['option_id'], 'option_value_id' => $ov_v['option_value_id'])
+                                    );
+
+                                    if ($only_fake_combination) {
+                                        $status = false;
+                                    }
+                                }
+
+                                $generated_statuses[$o_k]['product_option_value'][$ov_k] = $status;
+                            }
+                        }
+                    }
+
+
+                    $selection_combinations[] = array(
+                        'active_option'         => $option['option_id'],
+                        'active_option_value'   => $option_value['option_value_id'],
+                        'generated_statuses'    => $generated_statuses
+                    );
+                }
+            }
+        }
+
+        return $selection_combinations;
+    }
+
+    private function onlyFakeCombination($product_id, $option_a, $option_b)
+    {
+        $combinations_a = array();
+        $combinations_for_check = array();
+        $conna_q = $this->db->query("SELECT * FROM `" . DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
+            WHERE `product_id` = '" . (int)$product_id . "'
+            AND `option_a` = '" . (int)$option_a['option_id'] . "'
+            AND `option_value_a` = '" . (int)$option_a['option_value_id'] . "'");
+
+        foreach ($conna_q->rows as $comb) { $combinations_a[] = (int)$comb['combination_id']; }
+
+        $connb_q = $this->db->query("SELECT * FROM `" . DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
+            WHERE `product_id` = '" . (int)$product_id . "'
+            AND `option_a` = '" . (int)$option_b['option_id'] . "'
+            AND `option_value_a` = '" . (int)$option_b['option_value_id'] . "'");
+
+        foreach ($connb_q->rows as $comb) {
+            if (in_array($comb['combination_id'], $combinations_a)) {
+                $combinations_for_check[] = $comb['combination_id'];
+            }
+        }
+
+        $checker = true;
+        foreach ($combinations_for_check as $c) {
+            $comb_q = $this->db->query("SELECT * FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+            WHERE `product_id` = '". (int)$product_id ."'
+            AND `combination_id` = '". (int)$c ."'");
+            if ($comb_q->row && $comb_q->row['quantity'] > 0) {
+                $checker = false;
+            }
+        }
+
+        return $checker;
+    }
+
+    private function getOptionsConnectedToOption($product_id, $option_id, $option_value_id)
+    {
+        $connected_options = array();
+
+        $comb_q = $this->db->query("SELECT * FROM `" . DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
+            WHERE `product_id` = '" . (int)$product_id . "'
+            AND `option_a` = '" . (int)$option_id . "'
+            AND `option_value_a` = '" . (int)$option_value_id . "'");
+
+        foreach ($comb_q->rows as $comb) {
+
+            // GET OPTIONS FOR CONNECTION
+            $options_q = $this->db->query("SELECT * FROM `" . DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
+                WHERE `combination_id` = '" . (int)$comb['combination_id'] . "'
+                AND `product_id` = '" . (int)$product_id . "'");
+
+            foreach ($options_q->rows as $opt) {
+
+                $connected_options[] = array(
+                    'option_id'         => $opt['option_a'],
+                    'option_value_id'   => $opt['option_value_a']
+                );
+            }
+        }
+
+        return $connected_options;
+    }
+
+    public function getDefaultValues($product_id)
+    {
+        $data = $this->model_catalog_product->getProduct($product_id);
+        $lowest_price = $this->getLowestPrice($product_id);
+
+        $result = array(
+            'price'         => 0,
+            'special'       => false,
+            'rating'        => 0,
+            'min_quantity'  => $this->getMinQuantity($product_id),
+            'max_quantity'  => $this->getMaxQuantity($product_id),
+        );
+
+        if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+            $result['price'] = round($this->tax->calculate($lowest_price, $data['tax_class_id'], $this->config->get('config_tax')), 0);
+        }
+
+        if ((float)$data['special']) {
+            $result['special'] = round($this->tax->calculate($data['special'], $data['tax_class_id'], $this->config->get('config_tax')), 0);
+        }
+
+        if ($data['quantity'] <= 0) {
+            $result['stock'] = $data['stock_status'];
+        } elseif ($this->config->get('config_stock_display')) {
+            $result['stock'] = $data['quantity'];
+        } else {
+            $result['stock'] = $this->language->get('text_instock');
+        }
+
+        $result['rating'] = (int)$data['rating'];
+
+        return $result;
+    }
+
+    public function getLowestPrice($product_id)
+    {
+        return $this->super_offers->getLowestPrice($product_id);
+    }
+
+    public function getMinQuantity($product_id)
+    {
+        return $this->super_offers->getMinQuantity($product_id);
+    }
+
+    public function getMaxQuantity($product_id)
+    {
+        return $this->super_offers->getMaxQuantity($product_id);
+    }
 }

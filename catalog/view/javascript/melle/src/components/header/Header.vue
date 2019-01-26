@@ -72,7 +72,7 @@
                         :class="[{'active': m.active}]">
 
                       <a :href="m.url">{{ m.title }}</a>
-                      <ul v-if="m.children">
+                      <ul v-if="m.children.length > 0">
                          <li v-for="c in m.children">
                             <a :href="c.url">{{ c.title }}</a>
                          </li>
@@ -172,6 +172,7 @@ export default {
     },
     created() {
         this.$store.dispatch('header/initData')
+        this.$store.dispatch('cart/initData')
     },
 }
 </script>

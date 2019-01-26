@@ -14,6 +14,9 @@ class ControllerProductProduct extends Controller {
 
         $this->load->model('catalog/category');
 
+        $this->document->addScript('catalog/view/javascript/melle/query/zoom/jquery.zoom.min.js');
+        $this->document->addScript('catalog/view/javascript/melle/query/slick/slick.min.js');
+
         if (isset($this->request->get['path'])) {
             $path = '';
 
@@ -227,6 +230,14 @@ class ControllerProductProduct extends Controller {
 
             $data['heading_title'] = $product_info['name'];
 
+            $this->load->model('extension/module/super_offers');
+            $this->load->model('extension/module/pro_znachek');
+
+            $data['znachek'] = $this->model_extension_module_pro_znachek->getZnachek($product_info['znachek']);
+            $data['h1'] = $product_info['h1'];
+
+            $this->load->controller('extension/module/melle/initProduct', $product_id);
+
             $data['text_minimum'] = sprintf($this->language->get('text_minimum'), $product_info['minimum']);
             $data['text_login'] = sprintf($this->language->get('text_login'), $this->url->link('account/login', '', true), $this->url->link('account/register', '', true));
 
@@ -373,6 +384,18 @@ class ControllerProductProduct extends Controller {
 
             $data['attribute_groups'] = $this->model_catalog_product->getProductAttributes($this->request->get['product_id']);
 
+            $data['sostav'] = '';
+
+            foreach ($data['attribute_groups'] as $group) {
+                if (strcmp(trim($group['name']), 'Атрибуты') === 0) {
+                    foreach ($group['attribute'] as $attr) {
+                        if (strcmp(trim($attr['name']), 'Состав') === 0) {
+                            $data['sostav'] = $attr['text'];
+                        }
+                    }
+                }
+            }
+
             $data['products'] = array();
 
             $results = $this->model_catalog_product->getProductRelated($this->request->get['product_id']);
@@ -385,7 +408,7 @@ class ControllerProductProduct extends Controller {
                 }
 
                 if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
-                    $price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+                    $price = round($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), 0);
                 } else {
                     $price = false;
                 }
@@ -412,8 +435,10 @@ class ControllerProductProduct extends Controller {
                     'product_id'  => $result['product_id'],
                     'thumb'       => $image,
                     'name'        => $result['name'],
+                    'h1'          => $result['h1'],
+                    'znachek_class' => $this->model_extension_module_pro_znachek->getZnachekClass($result['znachek']),
                     'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..',
-                    'price'       => $price,
+                    'price'       => $this->model_extension_module_super_offers->getLowestPrice($result['product_id']),
                     'special'     => $special,
                     'tax'         => $tax,
                     'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,

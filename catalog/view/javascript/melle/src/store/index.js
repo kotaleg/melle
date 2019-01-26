@@ -13,6 +13,9 @@ import register from './modules/header/register'
 // ACCOUNT
 import account from './modules/account/account'
 
+// PRODUCT
+import product from './modules/product/product'
+
 
 Vue.use(Vuex)
 
@@ -28,6 +31,8 @@ export default new Vuex.Store({
         register,
 
         account,
+
+        product,
     },
     strict: debug,
 })
