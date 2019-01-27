@@ -140,21 +140,64 @@ class ModelCatalogProduct extends Model {
                 }
             }
 
-            if (!empty($data['filter_name'])) {
-                $sql .= " OR LCASE(p.model) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.sku) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.upc) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.ean) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.jan) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.isbn) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.mpn) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-            }
+            // if (!empty($data['filter_name'])) {
+            //     $sql .= " OR LCASE(p.model) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.sku) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.upc) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.ean) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.jan) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.isbn) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.mpn) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            // }
 
             $sql .= ")";
         }
 
-        if (!empty($data['filter_manufacturer_id'])) {
-            $sql .= " AND p.manufacturer_id = '" . (int)$data['filter_manufacturer_id'] . "'";
+        // if (!empty($data['filter_manufacturer_id'])) {
+        //     $sql .= " AND p.manufacturer_id = '" . (int)$data['filter_manufacturer_id'] . "'";
+        // }
+
+        $this->load->model('extension/pro_patch/db');
+
+        if (isset($data['manufacturers'])) {
+            $manufacturers = $this->model_extension_pro_patch_db->prepareSqlParents($data['manufacturers']);
+            if (!empty($manufacturers)) {
+                $sql .= " AND p.manufacturer_id IN (" . $this->db->escape($manufacturers) . ")";
+            }
+        }
+
+        if (isset($data['hit']) || isset($data['new']) || isset($data['act'])) {
+            $znachki = [];
+            if (isset($data['hit']) && $data['hit'] === true) { $znachki[] = 'hit'; }
+            if (isset($data['new']) && $data['new'] === true) { $znachki[] = 'new'; }
+            if (isset($data['act']) && $data['act'] === true) { $znachki[] = 'act'; }
+
+            $znachki = $this->model_extension_pro_patch_db->prepareSqlParents($znachki);
+            if (!empty($znachki)) {
+                $sql .= " AND p.znachek IN (" . $this->db->escape($znachki) . ")";
+            }
+        }
+
+        if (isset($data['min_price'])) {
+            $sql .= " AND (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
+                WHERE offers_comb.product_id = p.product_id) > " . (float)$data['min_price'];
+        }
+
+        if (isset($data['max_price'])) {
+            $sql .= " AND (SELECT MAX(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
+                WHERE offers_comb.product_id = p.product_id) < " . (float)$data['max_price'];
+        }
+
+        if (isset($data['den_id']) && isset($data['min_den'])) {
+            $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
+                WHERE pattr.product_id = p.product_id
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') > " . (float)$data['min_den'];
+        }
+
+        if (isset($data['den_id']) && isset($data['max_den'])) {
+            $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
+                WHERE pattr.product_id = p.product_id
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') < " . (float)$data['max_den'];
         }
 
         $sql .= " GROUP BY p.product_id";
@@ -497,21 +540,64 @@ class ModelCatalogProduct extends Model {
                 }
             }
 
-            if (!empty($data['filter_name'])) {
-                $sql .= " OR LCASE(p.model) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.sku) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.upc) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.ean) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.jan) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.isbn) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-                $sql .= " OR LCASE(p.mpn) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
-            }
+            // if (!empty($data['filter_name'])) {
+            //     $sql .= " OR LCASE(p.model) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.sku) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.upc) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.ean) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.jan) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.isbn) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            //     $sql .= " OR LCASE(p.mpn) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+            // }
 
             $sql .= ")";
         }
 
-        if (!empty($data['filter_manufacturer_id'])) {
-            $sql .= " AND p.manufacturer_id = '" . (int)$data['filter_manufacturer_id'] . "'";
+        // if (!empty($data['filter_manufacturer_id'])) {
+        //     $sql .= " AND p.manufacturer_id = '" . (int)$data['filter_manufacturer_id'] . "'";
+        // }
+
+        $this->load->model('extension/pro_patch/db');
+
+        if (isset($data['manufacturers'])) {
+            $manufacturers = $this->model_extension_pro_patch_db->prepareSqlParents($data['manufacturers']);
+            if (!empty($manufacturers)) {
+                $sql .= " AND p.manufacturer_id IN (" . $this->db->escape($manufacturers) . ")";
+            }
+        }
+
+        if (isset($data['hit']) || isset($data['new']) || isset($data['act'])) {
+            $znachki = [];
+            if (isset($data['hit']) && $data['hit'] === true) { $znachki[] = 'hit'; }
+            if (isset($data['new']) && $data['new'] === true) { $znachki[] = 'new'; }
+            if (isset($data['act']) && $data['act'] === true) { $znachki[] = 'act'; }
+
+            $znachki = $this->model_extension_pro_patch_db->prepareSqlParents($znachki);
+            if (!empty($znachki)) {
+                $sql .= " AND p.znachek IN (" . $this->db->escape($znachki) . ")";
+            }
+        }
+
+        if (isset($data['min_price'])) {
+            $sql .= " AND (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
+                WHERE offers_comb.product_id = p.product_id) > " . (float)$data['min_price'];
+        }
+
+        if (isset($data['max_price'])) {
+            $sql .= " AND (SELECT MAX(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
+                WHERE offers_comb.product_id = p.product_id) < " . (float)$data['max_price'];
+        }
+
+        if (isset($data['den_id']) && isset($data['min_den'])) {
+            $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
+                WHERE pattr.product_id = p.product_id
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') > " . (float)$data['min_den'];
+        }
+
+        if (isset($data['den_id']) && isset($data['max_den'])) {
+            $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
+                WHERE pattr.product_id = p.product_id
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') < " . (float)$data['max_den'];
         }
 
         $query = $this->db->query($sql);

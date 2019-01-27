@@ -16,6 +16,10 @@ import account from './modules/account/account'
 // PRODUCT
 import product from './modules/product/product'
 
+// CATALOG
+import catalog from './modules/catalog/catalog'
+import filter from './modules/catalog/filter'
+
 
 Vue.use(Vuex)
 
@@ -29,10 +33,10 @@ export default new Vuex.Store({
         mail_us,
         forgotten,
         register,
-
         account,
-
         product,
+        catalog,
+        filter,
     },
     strict: debug,
 })

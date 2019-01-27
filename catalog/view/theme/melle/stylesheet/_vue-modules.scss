@@ -207,3 +207,100 @@
         font-weight: bold;
     }
 }
+
+/* FILTER START */
+// PRICE
+.super-flex {
+    display: flex;
+}
+.mt-14 {
+    margin-top: 14px;
+}
+
+@media (max-width:1199px) {
+    .vsc-class {
+        display:none!important
+    }
+}
+
+.select-section {
+    margin-bottom: 30px;
+    position: relative;
+    left: -1px;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.select-section-item {
+    line-height: 28px;
+    margin-bottom: 10px;
+}
+
+.search__sidebar {
+    .filter__select-name {
+        width: auto;
+    }
+}
+
+// SELECT
+.v-select {
+    width: 189px;
+    // height: 28px;
+
+    .dropdown-toggle {
+        padding: 0 15px;
+        border: 0;
+        outline: none;
+        background-color: #e7e7e7;
+        border-radius: 0px;
+
+        .clear {
+            bottom: 2px;
+        }
+    }
+
+    .dropdown-menu {
+        color: #6d6b6a;
+        border: 0;
+        background-color: #f7f7f7;
+        font-size: 12px;
+    }
+
+    .selected-tag {
+        height: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 11px;
+        color: #6d6b6a;
+        position: relative;
+        left: 6px;
+        top: 3px;
+    }
+
+    .open-indicator {
+        bottom: 1px;
+    }
+
+    input[type=search] {
+        height: 28px;
+        font-size: 11px;
+
+        &:focus {
+            height: 28px;
+        }
+    }
+
+    &.unsearchable input[type="search"] {
+        opacity: 1;
+    }
+}
+
+.catalog__sidebar {
+    .show-shitty-results {
+        display: none;
+    }
+}
+/* FILTER END */

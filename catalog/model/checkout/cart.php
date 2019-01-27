@@ -3,6 +3,8 @@ class ModelCheckoutCart extends Model
 {
     public function getCart()
     {
+        $this->load->model('extension/pro_patch/url');
+
         $state['count'] = $this->cart->countProducts();
         $state['products'] = array();
 

@@ -547,10 +547,6 @@ class ControllerCheckoutCart extends Controller {
 
     public function melle_get_data()
     {
-        $this->load->model('extension/pro_patch/url');
-        $this->load->model('extension/pro_patch/json');
-        $this->load->model('catalog/product');
-
         $this->load->model('checkout/cart');
         $json = $this->model_checkout_cart->getCart();
 
@@ -559,12 +555,6 @@ class ControllerCheckoutCart extends Controller {
 
     public function melle_clear()
     {
-        $this->load->model('extension/pro_patch/url');
-        $this->load->model('extension/pro_patch/json');
-        $this->load->model('catalog/product');
-
-        $this->load->language('checkout/cart');
-
         $this->cart->clear();
         $json['cleared'] = true;
 
@@ -573,9 +563,7 @@ class ControllerCheckoutCart extends Controller {
 
     public function melle_remove()
     {
-        $this->load->model('extension/pro_patch/url');
         $this->load->model('extension/pro_patch/json');
-        $this->load->model('catalog/product');
 
         $this->load->language('checkout/cart');
 
@@ -599,9 +587,7 @@ class ControllerCheckoutCart extends Controller {
 
     public function melle_update()
     {
-        $this->load->model('extension/pro_patch/url');
         $this->load->model('extension/pro_patch/json');
-        $this->load->model('catalog/product');
 
         $this->load->language('checkout/cart');
 

@@ -14,10 +14,40 @@
       </div>
    </section>
 
-   <section class="catalog">
+   <section data-layout="col" class="catalog">
       <div class="catalog__container container">
 
-         <h1>{{ heading_title }}</h1>
+         <div class="catalog__sidebar">
+            <melle-catalog-filter></melle-catalog-filter>
+         </div>
+
+         <div class="catalog__content">
+            <melle-catalog-content></melle-catalog-content>
+
+            {% if recently_viewed %}
+            <div class="other-prod">
+               <h3 class="other-prod__title">Вы смотрели</h3>
+               <ul class="">
+                  {% for p in recently_viewed %}
+                  <li class="other-prod__item {{znachek_class}}">
+                     <a href="{{p.href}}" class="other-prod__item-link"><img src="{{p.thumb}}"></a>
+                     <div class="other-prod__item-ivaninfo">
+                        <div class="row">
+                           <div class="col-xs-12">
+                              <h3 class="ivanitemtitle"><a href="{{p.href}}">{{p.h1}} </a></h3>
+                           </div>
+                           <div class="col-xs-7"><span class="other-prod__item-price-default">{{p.price}}<span class="ruble-sign">Р</span></span></div>
+                           <div class="col-xs-5">
+                              <div><a href="{{p.href}}" class="ivanbuybutton">Купить</a></div>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  {% endfor %}
+               </ul>
+            </div>
+            {% endif %}
+         </div>
 
       </div>
    </section>

@@ -189,4 +189,31 @@ class ControllerExtensionModuleMelle extends Controller
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
     }
+
+    public function initCatalog()
+    {
+        // VARIABLE
+        $state['id'] = "{$this->codename}_catalog";
+
+        $this->load->model('catalog/super');
+        $state = array_merge($state, $this->model_catalog_super->getProducts());
+
+        $state['design_col'] = true;
+        $state['get_link'] = $this->model_extension_pro_patch_url->ajax('product/category/melle_get', '', true);
+
+        // SET STATE
+        $this->document->addState($state['id'], json_encode($state));
+    }
+
+    public function initFilter()
+    {
+        // VARIABLE
+        $state['id'] = "{$this->codename}_filter";
+
+        $this->load->model('catalog/super');
+        $state = $this->model_catalog_super->getFilterValues();
+
+        // SET STATE
+        $this->document->addState($state['id'], json_encode($state));
+    }
 }
