@@ -1,7 +1,25 @@
 {{ header }}
-<div id="common-maintenance" class="container">
-  <div class="row">
-    <div class="col-12">{{ message }}</div>
-  </div>
-</div>
+<main class="main-page">
+   <section class="breadcrumbs">
+      <div class="breadcrumbs__container container">
+         <div class="breadcrumbs__inner">
+            {% for breadcrumb in breadcrumbs %}
+            {% if not loop.last %}
+            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
+            {% else %}
+            <span>{{ breadcrumb.text }}</span>
+            {% endif %}
+            {% endfor %}
+         </div>
+      </div>
+   </section>
+
+   <section class="catalog">
+      <div class="catalog__container container">
+
+         <h1>{{ message }}</h1>
+
+      </div>
+   </section>
+</main>
 {{ footer }}

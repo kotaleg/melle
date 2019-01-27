@@ -10,6 +10,8 @@ const state = {
     'products': [],
     'total': 0,
 
+    'is_checkout': false,
+
     'catalog_link': '',
     'checkout_link': '',
 }
@@ -51,6 +53,10 @@ const actions = {
                 }
 
                 notify.messageHandler(res.data, '_header')
+
+                if (state.is_checkout === true) {
+                    window.location = state.checkout_link
+                }
             }
         )
     },

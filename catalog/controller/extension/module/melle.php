@@ -116,6 +116,13 @@ class ControllerExtensionModuleMelle extends Controller
         $state['clear'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_clear', '', true);
         $state['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_oneclick', '', true);
 
+        $this->load->model('tool/base');
+        if (strcmp($this->model_tool_base->getPageType(), 'checkout') === 0) {
+            $state['is_checkout'] = true;
+        } else {
+            $state['is_checkout'] = false;
+        }
+
         $this->load->model('checkout/cart');
         $cart_data = $this->model_checkout_cart->getCart();
         $state = array_merge($state, $cart_data);
