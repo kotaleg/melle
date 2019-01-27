@@ -278,28 +278,29 @@ const actions = {
         }
     },
 
-    addToCartRequest({ commit, state, dispatch, getters }) {
+    addToCartRequest({ commit, state, rootState, dispatch, getters }) {
         this.dispatch('header/setLoadingStatus', true)
         shop.makeRequest(
             {
-                url: state.add_to_cart,
+                url: rootState.cart.add_to_cart,
                 product_id: state.product_id,
                 quantity: state.quantity,
                 options: getters.getOptionsForCart,
             },
             res => {
                 this.dispatch('header/setLoadingStatus', false)
-
                 notify.messageHandler(res.data, '_header')
+
+                this.dispatch('cart/updateCartDataRequest')
             }
         )
     },
 
-    oneClickRequest({ commit, state, dispatch }, payload) {
+    oneClickRequest({ commit, state, rootState, dispatch }, payload) {
         this.dispatch('header/setLoadingStatus', true)
         shop.makeRequest(
             {
-                url: state.buy_one_click,
+                url: rootState.cart.buy_one_click,
                 product_id: state.product_id,
                 quantity: state.quantity,
                 options: getters.getOptionsForCart,

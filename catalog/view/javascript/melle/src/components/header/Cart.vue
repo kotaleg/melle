@@ -18,15 +18,15 @@
                             </div>
                         </div>
                         <div class="basket-modal__prod-count">
-                            <button class="item_minus" role="button" @click="minusCount(p.cart_id)"><span>-</span></button>
-                            <input type="text" :value="p.quantity" @change="changeCount(p.cart_id)" class="item_col keyPressedNum boldCount">
-                            <button class="item_plus" role="button" @click="plusCount(p.cart_id)"><span>+</span></button>
+                            <button class="item_minus" role="button" @click="quantityHandler(i, '-')"><span>-</span></button>
+                            <input type="text" :value="p.quantity" class="item_col keyPressedNum boldCount" readonly>
+                            <button class="item_plus" role="button" @click="quantityHandler(i, '+')"><span>+</span></button>
                             <span v-show="p.quantity >= p.max_quantity" class="catalog__item-count_label">доступно:<span>{{ p.max_quantity }}</span></span>
                         </div>
                     </div>
                     <div class="basket-modal__item-right">
                         <div class="basket-modal__del">
-                            <button @click="removeProduct(p.cart_id)">
+                            <button @click="removeCartItemRequest(p.cart_id)">
                                 <svg viewBox="0 0 191.414 191.414" width="21" height="21">
                                     <path d="M107.888,96.142l80.916-80.916c3.48-3.48,3.48-8.701,0-12.181s-8.701-3.48-12.181,0L95.707,83.961L14.791,3.045   c-3.48-3.48-8.701-3.48-12.181,0s-3.48,8.701,0,12.181l80.915,80.916L2.61,177.057c-3.48,3.48-3.48,8.701,0,12.181   c1.74,1.74,5.22,1.74,6.96,1.74s5.22,0,5.22-1.74l80.916-80.916l80.916,80.916c1.74,1.74,5.22,1.74,6.96,1.74   c1.74,0,5.22,0,5.22-1.74c3.48-3.48,3.48-8.701,0-12.181L107.888,96.142z"></path>
                                 </svg>
@@ -41,7 +41,7 @@
 
             <div class="basket-modal__footer">
                 <div class="basket-modal__clean">
-                    <a v-if="hasProducts" :href="cart_link">Оформить заказ</a>
+                    <a v-if="hasProducts" :href="checkout_link">Оформить заказ</a>
                 </div>
                 <div class="basket-modal__full-price">
                     <span>ИТОГО: </span><span class="boldPrice">{{ total }} <span class="ruble-sign">Р</span></span>
@@ -58,7 +58,7 @@
                     </svg>
                     Продолжить покупки
                 </a>
-                <a href="javascript:void(0)" @click="clearCart()">
+                <a href="javascript:void(0)" @click="clearCartRequest()">
                     очистить корзину
                     <svg viewBox="0 0 191.414 191.414" width="12" height="15">
                         <path d="M107.888,96.142l80.916-80.916c3.48-3.48,3.48-8.701,0-12.181s-8.701-3.48-12.181,0L95.707,83.961L14.791,3.045   c-3.48-3.48-8.701-3.48-12.181,0s-3.48,8.701,0,12.181l80.915,80.916L2.61,177.057c-3.48,3.48-3.48,8.701,0,12.181   c1.74,1.74,5.22,1.74,6.96,1.74s5.22,0,5.22-1.74l80.916-80.916l80.916,80.916c1.74,1.74,5.22,1.74,6.96,1.74   c1.74,0,5.22,0,5.22-1.74c3.48-3.48,3.48-8.701,0-12.181L107.888,96.142z"></path>
@@ -89,7 +89,6 @@ export default {
             'products',
             'total',
             'catalog_link',
-            'cart_link',
             'checkout_link',
         ]),
         ...mapState('header', [
@@ -106,25 +105,29 @@ export default {
         ...mapActions('header', [
             'enableElement',
         ]),
+        ...mapActions('cart', [
+            'clearCartRequest',
+            'updateCartItemRequest',
+            'removeCartItemRequest',
+        ]),
 
-        minusCount(cart_id) {
+        quantityHandler(key, type) {
+            let cart_id = this.products[key].cart_id
+            let quantity = this.products[key].quantity
 
+            switch (type) {
+                case '+':
+                    quantity += 1
+                    break;
+                case '-':
+                    quantity -= 1
+                    break;
+            }
+
+            if (quantity <= this.products[key].max_quantity) {
+                this.updateCartItemRequest({cart_id, quantity})
+            }
         },
-        plusCount(cart_id) {
-
-        },
-        changeCount(cart_id) {
-            // TODO: add changed quantity
-        },
-        removeProduct(cart_id) {
-
-        },
-        clearCart() {
-
-        },
-    },
-    created() {
-
     },
 }
 </script>

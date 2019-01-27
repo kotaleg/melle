@@ -107,8 +107,14 @@ class ControllerExtensionModuleMelle extends Controller
         $state['id'] = "{$this->codename}_cart";
 
         $state['catalog_link'] = $this->model_extension_pro_patch_url->ajax('common/home');
-        $state['cart_link'] = $this->model_extension_pro_patch_url->ajax('checkout/cart');
         $state['checkout_link'] = $this->model_extension_pro_patch_url->ajax('checkout/checkout');
+
+        $state['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add', '', true);
+        $state['get_data'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_get_data', '', true);
+        $state['remove'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_remove', '', true);
+        $state['update'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_update', '', true);
+        $state['clear'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_clear', '', true);
+        $state['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_oneclick', '', true);
 
         $this->load->model('checkout/cart');
         $cart_data = $this->model_checkout_cart->getCart();
@@ -172,8 +178,6 @@ class ControllerExtensionModuleMelle extends Controller
 
         $state['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add', '', true);
         $state['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_oneclick', '', true);
-
-        // echo "<pre>"; print_r($state); echo "</pre>";exit;
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));

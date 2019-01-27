@@ -1,6 +1,11 @@
 <?php
 class ControllerCheckoutCart extends Controller {
     public function index() {
+
+        /* IVAN MOD START */
+        return $this->response->redirect($this->url->link('common/home'));
+        /* IVAN MOD END */
+
         $this->load->language('checkout/cart');
 
         $this->document->setTitle($this->language->get('heading_title'));
@@ -260,6 +265,11 @@ class ControllerCheckoutCart extends Controller {
     }
 
     public function add() {
+
+        /* IVAN MOD START */
+        return $this->response->redirect($this->url->link('common/home'));
+        /* IVAN MOD END */
+
         $this->load->language('checkout/cart');
 
         $json = array();
@@ -381,6 +391,11 @@ class ControllerCheckoutCart extends Controller {
     }
 
     public function edit() {
+
+        /* IVAN MOD START */
+        return $this->response->redirect($this->url->link('common/home'));
+        /* IVAN MOD END */
+
         $this->load->language('checkout/cart');
 
         $json = array();
@@ -407,6 +422,11 @@ class ControllerCheckoutCart extends Controller {
     }
 
     public function remove() {
+
+        /* IVAN MOD START */
+        return $this->response->redirect($this->url->link('common/home'));
+        /* IVAN MOD END */
+
         $this->load->language('checkout/cart');
 
         $json = array();
@@ -518,6 +538,91 @@ class ControllerCheckoutCart extends Controller {
                     unset($this->session->data['payment_methods']);
                 }
             }
+        } else {
+            $json['error'][] = $this->language->get('error_no_fields');
+        }
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function melle_get_data()
+    {
+        $this->load->model('extension/pro_patch/url');
+        $this->load->model('extension/pro_patch/json');
+        $this->load->model('catalog/product');
+
+        $this->load->model('checkout/cart');
+        $json = $this->model_checkout_cart->getCart();
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function melle_clear()
+    {
+        $this->load->model('extension/pro_patch/url');
+        $this->load->model('extension/pro_patch/json');
+        $this->load->model('catalog/product');
+
+        $this->load->language('checkout/cart');
+
+        $this->cart->clear();
+        $json['cleared'] = true;
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function melle_remove()
+    {
+        $this->load->model('extension/pro_patch/url');
+        $this->load->model('extension/pro_patch/json');
+        $this->load->model('catalog/product');
+
+        $this->load->language('checkout/cart');
+
+        $json['removed'] = false;
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        if (isset($parsed['cart_id'])) {
+
+            $this->cart->remove($parsed['cart_id']);
+            unset($this->session->data['vouchers'][$parsed['cart_id']]);
+
+            $json['removed'] = true;
+            $json['success'][] = $this->language->get('text_remove');
+
+        } else {
+            $json['error'][] = $this->language->get('error_no_fields');
+        }
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function melle_update()
+    {
+        $this->load->model('extension/pro_patch/url');
+        $this->load->model('extension/pro_patch/json');
+        $this->load->model('catalog/product');
+
+        $this->load->language('checkout/cart');
+
+        $json['updated'] = false;
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        if (isset($parsed['quantity_data'])) {
+
+            foreach ($parsed['quantity_data'] as $cart_id => $quantity) {
+                $this->cart->update($cart_id, $quantity);
+            }
+
+            unset($this->session->data['shipping_method']);
+            unset($this->session->data['shipping_methods']);
+            unset($this->session->data['payment_method']);
+            unset($this->session->data['payment_methods']);
+            unset($this->session->data['reward']);
+
+            $json['updated'] = true;
+            $json['success'][] = $this->language->get('text_remove');
+
         } else {
             $json['error'][] = $this->language->get('error_no_fields');
         }
