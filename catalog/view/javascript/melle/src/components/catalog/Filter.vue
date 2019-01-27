@@ -31,7 +31,13 @@ export default {
        vueSlider,
     },
     computed: {
-
+        ...mapGetters('filter', [
+            'isFilterChanged',
+        ]),
+        ...mapState('filter', [
+            'filter_data',
+            'last_filter',
+        ]),
     },
     methods: {
 

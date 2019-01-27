@@ -14,10 +14,18 @@
       </div>
    </section>
 
-   <section class="catalog">
-      <div class="catalog__container container">
+   <section data-layout="col" class="search catalog">
+      <div class="search__container container">
 
-         <h1>{{ heading_title }}</h1>
+         <div class="search__sidebar">
+            <melle-catalog-filter></melle-catalog-filter>
+         </div>
+
+         <div class="search__content">
+            <melle-search-form></melle-search-form>
+
+            <melle-catalog-content></melle-catalog-content>
+         </div>
 
       </div>
    </section>

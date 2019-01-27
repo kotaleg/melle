@@ -271,7 +271,9 @@ class super_offers
                     }
 
                     $stock = true;
-                    if ($quantity < $pd['quantity']) { $stock = false; }
+                    if ($quantity < $pd['quantity']) {
+                        $products_data[$pd_key]['quantity'] = $quantity;
+                    }
                     $products_data[$pd_key]['stock'] = $stock;
 
                     $products_data[$pd_key]['max_quantity'] = $quantity;

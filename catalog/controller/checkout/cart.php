@@ -528,8 +528,7 @@ class ControllerCheckoutCart extends Controller {
                     $this->cart->add($product_id, $quantity, $options);
                     $json['added'] = true;
 
-                    $json['success'][] = sprintf($this->language->get('text_success'),
-                        $this->url->link('product/product', 'product_id=' . $product_id), $product_info['name'], $this->url->link('checkout/cart'));
+                    $json['success'][] = sprintf($this->language->get('text_success'), $product_info['name']);
 
                     // Unset all shipping and payment methods
                     unset($this->session->data['shipping_method']);

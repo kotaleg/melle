@@ -105,6 +105,7 @@ class ControllerProductCategory extends Controller {
             );
 
             $this->load->controller('extension/module/melle/initCatalog');
+            $this->load->controller('extension/module/melle/initFilter');
 
             $this->load->model('extension/module/pro_recently');
             $data['recently_viewed'] = $this->model_extension_module_pro_recently->getProductsPrepared();

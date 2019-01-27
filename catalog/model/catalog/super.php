@@ -22,7 +22,7 @@ class ModelCatalogSuper extends Model
         );
         $filter_data = $this->prepareInitialData($filter_data);
 
-        $result['product_total'] = $this->model_catalog_product->getTotalProducts($filter_data);
+        $result['product_total'] = (int) $this->model_catalog_product->getTotalProducts($filter_data);
         $products = $this->model_catalog_product->getProducts($filter_data);
 
         $this->load->model('extension/pro_patch/url');
@@ -112,13 +112,14 @@ class ModelCatalogSuper extends Model
         if (isset($filter_data['filter_category_id'])) {
             $result['category_id'] = $filter_data['filter_category_id'];
         }
-
         if (isset($filter_data['page'])) {
             $result['page'] = (int)$filter_data['page'];
         }
-
         if (isset($filter_data['limit'])) {
             $result['limit'] = (int)$filter_data['limit'];
+        }
+        if (isset($filter_data['filter_name'])) {
+            $result['search'] = $filter_data['filter_name'];
         }
 
         return $result;
@@ -132,31 +133,26 @@ class ModelCatalogSuper extends Model
         } else {
             $sort = 'p.sort_order';
         }
-
         if (isset($this->request->get['order'])) {
             $order = $this->request->get['order'];
         } else {
             $order = 'ASC';
         }
-
         if (isset($this->request->get['page'])) {
             $page = $this->request->get['page'];
         } else {
             $page = 1;
         }
-
         if (isset($this->request->get['limit'])) {
             $limit = (int)$this->request->get['limit'];
         } else {
             $limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
         }
-
         if (isset($this->request->get['search'])) {
             $search = $this->request->get['search'];
         } else {
             $search = null;
         }
-
         if (isset($this->request->get['path'])) {
             $parts = explode('_', (string)$this->request->get['path']);
             $category_id = (int)array_pop($parts);
@@ -183,6 +179,45 @@ class ModelCatalogSuper extends Model
         /* FROM FILTER START */
         if (isset($filter_data['page'])) {
             $page = (int)$filter_data['page'];
+        }
+        if (isset($filter_data['category_id'])) {
+            $category_id = (int)$filter_data['category_id'];
+        }
+        if (isset($filter_data['min_den'])) {
+            $min_den = (float)$filter_data['min_den'];
+        }
+        if (isset($filter_data['max_den'])) {
+            $max_den = (float)$filter_data['max_den'];
+        }
+        if (isset($filter_data['min_price'])) {
+            $min_price = (float)$filter_data['min_price'];
+        }
+        if (isset($filter_data['max_price'])) {
+            $max_price = (float)$filter_data['max_price'];
+        }
+        if (isset($filter_data['hit'])) {
+            $hit = (bool)$filter_data['hit'];
+        }
+        if (isset($filter_data['hit'])) {
+            $hit = (bool)$filter_data['hit'];
+        }
+        if (isset($filter_data['act'])) {
+            $act = (bool)$filter_data['act'];
+        }
+        if (isset($filter_data['material'])) {
+            $material = (int)$filter_data['material'];
+        }
+        if (isset($filter_data['color'])) {
+            $color = (int)$filter_data['color'];
+        }
+        if (isset($filter_data['size'])) {
+            $size = (int)$filter_data['size'];
+        }
+        if (isset($filter_data['manufacturers'])) {
+            $manufacturers = (array)$filter_data['manufacturers'];
+        }
+        if (isset($filter_data['search'])) {
+            $search = (string)$filter_data['search'];
         }
         /* FROM FILTER END */
 

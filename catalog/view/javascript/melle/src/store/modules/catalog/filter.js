@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, has, forEach } from 'lodash'
+import { isUndefined, isEqual, has, forEach } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -26,12 +26,17 @@ const state = {
         sort: 'p.sort_order',
         order: 'ASC',
     },
+
+    last_filter: {},
 }
 
 // getters
 const getters = {
-    getFilterValue: (state) => (index) => {
+    getFilterValue: state => index => {
         return state.filter_data[index]
+    },
+    isFilterChanged: state => {
+        return !isEqual(state.filter_data, state.last_filter)
     },
 }
 
@@ -42,9 +47,17 @@ const actions = {
             commit('setData', data)
         })
     },
+    updateFilterValue({ commit }, payload) {
+        commit('updateFilterValue', payload)
+    },
     updateFilterData({ commit }, payload) {
-        forEach(payload, (value, key) => {
-            commit('updateFilterValue', {key, value})
+        forEach(payload, (v, k) => {
+            commit('updateFilterValue', {k, v})
+        })
+    },
+    updateLastFilterData({ commit }, payload) {
+        forEach(payload, (v, k) => {
+            commit('updateLastFilterValue', {k, v})
         })
     },
 }
@@ -56,8 +69,11 @@ const mutations = {
             Vue.set(state, d, data[d])
         }
     },
-    updateFilterValue(state, {key, value}) {
-        Vue.set(state.filter_data, key, value)
+    updateFilterValue(state, {k, v}) {
+        Vue.set(state.filter_data, k, v)
+    },
+    updateLastFilterValue(state, {k, v}) {
+        Vue.set(state.last_filter, k, v)
     },
 }
 

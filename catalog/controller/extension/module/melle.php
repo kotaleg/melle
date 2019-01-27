@@ -211,7 +211,8 @@ class ControllerExtensionModuleMelle extends Controller
         $state['id'] = "{$this->codename}_filter";
 
         $this->load->model('catalog/super');
-        $state = $this->model_catalog_super->getFilterValues();
+        $state['filter_data'] = $this->model_catalog_super->getFilterValues();
+        $state['last_filter'] = $state['filter_data'];
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));

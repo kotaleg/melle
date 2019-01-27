@@ -15,8 +15,9 @@ const state = {
 
 // getters
 const getters = {
-    canLoadMore: state => field => {
-        return state.product_total > state.products.length
+    canLoadMore: state => {
+        return state.product_total > 0
+            && state.product_total > state.products.length
     },
     getRating: state => key => {
         let rating = []
@@ -42,11 +43,9 @@ const actions = {
             commit('setData', data)
         })
     },
-    loadMoreRequest({ commit, state, rootState, dispatch, getters }) {
-        if (!getters.canLoadMore) { return }
-
+    loadMoreRequest({ commit, state, rootState, rootGetters, dispatch, getters }, reload) {
         let filter_data = clone(rootState.filter.filter_data)
-        filter_data.page += 1
+        if (reload !== true) { filter_data.page += 1 }
 
         this.dispatch('header/setLoadingStatus', true)
         shop.makeRequest(
@@ -58,9 +57,13 @@ const actions = {
                 this.dispatch('header/setLoadingStatus', false)
 
                 if (has(res.data, 'products') && isArray(res.data.products)) {
-                    res.data.products.forEach((product) => {
-                        commit('addProduct', product)
-                    })
+                    if (reload !== true && !rootGetters['filter/isFilterChanged']) {
+                        res.data.products.forEach((product) => {
+                            commit('addProduct', product)
+                        })
+                    } else {
+                        commit('setProducts', res.data.products)
+                    }
                 }
 
                 if (has(res.data, 'product_total')) {
@@ -69,6 +72,7 @@ const actions = {
 
                 if (has(res.data, 'filter_data')) {
                     this.dispatch('filter/updateFilterData', res.data.filter_data)
+                    this.dispatch('filter/updateLastFilterData', res.data.filter_data)
                 }
 
                 notify.messageHandler(res.data, '_header')
@@ -88,7 +92,16 @@ const mutations = {
         Vue.set(state, 'products', products)
     },
     addProduct(state, product) {
-        state.products.push(product)
+        let check = true
+        state.products.forEach((p) => {
+            if (p.product_id == product.product_id) {
+                check = false
+            }
+        })
+
+        if (check === true) {
+            state.products.push(product)
+        }
     },
     setProductTotal(state, product_total) {
         Vue.set(state, 'product_total', product_total)
