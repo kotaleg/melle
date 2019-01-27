@@ -10,7 +10,7 @@
 				<h4 class="panel-title">
 					<span class="icon">
 						<i class="<%= model.config.icon %>"></i>
-					</span> 
+					</span>
 					<span class="text"><%= model.config.title %></span>
 				</h4>
 			</div>
@@ -20,8 +20,8 @@
 						<i class="fa fa-exclamation-circle"></i> <%= model.error %>
 					</div>
 				<% } %>
-				<% if (model.config.description) { %> 
-					<p class="description"><%= model.config.description %></p>
+				<% if (model.config.description) { %>
+					<p class=""><%= model.config.description %></p>
 				<% } %>
 				<div id="payment_method_list" class="<%= parseInt(model.config.display_options) ? '' : 'hidden' %>">
 				<% if(model.config.input_style == 'select') { %>
@@ -43,7 +43,7 @@
 							<% } else { %>
 								<p class="payment-method-terms <%= payment_method.code %> hidden">(<%= payment_method.terms %>)</p>
 							<% } %>
-							
+
 						<% } %>
 					<% }) %>
 
@@ -60,7 +60,7 @@
 								<% if(parseInt(model.config.display_images)) { %>
 									<img class="payment-image" src="<%= payment_method.image %>" />
 								<% } %>
-      
+
 								<%= payment_method.title %>
 								<span class="price"><%= payment_method.cost ? payment_method.cost : '' %></span>
 
@@ -71,11 +71,11 @@
 						</div>
 					<% }) %>
 				<% } %>
-				</div>									
+				</div>
 			</div>
 		</div>
 	<% } else{ %>
-    <% if (model.payment_error) { %> 
+    <% if (model.payment_error) { %>
        <div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i> <%= model.payment_error %></div>
    <% } %>
 	<% } %>
@@ -85,8 +85,8 @@
 $(function() {
 	qc.paymentMethod = $.extend(true, {}, new qc.PaymentMethod({{ json }} ));
 	qc.paymentMethodView = $.extend(true, {}, new qc.PaymentMethodView({
-		el:$("#payment_method"), 
-		model: qc.paymentMethod, 
+		el:$("#payment_method"),
+		model: qc.paymentMethod,
 		template: _.template($("#payment_method_template").html())
 	}));
 });

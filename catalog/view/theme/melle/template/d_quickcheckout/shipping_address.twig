@@ -11,7 +11,7 @@
 			</h4>
 		</div>
 		<div class="panel-body">
-			<% if(model.config.description){ %><p class="description"><%= model.config.description %></p><% } %>
+			<% if(model.config.description){ %><p class=""><%= model.config.description %></p><% } %>
 			<% if(model.account == 'logged'){ %>
 				<% if(_.size(model.addresses) > 0){ %>
 					<p>{{ text_address_existing }} </p>

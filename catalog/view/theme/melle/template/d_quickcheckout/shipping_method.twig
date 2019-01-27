@@ -18,17 +18,17 @@
 						<i class="fa fa-exclamation-circle"></i> <%= model.error %>
 					</div>
 				<% } %>
-				<% if (model.config.description) { %> 
-					<p class="description"><%= model.config.description %></p>
+				<% if (model.config.description) { %>
+					<p class=""><%= model.config.description %></p>
 				<% } %>
 				<div id="shipping_method_list">
-					
+
 
 						<% if(model.config.input_style == 'select') { %>
 							<div class="select-input form-group">
 								<select name="shipping_method" class="form-control shipping-method-select" data-refresh="5" >
 								<% _.each(model.shipping_methods, function(shipping_method) { %>
-									<% if (parseInt(model.config.display_title)) { %> 
+									<% if (parseInt(model.config.display_title)) { %>
 										<optgroup label="<%= shipping_method.title %>">
 									<% } %>
 									<% _.each(shipping_method.quote, function(quote) { %>
@@ -38,7 +38,7 @@
 											<option  value="<%= quote.code %>" id="<%= quote.code %>" ><%= quote.title %> <span class="price"><%= quote.text %></span></option>
 										<% } %>
 									<% }) %>
-									<% if (parseInt(model.config.display_title)) { %> 
+									<% if (parseInt(model.config.display_title)) { %>
 										</optgroup>
 									<% } %>
 								<% }) %>
@@ -48,7 +48,7 @@
 
 						<% }else{ %>
 							<% _.each(model.shipping_methods, function(shipping_method) { %>
-								<% if (parseInt(model.config.display_title)) { %> 
+								<% if (parseInt(model.config.display_title)) { %>
 									<strong class="title"><%= shipping_method.title %></strong>
 								<% } %>
 
@@ -57,9 +57,9 @@
 									  <div class="radio-input radio">
 									    <label for="<%= quote.code %>">
 									    <% if (quote.code == model.shipping_method.code) { %>
-									      <input type="radio" name="shipping_method" value="<%= quote.code %>" id="<%= quote.code %>" checked="checked" data-refresh="5" class="styled"/> 
+									      <input type="radio" name="shipping_method" value="<%= quote.code %>" id="<%= quote.code %>" checked="checked" data-refresh="5" class="styled"/>
 									    <% } else { %>
-									      <input type="radio" name="shipping_method" value="<%= quote.code %>" id="<%= quote.code %>" data-refresh="5" class="styled"/> 
+									      <input type="radio" name="shipping_method" value="<%= quote.code %>" id="<%= quote.code %>" data-refresh="5" class="styled"/>
 									    <% } %>
 									    <span class="text"><%= quote.title %></span><span class="price"><%= quote.text %></span></label>
 									  </div>
@@ -69,12 +69,12 @@
 								<% } %>
 							<% }) %>
 						<% } %>
-					
+
 				</div>
 			</div>
 		</div>
 	<% }else{ %>
-    <% if (model.shipping_error) { %> 
+    <% if (model.shipping_error) { %>
        <div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i> <%= model.shipping_error %></div>
    <% } %>
 	<% } %>
@@ -84,8 +84,8 @@
 $(function() {
 	qc.shippingMethod = $.extend(true, {}, new qc.ShippingMethod({{ json }} ));
 	qc.shippingMethodView = $.extend(true, {}, new qc.ShippingMethodView({
-		el:$("#shipping_method"), 
-		model: qc.shippingMethod, 
+		el:$("#shipping_method"),
+		model: qc.shippingMethod,
 		template: _.template($("#shipping_method_template").html())
 	}));
 });
