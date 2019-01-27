@@ -65,15 +65,23 @@
             </div>
          </div>
 
+
+        <one-click-modal
+           dir="ltr"
+           :width="500"
+           :scrollable="false"/>>
+
       </form>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 
+import OneClickModal from './../modal/OneClickModal.vue'
+
 export default {
     components: {
-
+        'one-click-modal': OneClickModal,
     },
     computed: {
         ...mapGetters('product', [
@@ -107,7 +115,7 @@ export default {
             this.addToCartRequest()
         },
         buyOneClick() {
-
+          this.$modal.show('one-click-modal', {});
         },
     },
     created() {

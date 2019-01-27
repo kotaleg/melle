@@ -93,8 +93,8 @@ class ControllerExtensionModuleMelle extends Controller
         $state['captcha_link'] = $this->model_extension_pro_patch_url->ajax(
             "extension/captcha/{$this->config->get('config_captcha')}/melle_validate", '', true);
 
-        $state['konfidentsialnost_link'] = $this->model_extension_pro_patch_url->ajax('account/login/melle_login', '', true);
-        $state['public_offer_link'] = $this->model_extension_pro_patch_url->ajax('account/login/melle_login', '', true);
+        $state['konfidentsialnost_link'] = $this->model_extension_pro_patch_url->ajax('information/information', '&information_id=3', true);
+        $state['public_offer_link'] = $this->model_extension_pro_patch_url->ajax('information/information', '&information_id=5', true);
         $state['delivery_link'] = $this->model_extension_pro_patch_url->ajax('information/information', '&information_id=8', true);
 
         // SET STATE
@@ -171,7 +171,7 @@ class ControllerExtensionModuleMelle extends Controller
         }
 
         $state['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add', '', true);
-        $state['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('account/edit/melle_edit', '', true);
+        $state['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_oneclick', '', true);
 
         // echo "<pre>"; print_r($state); echo "</pre>";exit;
 

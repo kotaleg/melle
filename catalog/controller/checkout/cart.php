@@ -487,7 +487,7 @@ class ControllerCheckoutCart extends Controller {
         $json['added'] = false;
         $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
 
-        if (isset($parsed['product_id']) && isset($parsed['product_id']) && isset($parsed['options'])) {
+        if (isset($parsed['product_id']) && isset($parsed['quantity']) && isset($parsed['options'])) {
             $product_id = (int)$parsed['product_id'];
             $quantity = (int)$parsed['quantity'];
             $options = array_filter($parsed['options']);
@@ -525,4 +525,80 @@ class ControllerCheckoutCart extends Controller {
         $this->response->setOutput(json_encode($json));
     }
 
+    public function melle_oneclick()
+    {
+        $this->load->model('extension/pro_patch/url');
+        $this->load->model('extension/pro_patch/json');
+        $this->load->model('catalog/product');
+
+        $this->load->language('account/register');
+
+        $json['sent'] = false;
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        if (isset($parsed['product_id']) && isset($parsed['quantity'])
+        && isset($parsed['name']) && isset($parsed['phone'])) {
+
+            $product_id = (int)$parsed['product_id'];
+            $quantity = (int)$parsed['quantity'];
+            $options = (isset($parsed['options'])) ? array_filter($parsed['options']) : array();
+
+            if ((utf8_strlen($parsed['phone']) < 3) || (utf8_strlen($parsed['phone']) > 32)) {
+                $json['error'][] = $this->language->get('error_telephone');
+            }
+
+            if ((utf8_strlen($parsed['name']) < 1) || (utf8_strlen($parsed['name']) > 32)) {
+                $json['error'][] = $this->language->get('error_firstname');
+            }
+
+            $product_info = $this->model_catalog_product->getProduct($product_id);
+
+            if ($product_info && !isset($json['error'])) {
+
+                $selected_options = array();
+                $product_options = $this->model_catalog_product->getProductOptions($product_id);
+
+                foreach ($product_options as $product_option) {
+                    if (isset($options[$product_option['product_option_id']])) {
+                        foreach ($product_option['product_option_value'] as $pov) {
+                            if ($options[$product_option['product_option_id']] == $pov['product_option_value_id']) {
+                                $selected_options[] = array(
+                                    'name'  => $product_option['name'],
+                                    'value' => $pov['name'],
+                                );
+                            }
+                        }
+                    }
+                }
+
+                $mail = new Mail($this->config->get('config_mail_engine'));
+                $mail->parameter = $this->config->get('config_mail_parameter');
+                $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+                $mail->smtp_username = $this->config->get('config_mail_smtp_username');
+                $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+                $mail->smtp_port = $this->config->get('config_mail_smtp_port');
+                $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+
+                $mail->setTo($this->config->get('config_email'));
+                $mail->setFrom($this->config->get('config_email'));
+                $mail->setSender(html_entity_decode($parsed['name'], ENT_QUOTES, 'UTF-8'));
+                $mail->setSubject(html_entity_decode(sprintf('Заказ в один клик %s', $parsed['name']), ENT_QUOTES, 'UTF-8'));
+                $mail->setText($this->load->view('mail/one_click', array(
+                    'phone' => filter_var($parsed['phone'], FILTER_SANITIZE_NUMBER_INT),
+                    'name' => $parsed['name'],
+                    'quantity' => $quantity,
+                    'product' => $this->model_extension_pro_patch_url->ajax('product/product', 'product_id=' . $product_id),
+                    'options' => $selected_options,
+                )));
+                $mail->send();
+
+                $json['sent'] = true;
+                $json['success'][] = 'Заказ успешно оформлен';
+            }
+        } else {
+            $json['error'][] = $this->language->get('error_no_fields');
+        }
+
+        $this->response->setOutput(json_encode($json));
+    }
 }

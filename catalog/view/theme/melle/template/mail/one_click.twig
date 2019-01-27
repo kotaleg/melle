@@ -1,0 +1,18 @@
+Телефон:
+{{ phone }}
+
+Имя:
+{{ name }}
+
+Товар:
+{{ product }}
+
+Кол-во:
+{{ quantity }}
+
+{% if options %}
+Опции:
+{% for o in options %}
+<span>{{o.name}}: </span><span>{{o.value}}</span>
+{% endfor %}
+{% endif %}

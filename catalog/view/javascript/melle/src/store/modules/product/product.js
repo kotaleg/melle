@@ -103,6 +103,24 @@ const getters = {
 
         return status
     },
+    getOptionsForCart: state => {
+        let options = {}
+
+        state.options.forEach((option) => {
+            if (!isArray(option.product_option_value)
+            || isEmpty(option.product_option_value)) {
+                return
+            }
+
+            option.product_option_value.forEach((option_value) => {
+                if (option_value.selected === true) {
+                    options[option.product_option_id] = option_value.product_option_value_id
+                }
+            })
+        })
+
+        return options
+    },
 }
 
 // actions
@@ -260,33 +278,41 @@ const actions = {
         }
     },
 
-    addToCartRequest({ commit, state, rootState, dispatch }) {
+    addToCartRequest({ commit, state, dispatch, getters }) {
         this.dispatch('header/setLoadingStatus', true)
-
-        let options = {}
-
-        state.options.forEach((option) => {
-            if (!isArray(option.product_option_value)
-            || isEmpty(option.product_option_value)) {
-                return
-            }
-
-            option.product_option_value.forEach((option_value) => {
-                if (option_value.selected === true) {
-                    options[option.product_option_id] = option_value.product_option_value_id
-                }
-            })
-        })
-
         shop.makeRequest(
             {
                 url: state.add_to_cart,
                 product_id: state.product_id,
                 quantity: state.quantity,
-                options: options,
+                options: getters.getOptionsForCart,
             },
             res => {
                 this.dispatch('header/setLoadingStatus', false)
+
+                notify.messageHandler(res.data, '_header')
+            }
+        )
+    },
+
+    oneClickRequest({ commit, state, dispatch }, payload) {
+        this.dispatch('header/setLoadingStatus', true)
+        shop.makeRequest(
+            {
+                url: state.buy_one_click,
+                product_id: state.product_id,
+                quantity: state.quantity,
+                options: getters.getOptionsForCart,
+                name: payload.name,
+                phone: payload.phone,
+                agree: payload.agree,
+            },
+            res => {
+                this.dispatch('header/setLoadingStatus', false)
+
+                if (has(res.data, 'sent') && res.data.sent === true) {
+                    Vue.prototype.$modal.hide('one-click-modal', {})
+                }
 
                 notify.messageHandler(res.data, '_header')
             }
