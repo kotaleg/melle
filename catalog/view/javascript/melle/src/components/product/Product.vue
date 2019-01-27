@@ -69,7 +69,7 @@
         <one-click-modal
            dir="ltr"
            :width="500"
-           :scrollable="false"/>>
+           :scrollable="false"/>
 
       </form>
 </template>

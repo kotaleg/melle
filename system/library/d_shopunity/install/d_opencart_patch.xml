@@ -165,4 +165,23 @@
                 ]]></add>
         </operation>
     </file>
+    <file path="system/config/catalog.php">
+        <operation>
+            <search index="1" ><![CDATA['view/*/before' => array(]]></search>
+            <add position="replace" offset="2"><![CDATA[
+                   //    "view/*/before" => array(
+                   //        1000  => 'event/debug/before'
+                   //    ),
+                ]]></add>
+        </operation>
+        <operation>
+            <search ><![CDATA['controller/*/after'  => array(]]></search>
+            <add position="replace" offset="2"><![CDATA[
+                    //	'controller/*/after'  => array(
+                    //'event/debug/after'
+                    //)
+                ]]></add>
+        </operation>
+    </file>
+
 </modification>
