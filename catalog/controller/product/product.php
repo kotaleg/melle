@@ -232,6 +232,10 @@ class ControllerProductProduct extends Controller {
 
             $this->load->model('extension/module/super_offers');
             $this->load->model('extension/module/pro_znachek');
+            $this->load->model('extension/module/pro_recently');
+
+            $data['recently_viewed'] = $this->model_extension_module_pro_recently->getProductsPrepared();
+            $this->model_extension_module_pro_recently->addProduct($product_id);
 
             $data['znachek'] = $this->model_extension_module_pro_znachek->getZnachek($product_info['znachek']);
             $data['h1'] = $product_info['h1'];
