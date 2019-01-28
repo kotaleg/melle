@@ -87,18 +87,20 @@ class ModelCatalogSuper extends Model
     public function getFilterValues($filter_data = array())
     {
         $filter_data = $this->prepareInitialData($filter_data);
+        $product_total = $this->model_catalog_product->getTotalProducts($filter_data, true);
+
         $result = array(
-            'min_den' => null,
-            'max_den' => null,
-            'min_price' => null,
-            'max_price' => null,
-            'hit' => null,
-            'new' => null,
-            'act' => null,
+            'min_den' => 0,
+            'max_den' => 1000,
+            'min_price' => 0,
+            'max_price' => 10000,
+            'hit' => false,
+            'neww' => false,
+            'act' => false,
             'material' => null,
             'color' => null,
             'size' => null,
-            'manufacturers' => null,
+            'manufacturers' => [],
 
             'category_id' => '',
             'search' => null,
@@ -109,11 +111,24 @@ class ModelCatalogSuper extends Model
             'limit' => $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit'),
         );
 
+        if ($product_total) {
+            $result['min_den'] = (int) $product_total['min_den'];
+            $result['max_den'] = (int) $product_total['max_den'];
+            $result['min_price'] = (int) $product_total['min_price'];
+            $result['max_price'] = (int) $product_total['max_price'];
+        }
+
         if (isset($filter_data['filter_category_id'])) {
             $result['category_id'] = $filter_data['filter_category_id'];
         }
         if (isset($filter_data['page'])) {
             $result['page'] = (int)$filter_data['page'];
+        }
+        if (isset($filter_data['sort'])) {
+            $result['sort'] = (int)$filter_data['sort'];
+        }
+        if (isset($filter_data['order'])) {
+            $result['order'] = (int)$filter_data['order'];
         }
         if (isset($filter_data['limit'])) {
             $result['limit'] = (int)$filter_data['limit'];
@@ -121,6 +136,49 @@ class ModelCatalogSuper extends Model
         if (isset($filter_data['filter_name'])) {
             $result['search'] = $filter_data['filter_name'];
         }
+        if (isset($filter_data['act'])) {
+            $result['act'] = $filter_data['act'];
+        }
+        if (isset($filter_data['neww'])) {
+            $result['neww'] = $filter_data['neww'];
+        }
+        if (isset($filter_data['hit'])) {
+            $result['hit'] = $filter_data['hit'];
+        }
+        if (isset($filter_data['min_den'])) {
+            $result['min_den'] = $filter_data['min_den'];
+        }
+        if (isset($filter_data['max_den'])) {
+            $result['max_den'] = $filter_data['max_den'];
+        }
+        if (isset($filter_data['min_price'])) {
+            $result['min_price'] = $filter_data['min_price'];
+        }
+        if (isset($filter_data['max_price'])) {
+            $result['max_price'] = $filter_data['max_price'];
+        }
+        if (isset($filter_data['manufacturers'])
+        && is_array($filter_data['manufacturers'])) {
+            $manu_ = $filter_data['manufacturers'];
+        }
+
+        // ALL MANUFACTURERS
+        if (isset($manu_)) {
+            $manu_ = array_map(function($v) {
+                if ($v['checked']) {
+                    return $v['value'];
+                }
+            }, $manu_);
+        } else { $manu_ = array(); }
+
+        $manufacturers = $this->model_catalog_product->getManufacturersForFilter($filter_data);
+        $result['manufacturers'] = array_map(function($v) use ($manu_) {
+            $v['checked'] = false;
+            if (in_array($v['value'], $manu_)) {
+                $v['checked'] = true;
+            }
+            return $v;
+        }, $manufacturers);
 
         return $result;
     }
@@ -167,14 +225,14 @@ class ModelCatalogSuper extends Model
         $max_price = null;
 
         $hit = false;
-        $new = false;
+        $neww = false;
         $act = false;
 
         $material = null;
         $color = null;
         $size = null;
 
-        $manufacturers = null;
+        $manufacturers = [];
 
         /* FROM FILTER START */
         if (isset($filter_data['page'])) {
@@ -214,7 +272,7 @@ class ModelCatalogSuper extends Model
             $size = (int)$filter_data['size'];
         }
         if (isset($filter_data['manufacturers'])) {
-            $manufacturers = (array)$filter_data['manufacturers'];
+            $manufacturers = $filter_data['manufacturers'];
         }
         if (isset($filter_data['search'])) {
             $search = (string)$filter_data['search'];
@@ -237,13 +295,14 @@ class ModelCatalogSuper extends Model
         if ($min_price !== null) { $prepared['min_price'] = (float)$min_price; }
         if ($max_price !== null) { $prepared['max_price'] = (float)$max_price; }
         if ($hit !== false) { $prepared['hit'] = (bool)$hit; }
-        if ($new !== false) { $prepared['new'] = (bool)$new; }
+        if ($neww !== false) { $prepared['neww'] = (bool)$neww; }
         if ($act !== false) { $prepared['act'] = (bool)$act; }
         if ($material !== null) { $prepared['material'] = $material; }
         if ($color !== null) { $prepared['color'] = $color; }
         if ($size !== null) { $prepared['size'] = $size; }
-        if ($manufacturers !== null && is_array($manufacturers)) {
-            $prepared['manufacturers'] = array_filter($manufacturers); }
+        if (is_array($manufacturers) && !empty($manufacturers)) {
+            $prepared['manufacturers'] = array_filter($manufacturers);
+        }
 
         $den_id = $this->getDenId();
         if ($den_id !== null) {
@@ -265,5 +324,56 @@ class ModelCatalogSuper extends Model
         return null;
     }
 
+    public function prepareSliderOptions()
+    {
+        $filter_data = $this->prepareInitialData(array(
+            'page' => 1,
+            'search' => null,
+            'category_id' => 0,
+        ));
+        $product_total = $this->model_catalog_product->getTotalProducts($filter_data, true);
+
+        return array(
+            'den' => $this->getSliderOptions($product_total['min_den'], $product_total['max_den']),
+            'price' => $this->getSliderOptions($product_total['min_price'], $product_total['max_price']),
+        );
+    }
+
+    private function getSliderOptions($min, $max)
+    {
+        return array(
+            'min' => (int) $min,
+            'max' => (int) $max,
+            'disabled' => false,
+            'show' => true,
+            'tooltip' => 'newer',
+
+            'bgStyle' => array(
+                'border' => '1px solid #c5c5c5',
+                'background' => '#fff',
+                'height' => '12.5px',
+                'border-radius' => 0,
+            ),
+
+            'sliderStyle' => array(
+                array(
+                    'backgroundColor' => '#2b2a29',
+                    'width' => '20px',
+                    'height' => '20px',
+                    'border-radius' => 0,
+                ),
+                array(
+                    'backgroundColor'   => '#2b2a29',
+                    'width' => '20px',
+                    'height' => '20px',
+                    'border-radius' => 0,
+                ),
+            ),
+
+            'processStyle' => array(
+                'background' => '#e9e9e9',
+            ),
+        );
+    }
 
 }

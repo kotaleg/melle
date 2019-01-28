@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isEqual, has, forEach } from 'lodash'
+import { isUndefined, isEqual, isArray, has, forEach } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -7,17 +7,17 @@ import notify from '../../../components/partial/notify'
 // initial state
 const state = {
     filter_data: {
-        min_den: null,
-        max_den: null,
-        min_price: null,
-        max_price: null,
-        hit: null,
-        new: null,
-        act: null,
-        material: null,
-        color: null,
-        size: null,
-        manufacturers: null,
+        min_den: '',
+        max_den: '',
+        min_price: '',
+        max_price: '',
+        hit: false,
+        neww: false,
+        act: false,
+        material: '',
+        color: '',
+        size: '',
+        manufacturers: [],
 
         category_id: 0,
         search: null,
@@ -28,6 +28,7 @@ const state = {
     },
 
     last_filter: {},
+    slider_options: {den: {}, price: {}},
 }
 
 // getters
@@ -35,8 +36,14 @@ const getters = {
     getFilterValue: state => index => {
         return state.filter_data[index]
     },
+    getSliderOptions: state => key => {
+        return state.slider_options[key]
+    },
     isFilterChanged: state => {
         return !isEqual(state.filter_data, state.last_filter)
+    },
+    isManufacturerSelected: state => key => {
+        return state.filter_data.manufacturers[key].checked
     },
 }
 
@@ -49,7 +56,31 @@ const actions = {
     },
     updateFilterValue({ commit }, payload) {
         commit('updateFilterValue', payload)
+        this.dispatch('catalog/loadMoreRequest')
     },
+    updateFromSlider({ commit, state, getters }, payload) {
+        let type = payload.type
+        let value = payload.v
+        if (isArray(value)) {
+            if (!isUndefined(value[0])
+            && getters.getFilterValue(`min_${type}`) != value[0]) {
+                commit('updateFilterValue', {k: `min_${type}`, v: value[0]})
+                this.dispatch('catalog/loadMoreRequest')
+            }
+
+            if (!isUndefined(value[1])
+            && getters.getFilterValue(`max_${type}`) != value[1]) {
+                commit('updateFilterValue', {k: `max_${type}`, v: value[1]})
+                this.dispatch('catalog/loadMoreRequest')
+            }
+        }
+    },
+    updateManufacturerStatus({ commit, state, getters }, k) {
+        let v = !state.filter_data.manufacturers[k].checked
+        commit('updateManufacturerCheckedStatus', {k, v})
+        this.dispatch('catalog/loadMoreRequest')
+    },
+
     updateFilterData({ commit }, payload) {
         forEach(payload, (v, k) => {
             commit('updateFilterValue', {k, v})
@@ -74,6 +105,10 @@ const mutations = {
     },
     updateLastFilterValue(state, {k, v}) {
         Vue.set(state.last_filter, k, v)
+    },
+
+    updateManufacturerCheckedStatus(state, {k, v}) {
+        Vue.set(state.filter_data.manufacturers[k], 'checked', v)
     },
 }
 

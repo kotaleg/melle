@@ -80,7 +80,7 @@ class ModelExtensionProPatchDb extends Model
             $parents_keys = array_keys($parent_ids);
             $last_parent_key = end ($parents_keys);
             foreach ($parent_ids as $k => $parent_id) {
-                $sql_parents .= "{$parent_id}";
+                $sql_parents .= "'{$parent_id}'";
                 if ($k !== $last_parent_key) {
                     $sql_parents .= ',';
                 }

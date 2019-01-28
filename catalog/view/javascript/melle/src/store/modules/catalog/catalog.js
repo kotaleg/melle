@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isArray, has, clone } from 'lodash'
+import { isUndefined, isArray, has, clone, debounce } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -43,18 +43,21 @@ const actions = {
             commit('setData', data)
         })
     },
-    loadMoreRequest({ commit, state, rootState, rootGetters, dispatch, getters }, reload) {
+    loadMoreRequest: debounce(({ commit, state, rootState, rootGetters, dispatch, getters }, reload) => {
         let filter_data = clone(rootState.filter.filter_data)
         if (reload !== true) { filter_data.page += 1 }
+        if (rootGetters['filter/isFilterChanged']) {
+            filter_data.page = 1
+        }
 
-        this.dispatch('header/setLoadingStatus', true)
+        dispatch('header/setLoadingStatus', true, {root:true})
         shop.makeRequest(
             {
                 url: state.get_link,
                 filter_data,
             },
             res => {
-                this.dispatch('header/setLoadingStatus', false)
+                dispatch('header/setLoadingStatus', false, {root:true})
 
                 if (has(res.data, 'products') && isArray(res.data.products)) {
                     if (reload !== true && !rootGetters['filter/isFilterChanged']) {
@@ -71,14 +74,14 @@ const actions = {
                 }
 
                 if (has(res.data, 'filter_data')) {
-                    this.dispatch('filter/updateFilterData', res.data.filter_data)
-                    this.dispatch('filter/updateLastFilterData', res.data.filter_data)
+                    dispatch('filter/updateFilterData', res.data.filter_data, {root:true})
+                    dispatch('filter/updateLastFilterData', res.data.filter_data, {root:true})
                 }
 
                 notify.messageHandler(res.data, '_header')
             }
         )
-    },
+    }, 500),
 }
 
 // mutations
