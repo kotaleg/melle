@@ -17,6 +17,7 @@ export default {
                     type: 'success',
                     // title: store.state.header.text_success,
                     text: element,
+                    // duration: -1,
                 })
             }, this)
         } else if (data.error && isArray(data.error)) {
@@ -26,6 +27,7 @@ export default {
                     type: 'warn',
                     // title: store.state.header.text_warning,
                     text: element,
+                    // duration: -1,
                 })
             }, this)
         }
