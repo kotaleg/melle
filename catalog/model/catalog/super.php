@@ -37,9 +37,17 @@ class ModelCatalogSuper extends Model
                 $image = $this->model_tool_image->resize('placeholder.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'));
             }
 
+            if (isset($filter_data['path']) && !empty($filter_data['path'])) {
+                $href = $this->model_extension_pro_patch_url->ajax('product/product', 'path=' . $filter_data['path'] .'&product_id=' . (int)$p['product_id']);
+            } else {
+                $href = $this->model_extension_pro_patch_url->ajax('product/product', 'product_id=' . (int)$p['product_id']);
+            }
+
+            // echo "<pre>"; print_r(''); echo "</pre>";exit;
+
             $d_ = array(
                 'product_id' => $p['product_id'],
-                'href' => $this->model_extension_pro_patch_url->ajax('product/product', 'product_id=' . (int)$p['product_id']),
+                'href' => $href,
                 'name' => $p['name'],
                 'h1' => $p['h1'],
                 'manufacturer' => $p['manufacturer'],
@@ -109,6 +117,7 @@ class ModelCatalogSuper extends Model
             'sort' => 'p.sort_order',
             'order' => 'ASC',
             'limit' => $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit'),
+            'path' => '',
         );
 
         if ($product_total) {
@@ -123,6 +132,9 @@ class ModelCatalogSuper extends Model
         }
         if (isset($filter_data['page'])) {
             $result['page'] = (int)$filter_data['page'];
+        }
+        if (isset($filter_data['path']) && !empty($filter_data['path'])) {
+            $result['path'] = (string)$filter_data['path'];
         }
         if (isset($filter_data['sort'])) {
             $result['sort'] = (int)$filter_data['sort'];
@@ -237,6 +249,11 @@ class ModelCatalogSuper extends Model
         } else {
             $category_id = 0;
         }
+        if (isset($this->request->get['path']) && !empty($this->request->get['path'])) {
+            $path = $this->request->get['path'];
+        } else {
+            $path = '';
+        }
         /* FROM GET PARAMS END */
 
         $min_den = null;
@@ -305,6 +322,9 @@ class ModelCatalogSuper extends Model
         if (isset($filter_data['search'])) {
             $search = (string)$filter_data['search'];
         }
+        if (isset($filter_data['path']) && !empty($filter_data['path'])) {
+            $path = (string)$filter_data['path'];
+        }
         /* FROM FILTER END */
 
         $prepared = array(
@@ -318,6 +338,7 @@ class ModelCatalogSuper extends Model
         );
 
         if ($search !== null) { $prepared['filter_name'] = (string)$search; }
+        if ($path !== null) { $prepared['path'] = (string)$path; }
         if ($min_den !== null) { $prepared['min_den'] = (float)$min_den; }
         if ($max_den !== null) { $prepared['max_den'] = (float)$max_den; }
         if ($min_price !== null) { $prepared['min_price'] = (float)$min_price; }
