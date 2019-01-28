@@ -227,9 +227,11 @@ class ModelExtensionModuleSuperOffers extends Model
         return $connected_options;
     }
 
-    public function getDefaultValues($product_id)
+    public function getDefaultValues($product_id, $data = array())
     {
-        $data = $this->model_catalog_product->getProduct($product_id);
+        if (!$data) {
+            $data = $this->model_catalog_product->getProduct($product_id);
+        }
         $lowest_price = $this->getLowestPrice($product_id);
 
         $result = array(

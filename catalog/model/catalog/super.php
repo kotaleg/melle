@@ -49,7 +49,7 @@ class ModelCatalogSuper extends Model
                 'reviews_count' => $p['reviews'],
 
                 'quantity' => 1,
-                'default_values' => $this->model_extension_module_super_offers->getDefaultValues($p['product_id']),
+                'default_values' => $this->model_extension_module_super_offers->getDefaultValues($p['product_id'], $p),
                 // 'is_options_for_product' => (bool)$this->model_extension_module_super_offers->isOptionsForProduct($p['product_id']),
                 // 'options' => $this->model_extension_module_super_offers->getOptions($p['product_id']),
             );
@@ -261,16 +261,16 @@ class ModelCatalogSuper extends Model
         if (isset($filter_data['category_id'])) {
             $category_id = (int)$filter_data['category_id'];
         }
-        if (isset($filter_data['min_den'])) {
+        if (isset($filter_data['min_den']) && (float)$filter_data['min_den'] > 0) {
             $min_den = (float)$filter_data['min_den'];
         }
-        if (isset($filter_data['max_den'])) {
+        if (isset($filter_data['max_den']) && (float)$filter_data['max_den'] > 0) {
             $max_den = (float)$filter_data['max_den'];
         }
-        if (isset($filter_data['min_price'])) {
+        if (isset($filter_data['min_price']) && (float)$filter_data['min_price'] > 0) {
             $min_price = (float)$filter_data['min_price'];
         }
-        if (isset($filter_data['max_price'])) {
+        if (isset($filter_data['max_price']) && (float)$filter_data['max_price'] > 0) {
             $max_price = (float)$filter_data['max_price'];
         }
         if (isset($filter_data['hit'])) {

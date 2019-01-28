@@ -199,9 +199,10 @@ class super_offers
 
         $q = $this->db->query($sql);
 
-        if (isset($q->row['min_price'])) {
+        if (isset($q->row['min_price']) && $q->row['min_price'] != null) {
             $price = round($q->row['min_price'], 0);
         } else {
+            if ($check_all) { return $price; }
             return $this->getLowestPrice($product_id, true);
         }
 
