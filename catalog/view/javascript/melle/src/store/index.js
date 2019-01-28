@@ -15,6 +15,7 @@ import account from './modules/account/account'
 
 // PRODUCT
 import product from './modules/product/product'
+import review from './modules/product/review'
 
 // CATALOG
 import catalog from './modules/catalog/catalog'
@@ -35,6 +36,7 @@ export default new Vuex.Store({
         register,
         account,
         product,
+        review,
         catalog,
         filter,
     },

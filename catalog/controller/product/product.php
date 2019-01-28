@@ -588,6 +588,46 @@ class ControllerProductProduct extends Controller {
         $this->response->setOutput($this->load->view('product/review', $data));
     }
 
+    public function melle_add_review()
+    {
+        $this->load->model('extension/pro_patch/json');
+        $this->load->language('product/product');
+
+        $json['sent'] = false;
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        if (isset($parsed['form']) && is_array($parsed['form'])) {
+
+            if ((utf8_strlen($parsed['form']['name']) < 3) || (utf8_strlen($parsed['form']['name']) > 25)) {
+                $json['form_error']['name'] = $this->language->get('error_name');
+            }
+
+            if ((utf8_strlen($parsed['form']['message']) < 10) || (utf8_strlen($parsed['form']['message']) > 1000)) {
+                $json['form_error']['message'] = $this->language->get('error_text');
+            }
+
+            if (empty($parsed['form']['rating']) || $parsed['form']['rating'] < 0 || $parsed['form']['rating'] > 5) {
+                $json['form_error']['rating'] = $this->language->get('error_rating');
+            }
+
+            if (!isset($json['form_error'])) {
+                $this->load->model('catalog/review');
+                $this->model_catalog_review->addReview($parsed['form']['product_id'], array(
+                    'name' => $parsed['form']['name'],
+                    'text' => $parsed['form']['message'],
+                    'rating' => $parsed['form']['rating'],
+                ));
+                $json['sent'] = true;
+                $json['success'][] = $this->language->get('text_success');
+            }
+
+        } else {
+            $json['error'][] = $this->language->get('error_no_fields');
+        }
+
+        $this->response->setOutput(json_encode($json));
+    }
+
     public function write() {
         $this->load->language('product/product');
 

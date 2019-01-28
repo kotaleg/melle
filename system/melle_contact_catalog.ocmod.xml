@@ -64,6 +64,8 @@
 
                             $json['sent'] = true;
                         }
+                    } else {
+                        $json['error'][] = $this->language->get('error_no_fields');
                     }
 
                     $this->response->setOutput(json_encode($json));

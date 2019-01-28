@@ -25,10 +25,11 @@ Vue.component('v-select', vSelect)
 Vue.component('melle-header', require('./components/header/Header.vue'))
 Vue.component('melle-account-edit', require('./components/account/AccountEdit.vue'))
 Vue.component('melle-product', require('./components/product/Product.vue'))
-Vue.component('melle-product', require('./components/product/Product.vue'))
+Vue.component('melle-product-review', require('./components/product/ProductReview.vue'))
 Vue.component('melle-catalog-filter', require('./components/catalog/Filter.vue'))
 Vue.component('melle-catalog-content', require('./components/catalog/Catalog.vue'))
 Vue.component('melle-search-form', require('./components/catalog/SearchForm.vue'))
+
 
 document.addEventListener('DOMContentLoaded', () => {
     new Vue({

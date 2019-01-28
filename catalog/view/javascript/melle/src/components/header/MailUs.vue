@@ -66,7 +66,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import VueRecaptcha from 'vue-recaptcha';
+import VueRecaptcha from 'vue-recaptcha'
 
 export default {
     components: {

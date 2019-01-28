@@ -170,6 +170,10 @@ class ControllerExtensionModuleMelle extends Controller
         $product_info = $this->model_catalog_product->getProduct($product_id);
 
         if ($product_info) {
+
+            // REVIEW
+            $this->initProductReview($product_id);
+
             $state['product_id'] = $product_id;
             $state['quantity'] = 1;
 
@@ -189,6 +193,19 @@ class ControllerExtensionModuleMelle extends Controller
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
     }
+
+    public function initProductReview($product_id)
+    {
+        // VARIABLE
+        $state['id'] = "{$this->codename}_review";
+
+        $state['product_id'] = $product_id;
+        $state['review_link'] = $this->model_extension_pro_patch_url->ajax('product/product/melle_add_review', '', true);
+
+        // SET STATE
+        $this->document->addState($state['id'], json_encode($state));
+    }
+
 
     public function initCatalog()
     {

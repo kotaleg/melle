@@ -48,7 +48,7 @@ const getters = {
         return phone.replace(/\s/g,'')
     },
     isCaptcha: state => {
-        return !state.captcha.sitekey
+        return state.captcha.sitekey
     },
     captchaKey: state => {
         return state.captcha.sitekey
