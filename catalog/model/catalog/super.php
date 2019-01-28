@@ -97,9 +97,9 @@ class ModelCatalogSuper extends Model
             'hit' => false,
             'neww' => false,
             'act' => false,
-            'material' => null,
-            'color' => null,
-            'size' => null,
+            'material' => '',
+            'color' => '',
+            'size' => '',
             'manufacturers' => [],
 
             'category_id' => '',
@@ -160,25 +160,45 @@ class ModelCatalogSuper extends Model
         if (isset($filter_data['manufacturers'])
         && is_array($filter_data['manufacturers'])) {
             $manu_ = $filter_data['manufacturers'];
-        }
-
-        // ALL MANUFACTURERS
-        if (isset($manu_)) {
-            $manu_ = array_map(function($v) {
-                if ($v['checked']) {
-                    return $v['value'];
-                }
-            }, $manu_);
         } else { $manu_ = array(); }
 
+        if (isset($filter_data['material'])
+        && is_array($filter_data['material'])) {
+            $material = $filter_data['material'];
+        }
+
+
+        // ALL MANUFACTURERS
         $manufacturers = $this->model_catalog_product->getManufacturersForFilter($filter_data);
+        $manufacturers = array_filter($manufacturers, function($v) {
+            if ($v['value']) { return true; }
+        });
         $result['manufacturers'] = array_map(function($v) use ($manu_) {
             $v['checked'] = false;
-            if (in_array($v['value'], $manu_)) {
-                $v['checked'] = true;
-            }
+            if (in_array($v['value'], $manu_)) { $v['checked'] = true; }
             return $v;
         }, $manufacturers);
+
+        // ALL MATERIALS
+        // $result['all_materials'] = array();
+        // $materials = $this->model_catalog_product->getMaterialsForFilter($filter_data);
+        // $materials_check = array();
+        // $materials = array_filter($materials, function($v) {
+        //     if ($v['value']) { return true; }
+        // });
+        // foreach ($materials as $m) {
+        //     if (!in_array(trim($m['value']), $materials_check)) {
+        //         $materials_check[] = trim($m['value']);
+        //         $result['all_materials'][] = $m;
+
+        //         if (isset($material) && trim($material) == trim($m['value'])) {
+        //             $result['material'] = array(
+        //                 'label' => $material,
+        //                 'value' => $value,
+        //             );
+        //         }
+        //     }
+        // }
 
         return $result;
     }
@@ -256,24 +276,32 @@ class ModelCatalogSuper extends Model
         if (isset($filter_data['hit'])) {
             $hit = (bool)$filter_data['hit'];
         }
-        if (isset($filter_data['hit'])) {
-            $hit = (bool)$filter_data['hit'];
+        if (isset($filter_data['neww'])) {
+            $neww = (bool)$filter_data['neww'];
         }
         if (isset($filter_data['act'])) {
             $act = (bool)$filter_data['act'];
         }
-        if (isset($filter_data['material'])) {
-            $material = (int)$filter_data['material'];
+        if (isset($filter_data['material'])
+        && is_array($filter_data['material'])) {
+            $material = $filter_data['material']['value'];
         }
-        if (isset($filter_data['color'])) {
-            $color = (int)$filter_data['color'];
+        if (isset($filter_data['color'])
+        && is_array($filter_data['color'])) {
+            $color = $filter_data['color']['value'];
         }
-        if (isset($filter_data['size'])) {
-            $size = (int)$filter_data['size'];
+        if (isset($filter_data['size'])
+        && is_array($filter_data['size'])) {
+            $size = $filter_data['size']['value'];
         }
         if (isset($filter_data['manufacturers'])) {
             $manufacturers = $filter_data['manufacturers'];
+            $manufacturers = array_map(function($v) {
+                if ($v['checked']) { return $v['value']; }
+            }, $manufacturers);
+            $manufacturers = array_filter($manufacturers);
         }
+
         if (isset($filter_data['search'])) {
             $search = (string)$filter_data['search'];
         }
@@ -309,6 +337,11 @@ class ModelCatalogSuper extends Model
             $prepared['den_id'] = $den_id;
         }
 
+        $material_id = $this->getMaterialId();
+        if ($material_id !== null) {
+            $prepared['material_id'] = $material_id;
+        }
+
         return $prepared;
     }
 
@@ -316,6 +349,18 @@ class ModelCatalogSuper extends Model
     {
         $q = $this->db->query("SELECT `attribute_id` FROM " . DB_PREFIX . "attribute_description
             WHERE LCASE(`name`) = 'ден'");
+
+        if (isset($q->row['attribute_id'])) {
+            return (int)$q->row['attribute_id'];
+        }
+
+        return null;
+    }
+
+    private function getMaterialId()
+    {
+        $q = $this->db->query("SELECT `attribute_id` FROM " . DB_PREFIX . "attribute_description
+            WHERE LCASE(`name`) = 'материал'");
 
         if (isset($q->row['attribute_id'])) {
             return (int)$q->row['attribute_id'];

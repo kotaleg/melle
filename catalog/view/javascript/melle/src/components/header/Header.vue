@@ -5,6 +5,10 @@
         :group="this.$codename+'_header'"
         position="bottom right"/>
 
+      <loading
+        :active.sync="is_loading"
+        :is-full-page="true" />
+
         <div class="header-page__container">
             <a v-if="logo" class="header-page__logo" :href="base">
                 <img :src="logo" alt="logo">
@@ -102,8 +106,8 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-// import Loading from 'vue-loading-overlay'
-// import 'vue-loading-overlay/dist/vue-loading.min.css'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.min.css'
 
 import Sidebar from './Sidebar.vue'
 import Cart from './Cart.vue'
@@ -115,7 +119,7 @@ import Forgotten from './Forgotten.vue'
 
 export default {
     components: {
-        // Loading,
+        Loading,
         'header-sidebar': Sidebar,
         'h-mail-us': MailUs,
         'h-login': Login,

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isEqual, isArray, has, forEach } from 'lodash'
+import { isUndefined, isEqual, isArray, isObject, has, forEach } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -80,7 +80,6 @@ const actions = {
         commit('updateManufacturerCheckedStatus', {k, v})
         this.dispatch('catalog/loadMoreRequest')
     },
-
     updateFilterData({ commit }, payload) {
         forEach(payload, (v, k) => {
             commit('updateFilterValue', {k, v})
@@ -106,7 +105,6 @@ const mutations = {
     updateLastFilterValue(state, {k, v}) {
         Vue.set(state.last_filter, k, v)
     },
-
     updateManufacturerCheckedStatus(state, {k, v}) {
         Vue.set(state.filter_data.manufacturers[k], 'checked', v)
     },

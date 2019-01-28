@@ -46,7 +46,7 @@ const actions = {
     loadMoreRequest: debounce(({ commit, state, rootState, rootGetters, dispatch, getters }, reload) => {
         let filter_data = clone(rootState.filter.filter_data)
         if (reload !== true) { filter_data.page += 1 }
-        if (rootGetters['filter/isFilterChanged']) {
+        if (rootGetters['filter/isFilterChanged'] || reload) {
             filter_data.page = 1
         }
 

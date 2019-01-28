@@ -142,6 +142,7 @@ export default {
             'updateFilterValue',
             'updateFromSlider',
             'updateManufacturerStatus',
+            'updateSelectValue',
         ]),
     },
 }
