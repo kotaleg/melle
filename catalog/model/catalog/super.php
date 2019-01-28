@@ -43,8 +43,6 @@ class ModelCatalogSuper extends Model
                 $href = $this->model_extension_pro_patch_url->ajax('product/product', 'product_id=' . (int)$p['product_id']);
             }
 
-            // echo "<pre>"; print_r(''); echo "</pre>";exit;
-
             $d_ = array(
                 'product_id' => $p['product_id'],
                 'href' => $href,
@@ -114,12 +112,24 @@ class ModelCatalogSuper extends Model
             'search' => null,
 
             'page' => 1,
-            'sort' => 'pd.name',
-            'all_sorts' => array('pd.name', 'offers.price'),
+            'sort' => array('label' => 'Наименованию', 'value' => 'pd.name'),
             'order' => 'ASC',
             'limit' => $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit'),
             'path' => '',
         );
+
+        $result['all_sorts'] = array(
+            0 => array('label' => 'Наименованию', 'value' => 'pd.name'),
+            1 => array('label' => 'По цене', 'value' => 'offers.price'),
+        );
+
+        if (isset($filter_data['sort']) && !empty($filter_data['sort'])) {
+            foreach ($result['all_sorts'] as $k => $v) {
+                if (strcmp($filter_data['sort'], $v['value']) === 0) {
+                    $result['sort'] = $result['all_sorts'][$k];
+                }
+            }
+        }
 
         if ($product_total) {
             $result['min_den'] = (int) $product_total['min_den'];
@@ -136,9 +146,6 @@ class ModelCatalogSuper extends Model
         }
         if (isset($filter_data['path']) && !empty($filter_data['path'])) {
             $result['path'] = (string)$filter_data['path'];
-        }
-        if (isset($filter_data['sort'])) {
-            $result['sort'] = (string)$filter_data['sort'];
         }
         if (isset($filter_data['order'])) {
             $result['order'] = (string)$filter_data['order'];
@@ -179,7 +186,6 @@ class ModelCatalogSuper extends Model
         && is_array($filter_data['material'])) {
             $material = $filter_data['material'];
         }
-
 
         // ALL MANUFACTURERS
         $manufacturers = $this->model_catalog_product->getManufacturersForFilter($filter_data);
@@ -329,8 +335,9 @@ class ModelCatalogSuper extends Model
         if (isset($filter_data['order']) && !empty($filter_data['order'])) {
             $order = (string)$filter_data['order'];
         }
-        if (isset($filter_data['sort']) && !empty($filter_data['sort'])) {
-            $sort = (string)$filter_data['sort'];
+        if (isset($filter_data['sort']) && is_array($filter_data['sort'])
+        && isset($filter_data['sort']['value']) && !empty($filter_data['sort']['value'])) {
+            $sort = (string)$filter_data['sort']['value'];
         }
         /* FROM FILTER END */
 

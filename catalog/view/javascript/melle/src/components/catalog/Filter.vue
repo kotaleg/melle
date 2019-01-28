@@ -1,7 +1,7 @@
 <template>
       <div class="search-modal__filter filter">
          <div class="filter__title">Фильтр</div>
-         <form>
+         <form v-on:submit.prevent="openSidebar(false)">
             <div class="filter__relevant-category">
                <label>
                   <input name="CatalogFilterForm[hits]" type="checkbox" v-model="hit">
@@ -70,6 +70,10 @@
                     v-bind="getSliderOptions('den')"
                     v-model="den">
                 </vue-slider>
+            </div>
+
+            <div class="filter__buttons">
+                <input type="submit" value="Показать" class="show-shitty-results" />
             </div>
 
          </form>
@@ -141,6 +145,9 @@ export default {
             'updateFromSlider',
             'updateManufacturerStatus',
             'updateSelectValue',
+        ]),
+        ...mapActions('header', [
+            'openSidebar',
         ]),
     },
 }

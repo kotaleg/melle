@@ -23,7 +23,7 @@ const state = {
         search: null,
 
         page: 1,
-        sort: 'pd.name',
+        sort: {'label': 'Наименование', 'value': 'pd.name'},
         all_sorts: [],
         order: 'ASC',
     },
