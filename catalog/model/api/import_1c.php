@@ -195,14 +195,14 @@ class ModelApiImport1C extends Model
                 }
 
                 if (!isset($json['success']) || $json['success'] != false) {
-                    if ($this->renameFile($realpath) === true) {
+                    // if ($this->renameFile($realpath) === true) {
                         $json['success'] = true;
                         $this->extra[$filetype]['finished'] = true;
                         $json['message'][] = "Файл `{$filename}` обработан.";
-                    } else {
-                        $json['success'] = false;
-                        $json['error'][] = 'Не удалось переименовать файл.';
-                    }
+                    // } else {
+                    //     $json['success'] = false;
+                    //     $json['error'][] = 'Не удалось переименовать файл.';
+                    // }
                 }
             } else {
                 $json['success'] = true;
@@ -251,10 +251,6 @@ class ModelApiImport1C extends Model
         // MANUFACTURERS
         $this->load->model('api/import_1c/manufacturer');
         $this->model_api_import_1c_manufacturer->action($parsed);
-
-        // GROUP
-        $this->load->model('api/import_1c/group');
-        $this->model_api_import_1c_group->action('Группа', $languages);
 
         // DEN
         $this->load->model('api/import_1c/group');

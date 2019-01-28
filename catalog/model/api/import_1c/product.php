@@ -192,13 +192,16 @@ class ModelApiImport1CProduct extends Model
 
                 // GROUP
                 if (isset($product->group->id)) {
-                    $group = $this->getGroupData($parsed, $product->group);
-                    $attr = $this->model_api_import_1c_group->prepareProductAttribute(
-                        self::A_GROUP, $group['name'], $languages);
-                    if ($attr) {
-                        $d_['product_attribute'][] = $attr;
+                    $category_id = $this->getCategoryByImportId($product->group->id);
+                    if ($category_id) {
+                        if (isset($d_['product_category'])) {
+                            if (!is_array($d_['product_category'])) {
+                                $d_['product_category'] = array();
+                            }
+                        }
+                        $d_['product_category'][] = $category_id;
                     }
-                    unset($group, $attr);
+                    unset($category_id);
                 }
 
                 // PRODUCER

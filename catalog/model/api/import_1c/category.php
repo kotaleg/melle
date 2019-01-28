@@ -5,6 +5,7 @@ class ModelApiImport1CCategory extends Model
     private $route = 'api/import_1c/category';
 
     const CATEGORY = 'Категория';
+    const GROUP = 'Группа';
     const COLLECTION = 'Коллекция';
     const MATERIAL = 'Материал';
 
@@ -72,6 +73,44 @@ class ModelApiImport1CCategory extends Model
                         $this->model_api_import_1c_group->action(
                             trim($option->name), $languages);
                         break;
+                }
+            }
+        }
+
+        // GROUP FIX
+        if (isset($parsed->classificator->groups)
+            && is_array($parsed->classificator->groups)) {
+
+            foreach ($parsed->classificator->groups as $k => $item) {
+                $cd = array();
+                foreach ($languages as $l) {
+                    $cd[$l] = array(
+                        'name'  => trim($item->name),
+                        'description' => '',
+                        'meta_title' => trim($item->name),
+                        'meta_description' => '',
+                        'meta_keyword' => '',
+                    );
+                }
+
+                $d_ = array(
+                    'import_id' => $item->id,
+                    'parent_id' => 0,
+                    'column' => 1,
+                    'sort_order' => $k,
+                    'status' => 1,
+                    'category_description' => $cd,
+                    'category_store' => array(
+                        0 => $this->config->get('config_store_id'),
+                    ),
+                );
+
+                if (!$this->model_api_import_1c_helper->isImportRecordExist(
+                    self::CATEGORY_TABLE, $item->id)) {
+                    $this->addCategory($d_);
+                } else {
+                    // TODO: edit category?
+                    // $this->editCategory($item->id, $d_);
                 }
             }
         }

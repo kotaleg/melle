@@ -6,7 +6,6 @@ class ModelApiImport1CGroup extends Model
 
     const ATTRIBUTE_TABLE = 'attribute';
     const AG_ATTRIBURES = 'Атрибуты';
-    const A_GROUP = 'Группа';
 
     function __construct($registry)
     {
