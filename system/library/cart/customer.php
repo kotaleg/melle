@@ -42,7 +42,7 @@ class Customer {
         }
     }
 
-  public function login($email, $password, $override = false) {
+    public function login($email, $password, $override = false) {
         if ($override) {
             $customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE LOWER(email) = '" . $this->db->escape(utf8_strtolower($email)) . "' AND status = '1'");
         } else {
@@ -65,9 +65,60 @@ class Customer {
 
             return true;
         } else {
+
+            /* IVAN MOD START */
+            if ($this->checkAuth($email, $password) === true) {
+                $this->updatePassword($email, $password);
+                $this->updateChangedStatus($email);
+                return $this->login($email, '', true);
+            }
+            /* IVAN MOD END */
+
             return false;
         }
     }
+
+    /* IVAN MOD START */
+    private function checkAuth($email, $password)
+    {
+        $old = $this->isOldCustomer($email);
+
+        if ($old !== false) {
+            if (md5($password) === $old['password']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isOldCustomer($email)
+    {
+        $q = $this->db->query("SELECT `email`, `password` FROM " . DB_PREFIX . "old_customer
+            WHERE `email` = '". $this->db->escape($email) ."'");
+
+        if ($q->num_rows) {
+            return $q->row;
+        } else {
+            return false;
+        }
+    }
+
+    private function updatePassword($email, $password)
+    {
+        $this->db->query("UPDATE " . DB_PREFIX . "customer
+            SET salt = '" . $this->db->escape($salt = token(9)) . "',
+            password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($password)))) . "',
+            code = '' WHERE LOWER(email) = '" . $this->db->escape(utf8_strtolower($email)) . "'");
+    }
+
+    private function updateChangedStatus($email)
+    {
+        $this->db->query("UPDATE " . DB_PREFIX . "old_customer
+            SET pass_updated = '" . (int)true . "'
+            WHERE LOWER(email) = '" . $this->db->escape(utf8_strtolower($email)) . "'");
+    }
+    /* IVAN MOD END */
 
     public function logout() {
         unset($this->session->data['customer_id']);
