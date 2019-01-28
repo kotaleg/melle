@@ -38,9 +38,9 @@ class ModelExtensionModuleSuperOffers extends Model
         return $this->super_offers->saveCombinations($product_id, $so_combination);
     }
 
-    public function prepareActiveOptions($product_options)
+    public function prepareActiveOptions($product_id, $product_options)
     {
-        return $this->super_offers->prepareActiveOptions($product_options);
+        return $this->super_offers->prepareActiveOptions($product_id, $product_options);
     }
 
     public function getAvailableForProductWithOptions($product_id, $options)
@@ -48,8 +48,8 @@ class ModelExtensionModuleSuperOffers extends Model
         $quantity = 0;
 
         if ($this->isOptionsForProduct($product_id)) {
-            $active_options = $this->prepareActiveOptions($options);
-            $combination = $this->getCombinationForActiveOptions($product_id, $active_options);
+            $active_options = $this->super_offers->prepareActiveOptions($product_id, $options);
+            $combination = $this->super_offers->getCombinationForActiveOptions($product_id, $active_options);
 
             if ($combination !== null) {
                 if ($combination['quantity'] != $this->super_offers->getNullValue()) {

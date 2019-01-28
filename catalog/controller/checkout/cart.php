@@ -541,6 +541,8 @@ class ControllerCheckoutCart extends Controller {
                             $quantity = $available - $current['quantity'];
                         }
 
+                        $this->load->language('checkout/cart');
+
                         if ($quantity >= 1) {
                             $this->cart->add($product_id, $quantity, $options);
                             $json['added'] = true;

@@ -6712,6 +6712,11 @@ vue-progress@^0.2.1:
   dependencies:
     progressbar.js "^1.0.1"
 
+vue-rate-it@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/vue-rate-it/-/vue-rate-it-2.1.0.tgz#4c016aa56a5e2fa3a0e87e2fcd3d8280fea1404e"
+  integrity sha1-TAFqpWpeL6Og6H4vzT2CgP6hQE4=
+
 vue-recaptcha@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/vue-recaptcha/-/vue-recaptcha-1.1.1.tgz#be38f4ffab500e7f4775f149a279bb962cf91f07"

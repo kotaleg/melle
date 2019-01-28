@@ -252,7 +252,7 @@ class super_offers
                     continue;
                 }
 
-                $active_options = $this->prepareActiveOptions($pd['option']);
+                $active_options = $this->prepareActiveOptions($pd['product_id'], $pd['option']);
                 $combination = $this->getCombinationForActiveOptions($pd['product_id'], $active_options);
 
                 if ($combination !== null) {
@@ -279,10 +279,20 @@ class super_offers
         return $products_data;
     }
 
-    public function prepareActiveOptions($product_options)
+    public function prepareActiveOptions($product_id, $product_options)
     {
         $active_options = array();
         foreach ($product_options as $ok => $ov) {
+
+            if (!is_array($ov) && is_numeric($ov)) {
+                $ov = $this->getProductOptionDataById($product_id, $ov);
+                if ($ov && isset($ov['type']) && !empty($ov['type'])) {
+                    ///
+                } else {
+                    continue;
+                }
+            }
+
             if (!in_array($ov['type'], $this->getSupportedOptionTypes())) {
                 continue;
             }
@@ -294,6 +304,17 @@ class super_offers
         }
 
         return $active_options;
+    }
+
+    private function getProductOptionDataById($product_id, $pov_id)
+    {
+        $q = $this->db->query("SELECT pov.option_id, pov.option_value_id, o.type
+            FROM `". DB_PREFIX ."product_option_value` pov
+            LEFT JOIN `". DB_PREFIX ."option` o ON (pov.option_id = o.option_id)
+            WHERE `product_id` = '". (int)$product_id ."'
+            AND `product_option_value_id` = '". (int)$pov_id ."'");
+
+        return $q->row;
     }
 
     public function getCombinationForActiveOptions($product_id, $active_options)
