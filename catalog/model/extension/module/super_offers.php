@@ -38,6 +38,29 @@ class ModelExtensionModuleSuperOffers extends Model
         return $this->super_offers->saveCombinations($product_id, $so_combination);
     }
 
+    public function prepareActiveOptions($product_options)
+    {
+        return $this->super_offers->prepareActiveOptions($product_options);
+    }
+
+    public function getAvailableForProductWithOptions($product_id, $options)
+    {
+        $quantity = 0;
+
+        if ($this->isOptionsForProduct($product_id)) {
+            $active_options = $this->prepareActiveOptions($options);
+            $combination = $this->getCombinationForActiveOptions($product_id, $active_options);
+
+            if ($combination !== null) {
+                if ($combination['quantity'] != $this->super_offers->getNullValue()) {
+                    $quantity = $combination['quantity'];
+                }
+            }
+        }
+
+        return $quantity;
+    }
+
     public function getOptions($product_id)
     {
         $this->load->model('tool/image');

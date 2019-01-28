@@ -500,6 +500,7 @@ class ControllerCheckoutCart extends Controller {
     {
         $this->load->model('extension/pro_patch/url');
         $this->load->model('extension/pro_patch/json');
+        $this->load->model('extension/module/super_offers');
         $this->load->model('catalog/product');
 
         $this->load->language('checkout/cart');
@@ -525,16 +526,38 @@ class ControllerCheckoutCart extends Controller {
                 }
 
                 if (!isset($json['error'])) {
-                    $this->cart->add($product_id, $quantity, $options);
-                    $json['added'] = true;
+                    $available = 0;
 
-                    $json['success'][] = sprintf($this->language->get('text_success'), $product_info['name']);
+                    // CHECK IF AVAILABLE
+                    $available = $this->model_extension_module_super_offers->getAvailableForProductWithOptions(
+                        $product_id, $options);
 
-                    // Unset all shipping and payment methods
-                    unset($this->session->data['shipping_method']);
-                    unset($this->session->data['shipping_methods']);
-                    unset($this->session->data['payment_method']);
-                    unset($this->session->data['payment_methods']);
+                    if ($available <= 0) {
+                        $json['error'][] = sprintf($this->language->get('text_no_more'), $available);
+                    } else {
+
+                        $current = $this->cart->inCart($product_id, $quantity, $options);
+                        if (isset($current['quantity']) && $current['quantity'] < $available) {
+                            $quantity = $available - $current['quantity'];
+                        }
+
+                        if ($quantity >= 1) {
+                            $this->cart->add($product_id, $quantity, $options);
+                            $json['added'] = true;
+                            $json['success'][] = sprintf($this->language->get('text_success'), $product_info['name']);
+                        } else {
+                            $json['error'][] = sprintf($this->language->get('text_no_more'), $available);
+                        }
+
+                    }
+
+                    if ($json['added'] === true) {
+                        // Unset all shipping and payment methods
+                        unset($this->session->data['shipping_method']);
+                        unset($this->session->data['shipping_methods']);
+                        unset($this->session->data['payment_method']);
+                        unset($this->session->data['payment_methods']);
+                    }
                 }
             }
         } else {

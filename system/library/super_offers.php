@@ -252,19 +252,9 @@ class super_offers
                     continue;
                 }
 
-                $active_options = array();
-                foreach ($pd['option'] as $ok => $ov) {
-                    if (!in_array($ov['type'], $this->getSupportedOptionTypes())) {
-                        continue;
-                    }
-
-                    $active_options[] = array(
-                        'option_id'         => $ov['option_id'],
-                        'option_value_id'   => $ov['option_value_id'],
-                    );
-                }
-
+                $active_options = $this->prepareActiveOptions($pd['option']);
                 $combination = $this->getCombinationForActiveOptions($pd['product_id'], $active_options);
+
                 if ($combination !== null) {
                     $quantity = 0;
                     if ($combination['quantity'] != $this->getNullValue()) {
@@ -287,6 +277,23 @@ class super_offers
         }
 
         return $products_data;
+    }
+
+    public function prepareActiveOptions($product_options)
+    {
+        $active_options = array();
+        foreach ($product_options as $ok => $ov) {
+            if (!in_array($ov['type'], $this->getSupportedOptionTypes())) {
+                continue;
+            }
+
+            $active_options[] = array(
+                'option_id'         => $ov['option_id'],
+                'option_value_id'   => $ov['option_value_id'],
+            );
+        }
+
+        return $active_options;
     }
 
     public function getCombinationForActiveOptions($product_id, $active_options)
