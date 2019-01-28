@@ -1,165 +1,172 @@
 {{ header }}
-<div id="account-order" class="container">
-  <ul class="breadcrumb">
-    {% for breadcrumb in breadcrumbs %}
-    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-    {% endfor %}
-  </ul>
-  {% if success %}
-  <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-  </div>
-  {% endif %}
-  {% if error_warning %}
-  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-  </div>
-  {% endif %}
-  <div class="row">{{ column_left }}
-    {% if column_left and column_right %}
-    {% set class = 'col-sm-6' %}
-    {% elseif column_left or column_right %}
-    {% set class = 'col-sm-9' %}
-    {% else %}
-    {% set class = 'col-sm-12' %}
-    {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
-      <h2>{{ heading_title }}</h2>
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <td class="text-left" colspan="2">{{ text_order_detail }}</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-left" style="width: 50%;">{% if invoice_no %} <b>{{ text_invoice_no }}</b> {{ invoice_no }}<br />
-              {% endif %} <b>{{ text_order_id }}</b> #{{ order_id }}<br />
-              <b>{{ text_date_added }}</b> {{ date_added }}</td>
-            <td class="text-left" style="width: 50%;">{% if payment_method %} <b>{{ text_payment_method }}</b> {{ payment_method }}<br />
-              {% endif %}
-              {% if shipping_method %} <b>{{ text_shipping_method }}</b> {{ shipping_method }} {% endif %}</td>
-          </tr>
-        </tbody>
-      </table>
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <td class="text-left" style="width: 50%; vertical-align: top;">{{ text_payment_address }}</td>
-            {% if shipping_address %}
-            <td class="text-left" style="width: 50%; vertical-align: top;">{{ text_shipping_address }}</td>
-            {% endif %} </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-left">{{ payment_address }}</td>
-            {% if shipping_address %}
-            <td class="text-left">{{ shipping_address }}</td>
-            {% endif %} </tr>
-        </tbody>
-      </table>
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <td class="text-left">{{ column_name }}</td>
-              <td class="text-left">{{ column_model }}</td>
-              <td class="text-right">{{ column_quantity }}</td>
-              <td class="text-right">{{ column_price }}</td>
-              <td class="text-right">{{ column_total }}</td>
-              {% if products %}
-              <td style="width: 20px;"></td>
-              {% endif %} </tr>
-          </thead>
-          <tbody>
-          
-          {% for product in products %}
-          <tr>
-            <td class="text-left">{{ product.name }}
-              {% for option in product.option %} <br />
-              &nbsp;<small> - {{ option.name }}: {{ option.value }}</small> {% endfor %}</td>
-            <td class="text-left">{{ product.model }}</td>
-            <td class="text-right">{{ product.quantity }}</td>
-            <td class="text-right">{{ product.price }}</td>
-            <td class="text-right">{{ product.total }}</td>
-            <td class="text-right" style="white-space: nowrap;">{% if product.reorder %} <a href="{{ product.reorder }}" data-toggle="tooltip" title="{{ button_reorder }}" class="btn btn-primary"><i class="fa fa-shopping-cart"></i></a> {% endif %} <a href="{{ product.return }}" data-toggle="tooltip" title="{{ button_return }}" class="btn btn-danger"><i class="fa fa-reply"></i></a></td>
-          </tr>
-          {% endfor %}
-          {% for voucher in vouchers %}
-          <tr>
-            <td class="text-left">{{ voucher.description }}</td>
-            <td class="text-left"></td>
-            <td class="text-right">1</td>
-            <td class="text-right">{{ voucher.amount }}</td>
-            <td class="text-right">{{ voucher.amount }}</td>
-            {% if products %}
-            <td></td>
-            {% endif %} </tr>
-          {% endfor %}
-            </tbody>
-          
-          <tfoot>
-          
-          {% for total in totals %}
-          <tr>
-            <td colspan="3"></td>
-            <td class="text-right"><b>{{ total.title }}</b></td>
-            <td class="text-right">{{ total.text }}</td>
-            {% if products %}
-            <td></td>
-            {% endif %} </tr>
-          {% endfor %}
-            </tfoot>
-          
-        </table>
+<main class="main-page">
+   <section class="breadcrumbs">
+      <div class="breadcrumbs__container container">
+         <div class="breadcrumbs__inner">
+            {% for breadcrumb in breadcrumbs %}
+            {% if not loop.last %}
+            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
+            {% else %}
+            <span>{{ breadcrumb.text }}</span>
+            {% endif %}
+            {% endfor %}
+         </div>
       </div>
-      {% if comment %}
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <td class="text-left">{{ text_comment }}</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-left">{{ comment }}</td>
-          </tr>
-        </tbody>
-      </table>
-      {% endif %}
-      {% if histories %}
-      <h3>{{ text_history }}</h3>
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <td class="text-left">{{ column_date_added }}</td>
-            <td class="text-left">{{ column_status }}</td>
-            <td class="text-left">{{ column_comment }}</td>
-          </tr>
-        </thead>
-        <tbody>
-        
-        {% if histories %}
-        {% for history in histories %}
-        <tr>
-          <td class="text-left">{{ history.date_added }}</td>
-          <td class="text-left">{{ history.status }}</td>
-          <td class="text-left">{{ history.comment }}</td>
-        </tr>
-        {% endfor %}
-        {% else %}
-        <tr>
-          <td colspan="3" class="text-center">{{ text_no_results }}</td>
-        </tr>
-        {% endif %}
-          </tbody>
-        
-      </table>
-      {% endif %}
-      <div class="buttons clearfix">
-        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+   </section>
+
+   <section class="lk">
+      <div class="lk__container container">
+         <div class="lk__title">Заказ №{{ order_id }}</div>
+         <div class="lk__sidebar">
+            <section class="lk-sidebar">
+               <ul class="lk-sidebar__list">
+
+                  <li class="lk-sidebar__item"><a href="{{account_link}}">Настройки</a></li>
+                  <li class="lk-sidebar__item on"><a href="{{order_link}}">Мои заказы</a></li>
+                  <li class="lk-sidebar__item"><a href="{{address_link}}">Мои адреса</a></li>
+
+                  <li class="lk-sidebar__item">
+                     <a href="{{logout_link}}">
+                        Выход
+                        <svg viewBox="0 0 384.971 384.971" height="14" width="14">
+                           <path d="M180.455,360.91H24.061V24.061h156.394c6.641,0,12.03-5.39,12.03-12.03s-5.39-12.03-12.03-12.03H12.03C5.39,0.001,0,5.39,0,12.031V372.94c0,6.641,5.39,12.03,12.03,12.03h168.424c6.641,0,12.03-5.39,12.03-12.03C192.485,366.299,187.095,360.91,180.455,360.91z"></path>
+                           <path d="M381.481,184.088l-83.009-84.2c-4.704-4.752-12.319-4.74-17.011,0c-4.704,4.74-4.704,12.439,0,17.179l62.558,63.46H96.279c-6.641,0-12.03,5.438-12.03,12.151c0,6.713,5.39,12.151,12.03,12.151h247.74l-62.558,63.46c-4.704,4.752-4.704,12.439,0,17.179c4.704,4.752,12.319,4.752,17.011,0l82.997-84.2C386.113,196.588,386.161,188.756,381.481,184.088z"></path>
+                        </svg>
+                     </a>
+                  </li>
+               </ul>
+            </section>
+         </div>
+         <div class="lk__content">
+
+            {% if success %}
+            <div class="alert alert-success">{{ success }}</div>
+            {% endif %}
+            {% if error_warning %}
+            <div class="alert alert-danger">{{ error_warning }}</div>
+            {% endif %}
+
+            <section class="lk-order">
+               <div class="lk-order__info-top">
+                  <div class="lk-order__info-top-data"><span>дата оформления: </span><span class="data">{{ date_added }}</span></div>
+                  <div class="lk-order__info-top-status"><span>статус оплаты:     </span><span class="status">{{order_status}}</span></div>
+               </div>
+               <div class="lk-order__table-wrap">
+                  <table class="lk-order__table">
+                     <thead>
+                        <tr>
+                           <th>Товар</th>
+                           <th></th>
+                           <th>Опции</th>
+                           <th>Цена</th>
+                           <th>Кол-во</th>
+                           <th>Сумма</th>
+                           {% if product.reorder %}
+                           <th></th>
+                           {% endif %}
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for product in products %}
+                        <tr>
+                           <td>
+                              <a href="{{ product.href }}">
+                                 <div class="lk-order__photo"><img src="{{product.image}}"/></div>
+                              </a>
+                           </td>
+                           <td>
+                              <div class="lk-order__title">
+                                 <a href="{{ product.href }}">
+                                    <h3>{{ product.name }}</h3>
+                                 </a>
+                              </div>
+                              <div class="lk-order__article"><span>артикул: </span><span>
+                                 {{ product.model }}
+                                 </span>
+                              </div>
+                           </td>
+                           <td>
+                              <div class="lk-order__size">
+                                 {% for option in product.option %} <br />
+                                 &nbsp;<small>{{ option.name }}: {{ option.value }}</small> {% endfor %}
+                              </div>
+                           </td>
+                           <td>
+                              <div class="lk-order__price"><span class="lk-order__price-default">{{ product.price }} <span class="ruble-sign">Р</span></span></div>
+                           </td>
+                           <td>
+                              <div class="lk-order__count"><span>{{ product.quantity }}</span></div>
+                           </td>
+                           <td>
+                              <div class="lk-order__price"><span class="lk-order__price-default">{{ product.total }} <span class="ruble-sign">Р</span></span></div>
+                           </td>
+
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+               <div class="lk-order__footer">
+                  <div class="lk-order__info">
+                     <div class="lk-order__info-title">Информация о заказе</div>
+                     <ul>
+                        <li>
+                           <div class="lk-order__info-left"><span>Пользователь:</span></div>
+                           <div class="lk-order__info-right"><span>{{name}}</span></div>
+                        </li>
+                        <li>
+                           <div class="lk-order__info-left"><span>E-mail:</span></div>
+                           <div class="lk-order__info-right"><span>{{email}}</span></div>
+                        </li>
+                        <li>
+                           <div class="lk-order__info-left"><span>Телефон:</span></div>
+                           <div class="lk-order__info-right"><span>{{telephone}}</span></div>
+                        </li>
+                        {% if shipping_method %}
+                        <li>
+                           <div class="lk-order__info-left"><span>Способ доставки:</span></div>
+                           <div class="lk-order__info-right"><span>{{shipping_method}}</span></div>
+                        </li>
+                        {% endif %}
+                        {% if payment_address %}
+                        <li>
+                           <div class="lk-order__info-left"><span>Адрес доставки:</span></div>
+                           <div class="lk-order__info-right"><span>{{payment_address}}</span></div>
+                        </li>
+                        {% endif %}
+                        {% if payment_method %}
+                        <li>
+                           <div class="lk-order__info-left"><span>Способ оплаты:</span></div>
+                           <div class="lk-order__info-right"><span>{{payment_method}}</span></div>
+                        </li>
+                        {% endif %}
+                        {% if comment %}
+                        <li>
+                           <div class="lk-order__info-left"><span>Комментарий к заказу:</span></div>
+                           <div class="lk-order__info-right"><span>{{comment}}</span></div>
+                        </li>
+                        {% endif %}
+                     </ul>
+                  </div>
+                  <div class="lk-order__full-price">
+                     <div class="full-price">
+                        {% for total in totals %}
+                        {% if not loop.last %}
+                        <span class="full-price__sum">{{ total.title }}:
+                           <span class="full-price__number">{{ total.text }} <span class="ruble-sign">Р</span></span>
+                        </span>
+                        {% else %}
+                        <span class="full-price__end">{{ total.title }}:
+                           <span>{{ total.text }} <span class="ruble-sign">Р</span></span>
+                        </span>
+                        {% endif %}
+                        {% endfor %}
+                     </div>
+                  </div>
+               </div>
+            </section>
+         </div>
       </div>
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
-</div>
+   </section>
+</main>
 {{ footer }}

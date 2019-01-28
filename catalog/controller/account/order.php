@@ -160,6 +160,18 @@ class ControllerAccountOrder extends Controller {
             $data['order_id'] = $this->request->get['order_id'];
             $data['date_added'] = date($this->language->get('date_format_short'), strtotime($order_info['date_added']));
 
+            $data['telephone'] = $order_info['telephone'];
+            $data['email'] = $order_info['email'];
+            $data['name'] = "{$order_info['payment_firstname']} {$order_info['payment_lastname']}";
+            $data['order_status'] = '';
+
+            $this->load->model('checkout/order');
+            $info_ = $this->model_checkout_order->getOrder($order_id);
+
+            if ($info_) {
+                $data['order_status'] = $info_['order_status'];
+            }
+
             if ($order_info['payment_address_format']) {
                 $format = $order_info['payment_address_format'];
             } else {
@@ -240,7 +252,19 @@ class ControllerAccountOrder extends Controller {
 
             $products = $this->model_account_order->getOrderProducts($this->request->get['order_id']);
 
+            $this->load->model('tool/image');
+            $this->load->model('catalog/product');
+
             foreach ($products as $product) {
+
+                $p_extra = $this->model_catalog_product->getProduct($product['product_id']);
+
+                if (isset($p_extra['image']) && $p_extra['image']) {
+                    $image = $this->model_tool_image->resize($result['image'], 85, 125);
+                } else {
+                    $image = $this->model_tool_image->resize('placeholder.png', 85, 125);
+                }
+
                 $option_data = array();
 
                 $options = $this->model_account_order->getOrderOptions($this->request->get['order_id'], $product['order_product_id']);
@@ -273,12 +297,15 @@ class ControllerAccountOrder extends Controller {
                 }
 
                 $data['products'][] = array(
+                    'href'     => $this->url->link('product/product', 'product_id=' . $product['order_product_id'], true),
+                    'image'    => $image,
+
                     'name'     => $product['name'],
                     'model'    => $product['model'],
                     'option'   => $option_data,
                     'quantity' => $product['quantity'],
-                    'price'    => $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value']),
-                    'total'    => $this->currency->format($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']),
+                    'price'    => round($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0), 0),
+                    'total'    => round($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), 0),
                     'reorder'  => $reorder,
                     'return'   => $this->url->link('account/return/add', 'order_id=' . $order_info['order_id'] . '&product_id=' . $product['product_id'], true)
                 );
@@ -304,7 +331,7 @@ class ControllerAccountOrder extends Controller {
             foreach ($totals as $total) {
                 $data['totals'][] = array(
                     'title' => $total['title'],
-                    'text'  => $this->currency->format($total['value'], $order_info['currency_code'], $order_info['currency_value']),
+                    'text'  => round($total['value']),
                 );
             }
 
