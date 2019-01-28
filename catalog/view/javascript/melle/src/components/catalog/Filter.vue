@@ -1,5 +1,4 @@
 <template>
-   <section class="sidebar">
       <div class="search-modal__filter filter">
          <div class="filter__title">Фильтр</div>
          <form>
@@ -38,7 +37,7 @@
             </div>
 
             <ul class="filter__list">
-                <li v-for="(item, i) in filter_data.manufacturers"
+                <li v-for="(item, i) in getFilterValue('manufacturers')"
                     class="filter__item">
                     <label>
                         <input
@@ -75,7 +74,6 @@
 
          </form>
       </div>
-   </section>
 </template>
 
 <script>

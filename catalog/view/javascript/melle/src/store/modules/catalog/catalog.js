@@ -44,21 +44,21 @@ const actions = {
         })
     },
     loadMoreRequest: debounce(({ commit, state, rootState, rootGetters, dispatch, getters }, reload) => {
+         dispatch('header/setLoadingStatus', true, {root:true})
+         dispatch('header/setSidebarLoadingStatus', true, {root:true})
+
         let filter_data = clone(rootState.filter.filter_data)
         if (reload !== true) { filter_data.page += 1 }
         if (rootGetters['filter/isFilterChanged'] || reload) {
             filter_data.page = 1
         }
 
-        dispatch('header/setLoadingStatus', true, {root:true})
         shop.makeRequest(
             {
                 url: state.get_link,
                 filter_data,
             },
             res => {
-                dispatch('header/setLoadingStatus', false, {root:true})
-
                 if (has(res.data, 'products') && isArray(res.data.products)) {
                     if (reload !== true && !rootGetters['filter/isFilterChanged']) {
                         res.data.products.forEach((product) => {
@@ -78,6 +78,8 @@ const actions = {
                     dispatch('filter/updateLastFilterData', res.data.filter_data, {root:true})
                 }
 
+                dispatch('header/setLoadingStatus', false, {root:true})
+                dispatch('header/setSidebarLoadingStatus', false, {root:true})
                 notify.messageHandler(res.data, '_header')
             }
         )

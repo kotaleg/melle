@@ -19,6 +19,7 @@ const state = {
         filter: false,
         cart: false,
         forgotten: false,
+        filter: false,
     },
 
     captcha: {

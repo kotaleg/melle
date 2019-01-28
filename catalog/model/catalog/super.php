@@ -114,7 +114,8 @@ class ModelCatalogSuper extends Model
             'search' => null,
 
             'page' => 1,
-            'sort' => 'p.sort_order',
+            'sort' => 'pd.name',
+            'all_sorts' => array('pd.name', 'offers.price'),
             'order' => 'ASC',
             'limit' => $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit'),
             'path' => '',
@@ -137,10 +138,10 @@ class ModelCatalogSuper extends Model
             $result['path'] = (string)$filter_data['path'];
         }
         if (isset($filter_data['sort'])) {
-            $result['sort'] = (int)$filter_data['sort'];
+            $result['sort'] = (string)$filter_data['sort'];
         }
         if (isset($filter_data['order'])) {
-            $result['order'] = (int)$filter_data['order'];
+            $result['order'] = (string)$filter_data['order'];
         }
         if (isset($filter_data['limit'])) {
             $result['limit'] = (int)$filter_data['limit'];
@@ -221,7 +222,7 @@ class ModelCatalogSuper extends Model
         if (isset($this->request->get['sort'])) {
             $sort = $this->request->get['sort'];
         } else {
-            $sort = 'p.sort_order';
+            $sort = 'pd.name';
         }
         if (isset($this->request->get['order'])) {
             $order = $this->request->get['order'];
@@ -324,6 +325,12 @@ class ModelCatalogSuper extends Model
         }
         if (isset($filter_data['path']) && !empty($filter_data['path'])) {
             $path = (string)$filter_data['path'];
+        }
+        if (isset($filter_data['order']) && !empty($filter_data['order'])) {
+            $order = (string)$filter_data['order'];
+        }
+        if (isset($filter_data['sort']) && !empty($filter_data['sort'])) {
+            $sort = (string)$filter_data['sort'];
         }
         /* FROM FILTER END */
 

@@ -69,6 +69,7 @@ class ControllerExtensionModuleMelle extends Controller
             'filter' => false,
             'cart' => false,
             'forgotten' => false,
+            'filter' => false,
         );
 
         $state['captcha'] = array(

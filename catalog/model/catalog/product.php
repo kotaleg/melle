@@ -209,7 +209,8 @@ class ModelCatalogProduct extends Model {
             'p.price',
             'rating',
             'p.sort_order',
-            'p.date_added'
+            'p.date_added',
+            'offers.price',
         );
 
         if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
@@ -217,6 +218,9 @@ class ModelCatalogProduct extends Model {
                 $sql .= " ORDER BY LCASE(" . $data['sort'] . ")";
             } elseif ($data['sort'] == 'p.price') {
                 $sql .= " ORDER BY (CASE WHEN special IS NOT NULL THEN special WHEN discount IS NOT NULL THEN discount ELSE p.price END)";
+            } elseif ($data['sort'] == 'offers.price') {
+                $sql .= " ORDER BY (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
+                WHERE offers_comb.product_id = p.product_id)";
             } else {
                 $sql .= " ORDER BY " . $data['sort'];
             }

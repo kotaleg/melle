@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isEqual, isArray, isObject, has, forEach } from 'lodash'
+import { isUndefined, isEqual, isArray, isObject, has, forEach, debounce } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -23,7 +23,8 @@ const state = {
         search: null,
 
         page: 1,
-        sort: 'p.sort_order',
+        sort: 'pd.name',
+        all_sorts: [],
         order: 'ASC',
     },
 
@@ -54,9 +55,11 @@ const actions = {
             commit('setData', data)
         })
     },
-    updateFilterValue({ commit }, payload) {
-        commit('updateFilterValue', payload)
-        this.dispatch('catalog/loadMoreRequest')
+    updateFilterValue({ commit, state, getters }, payload) {
+        if (getters.getFilterValue(payload.k) != payload.v) {
+            commit('updateFilterValue', payload)
+            this.dispatch('catalog/loadMoreRequest')
+        }
     },
     updateFromSlider({ commit, state, getters }, payload) {
         let type = payload.type
@@ -90,6 +93,16 @@ const actions = {
             commit('updateLastFilterValue', {k, v})
         })
     },
+    flipSortOrder: debounce(({ commit, state, dispatch }) => {
+        let v = state.filter_data.order
+        if (v == 'ASC') {
+            v = 'DESC'
+        } else {
+            v = 'ASC'
+        }
+        commit('updateFilterValue', {k:'order', v})
+        dispatch('catalog/loadMoreRequest', null, {root:true})
+    }, 100),
 }
 
 // mutations
