@@ -16,15 +16,19 @@
             </span>
          </div>
       </div>
+
+      <sort-section />
    </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 
+import Sort from './Sort.vue'
+
 export default {
     components: {
-
+      'sort-section': Sort
     },
     computed: {
         ...mapGetters('filter', [
