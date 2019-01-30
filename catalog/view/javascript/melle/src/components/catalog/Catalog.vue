@@ -1,7 +1,6 @@
 <template>
     <div>
     <div class="catalog_list_view">
-       <!-- <div>Найдено: {{ product_total }}</div> -->
        <ul v-if="product_total > 0" class="catalog__list" id="ivan_products_replace">
 
           <li v-for="(p, i) in products"
@@ -61,10 +60,6 @@ export default {
         loadMore() {
             this.loadMoreRequest()
         },
-    },
-    created() {
-        this.$store.dispatch('catalog/initData')
-        this.$store.dispatch('filter/initData')
     },
 }
 </script>

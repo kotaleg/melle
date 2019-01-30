@@ -4,6 +4,8 @@ class ModelCatalogSuper extends Model
     const MAX_VALUE = -999;
     const MIN_VALUE = 999999999;
 
+    private $timing = array();
+
     public function __construct($registry)
     {
         parent::__construct($registry);
@@ -16,6 +18,8 @@ class ModelCatalogSuper extends Model
 
     public function getProducts($filter_data = array())
     {
+        $time_start = microtime(true);
+
         $result = array(
             'products' => array(),
             'product_total' => 0,
@@ -87,11 +91,18 @@ class ModelCatalogSuper extends Model
             $result['products'][] = $d_;
         }
 
+        $time_end = microtime(true);
+        $this->timing[] = array(
+            'PRODUCTS' => round($time_end - $time_start * 1000)
+        );
+
         return $result;
     }
 
     public function getFilterValues($filter_data = array())
     {
+        $time_start = microtime(true);
+
         $filter_data = $this->prepareInitialData($filter_data);
         $product_total = $this->model_catalog_product->getTotalProducts($filter_data, true);
 
@@ -182,16 +193,23 @@ class ModelCatalogSuper extends Model
             $manu_ = $filter_data['manufacturers'];
         } else { $manu_ = array(); }
 
-        if (isset($filter_data['material'])
-        && is_array($filter_data['material'])) {
+        if (isset($filter_data['material'])) {
             $material = $filter_data['material'];
+        }
+        if (isset($filter_data['color'])) {
+            $color = $filter_data['color'];
+        }
+        if (isset($filter_data['size'])) {
+            $size = $filter_data['size'];
         }
 
         // ALL MANUFACTURERS
         $manufacturers = $this->model_catalog_product->getManufacturersForFilter($filter_data);
+
         $manufacturers = array_filter($manufacturers, function($v) {
             if ($v['value']) { return true; }
         });
+
         $result['manufacturers'] = array_map(function($v) use ($manu_) {
             $v['checked'] = false;
             if (in_array($v['value'], $manu_)) { $v['checked'] = true; }
@@ -199,70 +217,102 @@ class ModelCatalogSuper extends Model
         }, $manufacturers);
 
         // ALL MATERIALS
-        // $result['all_materials'] = array();
-        // $materials = $this->model_catalog_product->getMaterialsForFilter($filter_data);
-        // $materials_check = array();
-        // $materials = array_filter($materials, function($v) {
-        //     if ($v['value']) { return true; }
-        // });
-        // foreach ($materials as $m) {
-        //     if (!in_array(trim($m['value']), $materials_check)) {
-        //         $materials_check[] = trim($m['value']);
-        //         $result['all_materials'][] = $m;
+        $result['all_materials'] = array();
+        $materials = $this->model_catalog_product->getMaterialsForFilter($filter_data);
 
-        //         if (isset($material) && trim($material) == trim($m['value'])) {
-        //             $result['material'] = array(
-        //                 'label' => $material,
-        //                 'value' => $value,
-        //             );
-        //         }
-        //     }
-        // }
+        $materials_check = array();
+        $materials = array_filter($materials, function($v) {
+            if ($v['value']) { return true; }
+        });
+
+        foreach ($materials as $m) {
+            if (!in_array(trim($m['value']), $materials_check)) {
+                $materials_check[] = trim($m['value']);
+                $result['all_materials'][] = $m;
+
+                if (isset($material) && trim($material) == trim($m['value'])) {
+                    $result['material'] = $m;
+                }
+            }
+        }
+
+        // ALL COLORS
+        $result['all_colors'] = array();
+        $colors = $this->model_catalog_product->getColorsForFilter($filter_data);
+
+        $colors_check = array();
+        $colors = array_filter($colors, function($v) {
+            if ($v['value']) { return true; }
+        });
+
+        foreach ($colors as $c) {
+            preg_match('/\((?<name>.+)\)/', $c['label'], $matches);
+            if (isset($matches['name'])) {
+                $matches['name'] = trim($matches['name']);
+
+                if (!in_array($matches['name'], $colors_check)) {
+                    $colors_check[] = $matches['name'];
+
+                    $result['all_colors'][] = array(
+                        'label' => $matches['name'],
+                        'value' => $matches['name'],
+                    );
+
+                    if (isset($color) && trim($color) == $matches['name']) {
+                        $result['color'] = array(
+                            'label' => $matches['name'],
+                            'value' => $matches['name'],
+                        );
+                    }
+                }
+            }
+        }
+
+        // ALL SIZES
+        $result['all_sizes'] = array();
+        $sizes = $this->model_catalog_product->getSizesForFilter($filter_data);
+
+        $sizes_check = array();
+        $sizes = array_filter($sizes, function($v) {
+            if ($v['value']) { return true; }
+        });
+
+        foreach ($sizes as $s) {
+            if (!in_array($s['value'], $sizes_check)) {
+                $sizes_check[] = $s['value'];
+                $result['all_sizes'][] = $s;
+
+                if (isset($size) && $size == $s['value']) {
+                    $result['size'] = $s;
+                }
+            }
+        }
+
+        // SORT SIZES
+        if (!empty($result['all_sizes'])) {
+            usort($result['all_sizes'], function($a,$b) {
+                return strcmp(strval($a['label']), strval($b['label']));
+            });
+        }
+
+        // SORT COLORS
+        if (!empty($result['all_colors'])) {
+            usort($result['all_colors'], function($a,$b) {
+                return strcmp(strval($a['label']), strval($b['label']));
+            });
+        }
+
+        $time_end = microtime(true);
+        $time_end = microtime(true);
+        $this->timing[] = array(
+            'FILTER VALUES' => round($time_end - $time_start * 1000)
+        );
 
         return $result;
     }
 
     public function prepareInitialData($filter_data = array())
     {
-        /* FROM GET PARAMS START */
-        if (isset($this->request->get['sort'])) {
-            $sort = $this->request->get['sort'];
-        } else {
-            $sort = 'pd.name';
-        }
-        if (isset($this->request->get['order'])) {
-            $order = $this->request->get['order'];
-        } else {
-            $order = 'ASC';
-        }
-        if (isset($this->request->get['page'])) {
-            $page = $this->request->get['page'];
-        } else {
-            $page = 1;
-        }
-        if (isset($this->request->get['limit'])) {
-            $limit = (int)$this->request->get['limit'];
-        } else {
-            $limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
-        }
-        if (isset($this->request->get['search'])) {
-            $search = $this->request->get['search'];
-        } else {
-            $search = null;
-        }
-        if (isset($this->request->get['path'])) {
-            $parts = explode('_', (string)$this->request->get['path']);
-            $category_id = (int)array_pop($parts);
-        } else {
-            $category_id = 0;
-        }
-        if (isset($this->request->get['path']) && !empty($this->request->get['path'])) {
-            $path = $this->request->get['path'];
-        } else {
-            $path = '';
-        }
-        /* FROM GET PARAMS END */
-
         $min_den = null;
         $max_den = null;
         $min_price = null;
@@ -278,6 +328,72 @@ class ModelCatalogSuper extends Model
 
         $manufacturers = [];
 
+        $sort = 'pd.name';
+        $order = 'ASC';
+        $page = 1;
+        $limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
+        $category_id = 0;
+        $search = null;
+        $path = '';
+
+        /* FROM GET PARAMS START */
+        if (isset($this->request->get['sort'])) {
+            $sort = $this->request->get['sort'];
+        }
+        if (isset($this->request->get['order'])) {
+            $order = $this->request->get['order'];
+        }
+        if (isset($this->request->get['page'])) {
+            $page = $this->request->get['page'];
+        }
+        if (isset($this->request->get['limit'])) {
+            $limit = (int)$this->request->get['limit'];
+        }
+        if (isset($this->request->get['search'])) {
+            $search = $this->request->get['search'];
+        }
+        if (isset($this->request->get['path'])) {
+            $parts = explode('_', (string)$this->request->get['path']);
+            $category_id = (int)array_pop($parts);
+        }
+        if (isset($this->request->get['path']) && !empty($this->request->get['path'])) {
+            $path = $this->request->get['path'];
+        }
+        if (isset($this->request->get['act'])) {
+            $act = (bool) $this->request->get['act'];
+        }
+        if (isset($this->request->get['neww'])) {
+            $neww = (bool) $this->request->get['neww'];
+        }
+        if (isset($this->request->get['hit'])) {
+            $hit = (bool) $this->request->get['hit'];
+        }
+        if (isset($this->request->get['min_den'])) {
+            $min_den = (float)$this->request->get['min_den'];
+        }
+        if (isset($this->request->get['max_den']) && (float)$this->request->get['max_den'] > 0) {
+            $max_den = (float)$this->request->get['max_den'];
+        }
+        if (isset($this->request->get['min_price'])) {
+            $min_price = (float)$this->request->get['min_price'];
+        }
+        if (isset($this->request->get['max_price']) && (float)$this->request->get['max_price'] > 0) {
+            $max_price = (float)$this->request->get['max_price'];
+        }
+        if (isset($this->request->get['material']) && !empty($this->request->get['material'])) {
+            $material = $this->request->get['material'];
+        }
+        if (isset($this->request->get['color']) && !empty($this->request->get['color'])) {
+            $color = $this->request->get['color'];
+        }
+        if (isset($this->request->get['size']) && !empty($this->request->get['size'])) {
+            $size = (int) $this->request->get['size'];
+        }
+        if (isset($this->request->get['manufacturers'])) {
+            $manufacturers = array_filter(explode(",", $this->request->get['manufacturers']));
+        }
+        /* FROM GET PARAMS END */
+
         /* FROM FILTER START */
         if (isset($filter_data['page'])) {
             $page = (int)$filter_data['page'];
@@ -285,13 +401,13 @@ class ModelCatalogSuper extends Model
         if (isset($filter_data['category_id'])) {
             $category_id = (int)$filter_data['category_id'];
         }
-        if (isset($filter_data['min_den']) && (float)$filter_data['min_den'] > 0) {
+        if (isset($filter_data['min_den'])) {
             $min_den = (float)$filter_data['min_den'];
         }
         if (isset($filter_data['max_den']) && (float)$filter_data['max_den'] > 0) {
             $max_den = (float)$filter_data['max_den'];
         }
-        if (isset($filter_data['min_price']) && (float)$filter_data['min_price'] > 0) {
+        if (isset($filter_data['min_price'])) {
             $min_price = (float)$filter_data['min_price'];
         }
         if (isset($filter_data['max_price']) && (float)$filter_data['max_price'] > 0) {
@@ -377,6 +493,16 @@ class ModelCatalogSuper extends Model
             $prepared['material_id'] = $material_id;
         }
 
+        $color_id = $this->getColorId();
+        if ($color_id !== null) {
+            $prepared['color_id'] = $color_id;
+        }
+
+        $size_id = $this->getSizeId();
+        if ($size_id !== null) {
+            $prepared['size_id'] = $size_id;
+        }
+
         return $prepared;
     }
 
@@ -399,6 +525,32 @@ class ModelCatalogSuper extends Model
 
         if (isset($q->row['attribute_id'])) {
             return (int)$q->row['attribute_id'];
+        }
+
+        return null;
+    }
+
+    private function getColorId()
+    {
+        $q = $this->db->query("SELECT o.option_id FROM " . DB_PREFIX . "option o
+            LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id)
+            WHERE LCASE(od.name) = 'цвет'");
+
+        if (isset($q->row['option_id'])) {
+            return (int)$q->row['option_id'];
+        }
+
+        return null;
+    }
+
+    private function getSizeId()
+    {
+        $q = $this->db->query("SELECT o.option_id FROM " . DB_PREFIX . "option o
+            LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id)
+            WHERE LCASE(od.name) = 'размер'");
+
+        if (isset($q->row['option_id'])) {
+            return (int)$q->row['option_id'];
         }
 
         return null;
@@ -453,6 +605,24 @@ class ModelCatalogSuper extends Model
             'processStyle' => array(
                 'background' => '#e9e9e9',
             ),
+        );
+    }
+
+    public function getDefaultFilterQueryParams()
+    {
+        return array(
+            'hit',
+            'act',
+            'neww',
+            'min_den',
+            'max_den',
+            'min_price',
+            'max_price',
+            'color',
+            'material',
+            'size',
+            'search',
+            'manufacturers',
         );
     }
 

@@ -241,9 +241,15 @@
     }
   }
   &__select-name {
+    width: 100px;
+    margin-right: 15px;
     text-transform: none;
     color: #807f7d;
     font-size: 14px;
+        display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
   }
   &__buttons {
     display: flex;

@@ -1,8 +1,11 @@
 import Vue from 'vue'
-import { isUndefined, isArray, has, clone, debounce } from 'lodash'
+import { isUndefined, isArray, isEmpty, has, clone, debounce, forEach, some } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
+
+import filterHelper from '../../../router/filterHelper'
+import router from '../../../router/index'
 
 // initial state
 const state = {
@@ -44,8 +47,10 @@ const actions = {
         })
     },
     loadMoreRequest: debounce(({ commit, state, rootState, rootGetters, dispatch, getters }, reload) => {
-         dispatch('header/setLoadingStatus', true, {root:true})
-         dispatch('header/setSidebarLoadingStatus', true, {root:true})
+        dispatch('header/setLoadingStatus', true, {root:true})
+        dispatch('header/setSidebarLoadingStatus', true, {root:true})
+
+        dispatch('updateRouterParams')
 
         let filter_data = clone(rootState.filter.filter_data)
         if (reload !== true) { filter_data.page += 1 }
@@ -84,6 +89,11 @@ const actions = {
             }
         )
     }, 500),
+    updateRouterParams({ commit, state, rootState, rootGetters, dispatch, getters }) {
+        let query = filterHelper.prepareFullQuery(
+            rootState.filter.filter_data, rootState.filter.slider_options);
+        router.push({ path: Vue.prototype.$storePath , query })
+    },
 }
 
 // mutations

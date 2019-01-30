@@ -5,39 +5,39 @@ class ControllerProductCategory extends Controller {
 
         $this->load->model('catalog/category');
 
-        $this->load->model('catalog/product');
+        // $this->load->model('catalog/product');
 
-        $this->load->model('tool/image');
+        // $this->load->model('tool/image');
 
-        if (isset($this->request->get['filter'])) {
-            $filter = $this->request->get['filter'];
-        } else {
-            $filter = '';
-        }
+        // if (isset($this->request->get['filter'])) {
+        //     $filter = $this->request->get['filter'];
+        // } else {
+        //     $filter = '';
+        // }
 
-        if (isset($this->request->get['sort'])) {
-            $sort = $this->request->get['sort'];
-        } else {
-            $sort = 'p.sort_order';
-        }
+        // if (isset($this->request->get['sort'])) {
+        //     $sort = $this->request->get['sort'];
+        // } else {
+        //     $sort = 'p.sort_order';
+        // }
 
-        if (isset($this->request->get['order'])) {
-            $order = $this->request->get['order'];
-        } else {
-            $order = 'ASC';
-        }
+        // if (isset($this->request->get['order'])) {
+        //     $order = $this->request->get['order'];
+        // } else {
+        //     $order = 'ASC';
+        // }
 
-        if (isset($this->request->get['page'])) {
-            $page = $this->request->get['page'];
-        } else {
-            $page = 1;
-        }
+        // if (isset($this->request->get['page'])) {
+        //     $page = $this->request->get['page'];
+        // } else {
+        //     $page = 1;
+        // }
 
-        if (isset($this->request->get['limit'])) {
-            $limit = (int)$this->request->get['limit'];
-        } else {
-            $limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
-        }
+        // if (isset($this->request->get['limit'])) {
+        //     $limit = (int)$this->request->get['limit'];
+        // } else {
+        //     $limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
+        // }
 
         $data['breadcrumbs'] = array();
 
@@ -120,23 +120,23 @@ class ControllerProductCategory extends Controller {
             // $data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
             // $data['compare'] = $this->url->link('product/compare');
 
-            $url = '';
+            // $url = '';
 
-            if (isset($this->request->get['filter'])) {
-                $url .= '&filter=' . $this->request->get['filter'];
-            }
+            // if (isset($this->request->get['filter'])) {
+            //     $url .= '&filter=' . $this->request->get['filter'];
+            // }
 
-            if (isset($this->request->get['sort'])) {
-                $url .= '&sort=' . $this->request->get['sort'];
-            }
+            // if (isset($this->request->get['sort'])) {
+            //     $url .= '&sort=' . $this->request->get['sort'];
+            // }
 
-            if (isset($this->request->get['order'])) {
-                $url .= '&order=' . $this->request->get['order'];
-            }
+            // if (isset($this->request->get['order'])) {
+            //     $url .= '&order=' . $this->request->get['order'];
+            // }
 
-            if (isset($this->request->get['limit'])) {
-                $url .= '&limit=' . $this->request->get['limit'];
-            }
+            // if (isset($this->request->get['limit'])) {
+            //     $url .= '&limit=' . $this->request->get['limit'];
+            // }
 
             // $data['categories'] = array();
 
@@ -359,10 +359,10 @@ class ControllerProductCategory extends Controller {
 
             // $data['continue'] = $this->url->link('common/home');
 
-            $data['column_left'] = $this->load->controller('common/column_left');
-            $data['column_right'] = $this->load->controller('common/column_right');
-            $data['content_top'] = $this->load->controller('common/content_top');
-            $data['content_bottom'] = $this->load->controller('common/content_bottom');
+            // $data['column_left'] = $this->load->controller('common/column_left');
+            // $data['column_right'] = $this->load->controller('common/column_right');
+            // $data['content_top'] = $this->load->controller('common/content_top');
+            // $data['content_bottom'] = $this->load->controller('common/content_bottom');
             $data['footer'] = $this->load->controller('common/footer');
             $data['header'] = $this->load->controller('common/header');
 
@@ -405,10 +405,10 @@ class ControllerProductCategory extends Controller {
 
             $this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . ' 404 Not Found');
 
-            $data['column_left'] = $this->load->controller('common/column_left');
-            $data['column_right'] = $this->load->controller('common/column_right');
-            $data['content_top'] = $this->load->controller('common/content_top');
-            $data['content_bottom'] = $this->load->controller('common/content_bottom');
+            // $data['column_left'] = $this->load->controller('common/column_left');
+            // $data['column_right'] = $this->load->controller('common/column_right');
+            // $data['content_top'] = $this->load->controller('common/content_top');
+            // $data['content_bottom'] = $this->load->controller('common/content_bottom');
             $data['footer'] = $this->load->controller('common/footer');
             $data['header'] = $this->load->controller('common/header');
 

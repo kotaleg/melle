@@ -43,6 +43,7 @@
     "vue-progress": "^0.2.1",
     "vue-rate-it": "^2.1.0",
     "vue-recaptcha": "^1.1.1",
+    "vue-router": "^3.0.2",
     "vue-select": "^2.5.1",
     "vue-simple-progress": "^1.1.0",
     "vue-slider-component": "^2.8.6",

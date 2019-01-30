@@ -1,6 +1,7 @@
 <template>
       <div class="search-modal__filter filter">
-         <div class="filter__title">Фильтр</div>
+         <div class="filter__title">Фильтр <span style="font-size: 10px;">(Найдено: {{ product_total }})</span></div>
+
          <form v-on:submit.prevent="openSidebar(false)">
             <div class="filter__relevant-category">
                <label>
@@ -53,6 +54,50 @@
                 </li>
             </ul>
 
+            <div class="select-section">
+                <div class="select-section-item text-right">
+                    <span class="filter__select-name">размер:</span>
+                    <v-select
+                        style="display: inline-block;"
+                        v-model="size"
+                        :options="getFilterValue('all_sizes')"
+                        placeholder="Все"
+                        :searchable="false"
+                        :closeOnSelect="true"
+                        maxHeight="200px">
+                        <span slot="no-options"></span>
+                    </v-select>
+                </div>
+
+                <div class="select-section-item text-right">
+                    <span class="filter__select-name">цвет:</span>
+                    <v-select
+                        style="display: inline-block;"
+                        v-model="color"
+                        :options="getFilterValue('all_colors')"
+                        placeholder="Все"
+                        :searchable="false"
+                        :closeOnSelect="true"
+                        maxHeight="200px">
+                        <span slot="no-options"></span>
+                    </v-select>
+                </div>
+
+                <div class="select-section-item text-right">
+                    <span class="filter__select-name">материал:</span>
+                    <v-select
+                        style="display: inline-block;"
+                        v-model="material"
+                        :options="getFilterValue('all_materials')"
+                        placeholder="Все"
+                        :searchable="false"
+                        :closeOnSelect="true"
+                        maxHeight="200px">
+                        <span slot="no-options"></span>
+                    </v-select>
+                </div>
+            </div>
+
             <div class="filter__price">
                 <div class="filter__price-title"><span>Ден:</span></div>
                 <div class="super-flex">
@@ -81,7 +126,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters, clone } from 'vuex'
 import vueSlider from 'vue-slider-component'
 
 export default {
@@ -94,8 +139,8 @@ export default {
             'getFilterValue',
             'getSliderOptions',
         ]),
-        ...mapState('filter', [
-            'filter_data',
+        ...mapState('catalog', [
+            'product_total',
         ]),
 
         hit: {
@@ -110,7 +155,6 @@ export default {
             get () { return this.getFilterValue('act') },
             set (v) { this.updateFilterValue({k: 'act', v}) }
         },
-
         min_price: {
             get () { return this.getFilterValue('min_price') },
             set (v) { this.updateFilterValue({k: 'min_price', v}) }
@@ -119,7 +163,6 @@ export default {
             get () { return this.getFilterValue('max_price') },
             set (v) { this.updateFilterValue({k: 'max_price', v}) }
         },
-
         min_den: {
             get () { return this.getFilterValue('min_den') },
             set (v) { this.updateFilterValue({k: 'min_den', v}) }
@@ -127,6 +170,18 @@ export default {
         max_den: {
             get () { return this.getFilterValue('max_den') },
             set (v) { this.updateFilterValue({k: 'max_den', v}) }
+        },
+        size: {
+            get () { return this.getFilterValue('size') },
+            set (v) { this.updateFilterValue({k: 'size', v}) }
+        },
+        color: {
+            get () { return this.getFilterValue('color') },
+            set (v) { this.updateFilterValue({k: 'color', v}) }
+        },
+        material: {
+            get () { return this.getFilterValue('material') },
+            set (v) { this.updateFilterValue({k: 'material', v}) }
         },
 
         den: {

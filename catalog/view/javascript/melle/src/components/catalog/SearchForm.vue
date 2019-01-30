@@ -40,12 +40,12 @@ export default {
 
         search: {
             get () { return this.getFilterValue('search') },
-            set (v) { this.updateFilterValue({k: 'search', v}) }
+            set (v) { this.updateFilterValueWithDelay({k: 'search', v}) }
         },
     },
     methods: {
         ...mapActions('filter', [
-            'updateFilterValue',
+            'updateFilterValueWithDelay',
         ]),
         ...mapActions('catalog', [
             'loadMoreRequest',

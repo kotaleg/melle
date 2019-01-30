@@ -30,6 +30,7 @@ const state = {
 
     last_filter: {},
     slider_options: {den: {}, price: {}},
+    query_params: [],
 }
 
 // getters
@@ -46,6 +47,9 @@ const getters = {
     isManufacturerSelected: state => key => {
         return state.filter_data.manufacturers[key].checked
     },
+    getDefaultQueryParams: state => {
+        return state.query_params
+    },
 }
 
 // actions
@@ -61,23 +65,26 @@ const actions = {
             this.dispatch('catalog/loadMoreRequest')
         }
     },
-    updateFromSlider({ commit, state, getters }, payload) {
+    updateFilterValueWithDelay: debounce(({ dispatch }, payload) => {
+        dispatch('updateFilterValue', payload)
+    }, 500),
+    updateFromSlider: debounce(({ commit, state, getters, dispatch }, payload) => {
         let type = payload.type
         let value = payload.v
         if (isArray(value)) {
             if (!isUndefined(value[0])
             && getters.getFilterValue(`min_${type}`) != value[0]) {
                 commit('updateFilterValue', {k: `min_${type}`, v: value[0]})
-                this.dispatch('catalog/loadMoreRequest')
+                dispatch('catalog/loadMoreRequest', null, {root:true})
             }
 
             if (!isUndefined(value[1])
             && getters.getFilterValue(`max_${type}`) != value[1]) {
                 commit('updateFilterValue', {k: `max_${type}`, v: value[1]})
-                this.dispatch('catalog/loadMoreRequest')
+                dispatch('catalog/loadMoreRequest', null, {root:true})
             }
         }
-    },
+    }, 50),
     updateManufacturerStatus({ commit, state, getters }, k) {
         let v = !state.filter_data.manufacturers[k].checked
         commit('updateManufacturerCheckedStatus', {k, v})

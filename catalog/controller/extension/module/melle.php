@@ -232,6 +232,7 @@ class ControllerExtensionModuleMelle extends Controller
         $state['filter_data'] = $this->model_catalog_super->getFilterValues();
         $state['last_filter'] = $state['filter_data'];
         $state['slider_options'] = $this->model_catalog_super->prepareSliderOptions();
+        $state['query_params'] = $this->model_catalog_super->getDefaultFilterQueryParams();
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));

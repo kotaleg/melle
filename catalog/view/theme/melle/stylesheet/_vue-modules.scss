@@ -22,12 +22,11 @@
     // Style for content
   }
 
-  &.my-type {
-    /*
-    Style for specific type of notification, will be applied when you
-    call notification with "type" parameter:
-    this.$notify({ type: 'my-type', message: 'Foo' })
-    */
+  &.success {
+    background: #fff;
+  }
+  &.warn {
+    background: #fff;
   }
 }
 
@@ -240,6 +239,7 @@
 .select-section-item {
     line-height: 28px;
     margin-bottom: 10px;
+    display: flex;
 }
 
 .search__sidebar {
@@ -281,7 +281,7 @@
         color: #6d6b6a;
         position: relative;
         left: 10px;
-        top: 14px;
+        top: 18px;
     }
 
     .open-indicator {
