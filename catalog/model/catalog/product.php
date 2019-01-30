@@ -60,6 +60,16 @@ class ModelCatalogProduct extends Model {
         }
     }
 
+    public function getProductImage($product_id)
+    {
+        $query = $this->db->query("SELECT DISTINCT p.image FROM " . DB_PREFIX . "product p
+            WHERE p.product_id = '" . (int)$product_id . "'");
+
+        if ($query->num_rows) {
+            return $query->row['image'];
+        } else { return false; }
+    }
+
     public function getProducts($data = array()) {
         $sql = "SELECT p.product_id, (SELECT AVG(rating) AS total FROM " . DB_PREFIX . "review r1 WHERE r1.product_id = p.product_id AND r1.status = '1' GROUP BY r1.product_id) AS rating, (SELECT price FROM " . DB_PREFIX . "product_discount pd2 WHERE pd2.product_id = p.product_id AND pd2.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND pd2.quantity = '1' AND ((pd2.date_start = '0000-00-00' OR pd2.date_start < NOW()) AND (pd2.date_end = '0000-00-00' OR pd2.date_end > NOW())) ORDER BY pd2.priority ASC, pd2.price ASC LIMIT 1) AS discount, (SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ps.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND ((ps.date_start = '0000-00-00' OR ps.date_start < NOW()) AND (ps.date_end = '0000-00-00' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special";
 
@@ -183,27 +193,27 @@ class ModelCatalogProduct extends Model {
         // MIN PRICE
         if (isset($data['min_price'])) {
             $sql .= " AND (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) > " . (float)$data['min_price'];
+                WHERE offers_comb.product_id = p.product_id) >= " . (float)$data['min_price'];
         }
 
         // MAX PRICE
         if (isset($data['max_price'])) {
             $sql .= " AND (SELECT MAX(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) < " . (float)$data['max_price'];
+                WHERE offers_comb.product_id = p.product_id) <= " . (float)$data['max_price'];
         }
 
         // MIN DEN
         if (isset($data['den_id']) && isset($data['min_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') > " . (float)$data['min_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') >= " . (float)$data['min_den'];
         }
 
         // MAX DEN
         if (isset($data['den_id']) && isset($data['max_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') < " . (float)$data['max_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') <= " . (float)$data['max_den'];
         }
 
         // MATERIAL
@@ -634,27 +644,27 @@ class ModelCatalogProduct extends Model {
         // MIN PRICE
         if (isset($data['min_price'])) {
             $sql .= " AND (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) > " . (float)$data['min_price'];
+                WHERE offers_comb.product_id = p.product_id) >= " . (float)$data['min_price'];
         }
 
         // MAX PRICE
         if (isset($data['max_price'])) {
             $sql .= " AND (SELECT MAX(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) < " . (float)$data['max_price'];
+                WHERE offers_comb.product_id = p.product_id) <= " . (float)$data['max_price'];
         }
 
         // MIN DEN
         if (isset($data['den_id']) && isset($data['min_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') > " . (float)$data['min_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') >= " . (float)$data['min_den'];
         }
 
         // MAX DEN
         if (isset($data['den_id']) && isset($data['max_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') < " . (float)$data['max_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') <= " . (float)$data['max_den'];
         }
 
         // MATERIAL
@@ -818,27 +828,27 @@ class ModelCatalogProduct extends Model {
         // MIN PRICE
         if (isset($data['min_price'])) {
             $sql .= " AND (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) > " . (float)$data['min_price'];
+                WHERE offers_comb.product_id = p.product_id) >= " . (float)$data['min_price'];
         }
 
         // MAX PRICE
         if (isset($data['max_price'])) {
             $sql .= " AND (SELECT MAX(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) < " . (float)$data['max_price'];
+                WHERE offers_comb.product_id = p.product_id) <= " . (float)$data['max_price'];
         }
 
         // MIN DEN
         if (isset($data['den_id']) && isset($data['min_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') > " . (float)$data['min_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') >= " . (float)$data['min_den'];
         }
 
         // MAX DEN
         if (isset($data['den_id']) && isset($data['max_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') < " . (float)$data['max_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') <= " . (float)$data['max_den'];
         }
 
         // MATERIAL
@@ -984,27 +994,27 @@ class ModelCatalogProduct extends Model {
         // MIN PRICE
         if (isset($data['min_price'])) {
             $sql .= " AND (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) > " . (float)$data['min_price'];
+                WHERE offers_comb.product_id = p.product_id) >= " . (float)$data['min_price'];
         }
 
         // MAX PRICE
         if (isset($data['max_price'])) {
             $sql .= " AND (SELECT MAX(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) < " . (float)$data['max_price'];
+                WHERE offers_comb.product_id = p.product_id) <= " . (float)$data['max_price'];
         }
 
         // MIN DEN
         if (isset($data['den_id']) && isset($data['min_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') > " . (float)$data['min_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') >= " . (float)$data['min_den'];
         }
 
         // MAX DEN
         if (isset($data['den_id']) && isset($data['max_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') < " . (float)$data['max_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') <= " . (float)$data['max_den'];
         }
 
         // COLOR
@@ -1145,27 +1155,27 @@ class ModelCatalogProduct extends Model {
         // MIN PRICE
         if (isset($data['min_price'])) {
             $sql .= " AND (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) > " . (float)$data['min_price'];
+                WHERE offers_comb.product_id = p.product_id) >= " . (float)$data['min_price'];
         }
 
         // MAX PRICE
         if (isset($data['max_price'])) {
             $sql .= " AND (SELECT MAX(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) < " . (float)$data['max_price'];
+                WHERE offers_comb.product_id = p.product_id) <= " . (float)$data['max_price'];
         }
 
         // MIN DEN
         if (isset($data['den_id']) && isset($data['min_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') > " . (float)$data['min_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') >= " . (float)$data['min_den'];
         }
 
         // MAX DEN
         if (isset($data['den_id']) && isset($data['max_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') < " . (float)$data['max_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') <= " . (float)$data['max_den'];
         }
 
         // MATERIAL
@@ -1301,27 +1311,27 @@ class ModelCatalogProduct extends Model {
         // MIN PRICE
         if (isset($data['min_price'])) {
             $sql .= " AND (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) > " . (float)$data['min_price'];
+                WHERE offers_comb.product_id = p.product_id) >= " . (float)$data['min_price'];
         }
 
         // MAX PRICE
         if (isset($data['max_price'])) {
             $sql .= " AND (SELECT MAX(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
-                WHERE offers_comb.product_id = p.product_id) < " . (float)$data['max_price'];
+                WHERE offers_comb.product_id = p.product_id) <= " . (float)$data['max_price'];
         }
 
         // MIN DEN
         if (isset($data['den_id']) && isset($data['min_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') > " . (float)$data['min_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') >= " . (float)$data['min_den'];
         }
 
         // MAX DEN
         if (isset($data['den_id']) && isset($data['max_den'])) {
             $sql .= " AND (SELECT MIN(CONVERT(pattr.text, UNSIGNED INTEGER)) FROM " . DB_PREFIX . "product_attribute pattr
                 WHERE pattr.product_id = p.product_id
-                AND pattr.attribute_id = '". (int)$data['den_id'] ."') < " . (float)$data['max_den'];
+                AND pattr.attribute_id = '". (int)$data['den_id'] ."') <= " . (float)$data['max_den'];
         }
 
         // MATERIAL

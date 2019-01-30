@@ -51,16 +51,20 @@ class ModelToolBase extends Model
     public function getOgImage($size = 350)
     {
         $type = $this->getPageType();
-        $image = '';
+        $image = $this->getBase().'image/catalog/og-image.jpg';
+
+        $this->load->model('tool/image');
 
         switch ($type) {
-
-            default:
-                $image = 'image/catalog/og-image.jpg';
+            case 'product':
+                $this->load->model('catalog/product');
+                if ($product_image = $this->model_catalog_product->getProductImage($this->getProductId())) {
+                    $image =  $this->model_tool_image->resize($product_image, 350, 350);
+                }
                 break;
         }
 
-        return $this->getBase().$image;
+        return $image;
     }
 
     public function getProductId()

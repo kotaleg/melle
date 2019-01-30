@@ -90,8 +90,7 @@ const actions = {
         )
     }, 500),
     updateRouterParams({ commit, state, rootState, rootGetters, dispatch, getters }) {
-        let query = filterHelper.prepareFullQuery(
-            rootState.filter.filter_data, rootState.filter.slider_options);
+        let query = filterHelper.prepareFullQuery(rootState.filter.filter_data);
         router.push({ path: Vue.prototype.$storePath , query })
     },
 }

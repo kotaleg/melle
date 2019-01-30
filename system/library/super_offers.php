@@ -191,7 +191,8 @@ class super_offers
         $price = 0;
         $sql = "SELECT MIN(`price`) as min_price
             FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
-            WHERE `product_id` = '". (int)$product_id ."'";
+            WHERE `product_id` = '". (int)$product_id ."'
+            AND `price` > 0";
 
         if ($check_all === false) {
             $sql .= " AND `quantity` > 0";

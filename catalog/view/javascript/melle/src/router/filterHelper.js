@@ -24,7 +24,7 @@ export default {
 
         return {storeQuery, storePath, filterQuery}
     },
-    prepareFullQuery(filter_data, slider_options) {
+    prepareFullQuery(filter_data) {
         let query = clone(Vue.prototype.$storeQuery)
 
         forEach(filter_data, (v, k) => {
@@ -35,24 +35,16 @@ export default {
                 if (k === 'search' && v !== null) { query[k] = trim(v) }
 
                 if (k === 'min_den' && v !== '') {
-                    if (v !== slider_options.den.min) {
-                        query[k] = v
-                    }
+                    query[k] = v
                 }
                 if (k === 'max_den' && v !== '') {
-                    if (v !== slider_options.den.max) {
-                        query[k] = v
-                    }
+                    query[k] = v
                 }
                 if (k === 'min_price' && v !== '') {
-                    if (v !== slider_options.price.min) {
-                        query[k] = v
-                    }
+                    query[k] = v
                 }
                 if (k === 'max_price' && v !== '') {
-                    if (v !== slider_options.price.max) {
-                        query[k] = v
-                    }
+                    query[k] = v
                 }
                 if (k === 'material' && v !== null && v !== '') {
                     if (has(v, 'value')) {

@@ -60,12 +60,13 @@ class ModelCatalogSuper extends Model
 
                 'quantity' => 1,
                 'default_values' => $this->model_extension_module_super_offers->getDefaultValues($p['product_id'], $p),
-                // 'is_options_for_product' => (bool)$this->model_extension_module_super_offers->isOptionsForProduct($p['product_id']),
-                // 'options' => $this->model_extension_module_super_offers->getOptions($p['product_id']),
             );
 
-            // $d['combinations_for_options'] = $this->model_extension_module_super_offers->getCombinationsForOptions(
-            //     $p['product_id'], $d_['options']);
+            // HIDE PRODUCTS
+            if (isset($d_['default_values']['price'])) {
+                if ($d_['default_values']['min_quantity'] <= 0) { continue; }
+                if ($d_['default_values']['price'] <= 0) { continue; }
+            } else { continue; }
 
             $attribute_groups = $this->model_catalog_product->getProductAttributes($p['product_id']);
 
@@ -93,7 +94,7 @@ class ModelCatalogSuper extends Model
 
         $time_end = microtime(true);
         $this->timing[] = array(
-            'PRODUCTS' => round($time_end - $time_start * 1000)
+            'PRODUCTS' => round(($time_end - $time_start) * 1000),
         );
 
         return $result;
@@ -305,7 +306,7 @@ class ModelCatalogSuper extends Model
         $time_end = microtime(true);
         $time_end = microtime(true);
         $this->timing[] = array(
-            'FILTER VALUES' => round($time_end - $time_start * 1000)
+            'FILTER VALUES' => round(($time_end - $time_start) * 1000),
         );
 
         return $result;

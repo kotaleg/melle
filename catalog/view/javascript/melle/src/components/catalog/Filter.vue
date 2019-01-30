@@ -141,6 +141,7 @@ export default {
         ]),
         ...mapState('catalog', [
             'product_total',
+            'filter_data',
         ]),
 
         hit: {
