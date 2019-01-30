@@ -43,6 +43,8 @@
 <script type="text/javascript">window.__{{state.codename}}__ = {{state.json}};</script>
 {% endfor %}
 
+<script src="{{base}}catalog/view/javascript/melle/dist/manifest.js" type="text/javascript"></script>
+<script src="{{base}}catalog/view/javascript/melle/dist/vendor.js" type="text/javascript"></script>
 <script src="{{base}}catalog/view/javascript/melle/dist/melle.js" type="text/javascript"></script>
 {% for script in scripts %}
 <script src="{{ script }}" type="text/javascript"></script>

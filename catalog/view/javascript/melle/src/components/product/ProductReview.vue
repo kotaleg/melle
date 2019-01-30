@@ -132,7 +132,7 @@ export default {
     },
     data() {
         return {
-            show_form: false,
+            show_form: true,
         }
     },
     created() {

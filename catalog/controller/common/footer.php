@@ -5,16 +5,16 @@ class ControllerCommonFooter extends Controller {
 
         $this->load->model('catalog/information');
 
-        $data['informations'] = array();
+        // $data['informations'] = array();
 
-        foreach ($this->model_catalog_information->getInformations() as $result) {
-            if ($result['bottom']) {
-                $data['informations'][] = array(
-                    'title' => $result['title'],
-                    'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'])
-                );
-            }
-        }
+        // foreach ($this->model_catalog_information->getInformations() as $result) {
+        //     if ($result['bottom']) {
+        //         $data['informations'][] = array(
+        //             'title' => $result['title'],
+        //             'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'])
+        //         );
+        //     }
+        // }
 
         $data['contact'] = $this->url->link('information/contact');
         $data['return'] = $this->url->link('account/return/add', '', true);
@@ -29,7 +29,7 @@ class ControllerCommonFooter extends Controller {
         $data['wishlist'] = $this->url->link('account/wishlist', '', true);
         $data['newsletter'] = $this->url->link('account/newsletter', '', true);
 
-        $data['powered'] = sprintf($this->language->get('text_powered'), $this->config->get('config_name'), date('Y', time()));
+        // $data['powered'] = sprintf($this->language->get('text_powered'), $this->config->get('config_name'), date('Y', time()));
 
         // Whos Online
         if ($this->config->get('config_customer_online')) {

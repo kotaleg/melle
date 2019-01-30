@@ -37,13 +37,13 @@ export default {
                 if (k === 'min_den' && v !== '') {
                     query[k] = v
                 }
-                if (k === 'max_den' && v !== '') {
+                if (k === 'max_den' && v !== '' && v !== 0) {
                     query[k] = v
                 }
                 if (k === 'min_price' && v !== '') {
                     query[k] = v
                 }
-                if (k === 'max_price' && v !== '') {
+                if (k === 'max_price' && v !== '' && v !== 0) {
                     query[k] = v
                 }
                 if (k === 'material' && v !== null && v !== '') {

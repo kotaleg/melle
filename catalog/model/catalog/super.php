@@ -566,10 +566,19 @@ class ModelCatalogSuper extends Model
         ));
         $product_total = $this->model_catalog_product->getTotalProducts($filter_data, true);
 
-        return array(
+        $result = array(
             'den' => $this->getSliderOptions($product_total['min_den'], $product_total['max_den']),
             'price' => $this->getSliderOptions($product_total['min_price'], $product_total['max_price']),
         );
+
+        if ($result['den']['max'] == 0) {
+            $result['den']['max'] = 1000;
+        }
+        if ($result['price']['max'] == 0) {
+            $result['price']['max'] = 10000;
+        }
+
+        return $result;
     }
 
     private function getSliderOptions($min, $max)

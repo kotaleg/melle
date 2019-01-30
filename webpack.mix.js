@@ -10,12 +10,13 @@ mix.sass(path.join(CATALOG_CSS_PATH, 'main.scss'), CODENAME+'.css');
 
 mix.setPublicPath(path.join(CATALOG_JS_PATH, 'dist/'))
 
-// mix.extract(['vue', 'vuex', 'lodash', 'axios'])
+mix.extract(['vue', 'vuex', 'lodash', 'axios', 'vue-router',
+    'vue-recaptcha', 'v-tooltip', 'v-click-outside', 'es6-promise'])
 
 mix.options({
     // extractVueStyles: true,
     // purifyCss: true,
-    // postCss: [require('autoprefixer')]
+    // postCss: [require('autoprefixer')],
 })
 
 if (mix.inProduction()) {

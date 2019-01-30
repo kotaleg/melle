@@ -1,6 +1,7 @@
 <?php
 class ControllerCommonContentTop extends Controller {
     public function index() {
+        return;
         $this->load->model('design/layout');
 
         if (isset($this->request->get['route'])) {
