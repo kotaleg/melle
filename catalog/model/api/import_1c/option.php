@@ -149,4 +149,41 @@ class ModelApiImport1COption extends Model
         $this->db->query("DELETE FROM " . DB_PREFIX . "option_value WHERE option_id = '" . (int)$option_id . "'");
         $this->db->query("DELETE FROM " . DB_PREFIX . "option_value_description WHERE option_id = '" . (int)$option_id . "'");
     }
+
+    public function importColorCubs()
+    {
+        $q = $this->db->query("SELECT f.name, ci.image FROM tbl_color_items ci
+            LEFT JOIN tbl_filters f ON (ci.filter_id = f.id)");
+
+        foreach ($q->rows as $ci) {
+
+            $image = 'catalog/colors/'.basename($ci['image']);
+
+            $o = $this->getOptionByName($ci['name']);
+            if ($o) {
+                $this->updateOptionImage($o['option_value_id'], $image);
+            } else {
+                // echo "<pre>"; print_r($ci['name']); echo "</pre>";
+            }
+
+        }
+    }
+
+    private function getOptionByName($name)
+    {
+        $query = $this->db->query("SELECT `option_value_id`
+            FROM `". DB_PREFIX ."option_value_description`
+            WHERE `name` LIKE '%".$this->db->escape($name)."%'");
+        if ($query->row) {
+            return $query->row;
+        }
+    }
+
+
+    private function updateOptionImage($option_value_id, $image)
+    {
+        $this->db->query("UPDATE " . DB_PREFIX . "option_value
+            SET image = '" . $this->db->escape($image) . "'
+            WHERE option_value_id = '" . (int)$option_value_id . "'");
+    }
 }

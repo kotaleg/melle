@@ -16,8 +16,13 @@ class ControllerCommonHome extends Controller {
         $data['footer'] = $this->load->controller('common/footer');
         $data['header'] = $this->load->controller('common/header');
 
+        // IMPORT OLD CUSTOMERS
         // $this->load->model('api/import_1c/customer');
         // $this->model_api_import_1c_customer->addOldUsers();
+
+        // IMPORT COLOR CUBS
+        // $this->load->model('api/import_1c/option');
+        // $this->model_api_import_1c_option->importColorCubs();
 
         $this->response->setOutput($this->load->view('common/home', $data));
     }
