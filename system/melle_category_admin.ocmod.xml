@@ -26,7 +26,7 @@
 
         <operation error="skip">
             <search><![CDATA[, date_modified = NOW() WHERE category_id = '" . (int)$category_id . "'");]]></search>
-            <add position="replace"><![CDATA[, date_modified = NOW(), `import_id` = '".$this->db->escape($data['import_id'])."' WHERE category_id = '" . (int)$category_id . "'");]]></add>
+            <add position="replace"><![CDATA[, date_modified = NOW(), `import_id` = '".$this->db->escape($data['import_id'])."', `sitemap_p` = '".$this->db->escape($data['sitemap_p'])."' WHERE category_id = '" . (int)$category_id . "'");]]></add>
         </operation>
     </file>
 
@@ -35,10 +35,6 @@
             <search><![CDATA[$data['layouts'] = $this->model_design_layout->getLayouts();]]></search>
             <add position="after"><![CDATA[
                 /* IVAN MOD START */
-                $data['entry_small_description'] = $this->language->get('entry_small_description');
-                $data['entry_h1'] = $this->language->get('entry_h1');
-                $data['entry_import_id'] = $this->language->get('entry_import_id');
-
                 if (isset($this->request->post['import_id'])) {
                     $data['import_id'] = $this->request->post['import_id'];
                 } elseif (!empty($category_info)) {
@@ -46,6 +42,19 @@
                 } else {
                     $data['import_id'] = '';
                 }
+
+                if (isset($this->request->post['sitemap_p'])) {
+                    $data['sitemap_p'] = $this->request->post['sitemap_p'];
+                } elseif (!empty($category_info)) {
+                    $data['sitemap_p'] = $category_info['sitemap_p'];
+                } else {
+                    $data['sitemap_p'] = 0.5;
+                }
+
+                $data['entry_small_description'] = $this->language->get('entry_small_description');
+                $data['entry_h1'] = $this->language->get('entry_h1');
+                $data['entry_import_id'] = $this->language->get('entry_import_id');
+                $data['entry_sitemap_p'] = $this->language->get('entry_sitemap_p');
                 /* IVAN MOD END */
             ]]></add>
         </operation>
@@ -59,6 +68,7 @@
                 $_['entry_small_description'] = 'Краткое описание';
                 $_['entry_h1'] = 'H1';
                 $_['entry_import_id'] = 'Import ID';
+                $_['entry_sitemap_p'] = 'Приоритет (Sitemap)';
                 /* IVAN MOD END */
             ]]></add>
         </operation>
@@ -96,6 +106,20 @@
                     <label class="col-sm-2 control-label" for="input-importid">{{ entry_import_id }}</label>
                     <div class="col-sm-10">
                       <input type="text" name="import_id" value="{{ import_id }}" placeholder="{{ entry_import_id }}" id="input-importid" class="form-control" readonly="readonly" />
+                    </div>
+                  </div>
+                  <!-- IVAN MOD END -->
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>]]></search>
+            <add position="before" offset="1"><![CDATA[
+                  <!-- IVAN MOD START -->
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-importid">{{ entry_sitemap_p }}</label>
+                    <div class="col-sm-10">
+                      <input type="text" name="sitemap_p" value="{{ sitemap_p }}" placeholder="{{ entry_sitemap_p }}" id="input-importid" class="form-control" />
                     </div>
                   </div>
                   <!-- IVAN MOD END -->

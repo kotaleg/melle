@@ -54,6 +54,7 @@ class ModelCatalogProduct extends Model {
                 'h1'                => $query->row['h1'],
                 'small_description' => $query->row['small_description'],
                 'znachek'           => $query->row['znachek'],
+                'sitemap_p'         => $query->row['sitemap_p'],
             );
         } else {
             return false;

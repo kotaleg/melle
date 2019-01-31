@@ -16,7 +16,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
                     $output .= '  <loc>' . $this->url->link('product/product', 'product_id=' . $product['product_id']) . '</loc>';
                     $output .= '  <changefreq>weekly</changefreq>';
                     $output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($product['date_modified'])) . '</lastmod>';
-                    $output .= '  <priority>1.0</priority>';
+                    $output .= '  <priority>'. round((float) $product['sitemap_p'], 1) .'</priority>';
                     $output .= '  <image:image>';
                     $output .= '  <image:loc>' . $this->model_tool_image->resize($product['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height')) . '</image:loc>';
                     $output .= '  <image:caption>' . $product['name'] . '</image:caption>';
@@ -47,7 +47,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
                     $output .= '<url>';
                     $output .= '  <loc>' . $this->url->link('product/product', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . '&product_id=' . $product['product_id']) . '</loc>';
                     $output .= '  <changefreq>weekly</changefreq>';
-                    $output .= '  <priority>1.0</priority>';
+                    $output .= '  <priority>'. round((float) $product['sitemap_p'], 1) .'</priority>';
                     $output .= '</url>';
                 }
             }
@@ -86,7 +86,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
             $output .= '<url>';
             $output .= '  <loc>' . $this->url->link('product/category', 'path=' . $new_path) . '</loc>';
             $output .= '  <changefreq>weekly</changefreq>';
-            $output .= '  <priority>0.7</priority>';
+            $output .= '  <priority>'. round((float) $result['sitemap_p'], 1) .'</priority>';
             $output .= '</url>';
 
             $products = $this->model_catalog_product->getProducts(array('filter_category_id' => $result['category_id']));
@@ -95,7 +95,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
                 $output .= '<url>';
                 $output .= '  <loc>' . $this->url->link('product/product', 'path=' . $new_path . '&product_id=' . $product['product_id']) . '</loc>';
                 $output .= '  <changefreq>weekly</changefreq>';
-                $output .= '  <priority>1.0</priority>';
+                $output .= '  <priority>'. round((float) $product['sitemap_p'], 1) .'</priority>';
                 $output .= '</url>';
             }
 
