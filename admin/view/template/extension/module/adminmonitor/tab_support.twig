@@ -1,0 +1,98 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-user"></i> {{ license_your_license }}</h3>
+                </div>
+                <div class="panel-body">
+                {% if not setting.adminmonitor.LicensedOn %}
+                    <div class="form-group">
+                        <label for="moduleLicense">{{ license_enter_code }}</label>
+                        <div class="licenseAlerts"></div>
+                        <div class="licenseDiv"></div>
+                        <input type="text" class="licenseCodeBox form-control" placeholder="{{ license_placeholder }}" value="{{ setting.adminmonitor.LicenseCode ?: '' }}" />
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success btnActivateLicense"><i class="icon-ok"></i> {{ license_activate }}</button>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-link small-link" onclick="window.open('http://isenselabs.com/users/purchases/')">{{ license_get_code }} <i class="fa fa-external-link"></i></button>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                      var domainraw = location.protocol + '//' + location.host;
+                      var domain = btoa(domainraw);
+                      var timenow = parseInt(Date.now() / 1000);
+                      var MID = 'PU2KNAJMH6';
+                    </script>
+                    <script type="text/javascript" src="//isenselabs.com/external/validate/"></script>
+
+                {% else %}
+                    <input name="cHRpbWl6YXRpb24ef4fe" type="hidden" value="{{ license_encoded }}" />
+                    <input name="OaXRyb1BhY2sgLSBDb21" type="hidden" value="{{ setting.adminmonitor.LicensedOn }}" />
+
+                    <div class="row">
+                        <label class="license_label">{{ license_holder }}</label>
+                        <span class="license_info">{{ setting.adminmonitor.License.customerName }}</span>
+                    
+                        <label class="license_label">{{ license_registered_domains }}</label>
+                        <ul class="license_info">
+                            {% for domain in setting.adminmonitor.License.licenseDomainsUsed %}
+                                <li><i class="fa fa-check"></i>&nbsp;{{ domain }}</li>
+                            {% endfor %}
+                        </ul>
+
+                        <label class="license_label">{{ license_expires }}</label>
+                        <span class="license_info">{{ license_expire_date }}</span>
+
+                        <div class="alert alert-success center">{{ license_valid }} [<a href="http://isenselabs.com/users/purchases" target="_blank">{{ license_manage }}</a>]</div>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+  
+        <div class="col-md-8">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-users"></i> {{ license_get_support }}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img alt="{{ license_community }}" src="view/image/adminmonitor/community.png">
+                                <div class="caption center">
+                                    <h3>{{ license_community }}</h3>
+                                    <p>{{ license_community_info }}</p>
+                                    <p style="padding-top: 5px;"><a href="http://isenselabs.com/forum" target="_blank" class="btn btn-lg btn-default">{{ license_forums }}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img data-src="holder.js/300x200" alt="Ticket support" src="view/image/adminmonitor/tickets.png">
+                                <div class="caption center">
+                                    <h3>{{ license_tickets }}</h3>
+                                    <p>{{ license_tickets_info }}</p>
+                                    <p style="padding-top: 5px;"><a href="{{ open_support_ticket_link }}" target="_blank" class="btn btn-lg btn-default">{{ license_tickets_open }}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img alt="{{ license_presale }}" src="view/image/adminmonitor/pre-sale.png">
+                                <div class="caption center">
+                                    <h3>{{ license_presale }}</h3>
+                                    <p>{{ license_presale_info }}</p>
+                                    <p style="padding-top: 5px;"><a href="mailto:sales@isenselabs.com?subject=Pre-sale question" target="_blank" class="btn btn-lg btn-default">{{ license_presale_bump }}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

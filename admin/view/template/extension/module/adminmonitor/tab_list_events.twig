@@ -1,0 +1,73 @@
+<div class="table-responsive">
+    <div class="pull-right spacer20">
+        <a id="clear_filters" class="btn btn-info"><i class="fa fa-remove"></i> {{ button_clear_filters }}</a>
+        <a id="delete_selected" class="btn btn-danger"><i class="fa fa-trash"></i> {{ button_delete_selected }}</a>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr class="active">
+                <th class="center"><input type="checkbox" class="select_all" /></th>
+                <th>{{ table_user }}</th>
+                <th>{{ table_message }}</th>
+                <th>{{ table_event_type }}</th>
+                <th>{{ table_event_group }}</th>
+                <th>{{ table_date_created }}</th>
+            </tr>
+            <tr class="info">
+                <td></td>
+                <td><select class="form-control" name="filter_user_id">
+                    <option value="">{{ adminmonitor_text_select }}</option>
+                    {% for filter_user in filter_users %}
+                        <option value="{{ filter_user.user_id }}">{{ filter_user.user_name }}</option>
+                    {% endfor %}
+                </select></td>
+                <td></td>
+                <td><select class="form-control" name="filter_type">
+                    <option value="">{{ adminmonitor_text_select }}</option>
+                    {% for filter_type in filter_types %}
+                        <option value="{{ filter_type.type_id }}">{{ filter_type.type_name }}</option>
+                    {% endfor %}
+                </select></td>
+                <td><select class="form-control" name="filter_group">
+                    <option value="">{{ adminmonitor_text_select }}</option>
+                    {% for filter_group in filter_groups %}
+                        <option value="{{ filter_group.group_id }}">{{ filter_group.group_name }}</option>
+                    {% endfor %}
+                </select></td>
+                <td>
+                    
+                    <div class="input-horizontal input-group date">
+                    <input type="text" name="filter_start" placeholder="{{ placeholder_start }}" data-format="YYYY-MM-DD" class="form-control" />
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                    </span></div>
+                    
+                    <div class="input-horizontal">
+                        &nbsp;{{ adminmonitor_text_to }}&nbsp;
+                    </div>
+
+                    <div class="input-horizontal input-group date">
+                    <input type="text" name="filter_end" placeholder="{{ placeholder_end }}" data-format="YYYY-MM-DD" class="form-control" />
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                    </span></div>
+                    
+                </td>
+            </tr>
+        </thead>
+        <tbody id="events">
+
+        </tbody>
+    </table>
+    <div id="pagination" class="pagination"></div>
+</div>
+<script type="text/javascript">
+    $(window).load(function() {
+        adminmonitor.init({
+            user_token: '{{ user_token }}',
+            module_path: '{{ module_path }}',
+            text_loading: '{{ adminmonitor_text_loading }}',
+            text_confirm: '{{ adminmonitor_text_confirm }}'
+        });
+    });
+</script>
