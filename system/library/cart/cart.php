@@ -238,6 +238,7 @@ class Cart {
                 $product_data[] = array(
                     'cart_id'         => $cart['cart_id'],
                     'product_id'      => $product_query->row['product_id'],
+                    'manufacturer_id' =>  $product_query->row['manufacturer_id'],
                     'name'            => $product_query->row['name'],
                     'model'           => $product_query->row['model'],
                     'shipping'        => $product_query->row['shipping'],

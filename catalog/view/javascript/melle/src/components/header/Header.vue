@@ -180,6 +180,11 @@ export default {
     created() {
         this.$store.dispatch('header/initData')
         this.$store.dispatch('cart/initData')
+        this.$store.dispatch('gtm/initData')
+    },
+    mounted() {
+        // GTM
+        this.$store.dispatch('gtm/ecommShittyPush')
     },
 }
 </script>

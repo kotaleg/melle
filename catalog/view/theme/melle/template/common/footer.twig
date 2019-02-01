@@ -56,4 +56,70 @@
 {% for script in scripts %}
 <script src="{{ script }}" type="text/javascript"></script>
 {% endfor %}
+
+<!-- BEGIN JIVOSITE CODE {literal} --><script type='text/javascript'>
+   (function(){ var widget_id = '0EPBW5Wrw9';var d=document;var w=window;function l(){
+   var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+</script><!-- {/literal} END JIVOSITE CODE -->
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function (d, w, c) {
+       (w[c] = w[c] || []).push(function() {
+           try {
+               w.yaCounter46407828 = new Ya.Metrika2({
+                   id:46407828,
+                   clickmap:true,
+                   trackLinks:true,
+                   accurateTrackBounce:true,
+                   webvisor:true,
+                   trackHash:true,
+                   ecommerce:"dataLayer"
+               });
+           } catch(e) { }
+       });
+
+       var n = d.getElementsByTagName("script")[0],
+           s = d.createElement("script"),
+           f = function () { n.parentNode.insertBefore(s, n); };
+       s.type = "text/javascript";
+       s.async = true;
+       s.src = "https://mc.yandex.ru/metrika/tag.js";
+
+       if (w.opera == "[object Opera]") {
+           d.addEventListener("DOMContentLoaded", f, false);
+       } else { f(); }
+   })(document, window, "yandex_metrika_callbacks2");
+</script>
+
+<noscript>
+   <div><img src="https://mc.yandex.ru/watch/46407828" style="position:absolute; left:-9999px;" alt="" /></div>
+</noscript>
+
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">// <![CDATA[
+   window.addEventListener('load', function () {
+      if (typeof yaCounter46407828 != 'undefined') {
+         $(document).on('submit', 'form.add-to-cart', function () { yaCounter46407828.reachGoal('newzakaz') });
+         $(document).on('click', 'button#showCartForm', function () { yaCounter46407828.reachGoal('zakaz') });
+         $(document).on('click', 'input.subscribe__send', function () { yaCounter46407828.reachGoal('podpiska') });
+         $(document).on('mousedown', 'input.mail-us__form-send', function () { yaCounter46407828.reachGoal('registraciya') });
+      }
+
+      $(document).on('submit', 'form.add-to-cart', function () {
+          gtag('event', 'korzina', { 'event_category': 'korzina', 'event_action': 'click', });
+      });
+      $(document).on('click', 'button#showCartForm', function () {
+          gtag('event', 'zakaz', { 'event_category': 'zakaz', 'event_action': 'click', });
+      });
+      $(document).on('click', 'input.subscribe__send', function () {
+          gtag('event', 'subscribe', { 'event_category': 'subscribe', 'event_action': 'click', });
+      });
+      $(document).on('mousedown', 'input.mail-us__form-send', function () {
+          gtag('event', 'registraciya', { 'event_category': 'registraciya', 'event_action': 'click', });
+      });
+   });
+   // ]]>
+</script>
+
 </body></html>

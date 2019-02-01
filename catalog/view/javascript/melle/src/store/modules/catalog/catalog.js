@@ -13,6 +13,7 @@ const state = {
     product_total: 0,
 
     design_col: true,
+    current_category: '',
     get_link: '',
 }
 
@@ -36,6 +37,40 @@ const getters = {
     },
     getPrice: state => key => {
         return state.products[key].default_values.price
+    },
+    getProductsForGTM: state => {
+        let products = []
+        state.products.forEach((item, i) => {
+            products.push({
+                id: item.product_id,
+                name: item.name,
+                brand: item.manufacturer,
+                category: state.current_category,
+                price: item.default_values.price,
+                position: i,
+                quantity: item.quantity,
+                list: '',
+            })
+        })
+        return products
+    },
+    getProductForGTM: state => index => {
+        let product = {}
+        state.products.forEach((item, i) => {
+            if (index === i) {
+                product = {
+                    id: item.product_id,
+                    name: item.name,
+                    brand: item.manufacturer,
+                    category: state.current_category,
+                    price: item.default_values.price,
+                    position: i,
+                    quantity: item.quantity,
+                    list: '',
+                }
+            }
+        })
+        return product
     },
 }
 

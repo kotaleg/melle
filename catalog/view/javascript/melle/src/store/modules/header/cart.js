@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, has } from 'lodash'
+import { isUndefined, has, clone } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -20,6 +20,34 @@ const state = {
 const getters = {
     hasProducts: state => {
         return state.count > 0 ? true : false
+    },
+    getProductsForGTM: state => {
+        let products = []
+        state.products.forEach((item) => {
+            products.push({
+                'id': item.product_id,
+                'name': item.name,
+                'brand': item.manufacturer,
+                'price': item.price,
+                'quantity': item.quantity,
+            })
+        })
+        return products
+    },
+    getProductForGTM: state => cart_id => {
+        let product = {}
+        state.products.forEach((item) => {
+            if (item.cart_id === cart_id) {
+                product = {
+                    'id': item.product_id,
+                    'name': item.name,
+                    'brand': item.manufacturer,
+                    'price': item.price,
+                    'quantity': item.quantity,
+                }
+            }
+        })
+        return product
     },
 }
 
@@ -71,7 +99,14 @@ const actions = {
                 this.dispatch('header/setSidebarLoadingStatus', false)
                 notify.messageHandler(res.data, '_header')
 
+                let removed_items = clone(getters.getProductsForGTM)
+
                 dispatch('updateCartDataRequest')
+
+                if (has(res.data, 'cleared') && res.data.cleared === true) {
+                    // GTM
+                    this.dispatch('gtm/removeFromCart', removed_items)
+                }
             }
         )
     },
@@ -107,7 +142,14 @@ const actions = {
                 this.dispatch('header/setSidebarLoadingStatus', false)
                 notify.messageHandler(res.data, '_header')
 
+                let removed_item = clone(getters.getProductForGTM(cart_id))
+
                 dispatch('updateCartDataRequest')
+
+                if (has(res.data, 'removed') && res.data.removed === true) {
+                    // GTM
+                    this.dispatch('gtm/removeFromCart', [removed_item])
+                }
             }
         )
     },

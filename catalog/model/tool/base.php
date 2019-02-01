@@ -74,4 +74,18 @@ class ModelToolBase extends Model
         }
         return null;
     }
+
+    public function getCurrentCategoryName()
+    {
+        $name = '';
+
+        if (isset($this->request->get['path'])) {
+            $parts = explode('_', (string)$this->request->get['path']);
+            $category_id = (int)array_pop($parts);
+            $category_info = $this->model_catalog_category->getCategory($category_id);
+            if ($category_info) { $name = $category_info['name']; }
+        }
+
+        return $name;
+    }
 }

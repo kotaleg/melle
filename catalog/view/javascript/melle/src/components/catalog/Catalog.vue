@@ -6,18 +6,18 @@
           <li v-for="(p, i) in products"
             :class="['catalog__item', p.znachek_class]">
 
-             <a :href="p.href" class="catalog__item-link">
+             <a @click="gtmProductClick(i)" :href="p.href" class="catalog__item-link">
                 <img :src="p.image">
              </a>
 
              <div class="catalog__item-ivaninfo">
                 <div class="row">
                    <div class="col-xs-12">
-                      <h3 class="ivanitemtitle"><a :href="p.href">{{ p.h1 }}</a></h3>
+                      <h3 @click="gtmProductClick(i)" class="ivanitemtitle"><a :href="p.href">{{ p.h1 }}</a></h3>
                    </div>
                    <div class="col-xs-7"><span class="catalog__item-price-default">{{ getPrice(i) }} <span class="ruble-sign">Р</span></span></div>
                    <div class="col-xs-5">
-                      <div><a :href="p.href" class="ivanbuybutton">Купить</a></div>
+                      <div><a @click="gtmProductClick(i)" :href="p.href" class="ivanbuybutton">Купить</a></div>
                    </div>
                 </div>
              </div>
@@ -46,6 +46,7 @@ export default {
             'canLoadMore',
             'getRating',
             'getPrice',
+            'getProductForGTM',
         ]),
         ...mapState('catalog', [
             'products',
@@ -56,10 +57,22 @@ export default {
         ...mapActions('catalog', [
             'loadMoreRequest',
         ]),
+        ...mapActions('gtm', [
+            'productClick',
+        ]),
 
         loadMore() {
             this.loadMoreRequest()
         },
+
+        gtmProductClick(i) {
+            let product = this.getProductForGTM(i)
+            this.productClick({page_type: false, product})
+        },
+    },
+    mounted() {
+        // GTM
+        this.$store.dispatch('gtm/loadCatalog')
     },
 }
 </script>

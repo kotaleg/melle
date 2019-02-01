@@ -98,6 +98,38 @@ class ControllerExtensionModuleMelle extends Controller
         $state['public_offer_link'] = $this->model_extension_pro_patch_url->ajax('information/information', '&information_id=5', true);
         $state['delivery_link'] = $this->model_extension_pro_patch_url->ajax('information/information', '&information_id=8', true);
 
+        // GTM EVENTS
+        $this->load->controller('extension/module/melle/initGTM');
+
+        // SET STATE
+        $this->document->addState($state['id'], json_encode($state));
+    }
+
+    public function initGTM()
+    {
+        // VARIABLE
+        $state['id'] = "{$this->codename}_gtm";
+
+        $pt = $this->model_tool_base->getPageType();
+        $state['page_type'] = 'other';
+
+        switch ($pt) {
+            case 'checkout':
+                $state['page_type'] = $pt;
+                break;
+            case 'category':
+                $state['page_type'] = $pt;
+                break;
+            case 'product':
+                $state['page_type'] = $pt;
+                break;
+            case 'search':
+                $state['page_type'] = 'Search Results';
+                break;
+        }
+
+        $state['related_products'] = array();
+
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
     }
@@ -117,7 +149,6 @@ class ControllerExtensionModuleMelle extends Controller
         $state['clear'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_clear', '', true);
         $state['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_oneclick', '', true);
 
-        $this->load->model('tool/base');
         if (strcmp($this->model_tool_base->getPageType(), 'checkout') === 0) {
             $state['is_checkout'] = true;
         } else {
@@ -171,11 +202,13 @@ class ControllerExtensionModuleMelle extends Controller
         $product_info = $this->model_catalog_product->getProduct($product_id);
 
         if ($product_info) {
-
             // REVIEW
             $this->initProductReview($product_id);
 
             $state['product_id'] = $product_id;
+            $state['name'] = $product_info['name'];
+            $state['manufacturer'] = $product_info['manufacturer'];
+            $state['current_category'] = $this->model_tool_base->getCurrentCategoryName();
             $state['quantity'] = 1;
 
             $state['default_values'] = $this->model_extension_module_super_offers->getDefaultValues($product_id, $product_info);
@@ -217,6 +250,7 @@ class ControllerExtensionModuleMelle extends Controller
         $state = array_merge($state, $this->model_catalog_super->getProducts());
 
         $state['design_col'] = true;
+        $state['current_category'] = $this->model_tool_base->getCurrentCategoryName();
         $state['get_link'] = $this->model_extension_pro_patch_url->ajax('product/category/melle_get', '', true);
 
         // SET STATE

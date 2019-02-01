@@ -59,8 +59,82 @@
 {{ analytic }}
 {% endfor %}
 
+<!-- Global sitee tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110511917-1"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-110511917-1');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KWDGTS9');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter46407828 = new Ya.Metrika2({
+                    id:46407828,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true,
+                    trackHash:true,
+                    ecommerce:"dataLayer"
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/tag.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks2");
+</script>
+<noscript>
+    <div>
+        <img src="https://mc.yandex.ru/watch/46407828" style="position:absolute; left:-9999px;" alt="" />
+    </div>
+</noscript>
+<!-- /Yandex.Metrika counter -->
+
+<script type="text/javascript">
+   var rrPartnerId = "5a81b1d8c7d011df204f1ed8";
+   var rrApi = {};
+   var rrApiOnReady = rrApiOnReady || [];
+   rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
+       rrApi.recomMouseDown = rrApi.recomAddToCart = function() {};
+   (function(d) {
+       var ref = d.getElementsByTagName('script')[0];
+       var apiJs, apiJsId = 'rrApi-jssdk';
+       if (d.getElementById(apiJsId)) return;
+       apiJs = d.createElement('script');
+       apiJs.id = apiJsId;
+       apiJs.async = true;
+       apiJs.src = "//cdn.retailrocket.ru/content/javascript/tracking.js";
+       ref.parentNode.insertBefore(apiJs, ref);
+   }(document));
+</script>
+
 </head>
 <body>
+
+    <!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWDGTS9"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><!-- End Google Tag Manager (noscript) -->
+
 <section id="melle-mount"> <!-- START MAIN SECTION -->
     {{melle_mobile_menu}}
 

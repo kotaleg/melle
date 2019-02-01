@@ -124,7 +124,7 @@ class ControllerProductSearch extends Controller {
         );
 
         if (isset($this->request->get['search'])) {
-            $data['heading_title'] = $this->language->get('heading_title') .  ' - ' . $this->request->get['search'];
+            $data['heading_title'] = $this->language->get('heading_title');
         } else {
             $data['heading_title'] = $this->language->get('heading_title');
         }

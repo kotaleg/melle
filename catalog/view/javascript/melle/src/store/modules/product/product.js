@@ -13,6 +13,9 @@ const state = {
     errors: new Errors(),
 
     product_id: '',
+    name: '',
+    manufacturer: '',
+    current_category: '',
     quantity: 1,
 
     is_options_for_product: false,
@@ -41,7 +44,15 @@ const getters = {
     getFieldError: state => field => {
         return state.errors.first(field)
     },
-
+    getProductForGTM: state => {
+        return {
+            id: state.product_id,
+            name: state.name,
+            price: state.default_values.price,
+            brand: state.manufacturer,
+            category: state.current_category,
+        }
+    },
     getRating: state => {
         let rating = []
         for (let r in [1,2,3,4,5]) {
@@ -157,10 +168,6 @@ const actions = {
 
         commit('setQuantity', q)
     },
-    selectFirstAvailable({ commit }) {
-
-    },
-
     radioHandler({ commit, dispatch, getters }, payload) {
         let o_key = payload.o_key
         let ov_key = payload.ov_key
@@ -180,7 +187,6 @@ const actions = {
             dispatch('clearDisableForAll')
         }
     },
-
     clearSelectionForOption({ commit, state }, o_key) {
         if (!has(state.options, o_key)) {
             return
@@ -197,7 +203,6 @@ const actions = {
             commit('setOptionSelectStatus', {o_key, ov_key, status:false})
         })
     },
-
     clearDisableForAll({ commit, state }) {
         state.options.forEach((option, o_key) => {
             if (!isArray(option.product_option_value)
@@ -210,7 +215,6 @@ const actions = {
             })
         })
     },
-
     updateSelectionFromGenerated({ commit, state }, payload) {
         if (!has(state.options, payload.o_key)) {
             return
@@ -248,7 +252,6 @@ const actions = {
 
         })
     },
-
     makeOnlyOneActive({ commit, state }, o_key) {
         if (!has(state.options, o_key)) {
             return
@@ -292,6 +295,12 @@ const actions = {
                 notify.messageHandler(res.data, '_header')
 
                 this.dispatch('cart/updateCartDataRequest')
+
+
+                if (has(res.data, 'added') && res.data.added === true) {
+                    // GTM
+                    this.dispatch('gtm/addToCart', getters.getProductForGTM)
+                }
             }
         )
     },

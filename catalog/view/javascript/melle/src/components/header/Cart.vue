@@ -129,6 +129,10 @@ export default {
             }
         },
     },
+    mounted() {
+        // GTM
+        this.$store.dispatch('gtm/openCheckoutPage')
+    },
 }
 </script>
 

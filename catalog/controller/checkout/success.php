@@ -4,6 +4,12 @@ class ControllerCheckoutSuccess extends Controller {
         $this->load->language('checkout/success');
 
         if (isset($this->session->data['order_id'])) {
+
+            /* IVAN MODIFICATION START */
+            $this->load->model('checkout/cart');
+            $data['final_gtm_data'] = $this->model_checkout_cart->prepareFinalGTMData();
+            /* IVAN MODIFICATION END */
+
             $this->cart->clear();
 
             unset($this->session->data['shipping_method']);
