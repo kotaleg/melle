@@ -32,7 +32,6 @@ system/storage/upload*
 system/storage/session*
 image/cache*
 install/*
-.htaccess*
 php.ini*
 
 # ---------------------------------------------------------------------------------------------------------

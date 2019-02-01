@@ -379,48 +379,51 @@ class ControllerAccountOrder extends Controller {
         $order_info = $this->model_account_order->getOrder($order_id);
 
         if ($order_info) {
-            if (isset($this->request->get['order_product_id'])) {
-                $order_product_id = $this->request->get['order_product_id'];
-            } else {
-                $order_product_id = 0;
-            }
 
-            $order_product_info = $this->model_account_order->getOrderProduct($order_id, $order_product_id);
+            $order_products = $this->model_account_order->getOrderProducts($order_id);
+            echo "<pre>"; print_r('TODO'); echo "</pre>";exit;
 
-            if ($order_product_info) {
-                $this->load->model('catalog/product');
+            // foreach ($order_products as $product) {
+            //     echo "<pre>"; print_r($product); echo "</pre>";exit;
+            //     $order_options = $this->model_account_order->getOrderOptions($order_product_info['order_id'], $order_product_id);
+            // }
 
-                $product_info = $this->model_catalog_product->getProduct($order_product_info['product_id']);
+            // $order_product_info = $this->model_account_order->getOrderProduct($order_id, $order_product_id);
 
-                if ($product_info) {
-                    $option_data = array();
+            // if ($order_product_info) {
+            //     $this->load->model('catalog/product');
 
-                    $order_options = $this->model_account_order->getOrderOptions($order_product_info['order_id'], $order_product_id);
+            //     $product_info = $this->model_catalog_product->getProduct($order_product_info['product_id']);
 
-                    foreach ($order_options as $order_option) {
-                        if ($order_option['type'] == 'select' || $order_option['type'] == 'radio' || $order_option['type'] == 'image') {
-                            $option_data[$order_option['product_option_id']] = $order_option['product_option_value_id'];
-                        } elseif ($order_option['type'] == 'checkbox') {
-                            $option_data[$order_option['product_option_id']][] = $order_option['product_option_value_id'];
-                        } elseif ($order_option['type'] == 'text' || $order_option['type'] == 'textarea' || $order_option['type'] == 'date' || $order_option['type'] == 'datetime' || $order_option['type'] == 'time') {
-                            $option_data[$order_option['product_option_id']] = $order_option['value'];
-                        } elseif ($order_option['type'] == 'file') {
-                            $option_data[$order_option['product_option_id']] = $this->encryption->encrypt($this->config->get('config_encryption'), $order_option['value']);
-                        }
-                    }
+            //     if ($product_info) {
+            //         $option_data = array();
 
-                    $this->cart->add($order_product_info['product_id'], $order_product_info['quantity'], $option_data);
+            //         $order_options = $this->model_account_order->getOrderOptions($order_product_info['order_id'], $order_product_id);
 
-                    $this->session->data['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $product_info['product_id']), $product_info['name'], $this->url->link('checkout/cart'));
+            //         foreach ($order_options as $order_option) {
+            //             if ($order_option['type'] == 'select' || $order_option['type'] == 'radio' || $order_option['type'] == 'image') {
+            //                 $option_data[$order_option['product_option_id']] = $order_option['product_option_value_id'];
+            //             } elseif ($order_option['type'] == 'checkbox') {
+            //                 $option_data[$order_option['product_option_id']][] = $order_option['product_option_value_id'];
+            //             } elseif ($order_option['type'] == 'text' || $order_option['type'] == 'textarea' || $order_option['type'] == 'date' || $order_option['type'] == 'datetime' || $order_option['type'] == 'time') {
+            //                 $option_data[$order_option['product_option_id']] = $order_option['value'];
+            //             } elseif ($order_option['type'] == 'file') {
+            //                 $option_data[$order_option['product_option_id']] = $this->encryption->encrypt($this->config->get('config_encryption'), $order_option['value']);
+            //             }
+            //         }
 
-                    unset($this->session->data['shipping_method']);
-                    unset($this->session->data['shipping_methods']);
-                    unset($this->session->data['payment_method']);
-                    unset($this->session->data['payment_methods']);
-                } else {
-                    $this->session->data['error'] = sprintf($this->language->get('error_reorder'), $order_product_info['name']);
-                }
-            }
+            //         $this->cart->add($order_product_info['product_id'], $order_product_info['quantity'], $option_data);
+
+            //         $this->session->data['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $product_info['product_id']), $product_info['name'], $this->url->link('checkout/cart'));
+
+            //         unset($this->session->data['shipping_method']);
+            //         unset($this->session->data['shipping_methods']);
+            //         unset($this->session->data['payment_method']);
+            //         unset($this->session->data['payment_methods']);
+            //     } else {
+            //         $this->session->data['error'] = sprintf($this->language->get('error_reorder'), $order_product_info['name']);
+            //     }
+            // }
         }
 
         $this->response->redirect($this->url->link('account/order/info', 'order_id=' . $order_id));

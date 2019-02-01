@@ -45,12 +45,12 @@
                 :title="text_edit">
 
                 <form class="form-horizontal">
-                    <div class="form-group clearfix">
+                    <div class="form-group">
                         <label class="col-sm-3 col-lg-2 control-label">{{ text_status }}</label>
                         <div class="col-sm-9 col-lg-5">
                             <toggle-button
                                 v-model="status"
-                                :width="80"
+                                :width="100"
                                 :height="25"
                                 :labels="getToggleStates"/>
                         </div>

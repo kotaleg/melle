@@ -1,0 +1,10 @@
+Options -Indexes
+
+<Files *.*>
+Order Deny,Allow
+Deny from all
+</Files>
+<Files ~ "export.(xml)$">
+Order Allow,Deny
+Allow from all
+</Files>

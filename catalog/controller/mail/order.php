@@ -251,6 +251,23 @@ class ControllerMailOrder extends Controller {
             );
         }
 
+        /* IVAN MODIFICATION START */
+
+        $data['full_name'] = "{$order_info['payment_firstname']} {$order_info['payment_lastname']}";
+
+        $this->load->model('tool/base');
+        $data['base'] = $this->model_tool_base->getBase();
+        $data['mail_images'] = array(
+            'facebook' => "{$data['base']}catalog/view/theme/melle/image/mail/facebook.png",
+            'instagram' => "{$data['base']}catalog/view/theme/melle/image/mail/instagram.png",
+            'lower_image3' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image3.png",
+            'lower_image2' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image2.png",
+            'lower_image1' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image1.png",
+            'kolgotki_main' => "{$data['base']}catalog/view/theme/melle/image/mail/kolgotki-main.png",
+            'mail_logo' => "{$data['base']}catalog/view/theme/melle/image/mail/mail-logo.png",
+        );
+        /* IVAN MODIFICATION END */
+
         $this->load->model('setting/setting');
 
         $from = $this->model_setting_setting->getSettingValue('config_email', $order_info['store_id']);
