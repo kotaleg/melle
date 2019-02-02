@@ -1,0 +1,13 @@
+SUP.ksl-red {
+	padding-left: 3px;
+	color: red;
+}
+/* Отступ названий полей формы */
+#ksl-shipping-method label{
+	padding-left: 0;
+}
+/* Ширина полей закладки "Способ доставки" */
+#collapse-shipping-method .radio label:first-of-type{
+	width: 50%;
+	min-width: 240px;
+}

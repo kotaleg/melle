@@ -1,0 +1,497 @@
+.show {
+  display: block !important;
+}
+.hidden {
+  display: none !important;
+}
+.main {
+  position: relative;
+}
+.preloader {
+  display: none;
+  position: absolute;
+  top: calc( 50% - 100px );
+  left: calc( 50% - 100px );
+  z-index: 5;
+}
+
+
+.pvz-list-link {
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 20px;
+  font-size: 0.8em;
+  color: #333333;
+  text-decoration: underline;
+}
+.pvz-list-link img {
+  width: 20px;
+  margin-right: 10px;
+}
+.pvz-list-link:hover {
+  color: #000;
+}
+.pvz-map-link {
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 20px;
+  font-size: 0.8em;
+  color: #333333;
+  text-decoration: underline;
+}
+.pvz-map-link img {
+  width: 20px;
+  margin-right: 10px;
+}
+.pvz-map-link:hover {
+  color: #000;
+}
+.pvz-map-link:focus {
+  border: none;
+}
+.pvz-div {
+  display: none;
+  position: absolute;
+  min-width: 180px;
+  max-width: 450px;
+  margin: 5px 0 0 15px;
+      z-index: 99999;
+}
+.pvz-list {
+  height: 180px;
+  margin-bottom: 0;
+  padding: 5px 0;
+  list-style: none;
+  background-color: #fff;
+  border: 1px solid gray;
+  overflow-y: auto;
+  z-index: 5;
+}
+.pvz-list .pvz-list-company {
+  padding: 5px 10px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.pvz-list .pvz-item {
+  padding: 5px 10px;
+}
+.pvz-list .pvz-item:hover {
+  background-color: #e5e5e5;
+  cursor: pointer;
+}
+.pvz-list .pvz-item.selected {
+  background-color: #e5e5e5;
+}
+.pvz-list .pvz-item img {
+  width: 40px;
+  margin-right: 10px;
+}
+
+.delivery-price {
+  display: inline-block;
+  float: right;
+  margin-top: -20px;
+}
+.delivery-price2 {
+  display: inline-block;
+  float: right;
+  margin-top: -20px;
+}
+.delivery-price3 {
+  display: inline-block;
+  float: right;
+  margin-top: -20px;
+}
+.delivery-price4 {
+  display: inline-block;
+  float: right;
+  margin-top: -20px;
+}
+.vidget-form .button-block {
+  text-align: left;
+}
+
+.i-checks {
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.i-checks > i {
+  
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-top: 6px;
+  margin-right: 10px;
+  margin-left: -30px;
+  line-height: 1;
+  vertical-align: middle;
+}
+.i-checks > i:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: transparent;
+  content: "";
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.i-checks input:checked + i:before {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  background-color: transparent;
+}
+.i-checks input:checked + i:before {
+  top: 4px;
+  left: 4px;
+  width: 10px;
+  height: 10px;
+}
+
+.ui-autocomplete {
+  width: 50%;
+  background-color: #fff;
+  border: 1px solid gray;
+}
+.modal-dialog {
+  max-width: 70vw;
+}
+.modal-content {
+  width: 70vw;
+}
+.modal-body {
+  position: relative;
+}
+.delivery-service-filter {
+  position: absolute;
+  bottom: 80px;
+  right: 30px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  z-index: 1055;
+}
+.modal-title {
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: 700;
+}
+.delivery-service-list h5 {
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 700;
+}
+#mapdostavim {
+  width: 100%;
+  height: 70vh;
+}
+#errorModal {
+  z-index: 1100;
+}
+#errorModal .modal-dialog {
+  margin-top: 40vh;
+  width: 400px;
+}
+#errorModal .modal-content {
+  width: 100%;
+}
+
+/* Окно */
+#modal_form {
+	width: 300px; 
+	height: 300px; /* Размеры должны быть фиксированы */
+	background: #fff;
+	position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+	top: 45%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+	left: 50%; /* половина экрана слева */
+	margin-top: -150px;
+	margin-left: -150px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+	display: none; /* в обычном состоянии окна не должно быть */
+	opacity: 0; /* полностью прозрачно для анимирования */
+	z-index: 99999; /* окно должно быть наиболее большем слое */ /* окно должно быть наиболее большем слое */
+	padding: 20px 10px;
+}
+/* Кнопка закрыть  */
+#modal_form #modal_close {
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	display: block;
+}
+/* Подложка */
+#overlay {
+	z-index: 3; /* подложка должна быть выше слоев элементов сайта, но ниже слоя модального окна */
+	position: fixed; /* всегда перекрывает весь сайт */
+	background-color: #000; /* черная */
+	opacity: 0.8; /* но немного прозрачна */
+	width: 100%; 
+	height: 100%; /* размером во весь экран */
+	top: 0; 
+	left: 0; /* сверху и слева 0, обязательные свойства! */
+	cursor: pointer;
+	display: none; /* в обычном состоянии её нет) */
+}
+/* Подложка */
+#overlayDostavim {
+	z-index: 99; /* подложка должна быть выше слоев элементов сайта, но ниже слоя модального окна */
+	position: fixed; /* всегда перекрывает весь сайт */
+	background-color: #000; /* черная */
+	opacity: 0.8; /* но немного прозрачна */
+	width: 100%; 
+	height: 100%; /* размером во весь экран */
+	top: 0; 
+	left: 0; /* сверху и слева 0, обязательные свойства! */
+	cursor: pointer;
+	display: none; /* в обычном состоянии её нет) */
+}
+
+#exampleModal {
+	width:75%;
+    outline: 0;
+
+	background: #fff;
+	position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+	top: 20%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+	left: 17%; /* 17% экрана слева */
+	margin-top: -5%;
+	margin-left: -5%; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+	display: none; /* в обычном состоянии окна не должно быть */
+	opacity: 0; /* полностью прозрачно для анимирования */
+	z-index: 99999 !important; /* окно должно быть наиболее большем слое */
+	padding: 20px 10px;
+	margin-top: -10%;
+}
+.modal-content {
+position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3rem;
+    outline: 0;
+	}
+	.modal-header .close {
+    padding: 1rem;
+    margin: -1rem -1rem -1rem auto;
+}
+button.close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}
+.modal-title {
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: 700;
+}
+.modal-header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    border-top-left-radius: .3rem;
+    border-top-right-radius: .3rem;
+}
+#errorModal {
+    z-index: 1100;
+}
+.modal.fade .modal-dialog {
+    transition: -webkit-transform .3s ease-out;
+    transition: transform .3s ease-out;
+    transition: transform .3s ease-out,-webkit-transform .3s ease-out;
+    -webkit-transform: translate(0,-25%);
+    transform: translate(0,-25%);
+}
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: .5rem;
+    pointer-events: none;
+}
+.close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+	cursor: pointer;
+}
+#mapdostavim {
+    width: 100%;
+height: 75vh;
+}
+.modal-dialog {
+    max-width: 75vw;
+}.modal-body {
+    position: relative;
+    width: 100%;
+}
+delivery-service-filter {
+    position: fixed;
+	}
+#nameDostavimID{display:block}
+#nameDostavimIDnone{display:none}
+
+.advice_variant{
+	padding-top: 1%;
+    padding-left: 3%;
+	cursor:pointer;
+}
+.advice_variant:hover{
+	color:#000;
+	font-weight:bold;
+}
+
+#deliveryCity{
+	width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0px !important;
+    font-size: 15px;
+    height: 35px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+}
+#customer{
+	width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0px !important;
+    font-size: 15px;
+    height: 35px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;	
+}
+#customersTel{
+	width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0px !important;
+    font-size: 15px;
+    height: 35px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;	
+}
+#customersEmail{
+	width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0px !important;
+    font-size: 15px;
+    height: 35px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;	
+}
+#deliveryAddress{
+	width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0px !important;
+    font-size: 15px;
+    height: 35px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;	
+}
+#deliveryComment{
+	width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0px !important;
+    font-size: 15px;
+    height: 35px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;	
+}
+/*#vidget-form-submit {
+text-transform: uppercase;
+    color: white;
+    background-color: #38C0EB;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+	cursor:pointer;
+	margin-bottom: 10px;
+}*/
+.advice_variant{
+	padding-top: 1%;
+    padding-left: 3%;
+	cursor:pointer;
+}
+.advice_variant:hover{
+	color:#000;
+	font-weight:bold;
+}
+#absolutDostavim + #absolutDostavim{
+	display:none;
+}
+.address-filter{
+display:none
+}
+/*.button31 {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  width: 3em;
+  height: 3em;
+  border-radius: 100%;
+  outline: none;
+  background: #ddd;
+  box-shadow: 0 1px rgba(0,0,0,.1) inset, 0 1px #fff;
+}*/
+input.address-filter {
+    display: none;
+}
+@-webkit-keyframes rotate31 {
+  100% {-webkit-transform: rotate(360deg);}
+}
+@keyframes rotate31 {
+  100% {transform: rotate(360deg);}
+}
+span.hidepvz{ display:none;}
+@media screen and (min-width:480px) and (max-width:800px) {
+.delivery-service-filter {
+		display: none;
+	}
+}
+@media all and (orientation: portrait) {
+.delivery-service-filter {
+		display: none;
+	}
+}

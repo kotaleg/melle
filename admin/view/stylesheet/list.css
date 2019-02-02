@@ -1,0 +1,96 @@
+h4 {
+
+  text-align: center;
+
+}
+.order-list {
+  margin-bottom: 50px;
+      text-align: center;
+}
+th,
+td {
+  font-size: 13px;
+  line-height: 15px;
+  padding: 10px;
+  border: none;
+}
+th:nth-child(1),
+td:nth-child(1) {
+  width: 10%;
+}
+th:nth-child(2),
+td:nth-child(2) {
+  width: 10%;
+}
+th:nth-child(3),
+td:nth-child(3) {
+  width: 7%;
+}
+th:nth-child(4),
+td:nth-child(4) {
+  width: 15%;
+}
+th:nth-child(5),
+td:nth-child(5) {
+  width: 11%;
+}
+th:nth-child(6),
+td:nth-child(6) {
+  width: 12%;
+}
+th:nth-child(7),
+td:nth-child(7) {
+  width: 8%;
+}
+th:nth-child(8),
+td:nth-child(8) {
+  width: 10%;
+}
+th:nth-child(8) img,
+td:nth-child(8) img {
+  /*width: 100%;*/
+}
+th:nth-child(9),
+td:nth-child(9) {
+  width: 12%;
+}
+th:nth-child(10),
+td:nth-child(10) {
+  width: 5%;
+}
+th {
+  padding: 10px 10px;
+  text-align: left;
+  color: #000000;
+  font-weight: 700;
+}
+thead {
+  background-color: rgb(244, 244, 248);
+}
+td {
+  border: 1px solid #DDDDDD;
+}
+.btn-info {
+    text-decoration: none;
+    color: #FFF !important;    
+	border-radius: 10px 10px 10px 10px;
+    display: inline-block;
+    padding: 5px 10px 5px 10px;
+    background: #003A88;
+	border: none;
+}
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active {
+  background-color: #3C76C8 !important;
+  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+}
+.btn-delete {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+}
+.btn-delete:hover {
+  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}

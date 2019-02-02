@@ -1,0 +1,1376 @@
+{{ header }}
+<style>
+input.serviceChoice {
+    background: transparent !important;
+	    display: none;
+}
+#orderFizik {
+    padding: 0px;
+    border: none;
+	    background: transparent !important;
+	    display: none;
+}
+#orderUrik {
+    padding: 0px;
+    border: none;
+	    background: transparent !important;
+	    display: none;
+}
+/* Подложка */
+.serviceChoice
+			{
+				padding: 0px !important;
+				border: none !important;
+			}
+#overlay {
+	z-index: 3; /* подложка должна быть выше слоев элементов сайта, но ниже слоя модального окна */
+	position: fixed; /* всегда перекрывает весь сайт */
+	background-color: #000; /* черная */
+	opacity: 0.8; /* но немного прозрачна */
+	width: 100%; 
+	height: 100%; /* размером во весь экран */
+	top: 0; 
+	left: 0; /* сверху и слева 0, обязательные свойства! */
+	cursor: pointer;
+	display: none; /* в обычном состоянии её нет) */
+}
+#modal_form {
+	width: 300px; 
+	height: 300px; /* Размеры должны быть фиксированы */
+	background: #fff;
+	position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+	top: 45%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+	left: 50%; /* половина экрана слева */
+	margin-top: -150px;
+	margin-left: -150px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+	display: none; /* в обычном состоянии окна не должно быть */
+	opacity: 0; /* полностью прозрачно для анимирования */
+	z-index: 5; /* окно должно быть наиболее большем слое */
+	padding: 20px 10px;
+}
+/* Кнопка закрыть  */
+#modal_form #modal_close {
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	display: block;
+}
+
+.search_area{
+			width: 350px;
+			margin: 0px;
+			position: relative;
+		}
+
+
+#search_advice_wrapper{
+			display:none;
+			width: 100%;
+			color: #333;
+			-moz-opacity: 0.95;
+			opacity: 0.95;
+			-ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=95);
+			filter: progid:DXImageTransform.Microsoft.Alpha(opacity=95);
+			filter:alpha(opacity=95);
+			z-index:999;
+			position: relative;
+			top: 24px; left: 0px;
+			border: 1px solid #D2D2D2;
+			border-radius: 5px;
+		}
+
+#search_advice_wrapper .advice_variant{
+			cursor: pointer;
+			padding: 5px;
+			text-align: left;
+			background-color: #818187;
+			color:white;
+		}
+#search_advice_wrapper .advice_variant:hover{
+			color:#FEFFBD;
+			background-color:#818187;
+		}
+#search_advice_wrapper .active{
+			cursor: pointer;
+			padding: 5px;
+			color:#FEFFBD;
+			background-color:#818187;
+		}
+
+</style>
+<script>
+
+    // Отправка заказа
+    function sendFormData() {
+		var formData = {};
+		var customerId = jQuery('#dostkey').text();  
+		formData.cityGuid = jQuery('#dostguid').text();        
+		formData.methodBlockNumber = jQuery('#dostdeliveryNum').text();        
+		formData.deliveryPointId = jQuery('#dostdeliveryId').text();
+		formData.deliveryPointCode = jQuery('#dostdeliveryId').text();
+		formData.deliveryPointGuid = null;        
+		formData.deliveryServiceId = jQuery('#dostdeliveryService').text();		
+		formData.clientFullName = jQuery('#dostshipping_firstname').text();
+		formData.clientPhone = jQuery('#dosttelephone').text();
+		formData.orderCost = jQuery('#dostsummaPrice').text();
+		formData.deliveryCost = jQuery('#dostcountPrice').text();
+		formData.length = jQuery('#dostdostavimlength').text();
+		formData.width = jQuery('#dostdostavimwidth').text();
+		formData.height = jQuery('#dostdostavimheight').text();
+		formData.weight = jQuery('#dostdostavimweight').text();
+		formData.clientAddress = jQuery('#dostshipping_address_1').text();
+		formData.clientCommentary = jQuery('#dostcomment').text();
+		console.log(formData);
+		jQuery.ajax({                    
+            url: "https://api.dostav.im/StoreWidget/OrderCreate",            
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: "json", 
+            headers: {
+              authorization: customerId
+            },
+            data: JSON.stringify(formData),
+            success: function (got) {
+			
+			$("#formelin").append("<h2>Доставка зарегестрирована в службе Dostav.im</h2> "); //выводим надпись
+			updateOrderDostavim('#'+got.orderId , jQuery('#dostdostavimorder_id').text());
+            setTimeout(function() {location.reload(true); }, 10);			
+			
+                return console.log(got);
+            },
+            error : function (msg) {
+				
+                return console.log(msg);
+            },
+            timeout: 30000
+        }); 
+    };
+		
+    // Отправка заказа
+    function sendFormData12345() {
+	location.reload(true)
+    };
+		
+    // Отправка заказа
+    function updateOrderDostavim(value,id) {
+		//var value = 300;
+		//var id = 7;
+					jQuery.ajax({
+					url: "index.php?route=setting/dostavimajaxquote&user_token={{ user_token }}",
+					type: 'post',
+					data: {name:'dostavimOrder', orderIddostavim:value, orderIdOC:id},
+					dataType: 'json',
+					success: function (ajax) { 
+						console.log(ajax);
+				   
+					}, 
+					error: function (msg) {
+						console.log(msg);
+							}
+					}); 
+	}
+		
+</script>
+{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right"><a href="{{ invoice }}" target="_blank" data-toggle="tooltip" title="{{ button_invoice_print }}" class="btn btn-info"><i class="fa fa-print"></i></a> <a href="{{ shipping }}" target="_blank" data-toggle="tooltip" title="{{ button_shipping_print }}" class="btn btn-info"><i class="fa fa-truck"></i></a> <a href="{{ edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a> <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }} от Dostavim</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-shopping-cart"></i> {{ text_order_detail }}</h3>
+          </div>
+          <table class="table">
+            <tbody>
+              <tr>
+                <td style="width: 1%;"><button data-toggle="tooltip" title="{{ text_store }}" class="btn btn-info btn-xs"><i class="fa fa-shopping-cart fa-fw"></i></button></td>
+                <td><a href="{{ store_url }}" target="_blank">{{ store_name }}</a></td>
+              </tr>
+              <tr>
+                <td><button data-toggle="tooltip" title="{{ text_date_added }}" class="btn btn-info btn-xs"><i class="fa fa-calendar fa-fw"></i></button></td>
+                <td>{{ date_added }}</td>
+              </tr>
+              <tr>
+                <td><button data-toggle="tooltip" title="{{ text_payment_method }}" class="btn btn-info btn-xs"><i class="fa fa-credit-card fa-fw"></i></button></td>
+                <td>{{ payment_method }}</td>
+              </tr>
+            {% if shipping_method %}
+            <tr>
+              <td><button data-toggle="tooltip" title="{{ text_shipping_method }}" class="btn btn-info btn-xs"><i class="fa fa-truck fa-fw"></i></button></td>
+              <td>{{ shipping_method }}</td>
+            </tr>
+            {% endif %}
+              </tbody>
+            
+          </table>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-user"></i> {{ text_customer_detail }}</h3>
+          </div>
+          <table class="table">
+            <tr>
+              <td style="width: 1%;"><button data-toggle="tooltip" title="{{ text_customer }}" class="btn btn-info btn-xs"><i class="fa fa-user fa-fw"></i></button></td>
+              <td>{% if customer %} <a href="{{ customer }}" target="_blank">{{ firstname }} {{ lastname }}</a> {% else %}
+                {{ firstname }} {{ lastname }}
+                {% endif %}</td>
+            </tr>
+            <tr>
+              <td><button data-toggle="tooltip" title="{{ text_customer_group }}" class="btn btn-info btn-xs"><i class="fa fa-group fa-fw"></i></button></td>
+              <td>{{ customer_group }}</td>
+            </tr>
+            <tr>
+              <td><button data-toggle="tooltip" title="{{ text_email }}" class="btn btn-info btn-xs"><i class="fa fa-envelope-o fa-fw"></i></button></td>
+              <td><a href="mailto:{{ email }}">{{ email }}</a></td>
+            </tr>
+            <tr>
+              <td><button data-toggle="tooltip" title="{{ text_telephone }}" class="btn btn-info btn-xs"><i class="fa fa-phone fa-fw"></i></button></td>
+              <td>{{ telephone }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-cog"></i> {{ text_option }}</h3>
+          </div>
+          <table class="table">
+            <tbody>
+              <tr>
+                <td>{{ text_invoice }}</td>
+                <td id="invoice" class="text-right">{{ invoice_no }}</td>
+                <td style="width: 1%;" class="text-center">{% if not invoice_no %}
+                  <button id="button-invoice" data-loading-text="{{ text_loading }}" data-toggle="tooltip" title="{{ button_generate }}" class="btn btn-success btn-xs"><i class="fa fa-cog"></i></button>
+                  {% else %}
+                  <button disabled="disabled" class="btn btn-success btn-xs"><i class="fa fa-refresh"></i></button>
+                  {% endif %}</td>
+              </tr>
+              <tr>
+                <td>{{ text_reward }}</td>
+                <td class="text-right">{{ reward }}</td>
+                <td class="text-center">{% if customer and reward %}
+                  {% if not reward_total %}
+                  <button id="button-reward-add" data-loading-text="{{ text_loading }}" data-toggle="tooltip" title="{{ button_reward_add }}" class="btn btn-success btn-xs"><i class="fa fa-plus-circle"></i></button>
+                  {% else %}
+                  <button id="button-reward-remove" data-loading-text="{{ text_loading }}" data-toggle="tooltip" title="{{ button_reward_remove }}" class="btn btn-danger btn-xs"><i class="fa fa-minus-circle"></i></button>
+                  {% endif %}
+                  {% else %}
+                  <button disabled="disabled" class="btn btn-success btn-xs"><i class="fa fa-plus-circle"></i></button>
+                  {% endif %}</td>
+              </tr>
+              <tr>
+                <td>{{ text_affiliate }}
+                  {% if affiliate %}
+                  (<a href="{{ affiliate }}">{{ affiliate_firstname }} {{ affiliate_lastname }}</a>)
+                  {% endif %}</td>
+                <td class="text-right">{{ commission }}</td>
+                <td class="text-center">{% if affiliate %}
+                  {% if not commission_total %}
+                  <button id="button-commission-add" data-loading-text="{{ text_loading }}" data-toggle="tooltip" title="{{ button_commission_add }}" class="btn btn-success btn-xs"><i class="fa fa-plus-circle"></i></button>
+                  {% else %}
+                  <button id="button-commission-remove" data-loading-text="{{ text_loading }}" data-toggle="tooltip" title="{{ button_commission_remove }}" class="btn btn-danger btn-xs"><i class="fa fa-minus-circle"></i></button>
+                  {% endif %}
+                  {% else %}
+                  <button disabled="disabled" class="btn btn-success btn-xs"><i class="fa fa-plus-circle"></i></button>
+                  {% endif %}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-info-circle"></i> {{ text_order }}</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <td style="width: 50%;" class="text-left">{{ text_payment_address }}</td>
+              {% if shipping_method %}
+              <td style="width: 50%;" class="text-left">{{ text_shipping_address }}</td>
+              {% endif %} </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left">{{ payment_address }}</td>
+              {% if shipping_method %}
+              <td class="text-left">{{ shipping_address }}</td>
+              {% endif %} </tr>
+          </tbody>
+        </table>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <td class="text-left">{{ column_product }}</td>
+              <td class="text-left">{{ column_model }}</td>
+              <td class="text-right">{{ column_quantity }}</td>
+              <td class="text-right">{{ column_price }}</td>
+              <td class="text-right">{{ column_total }}</td>
+            </tr>
+          </thead>
+          <tbody>
+          
+          {% for product in products %}
+          <tr>
+            <td class="text-left"><a href="{{ product.href }}">{{ product.name }}</a> {% for option in product.option %} <br />
+              {% if option.type != 'file' %}
+              &nbsp;<small> - {{ option.name }}: {{ option.value }}</small> {% else %}
+              &nbsp;<small> - {{ option.name }}: <a href="{{ option.href }}">{{ option.value }}</a></small> {% endif %}
+              {% endfor %}</td>
+            <td class="text-left">{{ product.model }}</td>
+            <td class="text-right">{{ product.quantity }}</td>
+            <td class="text-right">{{ product.price }}</td>
+            <td class="text-right">{{ product.total }}</td>
+          </tr>
+          {% endfor %}
+          {% for voucher in vouchers %}
+          <tr>
+            <td class="text-left"><a href="{{ voucher.href }}">{{ voucher.description }}</a></td>
+            <td class="text-left"></td>
+            <td class="text-right">1</td>
+            <td class="text-right">{{ voucher.amount }}</td>
+            <td class="text-right">{{ voucher.amount }}</td>
+          </tr>
+          {% endfor %}
+          {% for total in totals %}
+          <tr>
+            <td colspan="4" class="text-right">{{ total.title }}</td>
+            <td class="text-right">{{ total.text }}</td>
+          </tr>
+          {% endfor %}
+            </tbody>
+          
+        </table>
+        {% if comment %}
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <td>{{ text_comment }}</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ comment }}</td>
+            </tr>
+          </tbody>
+        </table>
+        {% endif %} </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-comment-o"></i> {{ text_history }}</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab-history" data-toggle="tab">{{ tab_history }}</a></li>
+          <li><a href="#tab-additional" data-toggle="tab">{{ tab_additional }}</a></li>
+          {% for tab in tabs %}
+          <li><a href="#tab-{{ tab.code }}" data-toggle="tab">{{ tab.title }}</a></li>
+          {% endfor %}
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab-history">
+            <div id="history"></div>
+            <br />
+            <fieldset>
+              <legend>{{ text_history_add }}</legend>
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-order-status">{{ entry_order_status }}</label>
+                  <div class="col-sm-10">
+                    <select name="order_status_id" id="input-order-status" class="form-control">
+                      
+                      
+                      {% for order_statuses in order_statuses %}
+                      {% if order_statuses.order_status_id == order_status_id %}
+                      
+                      
+                      <option value="{{ order_statuses.order_status_id }}" selected="selected">{{ order_statuses.name }}</option>
+                      
+                      
+                      {% else %}
+                      
+                      
+                      <option value="{{ order_statuses.order_status_id }}">{{ order_statuses.name }}</option>
+                      
+                      
+                      {% endif %}
+                      {% endfor %}
+                    
+                    
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-override"><span data-toggle="tooltip" title="{{ help_override }}">{{ entry_override }}</span></label>
+                  <div class="col-sm-10">
+                    <div class="checkbox">
+                      <input type="checkbox" name="override" value="1" id="input-override" />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-notify">{{ entry_notify }}</label>
+                  <div class="col-sm-10">
+                    <div class="checkbox">
+                      <input type="checkbox" name="notify" value="1" id="input-notify" />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-comment">{{ entry_comment }}</label>
+                  <div class="col-sm-10">
+                    <textarea name="comment" rows="8" id="input-comment" class="form-control"></textarea>
+                  </div>
+                </div>
+              </form>
+            </fieldset>
+            <div class="text-right">
+              <button id="button-history" data-loading-text="{{ text_loading }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i> {{ button_history_add }}</button>
+            </div>
+          </div>
+          <div class="tab-pane" id="tab-additional"> {% if account_custom_fields %}
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td colspan="2">{{ text_account_custom_field }}</td>
+                  </tr>
+                </thead>
+                <tbody>
+                
+                {% for custom_field in account_custom_fields %}
+                <tr>
+                  <td>{{ custom_field.name }}</td>
+                  <td>{{ custom_field.value }}</td>
+                </tr>
+                {% endfor %}
+                  </tbody>
+                
+              </table>
+            </div>
+            {% endif %}
+            {% if payment_custom_fields %}
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td colspan="2">{{ text_payment_custom_field }}</td>
+                  </tr>
+                </thead>
+                <tbody>
+                
+                {% for custom_field in payment_custom_fields %}
+                <tr>
+                  <td>{{ custom_field.name }}</td>
+                  <td>{{ custom_field.value }}</td>
+                </tr>
+                {% endfor %}
+                  </tbody>
+                
+              </table>
+            </div>
+            {% endif %}
+            {% if shipping_method and shipping_custom_fields %}
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td colspan="2">{{ text_shipping_custom_field }}</td>
+                  </tr>
+                </thead>
+                <tbody>
+                
+                {% for custom_field in shipping_custom_fields %}
+                <tr>
+                  <td>{{ custom_field.name }}</td>
+                  <td>{{ custom_field.value }}</td>
+                </tr>
+                {% endfor %}
+                  </tbody>
+                
+              </table>
+            </div>
+            {% endif %}
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td colspan="2">{{ text_browser }}</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ text_ip }}</td>
+                    <td>{{ ip }}</td>
+                  </tr>
+                {% if forwarded_ip %}
+                <tr>
+                  <td>{{ text_forwarded_ip }}</td>
+                  <td>{{ forwarded_ip }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                  <td>{{ text_user_agent }}</td>
+                  <td>{{ user_agent }}</td>
+                </tr>
+                <tr>
+                  <td>{{ text_accept_language }}</td>
+                  <td>{{ accept_language }}</td>
+                </tr>
+                  </tbody>
+                
+              </table>
+            </div>
+          </div>
+          {% for tab in tabs %}
+          <div class="tab-pane" id="tab-{{ tab.code }}">{{ tab.content }}</div>
+          {% endfor %} </div>
+      </div>
+    </div>
+  </div>
+  
+<!----------------------------------------------------------------------------------------------------------------------------------->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-truck"></i> Доставка от Dostav.im</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab-delivery" data-toggle="tab">Создать заказ</a></li>
+			{% if myaccept_language == '#' %}
+          <li><a href="#tab-senddelivery" data-toggle="tab">Отправить в курьерскую службу</a></li>
+			{% endif %}
+        </ul>
+		 <legend id="formelin" style="color:red"></legend>
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab-delivery">
+            <div id="delivery">
+            <br />
+            <fieldset>
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Почта</label>
+                  <div class="col-sm-10">
+					<span id="dostemail" contenteditable="true">{{ email }}</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Клиент</label>
+                  <div class="col-sm-10">
+					<span id="dostshipping_firstname" contenteditable="true">{{ firstname }}{{ lastname }}</span>
+                  </div>
+                </div>      
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Телефон</label>
+                  <div class="col-sm-10">
+					<span id="dosttelephone" contenteditable="true">{{ telephone }}</span>
+                  </div>
+                </div>            
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Адрес</label>
+                  <div class="col-sm-10">
+					<span id="dostshipping_address_1" contenteditable="true">{{ deliveryAddressParce }}</span>
+                  </div>
+                </div>              
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Город</label>
+                  <div class="col-sm-10">
+					<span id="dostshipping_city">{{ citydostavim }}</span>
+                  </div>
+                </div>                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Регион</label>
+                  <div class="col-sm-10">
+					<span id="dostshipping_region">{{ zonedostavim }}</span>
+                  </div>
+                </div>  
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Содержание посылки</label>
+                  <div class="col-sm-10">
+					<span id="dostname"	contenteditable="true">{{ productname }}</span>
+                  </div>
+                </div>  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Служба доставки</label>
+                  <div class="col-sm-10">
+					<span id="dostdeliveryService">{{ deliveryService }}</span>
+                  </div>
+                </div>  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Общая сумма заказа</label>
+                  <div class="col-sm-10">
+					<span id="dostsummaPrice">{{ productprice }}</span>
+					<span> рублей</span>
+                  </div> 
+                </div>  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Сумма доставки</label>
+				  
+                  <div class="col-sm-10">
+					<span id="dostcountPrice">{{ sumdelivery }}</span>
+					<span> рублей</span> 
+				  </div>
+				  
+                </div>  
+                <div class="form-group" style="display:none">
+                  <label class="col-sm-2 control-label">$key</label>
+                  <div class="col-sm-10">
+					<span id="dostkey">{{ tokenDostavim }}</span>
+                  </div>
+                </div>  
+                <div class="form-group" style="display:none">
+                  <label class="col-sm-2 control-label">Уникальный идентификатор города</label>
+                  <div class="col-sm-10">
+					<span id="dostguid">{{ guidDostavim }}</span>
+                  </div>
+                </div>   				
+                <div class="form-group" style="display:none">
+                  <label class="col-sm-2 control-label">$methodBlockNumber</label>
+                  <div class="col-sm-10">
+					<span id="dostdeliveryNum">{{ deliveryNum }}</span>
+                  </div>
+                </div>  
+               {% if deliveryId is defined and deliveryId is not empty %}				
+                <div class="form-group" style="display:none">
+                  <label class="col-sm-2 control-label">Название ПВЗ</label>
+                  <div class="col-sm-10">
+					<span id="dostdeliveryId">{{ deliveryId }}</span>
+                  </div>
+                </div>  
+				{% endif %} 
+                <div class="form-group" style="display:none">
+                  <label class="col-sm-2 control-label">$deliveryPointCode</label>
+                  <div class="col-sm-10" >
+                  </div>
+                </div>  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Комментарий клиента</label>
+                  <div class="col-sm-10" >
+					<span contenteditable="true" id="dostcomment">{{ comment }}</span>
+                  </div>
+                </div>  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Длина посылки</label>
+                  <div class="col-sm-10">
+					<span id="dostdostavimlength">{{ dostavimlength }}</span>
+                  </div>
+                </div>   
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Ширина посылки</label>
+                  <div class="col-sm-10">
+					<span id="dostdostavimwidth">{{ dostavimwidth }}</span>
+                  </div>
+                </div>   
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Высота посылки</label>
+                  <div class="col-sm-10">
+					<span id="dostdostavimheight">{{ dostavimheight }}</span>
+                  </div>
+                </div>   
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Вес посылки</label>
+                  <div class="col-sm-10">
+					<span id="dostdostavimweight">{{ dostavimweight }}</span>
+                  </div>
+                </div>    
+                <div class="form-group" style="display:none">
+                  <label class="col-sm-2 control-label">Номер заказа</label>
+                  <div class="col-sm-10">
+					<span id="dostdostavimorderid">{{ accept_language }}</span>
+                  </div>
+                </div>  	  
+                <div class="form-group" style="display:none">
+                  <label class="col-sm-2 control-label">Номер заказа в opencart</label>
+                  <div class="col-sm-10">
+					<span id="dostdostavimorder_id">{{ order_id }}</span>
+                  </div>
+                </div>  				
+            </fieldset>
+			</div>
+
+			{% if myaccept_language != '#' %}
+            <div class="text-right">
+              <button onclick="sendFormData();" class="btn btn-primary"><i class="fa fa-paper-plane"></i> создать заказ</button>
+            </div>
+			{% endif %}
+          </div>
+          <div class="tab-pane" id="tab-senddelivery">
+            <div id="senddelivery">
+            <br />
+            <fieldset>
+<!-------------------------------------------------------------------------------------------------------------------------->
+<div id="tab-dostavimcreate" class="vtabs-content">	  
+<!-------------------------------------------->
+
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> стили исправить-->
+<div id="content">
+<img src="http://24dostavim.ru/display-none.png" id="succesDostavim" style="width:100%;position:absolute;z-index: 999999;display:none">
+ <input style="display:none" id="token" type="text" value="{{ tokenDostavim }}" > 
+    <main class="main">
+        <div class="main-div">
+            <div>
+                <table class="order-info">
+                <tbody>
+                    <tr class="order-tr">
+                        <th>Номер заказа</th>
+                        <th>Дата и время создания</th>
+                        <th>Стоимость доставки</th>
+                        <th>Населенный пункт получателя</th>
+                        <th>Вариант пересылки</th>
+                        <th>Адрес получателя</th>
+                        <th>Номер ПВЗ</th>
+                        <th>ФИО клиента</th>
+                        <th>Телефон получателя</th>
+                        <th>Статус доставки</th>                        
+                    </tr>
+                    <tr class="order-tr info-row">
+                        <td class="order-number" contenteditable tabindex="1"></td>
+                        <td></td>
+                        <td class="order-cost"></td>
+                        <td></td>
+                        <td id="numberDost" namber=""></td>
+                        <td></td>
+                        <td id="pvz"></td>
+                        <td></td>
+                        <td></td>
+                        <td id="statusDostavim"></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>            
+            <div class="gray-bg container-fluid">
+                <form class="order-details">
+				
+				
+				
+				
+                    <div class="order-details-first">				
+						<div class="input-div" id="mypvzdostavim">
+							<div class="row">						
+								<div class="col-lg-12">
+								<label>Дата передачи в ПВЗ</label>
+									<input class="form-control" id="pvzDate" type="date" name="pvzDate" value="">
+								</div>						
+							</div> 	
+						</div>		
+						
+
+					<div id="mycourierdostavim">
+						<div class="input-div">
+							<div class="row">
+								<div class="col-lg-6">							
+									<span id="dateCourier">Дата вызова курьера</span>
+									<input class="form-control"  style="padding:8px;font-size:12px" id="courierDate" type="date" name="courierDate" value="" >
+								</div>
+							   <div class="col-lg-6">
+									<span id="timeCourier">Время вызова курьера</span>	
+									<br>
+										<select  style="padding:5px;font-size:12px" class="form-control" id="courierTime1" type="time" name="courierTime1">
+										<option time1="10:00:00" time2="18:00:00">10:00 - 18:00</option>
+										<option time1="10:00:00" time2="15:00:00">10:00 - 15:00</option>
+										<option time1="15:00:00" time2="18:00:00">15:00 - 18:00</option>
+										</select>															
+							   </div>									
+							</div>	
+							<div class="row" id="index"  style="display:none">
+								<div class="col-lg-6">							
+									<span>Индекс</span>
+									<input class="form-control"  style="padding:8px;font-size:12px" id="order-postcode" type="index" name="order-postcode" value="" >
+								</div>								
+								
+							<div class="col-lg-6">							
+																
+							</div>	
+							</div>
+						</div>		
+
+						
+
+					</div>
+<!------------------------------документы------------------------------------------>
+
+<div class="input-div" id="fizizurik" style="display:none">
+							<div class="row">
+								
+							   <div class="col-lg-6">
+								   Физ. лицо <label style="top: 20px;margin-left: 5%;" class="i-checks"> <input type="radio"  id="orderFizik" name="orderLico" value="1"><i></i> </label>
+							   </div>
+							    
+							   <div class="col-lg-6">
+								   Юр. лицо <label style="top: 20px;margin-left: 5%;"  class="i-checks"><input type="radio"  id="orderUrik" name="orderLico" value="0"><i></i></label>						   
+								</div>
+							</div>
+</div>	
+<br><br>
+<div class="fizik">
+							<div class="row">
+							   <div class="col-lg-4">
+								  <span>Паспорт </span> <label style="top: 20px;" class="i-checks"> <input type="radio" class="serviceChoice" id="orderPassport" name="order-doc"  value="0"><i></i> </label>
+							   </div>								
+							   <div class="col-lg-4">
+								  <span>Загран.</span> <label style="top: 20px;" class="i-checks"> <input type="radio" class="serviceChoice" id="orderZagran" name="order-doc" value="1"><i></i></label>						   
+								</div>							
+							   <div class="col-lg-4">
+								  <span>Права </span> <label style="top: 20px;" class="i-checks"> <input type="radio" class="serviceChoice" id="orderPrava" name="order-doc" value="2"><i></i></label>						   
+								</div>
+							</div>
+<br><br>
+	<div class="input-div">
+								<div class="row">
+									<div class="col-lg-6">
+										<label>Серия </label> <input class="form-control" type="text"  id="orderSeria" name="orderSeria">
+									</div>								
+									<div class="col-lg-6">
+										<label>Номер </label> <input class="form-control" type="text"  id="orderNumber" name="orderNumber">						   
+									</div>								
+								</div>
+	</div>
+	<div class="input-div">							
+								<div class="row">
+								<div class="col-lg-12">
+									<label>Дата выдачи</label> <input class="form-control" type="date" id="passportDate" name="passportDate">						   
+								</div>							
+								</div>
+	</div>	
+</div>
+<div class="urik"> 
+	<div class="input-div">
+		<div class="row">
+			<div class="col-lg-6">
+				<label>ИНН </label> <input class="form-control" type="text"  id="orderINN" name="orderINN">
+			</div>	
+			<div class="col-lg-6">
+				<label>Правовая форма </label> <input class="form-control" type="text"  id="orderLegalForm" name="orderLegalForm">
+			</div>				
+		</div>
+	</div>
+	<div class="input-div">
+		<div class="row">
+			<div class="col-lg-12">
+				<label>Наименование </label> <input class="form-control" type="text"  id="orderNameCompany" name="orderNameCompany">
+			</div>								
+		</div>
+	</div>
+	<p>Юридический адрес получателя:</p>
+	<div class="input-div">
+		<div class="row">
+			<div class="col-lg-6">
+				<label>Город </label> <input class="form-control" type="text"  id="orderCity" name="orderCity">
+			</div>	
+			<div class="col-lg-6">
+				<label>Улица </label> <input class="form-control" type="text"  id="orderStreet" name="orderStreet">
+			</div>				
+		</div>
+	</div>
+	<div class="input-div">
+		<div class="row">
+			<div class="col-lg-6">
+				<label>Дом </label> <input class="form-control" type="text"  id="orderHome" name="orderHome">
+			</div>								
+			<div class="col-lg-6">
+				<label>Строение </label> <input class="form-control" type="text"  id="orderBuilding" name="orderBuilding">						   
+			</div>									
+		</div>
+	</div>
+	<div class="input-div">
+		<div class="row">
+			<div class="col-lg-6">
+				<label>Корпус </label> <input class="form-control" type="text"  id="orderHousing" name="orderHousing">
+			</div>								
+			<div class="col-lg-6">
+				<label>Квартира </label> <input class="form-control" type="text"  id="orderApartment" name="orderApartment">						   
+			</div>									
+		</div>
+	</div>
+</div>
+<!------------------------------документы------------------------------------------>
+
+
+						
+					</div>			
+	
+                    <div class="order-details-first">
+                        <div class="input-div">
+						<div class="row">
+							<div class="col-lg-6">						
+											<label for="order-sum">Сумма заказа</label>
+											<input type="text" id="order-sum" name="order-sum" tabindex="2">
+							</div>								
+							<div class="col-lg-6">
+											<label for="order-street">Улица</label>
+											<input type="text" id="order-street" name="order-street" autocomplete="off" class="ui-autocomplete-input" tabindex="9" index="">
+							</div>			<div id="search_advice_wrapper"></div>
+							</div>	
+					    </div>
+						
+                        <div class="input-div">
+				
+		                <div class="row">
+		                	<div class="col-lg-6">							
+                                            <label for="order-sum">Сумма Н.П</label>
+                                            <input type="text" id="order-cod" name="order-sum" tabindex="3">
+		                	</div>								
+		                	<div class="col-lg-6">
+		                					
+                                            <label for="order-building">Дом/владение</label>
+                                            <input type="order-building" id="order-building" name="order-building" tabindex="10">
+		                    </div>	
+		                </div>							
+                        </div>
+						
+                        <div class="input-div">						
+						        <div class="row">						        
+						        	<div class="col-lg-6">							
+						        					<label for="order-ac">Объявленная стоимость</label>
+						        					<input type="text" id="order-ac" name="order-ac" tabindex="4">
+						        	</div>						        	
+						        	<div class="col-lg-6">							
+						        					<label for="order-pavilion">Корпус</label>
+						        					<input type="text" id="order-pavilion" name="order-pavilion" tabindex="11">
+						        	</div>	
+						        </div>								
+						</div>
+						
+						
+						
+						
+                        <div class="input-div">
+						        <div class="row">						        
+									<div class="col-lg-4">						
+								<label for="order-weight">Вес в кг</label>
+								<input type="text" value="{{ dostavimweight }}" id="order-weight" name="order-weight" tabindex="5"  >
+									</div>						        	
+									<div class="col-lg-4">								
+								
+	
+								<label for="order-housing">Строение</label>
+								<input type="text" id="order-housing" name="order-housing" tabindex="12">
+									</div>						        	
+									<div class="col-lg-4">								
+								
+                            <label for="order-apartment">Квартира</label>
+                            <input type="text" id="order-apartment" name="order-apartment" tabindex="13">
+									</div>	
+									
+									
+									
+									</div>					
+							</div>
+						
+						
+						
+                        <div class="input-div">                            
+						     <div class="row">
+                               <div class="col-lg-4">
+                                   <label for="length4">Длина</label>
+                                    <input type="text" class="setting-sizes" id="length4" tabindex="6" value="{{ dostavimlength }}">                                
+                                </div>
+                                <div class="col-lg-4">
+                                   <label for="width4">Ширина</label>
+                                    <input type="text" class="setting-sizes" id="width4" tabindex="7" value="{{ dostavimwidth }}">    
+                                </div>                                
+                                <div class="col-lg-4">
+                                   <label for="height4">Высота</label>
+                                    <input type="text" class="setting-sizes" id="height4" tabindex="8" value="{{ dostavimheight }}">                                
+                                </div>                                
+                               </div> 
+                        </div> 
+
+                        <div class="input-div">                            
+						     <div class="row">						
+                        <div>
+                            <p id="sizes-info"><em>Расчет тарифов произведен для<span></span></em></p>
+                        </div> 
+                               </div> 
+                        </div> 			
+
+			
+                    <div class="order-details-address">
+                        <div class="input-div">
+                            <span>Разница в стоимости доставки :  </span>
+                            <span class="order-delta-span"></span>
+                        </div>
+                    </div>			
+
+						
+                    </div><!--</div></div>-->
+					
+					
+					
+                    <div class="order-details-first">
+                        <table class="delivery-services-table">
+                            <tbody>
+                                <tr>
+                                    <th></th>
+                                    <th>Служба доставки</th>
+                                    <th>Скорость доставки, дн</th>
+                                    <th>Тариф</th>                                    
+                                </tr>                            
+                            </tbody>                        
+                        </table>
+                    </div> 					
+					
+					
+
+					
+    
+
+					
+                </form>            
+                <div class="comment container">                    
+                </div>
+            </div>
+            <div class="order-buttons-div container">
+                <a href="" id="order-count" class="order-button btn-info">Рассчитать</a>
+                
+                <a href="" id="order-confirm" class="order-button btn-info">Подтвердить заказ</a>
+            </div>
+        </div>
+    </main>
+    
+    <div id="modal-error" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Сообщение об ошибке</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p></p>
+          </div>
+          <div class="modal-footer">
+<!--            <button type="button" class="btn btn-primary">Save changes</button>-->
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<div id="modal_form"><span id="modal_close">X</span><p id="errorModalDostavimTitle"></p><hr><p id="errorModalDostavim"></p></div><div id="overlay"></div>
+   
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+    <!-- Google Font -->
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/admin/view/stylesheet/logist.css">
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	<script>jQuery.noConflict();</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+
+    <script src="/admin/view/javascript/logist.js"></script>
+</div>
+<button style="display:none" onclick="hranForTest()">тест</button>	
+<script type="text/javascript">
+function hranForTest(){
+	//$('input[name=order-lico]:checked').attr('value');
+	//alert($('input[name=orderLico]:checked').val());
+}
+
+
+setTimeout(function() {
+if ($('#statusDostavim').text() != 'Черновик'){
+$('#succesDostavim').css('display','block');
+}
+else
+$('#succesDostavim').css('display','none');
+
+}, 3000);
+
+
+if (($('#dostdeliveryService').text() == 'pecom') || ($('#dostdeliveryService').text() == 'dellin') || ($('#dostdeliveryService').text() == 'DelLin'))
+{
+	$('#fizizurik').css("display", "block");
+}
+
+
+if ($('#dostdeliveryId').text()=='')
+{
+	$('#mypvzdostavim').css("display", "none");
+}
+else
+	$('#mycourierdostavim').css("display", "none");
+
+$('div.fizik').css("display", "none");
+$('div.urik').css("display", "none");
+
+$('#orderFizik').change(function(e){
+	$('div.fizik').css('display','block');
+	$('div.urik').css('display','none');
+});
+	
+$('#orderUrik').change(function(e){
+	$('div.fizik').css('display','none');
+	$('div.urik').css('display','block');
+});
+setTimeout(function() {
+if (jQuery('#numberDost').attr('namber') == '5')
+{
+	$('#dateCourier').text("Дата отправки в почту России");
+	$('#timeCourier').text("Время отправки в почту России");
+	$('#index').css('display','block');
+;
+}
+}, 3000);
+</script>
+<script type="text/javascript">
+		jQuery('#pvz-dostavim').click( function(event){ // лoвим клик пo ссылки с id="pvz-dostavim"
+			jQuery('#overlayDostavim').fadeIn(400, // сначала плавно показываем темную подложку
+		 	function(){ // после выполнения предъидущей анимации
+				$('#exampleModal') .css('display', 'block').animate({opacity: 1, top: '20%'}, 200); // плавно прибавляем прозрачность одновременно со съезжанием вниз
+			});
+		
+	});
+	/* Закрытие модального окна */
+	$('#modal_close, #overlay').click( function(){ // ловим клик по крестику или подложке
+		$('#modal_form')
+			.animate({opacity: 0, top: '45%'}, 200,  // плавно меняем прозрачность на 0 и одновременно двигаем окно вверх
+				function(){ // после анимации
+					$(this).css('display', 'none'); // делаем ему display: none;
+					$('#overlay').fadeOut(400); // скрываем подложку
+				}
+			);
+	});
+</script> 
+<!-------------------------------------------->
+</div>	
+<!-------------------------------------------------------------------------------------------------------------------------->               
+            </fieldset>
+			</div>
+	
+          </div>
+        </div>
+      </div>
+    </div>
+<!----------------------------------------------------------------------------------------------------------------------------------->	
+	
+	
+  </div>
+<!----------------------------------------------------------------------------------------------------------------------------------->
+
+	  
+</div>
+	  <!----------------------------------------------------------------------------------------------------------------------------------->  
+  
+  
+  
+  <script type="text/javascript"><!--
+$(document).delegate('#button-invoice', 'click', function() {
+	$.ajax({
+		url: 'index.php?route=sale/order/createinvoiceno&user_token={{ user_token }}&order_id={{ order_id }}',
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-invoice').button('loading');
+		},
+		complete: function() {
+			$('#button-invoice').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				$('#content > .container-fluid').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+			}
+
+			if (json['invoice_no']) {
+				$('#invoice').html(json['invoice_no']);
+
+				$('#button-invoice').replaceWith('<button disabled="disabled" class="btn btn-success btn-xs"><i class="fa fa-cog"></i></button>');
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$(document).delegate('#button-reward-add', 'click', function() {
+	$.ajax({
+		url: 'index.php?route=sale/order/addreward&user_token={{ user_token }}&order_id={{ order_id }}',
+		type: 'post',
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-reward-add').button('loading');
+		},
+		complete: function() {
+			$('#button-reward-add').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				$('#content > .container-fluid').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+			}
+
+			if (json['success']) {
+                $('#content > .container-fluid').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+				$('#button-reward-add').replaceWith('<button id="button-reward-remove" data-toggle="tooltip" title="{{ button_reward_remove }}" class="btn btn-danger btn-xs"><i class="fa fa-minus-circle"></i></button>');
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$(document).delegate('#button-reward-remove', 'click', function() {
+	$.ajax({
+		url: 'index.php?route=sale/order/removereward&user_token={{ user_token }}&order_id={{ order_id }}',
+		type: 'post',
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-reward-remove').button('loading');
+		},
+		complete: function() {
+			$('#button-reward-remove').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				$('#content > .container-fluid').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+			}
+
+			if (json['success']) {
+                $('#content > .container-fluid').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+				$('#button-reward-remove').replaceWith('<button id="button-reward-add" data-toggle="tooltip" title="{{ button_reward_add }}" class="btn btn-success btn-xs"><i class="fa fa-plus-circle"></i></button>');
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$(document).delegate('#button-commission-add', 'click', function() {
+	$.ajax({
+		url: 'index.php?route=sale/order/addcommission&user_token={{ user_token }}&order_id={{ order_id }}',
+		type: 'post',
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-commission-add').button('loading');
+		},
+		complete: function() {
+			$('#button-commission-add').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				$('#content > .container-fluid').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+			}
+
+			if (json['success']) {
+                $('#content > .container-fluid').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+				$('#button-commission-add').replaceWith('<button id="button-commission-remove" data-toggle="tooltip" title="{{ button_commission_remove }}" class="btn btn-danger btn-xs"><i class="fa fa-minus-circle"></i></button>');
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$(document).delegate('#button-commission-remove', 'click', function() {
+	$.ajax({
+		url: 'index.php?route=sale/order/removecommission&user_token={{ user_token }}&order_id={{ order_id }}',
+		type: 'post',
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-commission-remove').button('loading');
+		},
+		complete: function() {
+			$('#button-commission-remove').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				$('#content > .container-fluid').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+			}
+
+			if (json['success']) {
+                $('#content > .container-fluid').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+				$('#button-commission-remove').replaceWith('<button id="button-commission-add" data-toggle="tooltip" title="{{ button_commission_add }}" class="btn btn-success btn-xs"><i class="fa fa-plus-circle"></i></button>');
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$('#history').delegate('.pagination a', 'click', function(e) {
+	e.preventDefault();
+
+	$('#history').load(this.href);
+});
+
+$('#history').load('index.php?route=sale/order/history&user_token={{ user_token }}&order_id={{ order_id }}');
+
+$('#button-history').on('click', function() {
+	$.ajax({
+		url: '{{ catalog }}index.php?route=api/order/history&api_token={{ api_token }}&store_id={{ store_id }}&order_id={{ order_id }}',
+		type: 'post',
+		dataType: 'json',
+		data: 'order_status_id=' + encodeURIComponent($('select[name=\'order_status_id\']').val()) + '&notify=' + ($('input[name=\'notify\']').prop('checked') ? 1 : 0) + '&override=' + ($('input[name=\'override\']').prop('checked') ? 1 : 0) + '&append=' + ($('input[name=\'append\']').prop('checked') ? 1 : 0) + '&comment=' + encodeURIComponent($('textarea[name=\'comment\']').val()),
+		beforeSend: function() {
+			$('#button-history').button('loading');
+		},
+		complete: function() {
+			$('#button-history').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				$('#history').before('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			}
+
+			if (json['success']) {
+				$('#history').load('index.php?route=sale/order/history&user_token={{ user_token }}&order_id={{ order_id }}');
+
+				$('#history').before('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+
+				$('textarea[name=\'comment\']').val('');
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+//--></script> 
+</div>
+{{ footer }} 
