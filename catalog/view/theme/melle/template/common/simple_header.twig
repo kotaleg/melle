@@ -1,0 +1,13 @@
+{{ header }}
+</section>
+
+<main class="main-page">
+
+   <section class="catalog">
+      <div class="catalog__container container">
+
+         {% if error_warning %}
+         <div class="alert alert-danger">{{ error_warning }}</div>
+         {% endif %}
+
+         <h1 class="basket-form__title">{{ heading_title }}</h1>
