@@ -1,0 +1,128 @@
+<div class="simplecheckout-block" id="simplecheckout_cart" {{ hide ? 'data-hide="true"' : '' }} {{ has_error ? 'data-error="true"' : '' }}>
+{% if display_header %}
+    <div class="checkout-heading panel-heading">{{ text_cart }}</div>
+{% endif %}
+{% if attention %}
+    <div class="alert alert-danger simplecheckout-warning-block">{{ attention }}</div>
+{% endif %}
+{% if error_warning %}
+    <div class="alert alert-danger simplecheckout-warning-block">{{ error_warning }}</div>
+{% endif %}
+
+<div class="basket-orders">
+   <div class="basket-orders__container ">
+      <div class="basket-orders__table-wrap">
+         <table class="basket-orders__table">
+            <thead>
+               <tr>
+                  <th>Товар</th>
+                  <th></th>
+                  <th>Опции</th>
+                  <th>Цена</th>
+                  <th>К-во</th>
+                  <th>Сумма</th>
+               </tr>
+            </thead>
+            <tbody>
+               {% for product in products %}
+                    {% if product['recurring'] is not empty %}
+                        <tr>
+                            <td class="simplecheckout-recurring-product" style="border:none;"><img src="{{ additional_path }}catalog/view/theme/default/image/reorder.png" alt="" title="" style="float:left;" />
+                                <span style="float:left;line-height:18px; margin-left:10px;">
+                                <strong>{{ text_recurring_item }}</strong>
+                                {{ product['profile_description'] }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td class="image">
+                           {% if product['thumb'] %}
+                           <a href="{{ product['href'] }}">
+                              <div class="basket-orders__photo"><img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}"></div>
+                           </a>
+                           {% endif %}
+                        </td>
+                        <td class="name">
+                           <div class="basket-orders__title">
+                              <a href="{{ product['href'] }}">
+                                 <h3>{{ product['name'] }}</h3>
+                              </a>
+                           </div>
+                           {% if not product['stock'] and (config_stock_warning or not config_stock_checkout) %}
+                           <div class="basket-orders__article">
+                              <span class="product-warning">***</span>
+                           </div>
+                           {% endif %}
+                        </td>
+                        <td>
+                           <div class="basket-orders__size">
+                              <div class="options">
+                               {% for option in product['option'] %}
+                               &nbsp;<span> - {{ option['name'] }}: {{ option['value'] }}</span><br />
+                               {% endfor %}
+                               {% if product['recurring'] is not empty %}
+                               - <span>{{ text_payment_profile }}: {{ product['profile_name'] }}</span>
+                               {% endif %}
+                               </div>
+                               {% if product['reward'] %}
+                               <span>{{ product['reward'] }}</span>
+                               {% endif %}
+                           </div>
+                        </td>
+                        <td>
+                           <div class="basket-orders__price">
+                              <span class="basket-orders__price-default">
+                                 {{ product['price'] }} <span class="ruble-sign">Р</span>
+                              </span>
+                           </div>
+                        </td>
+                        <td class="model">{{ product['quantity'] }}</td>
+                        <td>
+                           <div class="basket-orders__price">
+                              <span class="basket-orders__price-default">
+                                 {{ product['total'] }} <span class="ruble-sign">Р</span>
+                              </span>
+                           </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+         </table>
+      </div>
+      <div class="basket-orders__footer">
+
+         {% if modules['coupon'] is defined %}
+         <div class="basket-orders__discount">
+            <div class="form-vertical" id="PromoForm" style="display: flex;">
+               <input class="basket-orders__discount-input" placeholder="Введите промокод" id="PromoForm_promo" type="text" name="coupon" value="{{ coupon }}" style="margin-right: 10px;">
+               <input value="Применить" class="basket-orders__discount-send" data-onclick="reloadAll" style="text-align: center;">
+            </div>
+         </div>
+         {% endif %}
+
+         <div class="basket-orders__full-price">
+            <div class="full-price">
+               {% for total in totals %}
+               {% if not loop.last %}
+                   <span id="total_{{ total['code'] }}" class="full">{{ total['title'] }}: <span>{{ total['text'] }}</span> <span class="ruble-sign">Р</span></span>
+               {% else %}
+                   <span id="total_{{ total['code'] }}" class="full-price__end">{{ total['title'] }}: <span>{{ total['text'] }}</span> <span class="ruble-sign">Р</span></span>
+               {% endif %}
+               {% endfor %}
+            </div>
+         </div>
+
+      </div>
+
+   </div>
+</div>
+
+
+<input type="hidden" name="remove" value="" id="simplecheckout_remove">
+<div style="display:none;" id="simplecheckout_cart_total">{{ cart_total }}</div>
+{% if display_weight %}
+   <div style="display:none;" id="simplecheckout_cart_weight">{{ weight }}</div>
+{% endif %}
+
+</div>
