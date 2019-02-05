@@ -41,21 +41,19 @@
 
 /* CURSOR */
 
-.CodeMirror-cursor {
+.CodeMirror div.CodeMirror-cursor {
   border-left: 1px solid black;
-  border-right: none;
-  width: 0;
 }
 /* Shown when moving in bi-directional text */
 .CodeMirror div.CodeMirror-secondarycursor {
   border-left: 1px solid silver;
 }
-.cm-fat-cursor .CodeMirror-cursor {
+.CodeMirror.cm-fat-cursor div.CodeMirror-cursor {
   width: auto;
-  border: 0 !important;
+  border: 0;
   background: #7e7;
 }
-.cm-fat-cursor div.CodeMirror-cursors {
+.CodeMirror.cm-fat-cursor div.CodeMirror-cursors {
   z-index: 1;
 }
 
@@ -84,7 +82,7 @@
 }
 
 /* Can style cursor different in overwrite (non-insert) mode */
-.CodeMirror-overwrite .CodeMirror-cursor {}
+div.CodeMirror-overwrite div.CodeMirror-cursor {}
 
 .cm-tab { display: inline-block; text-decoration: inherit; }
 
@@ -165,7 +163,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 }
 
 /* The fake, visible scrollbars. Used to force redraw during scrolling
-   before actual scrolling happens, thus preventing shaking and
+   before actuall scrolling happens, thus preventing shaking and
    flickering artifacts. */
 .CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
   position: absolute;
@@ -191,14 +189,12 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 
 .CodeMirror-gutters {
   position: absolute; left: 0; top: 0;
-  min-height: 100%;
   z-index: 3;
 }
 .CodeMirror-gutter {
   white-space: normal;
   height: 100%;
   display: inline-block;
-  vertical-align: top;
   margin-bottom: -30px;
   /* Hack to make IE7 behave */
   *zoom:1;
@@ -246,8 +242,6 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   position: relative;
   overflow: visible;
   -webkit-tap-highlight-color: transparent;
-  -webkit-font-variant-ligatures: none;
-  font-variant-ligatures: none;
 }
 .CodeMirror-wrap pre {
   word-wrap: break-word;
@@ -290,9 +284,13 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   overflow: hidden;
   visibility: hidden;
 }
-
-.CodeMirror-cursor { position: absolute; }
 .CodeMirror-measure pre { position: static; }
+
+.CodeMirror div.CodeMirror-cursor {
+  position: absolute;
+  border-right: none;
+  width: 0;
+}
 
 div.CodeMirror-cursors {
   visibility: hidden;
