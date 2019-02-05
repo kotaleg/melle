@@ -136,7 +136,7 @@ class Image {
      * @param   int $height
      * @param   string  $default
      */
-    public function resize($width = 0, $height = 0, $default = '') {
+    public function resize($width = 0, $height = 0, $default = 'h') {
         if (!$this->width || !$this->height) {
             return;
         }
