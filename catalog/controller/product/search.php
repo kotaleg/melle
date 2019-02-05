@@ -65,10 +65,10 @@ class ControllerProductSearch extends Controller {
             $limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
         }
 
-        if (isset($this->request->get['search'])) {
-            $this->document->setTitle($this->language->get('heading_title') .  ' - ' . $this->request->get['search']);
+        if (isset($this->request->get['search']) && !empty($this->request->get['search'])) {
+            $this->document->setTitle($this->language->get('heading_title') . '-' . $this->request->get['search']);
         } elseif (isset($this->request->get['tag'])) {
-            $this->document->setTitle($this->language->get('heading_title') .  ' - ' . $this->language->get('heading_tag') . $this->request->get['tag']);
+            $this->document->setTitle($this->language->get('heading_title'));
         } else {
             $this->document->setTitle($this->language->get('heading_title'));
         }
