@@ -26,7 +26,7 @@
 
                 if (fieldId) {
                     var $field = $(self.params.mainContainer).find("#" + fieldId);
-                    
+
                     if ($field.length) {
                         if (!$rule.attr("data-required")) {
                             $rule.hide();
@@ -41,7 +41,7 @@
                             for (var i in arr) {
                                 if (!arr.hasOwnProperty(i)) continue;
                                 var realValue = arr[i].name.match(/.+\[(.+)\]\[(.+)\]/);
-                                values.push(realValue[2]);                                   
+                                values.push(realValue[2]);
                             }
                             value = values.join(',');
                         } else if ($field.attr("type") == "radio") {
@@ -55,7 +55,7 @@
                                 if (typeof toastr !== 'undefined' && self.params.notificationToasts) {
                                     toastr.error($rule.text());
                                 }
-                                
+
                                 if (self.params.notificationDefault) {
                                     $rule.show();
                                 }
@@ -89,7 +89,7 @@
                                 if (typeof toastr !== 'undefined' && self.params.notificationToasts) {
                                     toastr.error($rule.text());
                                 }
-                                
+
                                 if (self.params.notificationDefault) {
                                     $rule.show();
                                 }
@@ -137,7 +137,7 @@
                                 if (typeof toastr !== 'undefined' && self.params.notificationToasts) {
                                     toastr.error($rule.text());
                                 }
-                                
+
                                 if (self.params.notificationDefault) {
                                     $rule.show();
                                 }
@@ -173,7 +173,7 @@
                                 for (var i in arr) {
                                     if (!arr.hasOwnProperty(i)) continue;
                                     var realValue = arr[i].name.match(/.+\[(.+)\]\[(.+)\]/);
-                                    values.push(realValue[2]);                                   
+                                    values.push(realValue[2]);
                                 }
                                 value = values.join(',');
                             } else if ($field.attr("type") == "radio") {
@@ -193,7 +193,7 @@
                                         if (typeof toastr !== 'undefined' && self.params.notificationToasts) {
                                             toastr.error($rule.text());
                                         }
-                                        
+
                                         if (self.params.notificationDefault) {
                                             $rule.show();
                                         }
@@ -255,7 +255,7 @@
                                                 } else {
                                                     tmp[0] = '0';
                                                 }
-                                            }                                                                             
+                                            }
                                         }
                                         filter = tmp.join(",");
                                     } else {
@@ -284,7 +284,7 @@
                                 for (var i in arr) {
                                     if (!arr.hasOwnProperty(i)) continue;
                                     var realValue = arr[i].name.match(/.+\[(.+)\]\[(.+)\]/);
-                                    values.push(realValue[2]);                                   
+                                    values.push(realValue[2]);
                                 }
                                 value = values.join(',');
                             } else if ($field.attr("type") == "radio") {
@@ -299,7 +299,7 @@
                                         if (typeof toastr !== 'undefined' && self.params.notificationToasts) {
                                             toastr.error($rule.text());
                                         }
-                                        
+
                                         if (self.params.notificationDefault) {
                                             $rule.show();
                                         }
@@ -381,14 +381,14 @@
 
                         if ($pairField) {
                             $pairField[$field.attr('data-validate-on')](checker);
-                        }                  
+                        }
                     } else {
                         $field.change(checker);
 
                         if ($pairField) {
                             $pairField.change(checker);
                         }
-                    }                    
+                    }
                 }
             }
         });
@@ -571,7 +571,7 @@
                         });
                     }
                 }, 500);
-            });            
+            });
         });
     };
 
@@ -591,7 +591,7 @@
                 $field.on("keydown", function(){
                     $field.data("status", "started");
                 });
-            
+
                 $field.autocomplete({
                     source: function(request, response) {
                         $.ajax({
@@ -640,7 +640,7 @@
                         $field.data("status", "selected");
                         var name = $field.attr("name");
                         var from = name.substr(0, name.indexOf("["));
-                        
+
                         if (ui !== undefined) {
                             self.setAddressFields(from, ui.item.country_id, ui.item.zone_id, ui.item.city, ui.item.postcode, function() {
                                 callbackAfterChanging($field);
@@ -741,7 +741,7 @@
                             if ($(this).val().indexOf('_') > -1) {
                                 window.localStorage.setItem('inputmaskFailed', true);
                                 $(this).inputmask('remove');
-                            }                      
+                            }
                         });
                 }
             } catch (err) {}
@@ -750,11 +750,11 @@
 
     Simple.prototype.initSelect2 = function() {
         var self = this;
-       
+
         if (typeof $(document).select2 !== "undefined") {
             $(self.params.mainContainer).find("select[data-type=select2]").each(function() {
                 $(this).select2({
-                    
+
                 });
             });
         }
@@ -922,7 +922,7 @@
         $(self.params.mainContainer).find("input[type=time],input[data-type=time]").each(function() {
             if (typeof($(this).datetimepicker) !== "undefined") {
                 var $el = $(this);
-                
+
                 $el.datetimepicker({
                     pickDate: false,
                     pickTime: true,
