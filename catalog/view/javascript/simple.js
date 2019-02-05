@@ -578,6 +578,7 @@
     Simple.prototype.initAutocomplete = function(callbackAfterChanging) {
         var self = this;
         var $fields = $(self.params.mainContainer).find("#payment_address_city, #shipping_address_city, #register_city, #address_city");
+
         if (typeof($fields.autocomplete) !== "undefined") {
             $fields.each(function() {
                 var $field = $(this)
