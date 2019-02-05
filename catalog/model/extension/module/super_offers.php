@@ -93,21 +93,23 @@ class ModelExtensionModuleSuperOffers extends Model
                     }
                 }
 
-                $po_value_data[] = array(
-                    'product_option_value_id' => $pov['product_option_value_id'],
-                    'option_value_id'         => $pov['option_value_id'],
-                    'name'                    => $pov['name'],
-                    'image'                   => $pov_image,
-                    'quantity'                => 0,
-                    'subtract'                => 0,
-                    'price'                   => 0,
-                    'price_prefix'            => '+',
-                    'weight'                  => 0,
-                    'weight_prefix'           => '+',
+                if ($this->isAnyAvailablePare($product_id, $po['option_id'], $pov['option_value_id'])) {
+                    $po_value_data[] = array(
+                        'product_option_value_id' => $pov['product_option_value_id'],
+                        'option_value_id'         => $pov['option_value_id'],
+                        'name'                    => $pov['name'],
+                        'image'                   => $pov_image,
+                        'quantity'                => 0,
+                        'subtract'                => 0,
+                        'price'                   => 0,
+                        'price_prefix'            => '+',
+                        'weight'                  => 0,
+                        'weight_prefix'           => '+',
 
-                    'selected'                => false,
-                    'disabled_by_selection'   => false,
-                );
+                        'selected'                => false,
+                        'disabled_by_selection'   => false,
+                    );
+                }
             }
 
             if (!empty($po_value_data)) {
@@ -126,6 +128,21 @@ class ModelExtensionModuleSuperOffers extends Model
         }
 
         return $po_data;
+    }
+
+    private function isAnyAvailablePare($product_id, $option_id, $option_value_id)
+    {
+        $q = $this->db->query("SELECT con.combination_id, comb.quantity, comb.price
+            FROM `" . DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."` con
+            LEFT JOIN `" . DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."` comb
+            ON (con.combination_id = comb.combination_id)
+            WHERE con.product_id = '". (int)$product_id ."'
+            AND con.option_a = '". (int)$option_id ."'
+            AND con.option_value_a = '". (int)$option_value_id ."'
+            AND comb.quantity > 0");
+
+        if ($q->num_rows) { return true; }
+        return false;
     }
 
     public function getCombinationsForOptions($product_id, $options)
