@@ -111,11 +111,14 @@ form>div {
 }
 
 main {
-  margin-top: 130px;
-  margin-bottom: 50px;
     @include mobile{
         margin-top: 100px;
     }
+}
+
+.main-page {
+  margin-top: 130px;
+  margin-bottom: 50px;
 }
 
 // .alert-success {
