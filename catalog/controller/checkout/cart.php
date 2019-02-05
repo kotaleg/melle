@@ -537,7 +537,7 @@ class ControllerCheckoutCart extends Controller {
                     } else {
 
                         $current = $this->cart->inCart($product_id, $quantity, $options);
-                        if (isset($current['quantity']) && $current['quantity'] < $available) {
+                        if (isset($current['quantity']) && (($current['quantity'] + $quantity) > $available)) {
                             $quantity = $available - $current['quantity'];
                         }
 
