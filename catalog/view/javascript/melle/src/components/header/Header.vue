@@ -35,7 +35,7 @@
                    <li class="menu-search">
                       <div class="search-block">
                          <div class="search-modal__form">
-                            <input name="q" type="search" v-model="search" @keyup.enter.native="searchAction">
+                            <input name="q" type="search" v-model="search" @keyup.enter="searchAction">
                             <input type="submit" value="" @click="searchAction" class="cursorred">
                         </div>
                       </div>
