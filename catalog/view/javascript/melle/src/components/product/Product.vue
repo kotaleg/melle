@@ -66,12 +66,12 @@
          </div>
 
 
-        <one-click-modal
-           dir="ltr"
-           :width="500"
-           :scrollable="false"/>
+         <one-click-modal
+            dir="ltr"
+            :width="500"
+            :scrollable="false"/>
 
-      </form>
+    </form>
 </template>
 
 <script>

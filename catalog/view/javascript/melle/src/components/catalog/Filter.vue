@@ -206,6 +206,39 @@ export default {
             'openSidebar',
         ]),
     },
+    mounted() {
+        if(jQuery().scroll) {
+            //FLOAT filter
+            $(window).scroll(function() {
+                var sb_m = 20; /* отступ сверху и снизу */
+                var mb = 1000; /* высота подвала с запасом */
+                var st = $(window).scrollTop();
+                var sb = $(".sidebar");
+                var sbi = $(".sidebar , .catalog__sidebar");
+                var sb_ot = 0;
+                if (typeof sb.offset() != 'undefined') {
+                    sb_ot = sb.offset().top;
+                }
+
+                var sbi_ot = 0;
+                if (typeof sbi.offset() != 'undefined') {
+                    sbi_ot = sbi.offset().top;
+                }
+
+                var sb_h = sb.height();
+
+                if(sb_h + $(document).scrollTop() + sb_m + mb < $(document).height()) {
+                    if(st > sb_ot) {
+                        var h = Math.round(st - sb_ot) + sb_m;
+                        sb.css({"paddingTop" : h});
+                    }
+                    else {
+                        sb.css({"paddingTop" : 0});
+                    }
+                }
+            });
+        }
+    },
 }
 </script>
 
