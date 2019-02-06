@@ -81,10 +81,6 @@ const actions = {
                 }
 
                 notify.messageHandler(res.data, '_header')
-
-                if (state.is_checkout === true) {
-                    window.location = state.checkout_link
-                }
             }
         )
     },
@@ -107,6 +103,10 @@ const actions = {
                     // GTM
                     this.dispatch('gtm/removeFromCart', removed_items)
                 }
+
+                if (state.is_checkout === true) {
+                    window.location = state.checkout_link
+                }
             }
         )
     },
@@ -127,6 +127,10 @@ const actions = {
                 notify.messageHandler(res.data, '_header')
 
                 dispatch('updateCartDataRequest')
+
+                if (state.is_checkout === true) {
+                    window.location = state.checkout_link
+                }
             }
         )
     },
@@ -149,6 +153,10 @@ const actions = {
                 if (has(res.data, 'removed') && res.data.removed === true) {
                     // GTM
                     this.dispatch('gtm/removeFromCart', [removed_item])
+                }
+
+                if (state.is_checkout === true) {
+                    window.location = state.checkout_link
                 }
             }
         )
