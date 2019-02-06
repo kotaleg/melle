@@ -126,13 +126,13 @@
       </div>
 
       <div class="basket-orders__buttons" data-ng-show="cart.products">
-         <a href="/catalog" class="basket-orders__prev-button">
+         <a href="{{base}}" class="basket-orders__prev-button">
             <svg viewBox="0 0 489.2 489.2" width="20" height="20">
                <path d="M481.044,382.5c0-6.8-5.5-12.3-12.3-12.3h-418.7l73.6-73.6c4.8-4.8,4.8-12.5,0-17.3c-4.8-4.8-12.5-4.8-17.3,0l-94.5,94.5c-4.8,4.8-4.8,12.5,0,17.3l94.5,94.5c2.4,2.4,5.5,3.6,8.7,3.6s6.3-1.2,8.7-3.6c4.8-4.8,4.8-12.5,0-17.3l-73.6-73.6h418.8C475.544,394.7,481.044,389.3,481.044,382.5z"></path>
             </svg>
             <span>продолжить покупки</span>
          </a>
-         <a href="/cart/action.Clear" class="basket-orders__reset-button">
+         <a onclick="$('#melle_clear_cart').click();window.location.reload(true);" class="basket-orders__reset-button">
             <svg viewBox="0 0 191.414 191.414" width="19" height="19">
                <path d="M107.888,96.142l80.916-80.916c3.48-3.48,3.48-8.701,0-12.181s-8.701-3.48-12.181,0L95.707,83.961L14.791,3.045   c-3.48-3.48-8.701-3.48-12.181,0s-3.48,8.701,0,12.181l80.915,80.916L2.61,177.057c-3.48,3.48-3.48,8.701,0,12.181   c1.74,1.74,5.22,1.74,6.96,1.74s5.22,0,5.22-1.74l80.916-80.916l80.916,80.916c1.74,1.74,5.22,1.74,6.96,1.74   c1.74,0,5.22,0,5.22-1.74c3.48-3.48,3.48-8.701,0-12.181L107.888,96.142z"></path>
             </svg>
@@ -149,5 +149,9 @@
 {% if display_weight %}
    <div style="display:none;" id="simplecheckout_cart_weight">{{ weight }}</div>
 {% endif %}
+
+<script>
+
+</script>
 
 </div>

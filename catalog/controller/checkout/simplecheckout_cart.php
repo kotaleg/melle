@@ -247,7 +247,7 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
                     $image_cart_height = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_height');
                     $image_cart_height = $image_cart_height ? $image_cart_height : 40;
                 }
-                
+
                 $image = $this->model_tool_image->resize($product['image'], $image_cart_width, $image_cart_height);
             } else {
                 $image = '';
@@ -410,7 +410,7 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
                     $sort_order[$key] = $this->config->get($result['code'] . '_sort_order');
                 } else {
                     $sort_order[$key] = $this->config->get('total_' . $result['code'] . '_sort_order');
-                }                
+                }
             }
 
             array_multisort($sort_order, SORT_ASC, $results);
@@ -478,7 +478,7 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
             $this->_templateData['cart_total'] = $this->simplecheckout->formatCurrency($total);
         } else {
             $minicart = $this->simplecheckout->getSettingValue('minicartText', 'cart');
-            
+
             $text_items = '';
             $language_code = $this->simplecheckout->getCurrentLanguageCode();
 
@@ -494,25 +494,30 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
 
             if (strpos($text_items, '{quantity}') !== false || strpos($text_items, '{total}') !== false) {
                 $find = array(
-                    '{quantity}', 
+                    '{quantity}',
                     '{total}'
                 );
 
                 $replace = array(
-                    '{quantity}' => $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), 
+                    '{quantity}' => $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0),
                     '{total}' => $this->simplecheckout->formatCurrency($total)
                 );
 
                 $this->_templateData['cart_total'] = str_replace($find, $replace, $text_items);
             } else {
                 $this->_templateData['cart_total'] = sprintf($text_items, $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->simplecheckout->formatCurrency($total));
-            } 
+            }
         }
 
         $this->_templateData['display_header']           = $this->simplecheckout->getSettingValue('displayHeader', 'cart');
         $this->_templateData['display_model']            = $this->simplecheckout->getSettingValue('displayModel', 'cart');
         $this->_templateData['quantity_step_as_minimum'] = $this->simplecheckout->getSettingValue('quantityStepAsMinimum', 'cart');
         $this->_templateData['has_error']                = $this->simplecheckout->hasError('cart');
+
+        /* IVAN MODIFICATION */
+        $this->load->model('tool/base');
+        $this->_templateData['base'] = $this->model_tool_base->getBase();
+        /* IVAN MODIFICATION */
 
         $this->setOutputContent($this->renderPage('checkout/simplecheckout_cart', $this->_templateData));
     }

@@ -30,6 +30,8 @@ class ModelToolBase extends Model
                 $class = 'cart';
             } elseif ($this->request->get['route'] == 'checkout/checkout') {
                 $class = 'checkout';
+            } elseif ($this->request->get['route'] == 'checkout/simplecheckout') {
+                $class = 'checkout';
             } elseif ($this->request->get['route'] == 'account/login') {
                 $class = 'login';
             } elseif ($this->request->get['route'] == 'account/register') {
