@@ -104,6 +104,7 @@
         </transition>
 
         <input type="hidden" id="melle_reload_cart" @click="updateCartDataRequest()">
+        <input type="hidden" id="melle_clear_cart" @click="clearCartRequest()">
     </header>
 </template>
 
@@ -161,6 +162,7 @@ export default {
         ]),
         ...mapActions('cart', [
             'updateCartDataRequest',
+            'clearCartRequest',
         ]),
 
         searchAction() {
@@ -193,6 +195,9 @@ export default {
 
         $('.melle_reload_cart').on('click', () => {
             this.updateCartDataRequest()
+        })
+        $('.melle_clear_cart').on('click', () => {
+            this.clearCartRequest()
         })
     },
 }
