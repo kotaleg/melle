@@ -813,12 +813,14 @@ class scssc {
             }
 
             $strongTypes = array('include', 'block', 'for', 'while');
-            foreach ($content->children as $child) {
-                $this->storeEnv = (in_array($child[0], $strongTypes))
-                    ? null
-                    : $content->scope;
+            if (isset($content->children) && is_array($content->children)) {
+                foreach ($content->children as $child) {
+                    $this->storeEnv = (in_array($child[0], $strongTypes))
+                        ? null
+                        : $content->scope;
 
-                $this->compileChild($child, $out);
+                    $this->compileChild($child, $out);
+                }
             }
 
             unset($this->storeEnv);

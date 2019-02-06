@@ -305,7 +305,7 @@
       width: 90%;
       height: 90%;
       content: "";
-      background: url("../image/checkbox.png");
+      background: url("./../image/checkbox.png");
       background-position: center;
     }
   }
@@ -412,7 +412,7 @@
     &[aria-selected=true] {
       display: block;
       &:before {
-        background: #ffffff url(../image/checkbox.png);
+        background: #ffffff url(./../image/checkbox.png);
         background-position: center;
       }
     }

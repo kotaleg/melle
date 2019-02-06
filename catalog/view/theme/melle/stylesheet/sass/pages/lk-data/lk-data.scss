@@ -79,7 +79,7 @@
         input {
           display: none;
           &:checked + span {
-            background-image: url("../image/checkbox.png");
+            background-image: url("./../image/checkbox.png");
             background-size: cover;
           }
         }

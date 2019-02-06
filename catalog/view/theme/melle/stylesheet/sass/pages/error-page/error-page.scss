@@ -1,14 +1,14 @@
 .main-page--error{
     height: 700px;
     background-size: cover;
-     background-image: url(/themes/individual/public/image/404.jpg);
+     background-image: url(./../image/404.jpg);
     @include mobile{
-        background-image: url(/themes/individual/public/image/404_s.jpg);
+        background-image: url(./../image/404_s.jpg);
 
 
     }
     @include tablet{
-        background-image: url(/themes/individual/public/image/404_m.jpg);
+        background-image: url(./../image/404_m.jpg);
     }
 }
 
