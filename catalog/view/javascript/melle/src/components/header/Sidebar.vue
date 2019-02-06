@@ -100,11 +100,17 @@ export default {
     },
     data() {
         return {
+            fullyOpened: false,
             windowHeight: 0,
             windowWidth: 0,
             sidebarPopupContentWidth: 0,
             configCO: {
-                handler: (e, el) => { this.openSidebar(false) },
+                handler: (e, el) => {
+                    if (this.fullyOpened) {
+                        // console.log('click outside SIDEBAR');
+                        this.openSidebar(false)
+                    }
+                },
                 middleware: (e, el) => { return true },
                 events: ["dblclick", "click"],
             },
@@ -122,6 +128,11 @@ export default {
         window.addEventListener('keyup', this.onKeyUp)
         this.handleInit(true)
         this.handleResize()
+
+        // hack for click outside
+        setTimeout(() => {
+            this.fullyOpened = true
+        }, 500)
     },
 }
 </script>

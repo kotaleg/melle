@@ -31,77 +31,85 @@ const actions = {
         }
         let product = payload.product
 
-        dataLayer.push({
-            "event": "productClick",
-            "ecommerce": {
-                "click": {
-                    "actionField": {
-                        "list": page
-                    },
-                    "products": [product]
-                }
-            },
-            'event': 'gtm-ee-event',
-            'gtm-ee-event-category': 'Enhanced Ecommerce',
-            'gtm-ee-event-action': 'Product Clicks',
-            'gtm-ee-event-non-interaction': 'False',
-        })
+        if (!isUndefined(dataLayer)) {
+            dataLayer.push({
+                "event": "productClick",
+                "ecommerce": {
+                    "click": {
+                        "actionField": {
+                            "list": page
+                        },
+                        "products": [product]
+                    }
+                },
+                'event': 'gtm-ee-event',
+                'gtm-ee-event-category': 'Enhanced Ecommerce',
+                'gtm-ee-event-action': 'Product Clicks',
+                'gtm-ee-event-non-interaction': 'False',
+            })
 
-        console.log('-- product click --')
+            console.log('-- product click --')
+        }
     },
     addToCart({ commit }, product) {
-        dataLayer.push({
-            "event": "addToCart",
-            "ecommerce": {
-                "currencyCode": "RUB",
-                "add": {
-                    "products": [product]
-                }
-            },
-            'event': 'gtm-ee-event',
-            'gtm-ee-event-category': 'Enhanced Ecommerce',
-            'gtm-ee-event-action': 'Adding a Product to a Shopping Cart',
-            'gtm-ee-event-non-interaction': 'False',
-        })
+        if (!isUndefined(dataLayer)) {
+            dataLayer.push({
+                "event": "addToCart",
+                "ecommerce": {
+                    "currencyCode": "RUB",
+                    "add": {
+                        "products": [product]
+                    }
+                },
+                'event': 'gtm-ee-event',
+                'gtm-ee-event-category': 'Enhanced Ecommerce',
+                'gtm-ee-event-action': 'Adding a Product to a Shopping Cart',
+                'gtm-ee-event-non-interaction': 'False',
+            })
 
-        console.log('-- add to cart --')
+            console.log('-- add to cart --')
+        }
     },
     removeFromCart({ commit }, products) {
-        dataLayer.push({
-            "event": "removeFromCart",
-            "ecommerce": {
-                "currencyCode": "RUB",
-                "add": {
-                    "products": products
-                }
-            },
-            'event': 'gtm-ee-event',
-            'gtm-ee-event-category': 'Enhanced Ecommerce',
-            'gtm-ee-event-action': 'Removing a Product from a Shopping Cart',
-            'gtm-ee-event-non-interaction': 'False',
-        })
+        if (!isUndefined(dataLayer)) {
+                dataLayer.push({
+                "event": "removeFromCart",
+                "ecommerce": {
+                    "currencyCode": "RUB",
+                    "add": {
+                        "products": products
+                    }
+                },
+                'event': 'gtm-ee-event',
+                'gtm-ee-event-category': 'Enhanced Ecommerce',
+                'gtm-ee-event-action': 'Removing a Product from a Shopping Cart',
+                'gtm-ee-event-non-interaction': 'False',
+            })
 
-        console.log('-- remove from cart --')
+            console.log('-- remove from cart --')
+        }
     },
     openCheckoutPage({ commit, state, rootState, rootGetters, dispatch }, force = false) {
-        dataLayer.push({
-          "event": "checkout",
-          "ecommerce": {
-            "checkout": {
-              "actionField": {
-                "step": 1
+        if (!isUndefined(dataLayer)) {
+            dataLayer.push({
+              "event": "checkout",
+              "ecommerce": {
+                "checkout": {
+                  "actionField": {
+                    "step": 1
+                  },
+                  "products": rootGetters['cart/getProductsForGTM']
+                },
               },
-              "products": rootGetters['cart/getProductsForGTM']
-            },
-          },
-          'event': 'gtm-ee-event',
-          'gtm-ee-event-category': 'Enhanced Ecommerce',
-          'gtm-ee-event-action': 'Checkout Step 1',
-          'gtm-ee-event-non-interaction': 'False',
-        })
+              'event': 'gtm-ee-event',
+              'gtm-ee-event-category': 'Enhanced Ecommerce',
+              'gtm-ee-event-action': 'Checkout Step 1',
+              'gtm-ee-event-non-interaction': 'False',
+            })
 
-        console.log('-- open checkout page --')
-        dispatch('ecommShittyPush')
+            console.log('-- open checkout page --')
+            dispatch('ecommShittyPush')
+        }
     },
     ecommShittyPush({ commit, state, rootState, rootGetters }) {
         let ecomm_items = []
@@ -116,15 +124,17 @@ const actions = {
             });
         }
 
-        dataLayer.push({
-          'event': 'rem',
-          'ecomm_prodid': ecomm_items,
-          'ecomm_pagetype': state.page_type,
-          'ecomm_category': ecomm_categories,
-          'ecomm_totalvalue': ecomm_values,
-        })
+        if (!isUndefined(dataLayer)) {
+            dataLayer.push({
+              'event': 'rem',
+              'ecomm_prodid': ecomm_items,
+              'ecomm_pagetype': state.page_type,
+              'ecomm_category': ecomm_categories,
+              'ecomm_totalvalue': ecomm_values,
+            })
 
-        console.log('-- ECOMM --')
+            console.log('-- ECOMM --')
+        }
     },
 
     loadCatalog({ commit, state, rootState, rootGetters }) {
@@ -134,18 +144,20 @@ const actions = {
             products.push(product)
         })
 
-        dataLayer.push({
-            "ecommerce": {
-                "currencyCode": "RUB",
-                "impressions": products,
-            },
-            'event': 'gtm-ee-event',
-            'gtm-ee-event-category': 'Enhanced Ecommerce',
-            'gtm-ee-event-action': 'Product Impressions',
-            'gtm-ee-event-non-interaction': 'True',
-        })
+        if (!isUndefined(dataLayer)) {
+            dataLayer.push({
+                "ecommerce": {
+                    "currencyCode": "RUB",
+                    "impressions": products,
+                },
+                'event': 'gtm-ee-event',
+                'gtm-ee-event-category': 'Enhanced Ecommerce',
+                'gtm-ee-event-action': 'Product Impressions',
+                'gtm-ee-event-non-interaction': 'True',
+            })
 
-        console.log('-- load catalog products --')
+            console.log('-- load catalog products --')
+        }
     },
 }
 
