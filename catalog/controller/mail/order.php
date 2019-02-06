@@ -260,11 +260,12 @@ class ControllerMailOrder extends Controller {
         $data['mail_images'] = array(
             'facebook' => "{$data['base']}catalog/view/theme/melle/image/mail/facebook.png",
             'instagram' => "{$data['base']}catalog/view/theme/melle/image/mail/instagram.png",
-            'lower_image3' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image3.png",
-            'lower_image2' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image2.png",
-            'lower_image1' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image1.png",
-            'kolgotki_main' => "{$data['base']}catalog/view/theme/melle/image/mail/kolgotki-main.png",
-            'mail_logo' => "{$data['base']}catalog/view/theme/melle/image/mail/mail-logo.png",
+            'vk' => "{$data['base']}catalog/view/theme/melle/image/mail/vk.png",
+            'lower_image3' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image3.jpg",
+            'lower_image2' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image2.jpg",
+            'lower_image1' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image1.jpg",
+            'kolgotki_main' => "{$data['base']}catalog/view/theme/melle/image/mail/kolgotki-main.jpg",
+            'mail_logo' => "{$data['base']}catalog/view/theme/melle/image/mail/mail-logo.jpg",
         );
         /* IVAN MODIFICATION END */
 
