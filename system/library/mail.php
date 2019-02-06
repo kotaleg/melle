@@ -115,7 +115,6 @@ class Mail {
      *
      */
     public function send() {
-        return;
         if (!$this->to) {
             throw new \Exception('Error: E-Mail to required!');
         }
