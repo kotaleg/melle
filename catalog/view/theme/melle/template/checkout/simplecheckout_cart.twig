@@ -50,6 +50,13 @@
                                  <h3>{{ product['name'] }}</h3>
                               </a>
                            </div>
+                           {% if product['model'] %}
+                           <div class="basket-orders__article"><span>артикул: </span><span>{{product['model']}}</span></div>
+                           {% endif %}
+                           {% if product['manufacturer'] %}
+                           <div class="basket-orders__article"><span>производитель: </span><span>{{product['manufacturer']}}</span></div>
+                           {% endif %}
+
                            {% if not product['stock'] and (config_stock_warning or not config_stock_checkout) %}
                            <div class="basket-orders__article">
                               <span class="product-warning">***</span>
