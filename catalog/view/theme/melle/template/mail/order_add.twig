@@ -1,279 +1,268 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ title }}</title>
-</head>
-<body style="margin: 0; overflow-x: hidden">
-    <div class="mail-header">
-        <img src="{{ mail_images.mail_logo }}" alt="" width="100%">
-    </div>
-    <div class="mail-main" style="width: 636px; max-width: 100%;">
-        <div class="mail-appreciate-text" style="
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport"
+         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>{{ title }}</title>
+   </head>
+   <body style="margin: 0;">
+      <div class="mail-header" style="text-align: center; max-width: 100%;">
+         <img src="{{ mail_images.mail_logo }}" alt="">
+      </div>
+      <div class="mail-main" style="width: 636px; margin: 0 auto; max-width: 100%;">
+         <div class="mail-appreciate-text" style="
             text-align: center;
             font-family: 'Arial', sans-serif;
             font-size: 15px;
             color: #222222;
             margin-top: 28px;
             padding: 0 30px;
-        ">
+            ">
+
+            {% if not admin %}
             <p style="margin: 0;">Благодарим за Ваш заказ. </p>
             <p style="margin: 0; margin-top: 8px;">Наши специалисты свяжутся с Вами в ближайшее время.</p>
+            {% else %}
+            <p style="margin: 0;">Новый заказ. </p>
+            {% endif %}
+
             <h2 style="
-                text-align: center;
-                font-family: 'Arial', sans-serif;
-                font-size: 25px;
-                color: #222222;
-                font-weight: 700;
-                text-transform: uppercase;
-                margin-top: 32px;
-                margin-bottom: 34px;
-            ">СПАСИБО ЗА ВАШ ЗАКАЗ</h2>
+               text-align: center;
+               font-family: 'Arial', sans-serif;
+               font-size: 25px;
+               color: #222222;
+               font-weight: 700;
+               text-transform: uppercase;
+               margin-top: 32px;
+               margin-bottom: 34px;
+               "></h2>
             <img src="{{ mail_images.kolgotki_main }}" alt="" style="max-width: 100%; height: auto; margin: 0 auto">
-        </div>
-
-        <div class="mail-details" style="margin: 0 30px;" >
+         </div>
+         <div class="mail-details" style="margin: 0 30px;" >
             <div style="border-bottom: 1px solid #bfbfbf; padding: 28px 0;">
-
-                <table border="0" cellpadding="6" cellspacing="0" class="delivery-detail" style="
-                    font-family: 'Arial', sans-serif;
-                    font-size: 15px;
-                    color: #222222;
-                    width: 100%;
-                ">
+               <table border="0" cellpadding="6" cellspacing="0" class="delivery-detail" style="
+                  font-family: 'Arial', sans-serif;
+                  font-size: 15px;
+                  color: #222222;
+                  max-width: 100%;
+                  ">
+                  <tr>
+                     <td><strong>Имя:</strong></td>
+                     <td>{{full_name}}</td>
+                  </tr>
+                  <tr>
+                     <td> <strong>Контактный телефон:</strong></td>
+                     <td>{{telephone}}</td>
+                  </tr>
+                  <tr>
+                     <td> <strong>E-mail:</strong></td>
+                     <td>{{email}}</td>
+                  </tr>
+                  <tr>
+                     <td> <strong>Адрес доставки:</strong></td>
+                     <td>{{ shipping_address }}</td>
+                  </tr>
+                  {% if comment %}
+                  <tr>
+                     <td> <strong>Комментарий:</strong></td>
+                     <td>{{ comment }}</td>
+                  </tr>
+                  {% endif %}
+                  {% if shipping_method %}
+                  <tr>
+                     <td> <strong>Способ доставки:</strong></td>
+                     <td>{{ shipping_method }}</td>
+                  </tr>
+                  {% endif %}
+                  <tr>
+                     <td> <strong>Способ оплаты:</strong></td>
+                     <td>{{ payment_method }}</td>
+                  </tr>
+                  <tr>
+                     <td> <strong>Номер заказа:</strong></td>
+                     <td>{{ order_id }}</td>
+                  </tr>
+               </table>
+               <div style="max-width: 100%; overflow: auto">
+                  <table border="1" cellpadding="13" cellspacing="0" class="order-detail" style="
+                     border: 1px solid #bfbfbf;
+                     max-width: 100%;
+                     border-collapse: collapse;
+                     margin-top: 30px;
+                     text-align: center;
+                     color: #222222;
+                     font-family: 'Arial', sans-serif;
+                     font-size: 13px;
+                     ">
+                     <tr style="background-color: #f2f2f2;border: 1px solid #bfbfbf;">
+                        <th style="border: 1px solid #bfbfbf;">Название</th>
+                        <th style="border: 1px solid #bfbfbf;">Опции</th>
+                        <th style="border: 1px solid #bfbfbf;">Цена, руб.</th>
+                        <th style="border: 1px solid #bfbfbf;">Кол-во шт</th>
+                        <th style="border: 1px solid #bfbfbf;">Сумма, руб.</th>
+                     </tr>
+                     {% for product in products %}
+                     <tr style="font-size: 12px;border: 1px solid #bfbfbf;">
+                        <td style="border: 1px solid #bfbfbf;"><a href="{{ product.href }}" target="_blank" style="color: #000;">{{ product.name }}</a></td>
+                        <td style="border: 1px solid #bfbfbf;">{% for option in product.option %}<br />&nbsp;<small>{{ option.name }}: {{ option.value }}</small>{% endfor %}</td>
+                        <td style="border: 1px solid #bfbfbf;">{{ product.price }}</td>
+                        <td style="border: 1px solid #bfbfbf;">{{ product.quantity }}</td>
+                        <td style="border: 1px solid #bfbfbf;">{{ product.total }}</td>
+                     </tr>
+                     {% endfor %}
+                  </table>
+               </div>
+               <table border="0" cellpadding="6" cellspacing="0" class="price-detail" style="
+                  margin-top: 30px;
+                  width: 50%;
+                  min-width: 300px;
+                  font-family: 'Arial', sans-serif;
+                  font-size: 14px;
+                  color: #222222;
+                  ">
+                    {% for total in totals %}
+                    {% if not loop.last %}
                     <tr>
-                        <td><strong>Имя:</strong></td>
-                        <td>{{full_name}}</td>
+                        <td><strong>{{total.title}}</strong></td>
+                        <td>{{total.text}}</td>
                     </tr>
-                    <tr>
-                        <td> <strong>Контактный телефон:</strong></td>
-                        <td>{{telephone}}</td>
-                    </tr>
-                    <tr>
-                        <td> <strong>E-mail:</strong></td>
-                        <td>{{email}}</td>
-                    </tr>
-                    <tr>
-                        <td> <strong>Адрес доставки:</strong></td>
-                        <td>{{ shipping_address }}</td>
-                    </tr>
-                    {% if comment %}
-                    <tr>
-                        <td> <strong>Комментарий:</strong></td>
-                        <td>{{ comment }}</td>
+                    {% else %}
+                    <tr style="font-size: 16px; font-weight: 700; line-height: 50px;">
+                        <td style="text-transform: uppercase;">{{total.title}}</td>
+                        <td>{{total.text}}</td>
                     </tr>
                     {% endif %}
-                    {% if shipping_method %}
-                    <tr>
-                        <td> <strong>Способ доставки:</strong></td>
-                        <td>{{ shipping_method }}</td>
-                    </tr>
-                    {% endif %}
-                    <tr>
-                        <td> <strong>Способ оплаты:</strong></td>
-                        <td>{{ payment_method }}</td>
-                    </tr>
-                    <tr>
-                        <td> <strong>Номер заказа:</strong></td>
-                        <td>{{ order_id }}</td>
-                    </tr>
-                </table>
-
-                <div style="max-width: 100%; overflow: auto">
-                    <table border="1" cellpadding="13" cellspacing="0" class="order-detail" style="
-                        border: 1px solid #bfbfbf;
-                        max-width: 100%;
-                        border-collapse: collapse;
-                        margin-top: 30px;
-                        text-align: center;
-                        color: #222222;
-                        font-family: 'Arial', sans-serif;
-                        font-size: 13px;
-                    ">
-                        <tr style="background-color: #f2f2f2; max-width: 100%;">
-                            <th>Название</th>
-                            <th>Опции</th>
-                            <th>Цена, руб.</th>
-                            <th>Кол-во шт</th>
-                            <th>Сумма, руб.</th>
-                        </tr>
-                        {% for product in products %}
-                        <tr style="font-size: 12px; max-width: 100%;">
-                            <td>{{ product.name }}</td>
-                            <td>{% for option in product.option %}<br />&nbsp;<small>{{ option.name }}: {{ option.value }}</small>{% endfor %}</td>
-                            <td>{{ product.price }}</td>
-                            <td>{{ product.quantity }}</td>
-                            <td>{{ product.total }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-
-            <table border="0" cellpadding="6" cellspacing="0" class="price-detail" style="
-                margin-top: 30px;
-                width: 50%;
-                min-width: 300px;
-                font-family: 'Arial', sans-serif;
-                font-size: 14px;
-                color: #222222;
-            ">
-                {% for total in totals %}
-                {% if not loop.last %}
-                <tr>
-                    <td><strong>{{total.title}}</strong></td>
-                    <td>{{total.text}}</td>
-                </tr>
-                {% else %}
-                <tr style="font-size: 16px; font-weight: 700; line-height: 50px;">
-                    <td style="text-transform: uppercase;">{{total.title}}</td>
-                    <td>{{total.text}}</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </table>
-
-            <p style="
-                margin: 0;
-                font-family: 'Arial', sans-serif;
-                font-size: 14px;
-                color: #222222;
-            ">Письмо сформировано: {{ "now"|date("Y.m.d H:i:s") }}</p>
+                    {% endfor %}
+               </table>
+               <p style="
+                  margin: 0;
+                  font-family: 'Arial', sans-serif;
+                  font-size: 14px;
+                  color: #222222;
+                  ">Письмо сформировано: {{ "now"|date("Y.m.d H:i:s") }}</p>
             </div>
-
-
             <div class="column" style="width: 100%; display: inline-block; vertical-align: top">
-                <table border="0" cellpadding="0" cellspacing="7" class="mail-links" style="
-                width: 100%;
-                margin-top: 32px;
-                margin-bottom: 32px;
-            ">
-                    <tr style="max-width: 100%">
-                        <td style="width: 50%; height: auto; max-width: 100%">
-                            <a href="{{base}}" style="
-                            display: block;
-                            width: 100%;
-                            height: 100%;
-                            text-decoration: none;
-                            background-image: url('{{ mail_images.lower_image1 }}');
-                            background-repeat: no-repeat;
-                            -webkit-background-size: cover;background-size: cover;
-                            background-position: center;
-                            position: relative;
-                        ">
-                              <img src="{{ mail_images.lower_image1 }}" alt="" style="max-width: 100%; height: auto;">
-                                <h2 style="
-                                display: block;
-                                position:absolute;
-                                top: 40%;
-                                left: 0;
-                                width: 100%;
-                                height: 20px;
-                                margin: 0;
-                                font-family: 'Arial', sans-serif;
-                                font-size: 20px;
-                                color: #fffefe;
-                                font-weight: 700;
-                                text-transform: uppercase;
-                                text-align: center;
-                            ">Хиты</h2>
-                            </a>
-                        </td>
-                        <td style="width: 50%; height: auto; max-width: 100%;">
-                            <a href="{{base}}" style="
-                            display: block;
-                            position:relative;
-                            width: 100%;
-                            height: 100%;
-                            text-decoration: none;
-                            background-image: url('{{ mail_images.lower_image2 }}');
-                            background-repeat: no-repeat;
-                            -webkit-background-size: cover;background-size: cover;
-                            background-position: center;
-                        ">
-                                <img src="{{ mail_images.lower_image2 }}" alt="" style="max-width: 100%; height: auto;">
-                                <h2 style="
-                                display: block;
-                                position:absolute;
-                                top: 40%;
-                                left: 0;
-                                width: 100%;
-                                height: 20px;
-                                margin: 0;
-                                font-family: 'Arial', sans-serif;
-                                font-size: 20px;
-                                color: #fffefe;
-                                font-weight: 700;
-                                text-transform: uppercase;
-                                text-align: center;
-                            ">АКЦИИ</h2>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr style="max-width: 100%;">
-                        <td colspan="2" style="width: 100%; height: auto; max-width: 100%;">
-                            <a href="{{base}}" style="
-                            display: block;
-                            position:relative;
-                            width: 100%;
-                            height: 100%;
-                            text-decoration: none;
-                            background-image: url('{{ mail_images.lower_image3 }}');
-                            background-repeat: no-repeat;
-                            -webkit-background-size: cover;background-size: cover;
-                            background-position: center;
-                        ">
-                                <img src="{{ mail_images.lower_image3 }}" alt="" style="max-width: 100%; height: auto;">
-                                <h2 style="
-                                display: block;
-                                position:absolute;
-                                top: 40%;
-                                left: 0;
-                                width: 100%;
-                                height: 20px;
-                                margin: 0;
-                                font-family: 'Arial', sans-serif;
-                                font-size: 20px;
-                                color: #fffefe;
-                                font-weight: 700;
-                                text-transform: uppercase;
-                                text-align: center;
-                            ">НОВОСТИ</h2>
-                            </a>
-                        </td>
-                    </tr>
-                </table>
+               <table border="0" cellpadding="0" cellspacing="7" class="mail-links" style="
+                  width: 100%;
+                  margin-top: 32px;
+                  margin-bottom: 32px;
+                  ">
+                  <tr style="max-width: 100%">
+                     <td style="width: 50%; height: auto; max-width: 100%">
+                        <a href="{{ base }}" target="_blank" background="{{ mail_images.lower_image1 }}" style="
+                           display: block;
+                           width: 100%;
+                           height: 100%;
+                           background-image: url('{{ mail_images.lower_image1 }}'), url('{{ mail_images.lower_image1 }}');
+                           background-repeat: no-repeat;
+                           -webkit-background-size: cover;
+                           background-size: cover;
+                           background-position: center;
+                           text-decoration: none;
+                           ">
+                           <h2 style="
+                              display: block;
+                              width: 100%;
+                              height: 100%;
+                              background-color: rgba(0,0,0,0.5);
+                              margin: 0;
+                              font-family: 'Arial', sans-serif;
+                              font-size: 20px;
+                              color: #fffefe;
+                              font-weight: 700;
+                              text-transform: uppercase;
+                              text-align: center;
+                              line-height: 280px;
+                              ">Хиты</h2>
+                        </a>
+                     </td>
+                     <td style="width: 50%; height: auto; max-width: 100%"">
+                        <a href="{{ base }}" target="_blank" background="{{ mail_images.lower_image2 }}" style="
+                           display: block;
+                           width: 100%;
+                           height: 100%;
+                           background-image: url('{{ mail_images.lower_image2 }}'), url('{{ mail_images.lower_image2 }}');
+                           background-repeat: no-repeat;
+                           -webkit-background-size: cover;
+                           background-size: cover;
+                           background-position: center;
+                           text-decoration: none;
+                           ">
+                           <h2 style="
+                              display: block;
+                              width: 100%;
+                              height: 100%;
+                              background-color: rgba(0,0,0,0.5);
+                              margin: 0;
+                              font-family: 'Arial', sans-serif;
+                              font-size: 20px;
+                              color: #fffefe;
+                              font-weight: 700;
+                              text-transform: uppercase;
+                              text-align: center;
+                              line-height: 280px;
+                              ">АКЦИИ</h2>
+                        </a>
+                     </td>
+                  </tr>
+                  <tr style="max-width: 100%">
+                     <td colspan="2" style="width: 100%; height: auto; max-width: 100%"">
+                        <a href="{{ base }}" target="_blank" background="{{ mail_images.lower_image3 }}" style="
+                           display: block;
+                           width: 100%;
+                           height: 100%;
+                           background-image: url('{{ mail_images.lower_image3 }}'), url('{{ mail_images.lower_image3 }}');
+                           background-repeat: no-repeat;
+                           -webkit-background-size: cover;
+                           background-size: cover;
+                           background-position: center;
+                           text-decoration: none;
+                           ">
+                           <h2 style="
+                              display: block;
+                              width: 100%;
+                              height: 100%;
+                              background-color: rgba(0,0,0,0.5);
+                              margin: 0;
+                              font-family: 'Arial', sans-serif;
+                              font-size: 20px;
+                              color: #fffefe;
+                              font-weight: 700;
+                              text-transform: uppercase;
+                              text-align: center;
+                              line-height: 280px;
+                              ">НОВОСТИ</h2>
+                        </a>
+                     </td>
+                  </tr>
+               </table>
             </div>
-
-
-        </div>
-
-    </div>
-
-    <div class="mail-footer" style="
-        padding: 30px 0;
-        background-color: #e7e7e7;
-        max-width: 100%;
-    ">
-        <div class="social" style="text-align: center; margin-bottom: 20px;">
-            <a href="https://www.facebook.com/melle.online/" style="display: inline-block; margin-right: 16px;">
-                <img src="{{ mail_images.facebook }}" alt="">
+         </div>
+      </div>
+      <div class="mail-footer" style="
+         padding: 30px 0;
+         background-color: #e7e7e7;
+         ">
+         <div class="social" style="text-align: center; margin-bottom: 20px;">
+            <a href="https://www.facebook.com/melle.online/" target="_blank"  style="display: inline-block; margin-right: 16px;">
+            <img src="{{ mail_images.facebook }}" alt="facebook">
             </a>
-            <a href="https://www.instagram.com/melle.online/" style="display: inline-block; margin-right: 16px;">
-                <img src="{{ mail_images.instagram }}" alt="">
+            <a href="https://www.instagram.com/melle.online/" target="_blank"  style="display: inline-block; margin-right: 16px;">
+            <img src="{{ mail_images.instagram }}" alt="instagram">
             </a>
-        </div>
-        <div class="mail-footer-link" style="text-align: center;">
-            <a href="{{ base }}" style="
-                font-family: 'Arial', sans-serif;
-                font-size: 14px;
-                color: #222222;
-            ">{{store_name}}</a>
-        </div>
-    </div>
-
-</body>
-
+            <a href="http://vk.com" target="_blank" >
+            <img src="{{ mail_images.vk }}" alt="vk">
+            </a>
+         </div>
+         <div class="mail-footer-link" style="text-align: center;">
+            <a href="https://melle.online/" style="
+               font-family: 'Arial', sans-serif;
+               font-size: 14px;
+               color: #222222;
+               ">melle.online</a>
+         </div>
+      </div>
+   </body>
 </html>

@@ -252,7 +252,7 @@ class ControllerMailOrder extends Controller {
         }
 
         /* IVAN MODIFICATION START */
-
+        $data['admin'] = false;
         $data['full_name'] = "{$order_info['payment_firstname']} {$order_info['payment_lastname']}";
 
         $this->load->model('tool/base');
@@ -291,6 +291,30 @@ class ControllerMailOrder extends Controller {
         $mail->setSubject(html_entity_decode(sprintf($language->get('text_subject'), $order_info['store_name'], $order_info['order_id']), ENT_QUOTES, 'UTF-8'));
         $mail->setHtml($this->load->view('mail/order_add', $data));
         $mail->send();
+
+        if ($order_info && !$order_info['order_status_id']
+        && $order_status_id && in_array('order', (array)$this->config->get('config_mail_alert'))) {
+
+            $data['admin'] = true;
+            $this->load->language('mail/order_alert');
+
+            $mail->setTo($this->config->get('config_email'));
+            $mail->setFrom($this->config->get('config_email'));
+            $mail->setSender(html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'));
+            $mail->setSubject(html_entity_decode(sprintf($this->language->get('text_subject'), $this->config->get('config_name'), $order_info['order_id']), ENT_QUOTES, 'UTF-8'));
+            $mail->setHtml($this->load->view('mail/order_add', $data));
+            $mail->send();
+
+            // Send to additional alert emails
+            $emails = explode(',', $this->config->get('config_mail_alert_email'));
+
+            foreach ($emails as $email) {
+                if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $mail->setTo($email);
+                    $mail->send();
+                }
+            }
+        }
     }
 
     public function edit($order_info, $order_status_id, $comment) {
@@ -324,6 +348,24 @@ class ControllerMailOrder extends Controller {
 
         $data['comment'] = strip_tags($comment);
 
+        /* IVAN MODIFICATION START */
+
+        $data['full_name'] = "{$order_info['payment_firstname']} {$order_info['payment_lastname']}";
+
+        $this->load->model('tool/base');
+        $data['base'] = $this->model_tool_base->getBase();
+        $data['mail_images'] = array(
+            'facebook' => "{$data['base']}catalog/view/theme/melle/image/mail/facebook.png",
+            'instagram' => "{$data['base']}catalog/view/theme/melle/image/mail/instagram.png",
+            'vk' => "{$data['base']}catalog/view/theme/melle/image/mail/vk.png",
+            'lower_image3' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image3.jpg",
+            'lower_image2' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image2.jpg",
+            'lower_image1' => "{$data['base']}catalog/view/theme/melle/image/mail/lower-image1.jpg",
+            'kolgotki_main' => "{$data['base']}catalog/view/theme/melle/image/mail/kolgotki-main.jpg",
+            'mail_logo' => "{$data['base']}catalog/view/theme/melle/image/mail/mail-logo.jpg",
+        );
+        /* IVAN MODIFICATION END */
+
         $this->load->model('setting/setting');
 
         $from = $this->model_setting_setting->getSettingValue('config_email', $order_info['store_id']);
@@ -344,7 +386,7 @@ class ControllerMailOrder extends Controller {
         $mail->setFrom($from);
         $mail->setSender(html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'));
         $mail->setSubject(html_entity_decode(sprintf($language->get('text_subject'), $order_info['store_name'], $order_info['order_id']), ENT_QUOTES, 'UTF-8'));
-        $mail->setHtml($this->load->view('mail/order_add', $data));
+        $mail->setHtml($this->load->view('mail/order_edit', $data));
         $mail->send();
     }
 

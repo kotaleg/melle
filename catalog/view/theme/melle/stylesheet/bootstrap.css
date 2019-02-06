@@ -2869,8 +2869,7 @@ body .search-form__send {
 
 .basket-orders {
   font-weight: 900;
-  margin: 0;
-  float: left; }
+  margin: 0; }
   @media (max-width: 767px) {
   .basket-orders {
     width: 100%; } }
@@ -2903,69 +2902,66 @@ body .search-form__send {
     .basket-orders__table tbody td > div > span {
       color: #2b2a29;
       font-size: 12px; }
-    .basket-orders__table tbody td:nth-child(1) {
+    .basket-orders__table tbody td.options {
+      max-width: 100px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 12px; }
+    .basket-orders__table tbody td.image {
       width: 83px; }
-      .basket-orders__table tbody td:nth-child(1) a {
+      .basket-orders__table tbody td.image a {
         display: block;
         margin-left: -2px; }
-      .basket-orders__table tbody td:nth-child(1) img {
+      .basket-orders__table tbody td.image img {
         width: 100%;
         height: auto; }
-    .basket-orders__table tbody td:nth-child(2) {
+    .basket-orders__table tbody td.name {
       padding-left: 40px;
       vertical-align: middle; }
       @media (min-width: 768px) and (max-width: 1199px) {
-      .basket-orders__table tbody td:nth-child(2) {
+      .basket-orders__table tbody td.name {
         padding-left: 20px; } }
-      .basket-orders__table tbody td:nth-child(2) .basket-orders__title {
+      .basket-orders__table tbody td.name .basket-orders__title {
         width: 60%;
         margin-bottom: 10px; }
-        .basket-orders__table tbody td:nth-child(2) .basket-orders__title > a {
+        .basket-orders__table tbody td.name .basket-orders__title > a {
           font-size: 12px;
           font-weight: bold; }
-          .basket-orders__table tbody td:nth-child(2) .basket-orders__title > a:link, .basket-orders__table tbody td:nth-child(2) .basket-orders__title > a:visited, .basket-orders__table tbody td:nth-child(2) .basket-orders__title > a:active, .basket-orders__table tbody td:nth-child(2) .basket-orders__title > a:hover {
+          .basket-orders__table tbody td.name .basket-orders__title > a:link, .basket-orders__table tbody td.name .basket-orders__title > a:visited, .basket-orders__table tbody td.name .basket-orders__title > a:active, .basket-orders__table tbody td.name .basket-orders__title > a:hover {
             color: #2b2a29; }
-          .basket-orders__table tbody td:nth-child(2) .basket-orders__title > a h3 {
+          .basket-orders__table tbody td.name .basket-orders__title > a h3 {
             color: #2b2a29;
             font-size: 12px;
             font-weight: 700; }
-      .basket-orders__table tbody td:nth-child(2) .basket-orders__article {
+      .basket-orders__table tbody td.name .basket-orders__article {
         margin-bottom: 10px;
         color: #807f7d;
         font-size: 12px; }
-      .basket-orders__table tbody td:nth-child(2) .basket-orders__manufacturer {
+      .basket-orders__table tbody td.name .basket-orders__manufacturer {
         color: #807f7d;
         font-size: 12px; }
-        .basket-orders__table tbody td:nth-child(2) .basket-orders__manufacturer a {
+        .basket-orders__table tbody td.name .basket-orders__manufacturer a {
           text-transform: uppercase; }
-          .basket-orders__table tbody td:nth-child(2) .basket-orders__manufacturer a:link, .basket-orders__table tbody td:nth-child(2) .basket-orders__manufacturer a:visited, .basket-orders__table tbody td:nth-child(2) .basket-orders__manufacturer a:active, .basket-orders__table tbody td:nth-child(2) .basket-orders__manufacturer a:hover {
+          .basket-orders__table tbody td.name .basket-orders__manufacturer a:link, .basket-orders__table tbody td.name .basket-orders__manufacturer a:visited, .basket-orders__table tbody td.name .basket-orders__manufacturer a:active, .basket-orders__table tbody td.name .basket-orders__manufacturer a:hover {
             color: #2b2a29; }
-    .basket-orders__table tbody td:nth-child(3) {
+    .basket-orders__table tbody td.price, .basket-orders__table tbody td.total {
       text-align: center;
       vertical-align: middle; }
-    .basket-orders__table tbody td:nth-child(4) {
-      max-width: 50px;
-      text-align: center;
-      vertical-align: middle; }
-    .basket-orders__table tbody td:nth-child(5), .basket-orders__table tbody td:nth-child(7) {
-      width: 75px;
-      text-align: center;
-      vertical-align: middle; }
-      .basket-orders__table tbody td:nth-child(5) .basket-orders__price, .basket-orders__table tbody td:nth-child(7) .basket-orders__price {
+      .basket-orders__table tbody td.price .basket-orders__price, .basket-orders__table tbody td.total .basket-orders__price {
         color: #2b2a29; }
-        .basket-orders__table tbody td:nth-child(5) .basket-orders__price-old, .basket-orders__table tbody td:nth-child(7) .basket-orders__price-old {
+        .basket-orders__table tbody td.price .basket-orders__price-old, .basket-orders__table tbody td.total .basket-orders__price-old {
           display: block;
           text-decoration: line-through;
           font-size: 14px; }
-        .basket-orders__table tbody td:nth-child(5) .basket-orders__price-default, .basket-orders__table tbody td:nth-child(7) .basket-orders__price-default {
+        .basket-orders__table tbody td.price .basket-orders__price-default, .basket-orders__table tbody td.total .basket-orders__price-default {
           display: block;
           font-size: 18px;
           line-height: 25px; }
-    .basket-orders__table tbody td:nth-child(6) {
+    .basket-orders__table tbody td.quantity {
       width: 100px;
       text-align: center;
       vertical-align: middle; }
-      .basket-orders__table tbody td:nth-child(6) .basket-orders__count {
+      .basket-orders__table tbody td.quantity .basket-orders__count {
         border: 1px solid black;
         display: flex;
         width: 85px;
@@ -2973,11 +2969,11 @@ body .search-form__send {
         color: #6d6b6a;
         background-color: white;
         font-size: 12px; }
-        .basket-orders__table tbody td:nth-child(6) .basket-orders__count .catalog__item-count_label {
+        .basket-orders__table tbody td.quantity .basket-orders__count .catalog__item-count_label {
           color: #807f7d; }
-          .basket-orders__table tbody td:nth-child(6) .basket-orders__count .catalog__item-count_label .ng-binding {
+          .basket-orders__table tbody td.quantity .basket-orders__count .catalog__item-count_label .ng-binding {
             color: #000; }
-        .basket-orders__table tbody td:nth-child(6) .basket-orders__count > button {
+        .basket-orders__table tbody td.quantity .basket-orders__count > button {
           width: 19px;
           height: 30px;
           text-align: center;
@@ -2987,27 +2983,27 @@ body .search-form__send {
           font-size: 18px;
           font-weight: bold;
           padding: 0; }
-          .basket-orders__table tbody td:nth-child(6) .basket-orders__count > button:hover {
+          .basket-orders__table tbody td.quantity .basket-orders__count > button:hover {
             cursor: pointer; }
-        .basket-orders__table tbody td:nth-child(6) .basket-orders__count > input {
+        .basket-orders__table tbody td.quantity .basket-orders__count > input {
           width: 46px;
           text-align: center;
           color: black;
           border: 0;
           background-color: transparent;
           font-size: 20px; }
-    .basket-orders__table tbody td:nth-child(8) {
+    .basket-orders__table tbody td.remove {
       text-align: center;
       vertical-align: middle; }
-      .basket-orders__table tbody td:nth-child(8) button {
+      .basket-orders__table tbody td.remove button {
         margin: 0;
         padding: 0;
         cursor: pointer;
         border: 0;
         background: transparent; }
-        .basket-orders__table tbody td:nth-child(8) button > svg {
+        .basket-orders__table tbody td.remove button > svg {
           fill: #94918e; }
-        .basket-orders__table tbody td:nth-child(8) button:hover > svg {
+        .basket-orders__table tbody td.remove button:hover > svg {
           fill: #6a6969; }
   .basket-orders__footer {
     border: 1px solid black;
@@ -3770,7 +3766,7 @@ section[data-layout="col"] .catalog__container {
     display: inline-block;
     width: 30%;
     height: 23.95833vw;
-    margin-bottom: 90px;
+    margin-bottom: 130px;
     vertical-align: top; }
   @media (max-width: 767px) {
       section[data-layout="col"] .catalog__item {

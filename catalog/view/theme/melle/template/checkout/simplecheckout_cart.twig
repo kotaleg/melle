@@ -19,8 +19,9 @@
                   <th></th>
                   <th>Опции</th>
                   <th>Цена</th>
-                  <th>К-во</th>
+                  <th>Кол-во</th>
                   <th>Сумма</th>
+                  <th></th>
                </tr>
             </thead>
             <tbody>
@@ -55,7 +56,7 @@
                            </div>
                            {% endif %}
                         </td>
-                        <td>
+                        <td class="options">
                            <div class="basket-orders__size">
                               <div class="options">
                                {% for option in product['option'] %}
@@ -70,20 +71,29 @@
                                {% endif %}
                            </div>
                         </td>
-                        <td>
+                        <td class="price">
                            <div class="basket-orders__price">
                               <span class="basket-orders__price-default">
                                  {{ product['price'] }} <span class="ruble-sign">Р</span>
                               </span>
                            </div>
                         </td>
-                        <td class="model">{{ product['quantity'] }}</td>
-                        <td>
+                        <td class="quantity">
+                           <div class="basket-orders__count">
+                              <button class="item_minus" role="button" data-onclick="decreaseProductQuantity" data-toggle="tooltip"><span>-</span></button>
+                              <input type="text" class="item_col keyPressedNum" data-onchange="changeProductQuantity" {{ quantity_step_as_minimum ? 'onfocus="$(this).blur()" data-minimum="' ~ product['minimum'] ~ '"' : '' }} name="quantity[{{ product['cart_id'] is not empty ? product['cart_id'] : product['key'] }}]" value="{{ product['quantity'] }}">
+                              <button class="item_plus" role="button" data-onclick="increaseProductQuantity" data-toggle="tooltip"><span>+</span></button>
+                           </div>
+                        </td>
+                        <td class="total">
                            <div class="basket-orders__price">
                               <span class="basket-orders__price-default">
                                  {{ product['total'] }} <span class="ruble-sign">Р</span>
                               </span>
                            </div>
+                        </td>
+                        <td class="remove">
+                           <div class="basket-orders__del" data-onclick="removeProduct" data-product-key="{{product['cart_id']}}"><button style="outline: none;border: 0;background: transparent;fill:#94918e"><svg viewBox="0 0 191.414 191.414" width="21" height="21"><path d="M107.888,96.142l80.916-80.916c3.48-3.48,3.48-8.701,0-12.181s-8.701-3.48-12.181,0L95.707,83.961L14.791,3.045   c-3.48-3.48-8.701-3.48-12.181,0s-3.48,8.701,0,12.181l80.915,80.916L2.61,177.057c-3.48,3.48-3.48,8.701,0,12.181   c1.74,1.74,5.22,1.74,6.96,1.74s5.22,0,5.22-1.74l80.916-80.916l80.916,80.916c1.74,1.74,5.22,1.74,6.96,1.74   c1.74,0,5.22,0,5.22-1.74c3.48-3.48,3.48-8.701,0-12.181L107.888,96.142z"></path></svg></button></div>
                         </td>
                     </tr>
                 {% endfor %}
@@ -113,6 +123,21 @@
             </div>
          </div>
 
+      </div>
+
+      <div class="basket-orders__buttons" data-ng-show="cart.products">
+         <a href="/catalog" class="basket-orders__prev-button">
+            <svg viewBox="0 0 489.2 489.2" width="20" height="20">
+               <path d="M481.044,382.5c0-6.8-5.5-12.3-12.3-12.3h-418.7l73.6-73.6c4.8-4.8,4.8-12.5,0-17.3c-4.8-4.8-12.5-4.8-17.3,0l-94.5,94.5c-4.8,4.8-4.8,12.5,0,17.3l94.5,94.5c2.4,2.4,5.5,3.6,8.7,3.6s6.3-1.2,8.7-3.6c4.8-4.8,4.8-12.5,0-17.3l-73.6-73.6h418.8C475.544,394.7,481.044,389.3,481.044,382.5z"></path>
+            </svg>
+            <span>продолжить покупки</span>
+         </a>
+         <a href="/cart/action.Clear" class="basket-orders__reset-button">
+            <svg viewBox="0 0 191.414 191.414" width="19" height="19">
+               <path d="M107.888,96.142l80.916-80.916c3.48-3.48,3.48-8.701,0-12.181s-8.701-3.48-12.181,0L95.707,83.961L14.791,3.045   c-3.48-3.48-8.701-3.48-12.181,0s-3.48,8.701,0,12.181l80.915,80.916L2.61,177.057c-3.48,3.48-3.48,8.701,0,12.181   c1.74,1.74,5.22,1.74,6.96,1.74s5.22,0,5.22-1.74l80.916-80.916l80.916,80.916c1.74,1.74,5.22,1.74,6.96,1.74   c1.74,0,5.22,0,5.22-1.74c3.48-3.48,3.48-8.701,0-12.181L107.888,96.142z"></path>
+            </svg>
+            <span>очистить корзину</span>
+         </a>
       </div>
 
    </div>
