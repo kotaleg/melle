@@ -1,21 +1,100 @@
-{{ text_order_id }} {{ order_id }}
-{{ text_date_added }} {{ date_added }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ title }}</title>
+</head>
+<body style="margin: 0; overflow-x: hidden">
+    <div class="mail-header">
+        <img src="{{ mail_images.mail_logo }}" alt="" width="100%">
+    </div>
+    <div class="mail-main" style="width: 636px; max-width: 100%;">
+        <div class="mail-appreciate-text" style="
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            font-size: 15px;
+            color: #222222;
+            margin-top: 28px;
+            padding: 0 30px;
+        ">
+            <p style="margin: 0;">Благодарим за Ваш заказ. </p>
+            <p style="margin: 0; margin-top: 8px;">Наши специалисты свяжутся с Вами в ближайшее время.</p>
+            <h2 style="
+                text-align: center;
+                font-family: 'Arial', sans-serif;
+                font-size: 25px;
+                color: #222222;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-top: 32px;
+                margin-bottom: 34px;
+            ">СПАСИБО ЗА ВАШ ЗАКАЗ</h2>
+            <img src="{{ mail_images.kolgotki_main }}" alt="" style="max-width: 100%; height: auto; margin: 0 auto">
+        </div>
 
-{{ text_order_status }}
+        <div class="mail-details" style="margin: 0 30px;" >
+            <div style="border-bottom: 1px solid #bfbfbf; padding: 28px 0;">
 
-{{ order_status }}
+                <table border="0" cellpadding="6" cellspacing="0" class="delivery-detail" style="
+                    font-family: 'Arial', sans-serif;
+                    font-size: 15px;
+                    color: #222222;
+                    width: 100%;
+                ">
+                    <tr>
+                        <td> <strong>Номер заказа:</strong></td>
+                        <td>{{ order_id }}</td>
+                    </tr>
+                    <tr>
+                        <td> <strong>{{ text_date_added }}</strong></td>
+                        <td>{{ date_added }}</td>
+                    </tr>
+                </table>
 
-{% if link %}
-{{ text_link }}
+                <div style="max-width: 100%; overflow: auto">
+                    {{ text_order_status }}
+                    {{ order_status }}
 
-{{ link }}
-{% endif %}
-{% if comment %}
+                    {% if link %}
+                    {{ text_link }}
+                    {{ link }}
+                    {% endif %}
 
-{{ text_comment }}
+                    {% if comment %}
+                    {{ text_comment }}
+                    {{ comment }}
+                    {% endif %}
+                </div>
 
-{{ comment }}
-{{ text_footer }}
-{% else %}
-{{ text_footer }}
-{% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="mail-footer" style="
+        padding: 30px 0;
+        background-color: #e7e7e7;
+        max-width: 100%;
+    ">
+        <div class="social" style="text-align: center; margin-bottom: 20px;">
+            <a href="https://www.facebook.com/melle.online/" style="display: inline-block; margin-right: 16px;">
+                <img src="{{ mail_images.facebook }}" alt="">
+            </a>
+            <a href="https://www.instagram.com/melle.online/" style="display: inline-block; margin-right: 16px;">
+                <img src="{{ mail_images.instagram }}" alt="">
+            </a>
+        </div>
+        <div class="mail-footer-link" style="text-align: center;">
+            <a href="{{ base }}" style="
+                font-family: 'Arial', sans-serif;
+                font-size: 14px;
+                color: #222222;
+            ">{{store_name}}</a>
+        </div>
+    </div>
+
+</body>
+
+</html>
