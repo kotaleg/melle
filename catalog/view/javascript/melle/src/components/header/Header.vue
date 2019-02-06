@@ -102,6 +102,8 @@
                 <h-filter v-if="isElementActive('filter')" />
             </header-sidebar>
         </transition>
+
+        <input type="hidden" id="melle_reload_cart" @click="updateCartDataRequest()">
     </header>
 </template>
 
@@ -157,6 +159,9 @@ export default {
             'menuHandler',
             'enableElement',
         ]),
+        ...mapActions('cart', [
+            'updateCartDataRequest',
+        ]),
 
         searchAction() {
             let url = this.base + 'index.php?route=product/search'
@@ -185,6 +190,10 @@ export default {
     mounted() {
         // GTM
         this.$store.dispatch('gtm/ecommShittyPush')
+
+        $('.melle_reload_cart').on('click', () => {
+            this.updateCartDataRequest()
+        })
     },
 }
 </script>
