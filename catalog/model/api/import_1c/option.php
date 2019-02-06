@@ -49,11 +49,13 @@ class ModelApiImport1COption extends Model
                         'option_description' => $od,
                     );
 
+                    $old_values = array();
                     if (!$this->model_api_import_1c_helper->isImportRecordExist(
                         self::OPTION_TABLE, $option->id)) {
                         $option_id = $this->addOption($d_);
                     } else {
                         $option_id = $this->getOptionByImportId($option->id);
+                        $old_values = $this->getOptionValues($option_id);
                         $this->deleteOldValues($option_id);
                     }
 
@@ -68,8 +70,13 @@ class ModelApiImport1COption extends Model
                                 );
                             }
 
+                            $image = '';
+                            if (array_key_exists($variant->id, $old_values)) {
+                                $image = $old_values[$variant->id]['image'];
+                            }
+
                             $option_values[] = array(
-                                'image' => '',
+                                'image' => $image,
                                 'sort_order' => 0,
                                 'import_id' => $variant->id,
                                 'option_value_description' => $ovd,
@@ -142,6 +149,26 @@ class ModelApiImport1COption extends Model
                 }
             }
         }
+    }
+
+    public function getOptionValues($option_id)
+    {
+        $option_value_data = array();
+
+        $option_value_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "option_value ov
+            WHERE ov.option_id = '" . (int)$option_id . "'
+            ORDER BY ov.sort_order");
+
+        foreach ($option_value_query->rows as $option_value) {
+            $option_value_data[$option_value['import_id']] = array(
+                'option_value_id' => $option_value['option_value_id'],
+                'image'           => $option_value['image'],
+                'sort_order'      => $option_value['sort_order'],
+                'import_id'       => $option_value['import_id'],
+            );
+        }
+
+        return $option_value_data;
     }
 
     private function deleteOldValues($option_id)
