@@ -301,7 +301,7 @@
                     var $el = $(this);
                     var id = $el.attr("id");
                     var value = localStorage.getItem(id);
-                    
+
                     if (id && value) {
                         if ($el.is("select")) {
                             if ($el.find("option[value='" + value + "']").length) {
@@ -376,13 +376,13 @@
         this.initAbandonedCart = function() {
             var self = this;
             var $mainContainer = $(self.params.mainContainer);
-            
+
             $mainContainer.find("input:not([data-onchange=reloadAll],[data-onclick=reloadAll]), select:not([data-onchange=reloadAll],[data-onclick=reloadAll]), textarea:not([data-onchange=reloadAll],[data-onclick=reloadAll])").on('change', function() {
                 $.ajax({
                     url: "index.php?" + self.params.additionalParams + "route=checkout/simplecheckout/abandoned",
                     data: self.createPostData(),
                     type: "POST",
-                    dataType: "text"                    
+                    dataType: "text"
                 });
             });
         };
@@ -661,7 +661,7 @@
                     }
 
                     self.hideCurrentStep();
-                    
+
                     self.submitForm(true);
                 } else {
                     if (typeof toastr !== 'undefined' && self.params.notificationCheckForm) {
@@ -759,15 +759,15 @@
         this.hideCurrentStep = function() {
             var self = this;
             var $mainContainer = $(self.params.mainContainer);
-            
+
             $mainContainer.find(self.selectors.agreementWarning).hide();
-                
+
             if (typeof self.params.menuType !== "undefined" && self.params.menuType == 2) {
                 $mainContainer.find(self.selectors.buttons).hide();
                 return $mainContainer.find(self.selectors.step).slideUp("slow");
             } else {
                 //return $mainContainer.find(self.selectors.step).hide();
-            }          
+            }
         };
 
         this.displayCurrentStep = function(changeStep) {
@@ -784,7 +784,7 @@
 
                     if (self.currentStep < self.stepsCount) {
                         $mainContainer.find(self.selectors.buttonNext).show();
-                        $mainContainer.find(self.selectors.buttonCreate).hide();                    
+                        $mainContainer.find(self.selectors.buttonCreate).hide();
                     }
 
                     $mainContainer.find(self.selectors.agreementCheckBox).hide();
@@ -802,7 +802,7 @@
                     }
 
                     $button.html(self.params.stepButtons[self.currentStep]);
-                }  
+                }
 
                 if (self.currentStep == self.stepsCount) {
                     $mainContainer.find(self.selectors.buttonNext).hide();
@@ -815,7 +815,7 @@
                     for (var i = 1; i < self.stepsCount + 1; i++) {
                         var $topItem = $mainContainer.find(self.selectors.stepsMenuTop + " " + self.selectors.stepsMenuVerticalItem + "[data-step=" + i + "]");
                         var $bottomItem = $mainContainer.find(self.selectors.stepsMenuBottom + " " + self.selectors.stepsMenuVerticalItem + "[data-step=" + i + "]");
-                        
+
                         if (i <= self.currentStep) {
                             $topItem.show();
                             $topItem.addClass(self.classes.stepsMenuVerticalCompleted);
@@ -861,7 +861,7 @@
                     }
                 } else {
                     self.$steps[self.currentStep - 1].show();
-                }                
+                }
             }
 
             if (self.stepsCount > 1) {
@@ -982,7 +982,7 @@
                         }, "slow");
                     }
                 }
-            }            
+            }
 
             self.saveStepNumber = self.currentStep;
         };
@@ -1009,7 +1009,7 @@
                                     $(".agreement_" + $(this).val()).hide();
                                 } else {
                                     $(".agreement_" + $(this).val()).show();
-                                }                        
+                                }
                             });
                         }
 
@@ -1017,7 +1017,7 @@
                             $agreementCheckbox.each(function() {
                                 if (!$(this).is(":checked")) {
                                     toastr.error($(".agreement_" + $(this).val()).text());
-                                }                        
+                                }
                             });
                         }
                     }
@@ -1058,7 +1058,7 @@
 
             if (typeof simpleValidate === 'function') {
                 if (!simpleValidate()) {
-                    result = false; 
+                    result = false;
                 }
             }
 
@@ -1533,7 +1533,7 @@
         if (this.params.notificationToasts) {
             container.find(".simplecheckout-warning-block").each(function() {
                 toastr.error($(this).text());
-            });            
+            });
         }
 
         if (container.find(".simplecheckout-warning-block").length) {
@@ -1604,7 +1604,7 @@
             deferred.resolve(result);
 
             return deferred.promise();
-        };  
+        };
 
         this.initMiniCart = function() {
             var self = this;
@@ -1657,10 +1657,10 @@
                     clearTimeout(self.timerId);
                     self.timerId = 0;
                 }
-                
+
                 self.timerId = window.setTimeout(function() {
                     self.reloadAll();
-                }, 300);                
+                }, 300);
             }
         };
 
@@ -1670,10 +1670,10 @@
             var $quantity = $target.parents(".quantity").find("input");
             var quantity = parseFloat($quantity.val());
             var step = +($quantity.attr("data-minimum") || 1);
-            
+
             if (!isNaN(quantity) && quantity > step) {
                 $quantity.val(quantity - step);
-                
+
                 self.copyCartState($quantity);
 
                 if (self.timerId) {
@@ -1683,7 +1683,7 @@
 
                 self.timerId = window.setTimeout(function() {
                     self.reloadAll();
-                }, 300);  
+                }, 300);
             }
         };
 
