@@ -170,6 +170,9 @@ class ModelCatalogProduct extends Model {
 
         $this->load->model('extension/pro_patch/db');
 
+        // $sql .= " AND (SELECT COUNT(offers_comb.combination_id) FROM " . DB_PREFIX . "so_option_combination offers_comb
+            // WHERE offers_comb.product_id = p.product_id AND offers_comb.quantity > 0) > 0";
+
         // MANUFACTURERS
         if (isset($data['manufacturers'])) {
             $manufacturers = $this->model_extension_pro_patch_db->prepareSqlParents($data['manufacturers']);

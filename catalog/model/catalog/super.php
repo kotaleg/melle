@@ -14,6 +14,7 @@ class ModelCatalogSuper extends Model
         $this->load->model('catalog/product');
         $this->load->model('catalog/category');
         $this->load->model('tool/image');
+        $this->load->model('tool/base');
     }
 
     public function getProducts($filter_data = array())

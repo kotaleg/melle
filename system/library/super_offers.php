@@ -128,6 +128,14 @@ class super_offers
         return $this->db->getLastId();
     }
 
+    public function _getCombinationsForProduct($product_id)
+    {
+        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+            WHERE `product_id` = '". (int)$product_id ."'");
+
+        return $q->rows;
+    }
+
     public function _getConnectionsForCombination($product_id, $combination_id)
     {
         $q = $this->db->query("SELECT * FROM `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`

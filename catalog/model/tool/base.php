@@ -90,4 +90,9 @@ class ModelToolBase extends Model
 
         return $name;
     }
+
+    public function formatMoney($price)
+    {
+        return number_format($price, 0, '.', ' ');
+    }
 }

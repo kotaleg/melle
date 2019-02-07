@@ -215,10 +215,9 @@ class ControllerExtensionModuleMelle extends Controller
 
             $state['is_options_for_product'] = (bool)$this->model_extension_module_super_offers->isOptionsForProduct($product_id);
             $state['options'] = $this->model_extension_module_super_offers->getOptions($product_id);
-            // $state['original_options'] = $state['options'];
             $state['combinations_for_options'] = $this->model_extension_module_super_offers->getCombinationsForOptions(
                 $product_id, $state['options']);
-            $state['active_options'] = array();
+            $state['full_combinations'] = $this->model_extension_module_super_offers->getFullCombinations($product_id);
         }
 
         $state['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add', '', true);

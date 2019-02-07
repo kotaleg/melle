@@ -35,9 +35,9 @@
                 <input id="productCounter" class="item_col keyPressedNum" v-model.number="quantity">
                 <button @click="quantityHandler('+')" class="item_plus" type="button">+</button>
 
-                <span v-show="quantity >= getAvailableQuantity" class="catalog__item-count_label js-product-count-block"">
+                <span v-show="quantity >= getActiveMaxQuantity" class="catalog__item-count_label js-product-count-block"">
                     доступно:
-                    <span class="js-product-count">{{ getAvailableQuantity }}</span>
+                    <span class="js-product-count">{{ getActiveMaxQuantity }}</span>
                 </span>
                </div>
             </div>
@@ -89,7 +89,7 @@ export default {
             'getPrice',
             'isSpecial',
             'getSpecial',
-            'getAvailableQuantity',
+            'getActiveMaxQuantity',
             'getFormValue',
             'getStateValue',
         ]),

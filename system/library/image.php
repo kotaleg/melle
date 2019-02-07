@@ -186,6 +186,57 @@ class Image {
         $this->height = $height;
     }
 
+    public function customResize($width = 0, $height = 0, $default = 'h')
+    {
+        if (!$this->width || !$this->height) {
+            return;
+        }
+
+        $xpos = 0;
+        $ypos = 0;
+        $scale = 1;
+
+        $scale_w = $width / $this->width;
+        $scale_h = $height / $this->height;
+
+        if ($default == 'w') {
+            $scale = $scale_w;
+        } elseif ($default == 'h') {
+            $scale = $scale_h;
+        } else {
+            $scale = min($scale_w, $scale_h);
+        }
+
+        if ($scale == 1 && $scale_h == $scale_w && $this->mime != 'image/png') {
+            return;
+        }
+
+        $new_width = (int)($this->width * $scale);
+        $new_height = (int)($this->height * $scale);
+        $xpos = 0; //$xpos = (int)(($width - $new_width) / 2);
+        $ypos = 0; //$ypos = (int)(($height - $new_height) / 2);
+
+        $image_old = $this->image;
+        $this->image = imagecreatetruecolor($new_width, $new_height);
+
+        if ($this->mime == 'image/png') {
+            imagealphablending($this->image, false);
+            imagesavealpha($this->image, true);
+            $background = imagecolorallocatealpha($this->image, 255, 255, 255, 127);
+            imagecolortransparent($this->image, $background);
+        } else {
+            $background = imagecolorallocate($this->image, 255, 255, 255);
+        }
+
+        imagefilledrectangle($this->image, 0, 0, $width, $height, $background);
+
+        imagecopyresampled($this->image, $image_old, $xpos, $ypos, 0, 0, $new_width, $new_height, $this->width, $this->height);
+        imagedestroy($image_old);
+
+        $this->width = $new_width;
+        $this->height = $new_height;
+    }
+
     /**
      *
      *

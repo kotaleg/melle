@@ -4,6 +4,7 @@ class ModelCheckoutCart extends Model
     public function getCart()
     {
         $this->load->model('extension/pro_patch/url');
+        $this->load->model('tool/base');
 
         $state['count'] = $this->cart->countProducts();
         $state['products'] = array();
@@ -50,8 +51,8 @@ class ModelCheckoutCart extends Model
                 if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
                     $unit_price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
 
-                    $price = round($unit_price, 0);
-                    $total = round($unit_price * $product['quantity'], 0);
+                    $price = $this->model_tool_base->formatMoney($unit_price, 0);
+                    $total = $this->model_tool_base->formatMoney($unit_price * $product['quantity'], 0);
                 } else {
                     $price = false;
                     $total = false;

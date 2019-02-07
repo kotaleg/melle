@@ -18,6 +18,7 @@ class ModelExtensionModuleSuperOffers extends Model
         $this->load->language('product/product');
         $this->load->model('catalog/product');
         $this->load->model('extension/pro_patch/url');
+        $this->load->model('tool/base');
 
         if (!$this->super_offers) {
             $this->super_offers = new \super_offers($registry); }
@@ -112,6 +113,13 @@ class ModelExtensionModuleSuperOffers extends Model
                 }
             }
 
+            // SORT
+            if (!empty($po_value_data)) {
+                usort($po_value_data, function($a,$b) {
+                    return strcmp(strval($a['name']), strval($b['name']));
+                });
+            }
+
             if (!empty($po_value_data)) {
                 $po_data[] = array(
                     'product_option_id'    => $po['product_option_id'],
@@ -195,7 +203,7 @@ class ModelExtensionModuleSuperOffers extends Model
                     $selection_combinations[] = array(
                         'active_option'         => $option['option_id'],
                         'active_option_value'   => $option_value['option_value_id'],
-                        'generated_statuses'    => $generated_statuses
+                        'generated_statuses'    => $generated_statuses,
                     );
                 }
             }
@@ -267,6 +275,36 @@ class ModelExtensionModuleSuperOffers extends Model
         return $connected_options;
     }
 
+    public function getFullCombinations($product_id)
+    {
+        $result = array();
+        $combinations = $this->super_offers->_getCombinationsForProduct($product_id);
+
+        foreach ($combinations as $c) {
+
+            $required = array();
+
+            $connections = $this->super_offers->_getConnectionsForCombination($product_id, $c['combination_id']);
+            foreach ($connections as $con) {
+                $required[] = array(
+                    'option_a' => $con['option_a'],
+                    'option_value_a' => $con['option_value_a'],
+                );
+            }
+
+            if (!$required) { continue; }
+
+            $result[] = array(
+                'combination_id' => $c['combination_id'],
+                'price' => $this->model_tool_base->formatMoney($c['price']),
+                'quantity' => $c['quantity'],
+                'required' => $required,
+            );
+        }
+
+        return $result;
+    }
+
     public function getDefaultValues($product_id, $data = array())
     {
         if (!$data) {
@@ -283,11 +321,11 @@ class ModelExtensionModuleSuperOffers extends Model
         );
 
         if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
-            $result['price'] = round($this->tax->calculate($lowest_price, $data['tax_class_id'], $this->config->get('config_tax')), 0);
+            $result['price'] = $this->model_tool_base->formatMoney($this->tax->calculate($lowest_price, $data['tax_class_id'], $this->config->get('config_tax')), 0);
         }
 
         if ((float)$data['special']) {
-            $result['special'] = round($this->tax->calculate($data['special'], $data['tax_class_id'], $this->config->get('config_tax')), 0);
+            $result['special'] = $this->model_tool_base->formatMoney($this->tax->calculate($data['special'], $data['tax_class_id'], $this->config->get('config_tax')), 0);
         }
 
         if ($data['quantity'] <= 0) {

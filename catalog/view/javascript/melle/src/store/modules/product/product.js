@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isInteger, isEmpty, isArray, has } from 'lodash'
+import { isUndefined, isInteger, isEmpty, isArray, isEqual, has } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -21,6 +21,7 @@ const state = {
     is_options_for_product: false,
     options: [],
     combinations_for_options: [],
+    full_combinations: [],
     default_values: {
         rating: 0,
         price: 0,
@@ -74,36 +75,63 @@ const getters = {
     getSpecial: state => {
         return state.default_values.special
     },
-    getAvailableQuantity: state => {
+    getTotalMaxQuantity: state => {
         return state.default_values.max_quantity
     },
-    isAnythingSelected: state => {
-        let status = false
-
+    getActiveMaxQuantity: (state, getters) => {
+        let q = false
+        let options = getters.getActiveOptions
+        state.full_combinations.forEach((comb) => {
+            if (isEqual(options, comb.required)) {
+                q = comb.quantity
+            }
+        })
+        if (q === false) {
+            return getters.getTotalMaxQuantity
+        }
+        return q
+    },
+    getActiveOptions: state => {
+        let options = []
         state.options.forEach((option) => {
             if (!isArray(option.product_option_value)
             || isEmpty(option.product_option_value)) {
                 return
             }
+            option.product_option_value.forEach((option_value) => {
+                if (option_value.selected === true) {
+                    options.push({
+                        option_a: option.option_id,
+                        option_value_a: option_value.option_value_id,
+                    })
+                }
+            })
+        })
 
+        return options
+    },
+    isAnythingSelected: state => {
+        let status = false
+        state.options.forEach((option) => {
+            if (!isArray(option.product_option_value)
+            || isEmpty(option.product_option_value)) {
+                return
+            }
             option.product_option_value.forEach((option_value) => {
                 if (option_value.selected === true) {
                     status = true
                 }
             })
         })
-
         return status
     },
     isAllSelectedElementsDisabled: state => {
         let status = true
-
         state.options.forEach((option) => {
             if (!isArray(option.product_option_value)
             || isEmpty(option.product_option_value)) {
                 return
             }
-
             option.product_option_value.forEach((option_value) => {
                 if (option_value.selected === true
                 && option_value.disabled_by_selection !== true) {
@@ -111,25 +139,21 @@ const getters = {
                 }
             })
         })
-
         return status
     },
     getOptionsForCart: state => {
         let options = {}
-
         state.options.forEach((option) => {
             if (!isArray(option.product_option_value)
             || isEmpty(option.product_option_value)) {
                 return
             }
-
             option.product_option_value.forEach((option_value) => {
                 if (option_value.selected === true) {
                     options[option.product_option_id] = option_value.product_option_value_id
                 }
             })
         })
-
         return options
     },
 }
@@ -146,8 +170,8 @@ const actions = {
     },
     updateQuantity({ commit, getters }, q) {
         q = parseInt(q)
-        if (getters.getAvailableQuantity < q) {
-            q = getters.getAvailableQuantity
+        if (getters.getTotalMaxQuantity < q) {
+            q = getters.getTotalMaxQuantity
         }
         commit('setQuantity', q)
     },
@@ -162,10 +186,9 @@ const actions = {
                 break;
         }
         if (q < 1) { q = 1 }
-        if (getters.getAvailableQuantity < q) {
-            q = getters.getAvailableQuantity
+        if (getters.getTotalMaxQuantity < q) {
+            q = getters.getTotalMaxQuantity
         }
-
         commit('setQuantity', q)
     },
     radioHandler({ commit, dispatch, getters }, payload) {
