@@ -44,7 +44,7 @@ section[data-layout="col"] {
         }
       }
       &:not(:nth-child(3n+3)) {
-        margin-right: 4% !important;
+//       margin-right: 4% !important;
         @include tablet {
           margin-right: 0;
         }
