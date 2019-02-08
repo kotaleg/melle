@@ -179,18 +179,21 @@ class ModelApiImport1COption extends Model
 
     public function importColorCubs()
     {
-        $q = $this->db->query("SELECT f.name, ci.image FROM tbl_color_items ci
+        $q = $this->db->query("SELECT f.name, ci.image, f.c_id FROM tbl_color_items ci
             LEFT JOIN tbl_filters f ON (ci.filter_id = f.id)");
 
+        $i = 0;
         foreach ($q->rows as $ci) {
 
             $image = 'catalog/colors/'.basename($ci['image']);
 
-            $o = $this->getOptionByName($ci['name']);
+            $o = $this->getOptionValueByImportId($ci['c_id']);
+            // $o = $this->getOptionByName($ci['name']);
             if ($o) {
+                $i++;
                 $this->updateOptionImage($o['option_value_id'], $image);
             } else {
-                // echo "<pre>"; print_r($ci['name']); echo "</pre>";
+                echo "<pre>"; print_r($ci); echo "</pre>";
             }
 
         }
@@ -205,7 +208,6 @@ class ModelApiImport1COption extends Model
             return $query->row;
         }
     }
-
 
     private function updateOptionImage($option_value_id, $image)
     {
