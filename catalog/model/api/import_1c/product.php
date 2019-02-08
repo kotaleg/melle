@@ -619,4 +619,14 @@ class ModelApiImport1CProduct extends Model
         $this->db->query("DELETE FROM " . DB_PREFIX . "product_option WHERE product_id = '" . (int)$product_id . "'");
         $this->db->query("DELETE FROM " . DB_PREFIX . "product_option_value WHERE product_id = '" . (int)$product_id . "'");
     }
+
+    public function isImageForProduct($path)
+    {
+        $query = $this->db->query("SELECT `product_id`
+            FROM `". DB_PREFIX ."product`
+            WHERE `image` = '".$this->db->escape($path)."'");
+        if ($query->num_rows) {
+            return $query->row['product_id'];
+        }
+    }
 }

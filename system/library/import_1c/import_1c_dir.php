@@ -26,5 +26,17 @@ class import_1c_dir
             )
         );
     }
+
+    public static function scanDir($path, $include = '*')
+    {
+        return Dir::scan($path,
+            array(
+                'followSymlinks' => false,
+                'recursive'      => true,
+                'skipDots'       => true,
+                'include'        => $include,
+            )
+        );
+    }
 }
 
