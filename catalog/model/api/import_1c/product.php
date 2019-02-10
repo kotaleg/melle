@@ -689,7 +689,14 @@ class ModelApiImport1CProduct extends Model
             FROM `". DB_PREFIX ."product`
             WHERE `image` = '".$this->db->escape($path)."'");
         if ($query->num_rows) {
-            return $query->row['product_id'];
+            return true;
+        } else {
+            $query = $this->db->query("SELECT `product_image_id`
+                FROM `". DB_PREFIX ."product_image`
+                WHERE `image` = '".$this->db->escape($path)."'");
+            if ($query->num_rows) {
+                return true;
+            }
         }
     }
 }
