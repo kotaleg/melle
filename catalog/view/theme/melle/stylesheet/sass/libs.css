@@ -270,8 +270,8 @@
 }
 
 .slick-slider .slick-list,.slick-slider .slick-track {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0)
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
 }
 
 .slick-track {

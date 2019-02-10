@@ -7,8 +7,6 @@
 @charset "utf-8";
 @charset "UTF-8";
 /*==========  Desktop First Method  ==========*/
-@import 'libs.css';
-@import 'new.css';
 @import '~pretty-checkbox/src/pretty-checkbox.scss';
 @font-face {
   font-family: "CenturyGothicRegular";

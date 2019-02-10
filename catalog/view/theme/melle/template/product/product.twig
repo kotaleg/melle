@@ -31,13 +31,13 @@
                   </ul>
                   <ul class="prod-card__list-big-photo slider-for">
                      {% if thumb %}
-                     <li class="prod-card__item-big-photo">
+                     <li class="prod-card__item-big-photo" data-zoom-image="{{popup}}">
                         <img src="{{popup}}">
                      </li>
                      {% endif %}
                      {% for i in images %}
                      <li class="prod-card__item-big-photo">
-                        <img src="{{i.popup}}">
+                        <img src="{{i.popup}}" data-zoom-image="{{i.popup}}">
                      </li>
                      {% endfor %}
                   </ul>
@@ -59,7 +59,13 @@
 
                   {% if manufacturer %}
                   <div class="prod-card__manufacturer">
-                     <span>производитель: </span><a href="javascript:void(0)">{{manufacturer}}</a>
+                     <span>производитель: </span><a href="{{manufacturers}}">{{manufacturer}}</a>
+                  </div>
+                  {% endif %}
+
+                  {% if den %}
+                  <div class="prod-card__manufacturer">
+                     <span>количество ден: </span>{{den}}
                   </div>
                   {% endif %}
 

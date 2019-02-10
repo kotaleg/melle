@@ -251,7 +251,7 @@ class ControllerProductProduct extends Controller {
 
             $data['product_id'] = (int)$this->request->get['product_id'];
             $data['manufacturer'] = $product_info['manufacturer'];
-            $data['manufacturers'] = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $product_info['manufacturer_id']);
+            $data['manufacturers'] = $this->url->link('product/search', 'manufacturers=' . $product_info['manufacturer_id']);
             $data['model'] = $product_info['model'];
             $data['reward'] = $product_info['reward'];
             $data['points'] = $product_info['points'];
@@ -388,13 +388,17 @@ class ControllerProductProduct extends Controller {
 
             $data['attribute_groups'] = $this->model_catalog_product->getProductAttributes($this->request->get['product_id']);
 
-            $data['sostav'] = '';
+            $data['sostav'] = false;
+            $data['den'] = false;
 
             foreach ($data['attribute_groups'] as $group) {
                 if (strcmp(trim($group['name']), 'Атрибуты') === 0) {
                     foreach ($group['attribute'] as $attr) {
                         if (strcmp(trim($attr['name']), 'Состав') === 0) {
                             $data['sostav'] = $attr['text'];
+                        }
+                        if (strcmp(trim($attr['name']), 'Ден') === 0) {
+                            $data['den'] = $attr['text'];
                         }
                     }
                 }
