@@ -6,7 +6,7 @@ class product {
     public $id;
     public $artikul;
     public $name;
-    public $picture;
+    public $pictures = array();
     public $description;
     public $den;
     public $tax_rate;

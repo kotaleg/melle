@@ -48,12 +48,12 @@ class ModelApiImport1C extends Model
         $json = array();
 
         // REMOVE OLD ONES
-        // foreach (glob("{$this->exchange_path}*{__OLD*,__FINISHED*}", GLOB_BRACE) as $file) {
-        //     if (is_file($file)) {
-        //         @unlink($file);
-        //         $json['message'][] = 'Файл `'.basename($file).'` удален';
-        //     }
-        // }
+        foreach (glob("{$this->exchange_path}*{__OLD*,__FINISHED*}", GLOB_BRACE) as $file) {
+            if (is_file($file)) {
+                @unlink($file);
+                $json['message'][] = 'Файл `'.basename($file).'` удален';
+            }
+        }
 
         // MARK AS OLD (PREVIOUS FILES)
         foreach (glob("{$this->exchange_path}*.xml") as $file) {
@@ -232,6 +232,8 @@ class ModelApiImport1C extends Model
                 $json['continue'] = true;
                 // TODO: save progress and continue
             }
+        } else {
+            $json['error'][] = "Тип файла `{$filename}` не определен.";
         }
 
         if ($json['success']) {

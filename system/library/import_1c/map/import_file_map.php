@@ -163,68 +163,75 @@ class import_file_map
             },
             '{'.self::$namespace.'}Товар' => function(Reader $reader) {
                 $product = new product();
-                $keyValue = Deserializer\keyValue($reader, self::$namespace);
-                if (isset($keyValue['Ид'])) {
-                    $product->id = $keyValue['Ид'];
-                }
-                if (isset($keyValue['Артикул'])) {
-                    $product->artikul = $keyValue['Артикул'];
-                }
-                if (isset($keyValue['Наименование'])) {
-                    $product->name = $keyValue['Наименование'];
-                }
-                if (isset($keyValue['Описание'])) {
-                    $product->description = $keyValue['Описание'];
-                }
-                if (isset($keyValue['Картинка'])) {
-                    $product->picture = $keyValue['Картинка'];
-                }
-                if (isset($keyValue['КоличествоДен'])) {
-                    $product->den = $keyValue['КоличествоДен'];
-                }
-                if (isset($keyValue['Группы']) && is_array($keyValue['Группы'])) {
-                    // в примере только одна группа
-                    foreach ($keyValue['Группы'] as $v) {
-                        if (isset($v['name']) && $v['name'] == '{'.self::$namespace.'}Ид') {
-                            $group = new group();
-                            $group->id = $v['value'];
-                            $product->group = $group;
-                            break;
+                $children = $reader->parseInnerTree();
+
+                foreach($children as $child) {
+                    if (!isset($child['name'])) { continue; }
+
+                    if ($child['name'] == '{'.self::$namespace.'}Ид') {
+                        $product->id = $child['value'];
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}Артикул') {
+                        $product->artikul = $child['value'];
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}Наименование') {
+                        $product->name = $child['value'];
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}Описание') {
+                        $product->description = $child['value'];
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}Картинка') {
+                        $product->pictures[] = $child['value'];
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}КоличествоДен') {
+                        $product->den = $child['value'];
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}Группы') {
+                        if (!is_array($child['value'])) { continue; }
+
+                        // в примере только одна группа
+                        foreach ($child['value'] as $v) {
+                            if (isset($v['name']) && $v['name'] == '{'.self::$namespace.'}Ид') {
+                                $group = new group();
+                                $group->id = $v['value'];
+                                $product->group = $group;
+                                break;
+                            }
+                        }
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}Изготовитель') {
+                        $product->producer = $child['value'];
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}Состав') {
+                        foreach ($child['value'] as $c) {
+                            if ($c['value'] instanceof composition) {
+                                $product->compositions[] = $c['value'];
+                            }
+                        }
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}ЗначенияСвойств') {
+                        foreach ($child['value'] as $c) {
+                            if ($c['value'] instanceof p_option) {
+                                $product->compositions[] = $c['value'];
+                            }
+                        }
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}ЗначенияРеквизитов') {
+                        foreach ($child['value'] as $c) {
+                            if ($c['value'] instanceof p_requisit) {
+                                $product->compositions[] = $c['value'];
+                            }
+                        }
+                    }
+                    if ($child['name'] == '{'.self::$namespace.'}СтавкиНалогов') {
+                        foreach ($child['value'] as $c) {
+                            if ($c['value'] instanceof p_tax_rate) {
+                                $product->compositions[] = $c['value'];
+                            }
                         }
                     }
                 }
-                if (isset($keyValue['Изготовитель'])
-                && $keyValue['Изготовитель'] instanceof producer) {
-                    $product->producer = $keyValue['Изготовитель'];
-                }
-                if (isset($keyValue['Состав']) && is_array($keyValue['Состав'])) {
-                    foreach ($keyValue['Состав'] as $child) {
-                        if ($child['value'] instanceof composition) {
-                            $product->compositions[] = $child['value'];
-                        }
-                    }
-                }
-                if (isset($keyValue['ЗначенияСвойств'])) {
-                    foreach ($keyValue['ЗначенияСвойств'] as $child) {
-                        if ($child['value'] instanceof p_option) {
-                            $product->options[] = $child['value'];
-                        }
-                    }
-                }
-                if (isset($keyValue['ЗначенияРеквизитов'])) {
-                    foreach ($keyValue['ЗначенияРеквизитов'] as $child) {
-                        if ($child['value'] instanceof p_requisit) {
-                            $product->requisits[] = $child['value'];
-                        }
-                    }
-                }
-                if (isset($keyValue['СтавкиНалогов'])) {
-                    foreach ($keyValue['СтавкиНалогов'] as $child) {
-                        if ($child['value'] instanceof p_tax_rate) {
-                            $product->tax_rate = $child['value'];
-                        }
-                    }
-                }
+
                 return $product;
             },
             '{'.self::$namespace.'}ЗначенияСвойства' => function(Reader $reader) {

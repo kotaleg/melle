@@ -36,6 +36,9 @@ class ModelApiImport1CProduct extends Model
     public function action($parsed, $languages, $exchange_path)
     {
         if (isset($parsed->catalog->products)) {
+
+            $already_moved_images = 0;
+
             foreach ($parsed->catalog->products as $product) {
 
                 $json = array();
@@ -74,15 +77,30 @@ class ModelApiImport1CProduct extends Model
                 );
 
                 // IMAGE
-                if ($product->picture) {
-                    $img = $this->moveImage($exchange_path, $product->picture);
-                    if ($img) {
-                        $d_['image'] = $img;
-                    } else {
-                        // CHECK IF IMAGE ALREADY EXIST
-                        if (is_readable($this->newImagePath($product->picture))) {
-                            // $json['message'][] = "Image already moved = {$product->picture}";
-                            $d_['image'] = $this->newImagePath($product->picture, false);
+                if ($product->pictures) {
+                    // MAIN IMAGE
+                    $first_picture = $this->imageHandler(array_shift($product->pictures));
+                    if ($first_picture['path']) {
+                        $d_['image'] = $first_picture['path'];
+                    }
+                    if ($first_picture['moved']) {
+                        $already_moved_images++;
+                    }
+
+                    // ADDITIONAL IMAGE
+                    if ($product->pictures) {
+                        $d_['product_image'] = array();
+                    }
+                    foreach ($product->pictures as $k => $pic) {
+                        $picture_ = $this->imageHandler(array_shift($product->pictures));
+                        if ($picture_['path']) {
+                            $d_['product_image'][] = array(
+                                'image' => $picture_['path'],
+                                'sort_order' => $k,
+                            );
+                        }
+                        if ($picture_['moved']) {
+                            $already_moved_images++;
                         }
                     }
                 }
@@ -224,7 +242,36 @@ class ModelApiImport1CProduct extends Model
                 // SAVE TO LOG
                 $this->model_api_import_1c_progress->parseJson($json);
             }
+
+            if ($already_moved_images) {
+                $json['message'] = array();
+                $json['message'][] = "Already moved images = {$already_moved_images}";
+
+                // SAVE TO LOG
+                $this->model_api_import_1c_progress->parseJson($json);
+            }
         }
+    }
+
+    private function imageHandler($picture)
+    {
+        $result = array(
+            'path' => false,
+            'moved' => false,
+        );
+
+        $img = $this->moveImage($exchange_path, $picture);
+        if ($img) {
+            $result['path'] = $img;
+        } else {
+            // CHECK IF IMAGE ALREADY EXIST
+            if (is_readable($this->newImagePath($picture))) {
+                $result['moved'] = true;
+                $result['path'] = $this->newImagePath($picture, false);
+            }
+        }
+
+        return $result;
     }
 
     private function newImagePath($picture, $full = true)
@@ -475,6 +522,15 @@ class ModelApiImport1CProduct extends Model
             }
         }
 
+        if (isset($data['product_image'])) {
+            foreach ($data['product_image'] as $product_image) {
+                $this->db->query("INSERT INTO " . DB_PREFIX . "product_image
+                    SET product_id = '" . (int)$product_id . "',
+                    image = '" . $this->db->escape($product_image['image']) . "',
+                    sort_order = '" . (int)$product_image['sort_order'] . "'");
+            }
+        }
+
         $this->cache->delete('product');
         return $product_id;
     }
@@ -565,6 +621,18 @@ class ModelApiImport1CProduct extends Model
                                 text = '" .  $this->db->escape($product_attribute_description['text']) . "'");
                     }
                 }
+            }
+        }
+
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_image
+            WHERE product_id = '" . (int)$product_id . "'");
+
+        if (isset($data['product_image'])) {
+            foreach ($data['product_image'] as $product_image) {
+                $this->db->query("INSERT INTO " . DB_PREFIX . "product_image
+                    SET product_id = '" . (int)$product_id . "',
+                    image = '" . $this->db->escape($product_image['image']) . "',
+                    sort_order = '" . (int)$product_image['sort_order'] . "'");
             }
         }
 
