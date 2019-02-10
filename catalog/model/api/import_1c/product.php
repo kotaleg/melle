@@ -74,31 +74,25 @@ class ModelApiImport1CProduct extends Model
                     'height' => '',
                     'width' => '',
                     'manufacturer_id' => '',
+                    'product_image' => array(),
                 );
 
                 // IMAGE
                 if ($product->pictures) {
-                    // MAIN IMAGE
-                    $first_picture = $this->imageHandler(array_shift($product->pictures));
-                    if ($first_picture['path']) {
-                        $d_['image'] = $first_picture['path'];
-                    }
-                    if ($first_picture['moved']) {
-                        $already_moved_images++;
-                    }
-
-                    // ADDITIONAL IMAGE
-                    if ($product->pictures) {
-                        $d_['product_image'] = array();
-                    }
                     foreach ($product->pictures as $k => $pic) {
-                        $picture_ = $this->imageHandler(array_shift($product->pictures));
+                        $picture_ = $this->imageHandler($pic);
+
                         if ($picture_['path']) {
-                            $d_['product_image'][] = array(
-                                'image' => $picture_['path'],
-                                'sort_order' => $k,
-                            );
+                            if ($k === 0) {
+                                $d_['image'] = $picture_['path'];
+                            } else {
+                                $d_['product_image'][] = array(
+                                    'image' => $picture_['path'],
+                                    'sort_order' => $k,
+                                );
+                            }
                         }
+
                         if ($picture_['moved']) {
                             $already_moved_images++;
                         }
