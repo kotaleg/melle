@@ -52,6 +52,7 @@ class ModelApiImport1CProduct extends Model
                     'jan' => '',
                     'isbn' => '',
                     'mpn' => '',
+                    'image' => '',
                     'location' => '',
                     'quantity' => 0,
                     'minimum' => 1,
@@ -80,10 +81,10 @@ class ModelApiImport1CProduct extends Model
                 // IMAGE
                 if ($product->pictures) {
                     foreach ($product->pictures as $k => $pic) {
-                        $picture_ = $this->imageHandler($pic);
+                        $picture_ = $this->imageHandler($exchange_path, $pic);
 
                         if ($picture_['path']) {
-                            if ($k === 0) {
+                            if ($k == 0) {
                                 $d_['image'] = $picture_['path'];
                             } else {
                                 $d_['product_image'][] = array(
@@ -247,7 +248,7 @@ class ModelApiImport1CProduct extends Model
         }
     }
 
-    private function imageHandler($picture)
+    private function imageHandler($exchange_path, $picture)
     {
         $result = array(
             'path' => false,
