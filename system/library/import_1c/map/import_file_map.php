@@ -212,21 +212,21 @@ class import_file_map
                     if ($child['name'] == '{'.self::$namespace.'}ЗначенияСвойств') {
                         foreach ($child['value'] as $c) {
                             if ($c['value'] instanceof p_option) {
-                                $product->compositions[] = $c['value'];
+                                $product->options[] = $c['value'];
                             }
                         }
                     }
                     if ($child['name'] == '{'.self::$namespace.'}ЗначенияРеквизитов') {
                         foreach ($child['value'] as $c) {
                             if ($c['value'] instanceof p_requisit) {
-                                $product->compositions[] = $c['value'];
+                                $product->requisits[] = $c['value'];
                             }
                         }
                     }
                     if ($child['name'] == '{'.self::$namespace.'}СтавкиНалогов') {
                         foreach ($child['value'] as $c) {
                             if ($c['value'] instanceof p_tax_rate) {
-                                $product->compositions[] = $c['value'];
+                                $product->tax_rate[] = $c['value'];
                             }
                         }
                     }
