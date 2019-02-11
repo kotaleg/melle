@@ -192,6 +192,10 @@ class ModelApiImport1C extends Model
             // PARSE XML TO OBJECTS
             $parsed = $this->import_1c->parse();
 
+            if (isset($parsed->only_changes) && !$parsed->only_changes) {
+                $json['message'][] = "Полный импорт";
+            }
+
             switch ($filetype) {
                 case $this->import_1c->getImportFileType():
                     $result = $this->_importRoutine($parsed);
