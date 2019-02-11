@@ -1,33 +1,13 @@
 {{ header }}
-<main class="main-page">
-   <section class="breadcrumbs">
-      <div class="breadcrumbs__container container">
-         <div class="breadcrumbs__inner">
-            {% for breadcrumb in breadcrumbs %}
-            {% if not loop.last %}
-            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
-            {% else %}
-            <span>{{ breadcrumb.text }}</span>
-            {% endif %}
-            {% endfor %}
-         </div>
-      </div>
-   </section>
+</section>
 
-   <section class="catalog">
-      <div class="catalog__container container">
+<section class="section section-2">
+   {{ content_top }}
+</section>
 
-         {% if success %}
-         <div class="alert alert-success">{{ success }}</div>
-         {% endif %}
-         {% if error_warning %}
-         <div class="alert alert-danger">{{ error_warning }}</div>
-         {% endif %}
+<section class="section section-3">
+   {{ content_bottom }}
+</section>
 
-         <h1>{{ heading_title }}</h1>
-
-
-      </div>
-   </section>
-</main>
+<section>
 {{ footer }}
