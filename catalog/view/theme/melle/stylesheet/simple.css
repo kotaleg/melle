@@ -795,3 +795,7 @@
     color: #fff;
     padding: 10px;
 }
+
+#total_shipping {
+    text-align: right;
+}

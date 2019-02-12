@@ -259,7 +259,7 @@
     display: flex;
     width: vw_(75px);
     color: #6d6b6a;
-    background-color: #e7e7e7;
+//    background-color: #e7e7e7;
     font-size: vw_(14px);
     @include tablet {
       width: 75px;
@@ -289,7 +289,9 @@
       padding: 0px;
       background-color: transparent;
       font-size: vw_(30px); //+- кнопки счетчика
+      line-height: vw_(30px);
       padding: 0px;
+      font-family: CenturyGothicRegular;
       @include tablet {
         width: 29px;
         height: 30px;
@@ -313,6 +315,7 @@
       background-color: transparent;
       font-weight: bold;
       font-size: vw_(24px); //счетчик товара
+      font-family: CenturyGothicRegular;
       @include tablet {
         font-size: 14px;
         width: 36px;

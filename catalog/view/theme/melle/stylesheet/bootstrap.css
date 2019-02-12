@@ -736,10 +736,11 @@ img {
 
 .container {
   position: relative;
-  margin: 0 1.41667vw; }
+  margin: 0 1% !important; }
   @media (max-width: 1439px) {
   .container {
-    margin: 0 auto; } }
+    margin: 0 auto;
+    width: 97% !important; } }
   @media (min-width: 768px) and (max-width: 1199px) {
   .container {
     width: auto;
@@ -1796,7 +1797,7 @@ img {
     color: #2b2a29;
     font-size: 18px; }
   .basket-modal__clean > a {
-    color: whitesmoke;
+    color: whitesmoke !important;
     display: inline-block;
     display: flex;
     align-items: center;
@@ -5694,7 +5695,6 @@ details {
     display: flex;
     width: 5.20833vw;
     color: #6d6b6a;
-    background-color: #e7e7e7;
     font-size: 0.97222vw; }
   @media (min-width: 768px) and (max-width: 1199px) {
     .prod-card__count {
@@ -5723,7 +5723,9 @@ details {
     padding: 0px;
     background-color: transparent;
     font-size: 2.08333vw;
-    padding: 0px; }
+    line-height: 2.08333vw;
+    padding: 0px;
+    font-family: CenturyGothicRegular; }
   @media (min-width: 768px) and (max-width: 1199px) {
       .prod-card__count > button {
         width: 29px;
@@ -5744,7 +5746,8 @@ details {
     border: 0;
     background-color: transparent;
     font-weight: bold;
-    font-size: 1.66667vw; }
+    font-size: 1.66667vw;
+    font-family: CenturyGothicRegular; }
   @media (min-width: 768px) and (max-width: 1199px) {
       .prod-card__count > input {
         font-size: 14px;
@@ -10015,7 +10018,7 @@ form > div {
       margin-top: 100px; } }
 
 .main-page {
-  margin-top: 130px;
+  margin-top: 108px;
   margin-bottom: 50px; }
 
 .alert {
@@ -10304,8 +10307,7 @@ section[data-layout="col"] .catalog__content {
   display: inline-block;
   width: 340px;
   height: 100%;
-  text-decoration: none;
-  margin-top: 30px; }
+  text-decoration: none; }
   #view-more-button span {
     position: relative;
     color: #fff;

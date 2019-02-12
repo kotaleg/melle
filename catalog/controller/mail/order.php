@@ -252,6 +252,9 @@ class ControllerMailOrder extends Controller {
         }
 
         /* IVAN MODIFICATION START */
+        $data['payment_address'] = preg_replace("/(::cdek::.+:)/", "", $data['payment_address']);
+        $data['shipping_address'] = preg_replace("/(::cdek::.+:)/", "", $data['shipping_address']);
+
         $data['admin'] = false;
         $data['full_name'] = "{$order_info['payment_firstname']} {$order_info['payment_lastname']}";
 

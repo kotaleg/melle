@@ -194,6 +194,8 @@ class ModelApiImport1C extends Model
 
             if (isset($parsed->only_changes) && !$parsed->only_changes) {
                 $json['message'][] = "Полный импорт";
+            } else {
+                $json['message'][] = "Малый импорт";
             }
 
             switch ($filetype) {
@@ -306,9 +308,11 @@ class ModelApiImport1C extends Model
         $this->load->model('api/import_1c/language');
         $languages = $this->model_api_import_1c_language->getLanguages();
 
-        // OPTIONS
-        $this->load->model('api/import_1c/option');
-        $this->model_api_import_1c_option->action($parsed, $languages);
+        if (!$parsed->only_changes) {
+            // OPTIONS
+            $this->load->model('api/import_1c/option');
+            $this->model_api_import_1c_option->action($parsed, $languages);
+        }
 
         // OFFERS
         $this->load->model('api/import_1c/offer');

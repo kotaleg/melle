@@ -96,10 +96,10 @@ img {
 .container {
   position: relative;
   // margin: 0 vw_(150px);
-  margin: 0 1.41667vw;
+  margin: 0 1% !important;
   @media (max-width: 1439px) {
     margin: 0 auto;
-//    width: 1140px;
+    width: 97% !important;
   }
   @include tablet {
     width: auto;
