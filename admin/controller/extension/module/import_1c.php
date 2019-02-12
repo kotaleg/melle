@@ -100,6 +100,11 @@ class ControllerExtensionModuleImport1C extends Controller
         $state['save'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/save");
         $state['get_running_imports'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/get_running_imports");
 
+        $state['api_token'] = $this->extension_model->getApiToken();
+        $state['upload_seo_file'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/upload_seo_file");
+        $state['import_seo_data'] = HTTPS_CATALOG . "index.php?route=api/import_1c&api_token={$state['api_token']}&type=catalog&mode=import&filename=seo.xml";
+
+
         // SETTING
         $state['setting'] = $this->setting;
         if (isset($state['setting']['status']) && $state['setting']['status']) {
@@ -113,6 +118,41 @@ class ControllerExtensionModuleImport1C extends Controller
     public function get_running_imports()
     {
         $json['imports'] = $this->extension_model->getRunningImports();
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function upload_seo_file()
+    {
+        $json = array(
+            'uploaded' => false,
+        );
+
+        if (isset($this->request->files['file']['name'])) {
+            if (substr($this->request->files['file']['name'], -4) != '.xml') {
+                $json['error'][] = 'Неверный тип файла';
+            }
+
+            if ($this->request->files['file']['error'] != UPLOAD_ERR_OK) {
+                $json['error'][] = 'Ошибка загрузки';
+            }
+        } else {
+            $json['error'][] = 'Ошибка загрузки';
+        }
+
+        if (!isset($json['error'])) {
+            $file = dirname(DIR_SYSTEM).'/protected/runtime/exchange/seo.xml';
+            if (is_file($file)) { @unlink($file); }
+
+            move_uploaded_file($this->request->files['file']['tmp_name'], $file);
+
+            if (is_file($file)) {
+                $json['uploaded'] = true;
+                $json['success'][] = 'Файл загружен';
+            } else {
+                $json['error'][] = 'Ошибка перемещения';
+            }
+        }
 
         $this->response->setOutput(json_encode($json));
     }

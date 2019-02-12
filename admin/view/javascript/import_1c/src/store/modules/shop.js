@@ -34,6 +34,10 @@ const state = {
     is_updating: false,
 
     imports: [],
+
+    upload_seo_file: '',
+    import_seo_data: '',
+    api_token: '',
 }
 
 // getters
@@ -73,6 +77,18 @@ const actions = {
                 if (!isUndefined(res.data.imports)) {
                     commit('updateImports', res.data.imports)
                 }
+                notify.messageHandler(res.data)
+            }
+        )
+    },
+    importSEOData({ commit }) {
+        commit('setUpdateStatus', true)
+        shop.makeRequest(
+            {
+                url: state.import_seo_data,
+            },
+            res => {
+                commit('setUpdateStatus', false)
                 notify.messageHandler(res.data)
             }
         )

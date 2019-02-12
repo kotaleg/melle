@@ -10,6 +10,7 @@ use Sabre\Xml\XmlDeserializable;
 
 use \import_1c\map\import_file_map;
 use \import_1c\map\offers_file_map;
+use \import_1c\map\seo_file_map;
 
 class import_1c
 {
@@ -20,6 +21,7 @@ class import_1c
 
     const IMPORT_FILE = 'import';
     const OFFERS_FILE = 'offers';
+    const SEO_FILE = 'seo';
 
     function __construct()
     {
@@ -41,6 +43,7 @@ class import_1c
         return array(
             self::IMPORT_FILE,
             self::OFFERS_FILE,
+            self::SEO_FILE,
         );
     }
 
@@ -52,6 +55,11 @@ class import_1c
     public function getOffersFileType()
     {
         return self::OFFERS_FILE;
+    }
+
+    public function getSeoFileType()
+    {
+        return self::SEO_FILE;
     }
 
     private function mapXml($path)
@@ -69,6 +77,10 @@ class import_1c
                 case self::OFFERS_FILE:
                     $this->filetype = self::OFFERS_FILE;
                     $this->service = offers_file_map::mapXml($this->service, $this->namespace);
+                    break;
+                case self::SEO_FILE:
+                    $this->filetype = self::SEO_FILE;
+                    $this->service = seo_file_map::mapXml($this->service, $this->namespace);
                     break;
             }
         }

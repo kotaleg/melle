@@ -191,4 +191,20 @@ class ModelExtensionModuleImport1C extends Model
 
         return $imports;
     }
+
+    public function getApiToken()
+    {
+        $this->load->model('user/api');
+
+        if ($this->config->get('config_api_id')) {
+            $session = new Session($this->config->get('session_engine'), $this->registry);
+            $session->start();
+
+            $this->model_user_api->addApiSession($this->config->get('config_api_id'), $session->getId(), $this->request->server['REMOTE_ADDR']);
+
+            $session->data['api_id'] = $api_info['api_id'];
+
+            return $session->getId();
+        }
+    }
 }

@@ -207,6 +207,10 @@ class ModelApiImport1C extends Model
                     $result = $this->_offersRoutine($parsed);
                     break;
 
+                case $this->import_1c->getSeoFileType();
+                    $result = $this->_seoRoutine($parsed);
+                    break;
+
                 default:
                     $json['success'] = false;
                     $json['error'][] = 'Тип файла не распознан.';

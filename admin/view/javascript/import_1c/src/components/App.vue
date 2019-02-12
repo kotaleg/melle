@@ -45,15 +45,27 @@
                 :title="text_edit">
 
                 <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-3 col-lg-2 control-label">{{ text_status }}</label>
-                        <div class="col-sm-9 col-lg-5">
-                            <toggle-button
-                                v-model="status"
-                                :width="100"
-                                :height="25"
-                                :labels="getToggleStates"/>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 col-lg-2 control-label">{{ text_status }}</label>
+                            <div class="col-sm-9 col-lg-5">
+                                <toggle-button
+                                    v-model="status"
+                                    :width="100"
+                                    :height="25"
+                                    :labels="getToggleStates"/>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        <file-upload
+                            :url="upload_seo_file"
+                            accept=".xml"
+                            btn-label="Выберите SEO файл"
+                            btn-uploading-label="Обработка.."
+                            @change="onFileChange"
+                            @success="onFileSuccess"
+                            @error="onFileError" />
                     </div>
                 </form>
 
@@ -164,6 +176,7 @@ export default {
             'is_loading',
             'is_updating',
             'imports',
+            'upload_seo_file',
         ]),
         ...mapGetters('shop', [
             'getToggleStates',
@@ -176,7 +189,7 @@ export default {
     },
     data () {
         return {
-            polling: null
+            polling: null,
         }
     },
     methods: {
@@ -184,12 +197,24 @@ export default {
             'updateSetting',
             'setLoadingStatus',
             'fetchImports',
+            'importSEOData',
         ]),
 
         pollData () {
             this.polling = setInterval(() => {
                 this.fetchImports()
             }, 3000)
+        },
+
+        onFileChange(res) {
+            notify.messageHandler(res)
+            this.setLoadingStatus(false)
+        },
+        onFileSuccess(e) {
+            this.importSEOData()
+        },
+        onFileError() {
+            console.log('UPLOAD FILE ERROR');
         },
 
         saveAndStay() {
@@ -224,19 +249,30 @@ export default {
 </script>
 
 <style lang="scss">
-    // NOTIFICATION
-    .vue-notification {
-      font-size: 14px;
-    }
+// NOTIFICATION
+.vue-notification {
+  font-size: 14px;
+}
 
-    .mt-30 {
-        margin-top: 30px;
-    }
+.mt-30 {
+    margin-top: 30px;
+}
 
-    .import-box {
-        .imp-head {
-            margin-bottom: 20px;
+.import-box {
+    .imp-head {
+        margin-bottom: 20px;
+    }
+    margin-bottom: 50px;
+}
+
+.file-upload {
+    .input-wrapper {
+        height: 45px !important;
+        .file-upload-label {
+            .file-upload-icon {
+                display: none !important;
+            }
         }
-        margin-bottom: 50px;
     }
+}
 </style>
