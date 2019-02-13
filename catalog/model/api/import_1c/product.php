@@ -240,7 +240,7 @@ class ModelApiImport1CProduct extends Model
 
             if ($already_moved_images) {
                 $json['message'] = array();
-                $json['message'][] = "Already moved images = {$already_moved_images}";
+                $json['message'][] = "Уже перемещенных изображений {$already_moved_images}";
 
                 // SAVE TO LOG
                 $this->model_api_import_1c_progress->parseJson($json);

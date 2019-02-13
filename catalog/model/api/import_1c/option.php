@@ -17,6 +17,7 @@ class ModelApiImport1COption extends Model
         parent::__construct($registry);
 
         $this->load->model('api/import_1c/helper');
+        $this->load->model('api/import_1c/progress');
     }
 
     private function getAllowedOptions()
@@ -31,6 +32,8 @@ class ModelApiImport1COption extends Model
     {
         if (isset($parsed->classificator->options)
             && is_array($parsed->classificator->options)) {
+
+            $find_image = 0;
 
             foreach ($parsed->classificator->options as $option) {
                 if (in_array(trim($option->name), $this->getAllowedOptions())) {
@@ -55,10 +58,9 @@ class ModelApiImport1COption extends Model
                         $option_id = $this->addOption($d_);
                     } else {
                         $option_id = $this->getOptionByImportId($option->id);
-                        $old_values = $this->getOptionValues($option_id);
-                        $this->deleteOldValues($option_id);
                     }
 
+                    $old_values = $this->getOptionValues($option_id);
 
                     if (isset($option->variants) && is_array($option->variants)) {
                         $option_values = array();
@@ -75,6 +77,17 @@ class ModelApiImport1COption extends Model
                                 $image = $old_values[$variant->id]['image'];
                             }
 
+                            if (empty($image)) {
+                                $o = $this->getOptionByName(trim($variant->value));
+                                if ($o && !empty($o['image'])) {
+                                    $image = $o['image'];
+                                }
+                            }
+
+                            if (empty($image)) {
+                                $find_image++;
+                            }
+
                             $option_values[] = array(
                                 'image' => $image,
                                 'sort_order' => 0,
@@ -83,10 +96,17 @@ class ModelApiImport1COption extends Model
                             );
                         }
 
+                        $this->deleteOldValues($option_id);
                         $this->addOptionValues($option_id, $option_values);
                     }
                 }
             }
+
+            $json['message'] = array();
+            $json['message'][] = "Восстановлено изображений опций {$find_image}";
+
+            // SAVE TO LOG
+            $this->model_api_import_1c_progress->parseJson($json);
         }
     }
 
@@ -193,17 +213,18 @@ class ModelApiImport1COption extends Model
                 $i++;
                 $this->updateOptionImage($o['option_value_id'], $image);
             } else {
-                echo "<pre>"; print_r($ci); echo "</pre>";
+                //
             }
-
         }
     }
 
     private function getOptionByName($name)
     {
-        $query = $this->db->query("SELECT `option_value_id`
-            FROM `". DB_PREFIX ."option_value_description`
-            WHERE `name` LIKE '%".$this->db->escape($name)."%'");
+        $query = $this->db->query("SELECT ovd.option_value_id, ov.image
+            FROM `". DB_PREFIX ."option_value_description` ovd
+            LEFT JOIN `" . DB_PREFIX . "option_value` ov
+            ON (ov.option_value_id = ovd.option_value_id)
+            WHERE ovd.name LIKE '%".$this->db->escape($name)."%'");
         if ($query->row) {
             return $query->row;
         }
