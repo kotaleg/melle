@@ -130,7 +130,7 @@ const getters = {
                 }
             })
         })
-        return options
+        return options_keys
     },
     isCombinationActive: (state, getters) => {
         let result = false
@@ -255,6 +255,8 @@ const actions = {
             dispatch('findCombination', o_key)
         }
 
+        dispatch('clearDisabled')
+        dispatch('updateDisabled')
     },
     clearSelectionForOption({ commit, state }, o_key) {
         if (!has(state.options, o_key)) { return }
@@ -264,7 +266,9 @@ const actions = {
             return
         }
         option.product_option_value.forEach((value, ov_key) => {
-            commit('setOptionSelectStatus', {o_key, ov_key, status:false})
+            if (value.selected === true) {
+                commit('setOptionSelectStatus', {o_key, ov_key, status:false})
+            }
         })
     },
     unselectAllBut({ commit, state, dispatch }, o_key) {
@@ -306,22 +310,60 @@ const actions = {
             })
         }
     },
-    // updateDisabled({ commit, state, getters }) {
-    //     let options = getters.getActiveOptions
-    //     let options_keys = getters.getActiveOptionsKeys
+    clearDisabled({ commit, state }) {
+        state.options.forEach((option, o_key) => {
+            if (!isArray(option.product_option_value)
+            || isEmpty(option.product_option_value)) {
+                return
+            }
+            option.product_option_value.forEach((option_value, ov_key) => {
+                if (option_value.disabled_by_selection === true) {
+                    commit('setOptionDisabledStatus',
+                        {o_key:o_key, ov_key:ov_key, status:false})
+                }
+            })
+        })
+    },
+    updateDisabled({ commit, state, getters }) {
+        let options = getters.getActiveOptions
 
-    //     state.full_combinations.forEach((comb, index) => {
-    //         if (!isEqual(options, comb.required)) {
-    //             comb.required.forEach((req) => {
-    //                 if (!isEmpty(options)) {
-    //                     options.forEach((o) => {
+        let allowed = []
+        options.forEach((o) => {
+            state.full_combinations.forEach((comb) => {
+                comb.required.forEach((req) => {
+                    if (comb.quantity > 0 && isEqual(req, o)) {
+                        comb.required.forEach((req) => {
+                            allowed.push({
+                                option_a: req.option_a,
+                                option_value_a: req.option_value_a,
+                            })
+                        })
+                    }
+                })
+            })
+        })
 
-    //                     })
-    //                 }
-    //             }
-    //         }
-    //     })
-    // },
+        state.options.forEach((option, o_key) => {
+            if (!isArray(option.product_option_value)
+            || isEmpty(option.product_option_value)) {
+                return
+            }
+            option.product_option_value.forEach((option_value, ov_key) => {
+                let check = false
+                allowed.forEach((a) => {
+                    if (a.option_a == option.option_id
+                    && option_value.option_value_id === a.option_value_a) {
+                        check = true
+                    }
+                })
+
+                if (check === false) {
+                    commit('setOptionDisabledStatus',
+                        {o_key:o_key, ov_key:ov_key, status:true})
+                }
+            })
+        })
+    },
 
     addToCartRequest({ commit, state, rootState, dispatch, getters }) {
         this.dispatch('header/setLoadingStatus', true)
