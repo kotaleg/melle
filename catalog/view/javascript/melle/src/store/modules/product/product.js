@@ -380,6 +380,11 @@ const actions = {
                 })
             }
         })
+
+        if (picked === true) {
+            dispatch('clearDisabled')
+            dispatch('updateDisabled')
+        }
     },
 
     addToCartRequest({ commit, state, rootState, dispatch, getters }) {
