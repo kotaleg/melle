@@ -356,6 +356,7 @@ class ModelExtensionModuleSuperOffers extends Model
         return $this->super_offers->getMaxQuantity($product_id);
     }
 
+
     /* ORDER FUNCTIONS */
 
     public function quantityHandler($order_id, $prefix)

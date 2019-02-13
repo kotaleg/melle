@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isInteger, isEmpty, isArray, isEqual, has } from 'lodash'
+import { isUndefined, isInteger, isEmpty, isArray, isEqual, has, first } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -20,7 +20,6 @@ const state = {
 
     is_options_for_product: false,
     options: [],
-    combinations_for_options: [],
     full_combinations: [],
     default_values: {
         rating: 0,
@@ -80,16 +79,25 @@ const getters = {
     },
     getActiveMaxQuantity: (state, getters) => {
         let q = false
-        let options = getters.getActiveOptions
-        state.full_combinations.forEach((comb) => {
-            if (isEqual(options, comb.required)) {
-                q = comb.quantity
-            }
-        })
+        let active_comb = getters.isCombinationActive
+        if (active_comb !== false) {
+            q = state.full_combinations[active_comb].quantity
+        }
         if (q === false) {
             return getters.getTotalMaxQuantity
         }
         return q
+    },
+    getActivePrice: (state, getters) => {
+        let p = false
+        let active_comb = getters.isCombinationActive
+        if (active_comb !== false) {
+            p = state.full_combinations[active_comb].price
+        }
+        if (p === false) {
+            return getters.getPrice
+        }
+        return p
     },
     getActiveOptions: state => {
         let options = []
@@ -107,8 +115,32 @@ const getters = {
                 }
             })
         })
-
         return options
+    },
+    getActiveOptionsKeys: state => {
+        let options_keys = []
+        state.options.forEach((option, k) => {
+            if (!isArray(option.product_option_value)
+            || isEmpty(option.product_option_value)) {
+                return
+            }
+            option.product_option_value.forEach((option_value, kk) => {
+                if (option_value.selected === true) {
+                    options.push({o_key: k, ov_key: kk})
+                }
+            })
+        })
+        return options
+    },
+    isCombinationActive: (state, getters) => {
+        let result = false
+        let options = getters.getActiveOptions
+        state.full_combinations.forEach((comb, index) => {
+            if (isEqual(options, comb.required)) {
+                result = index
+            }
+        })
+        return result
     },
     isAnythingSelected: state => {
         let status = false
@@ -156,6 +188,24 @@ const getters = {
         })
         return options
     },
+    getKeysForRealOptions: state => (payload) => {
+        let result = {o_key: false, ov_key: false}
+        state.options.forEach((option, k) => {
+            if (option.option_id !== payload.option_a) { return }
+            if (!isArray(option.product_option_value)
+            || isEmpty(option.product_option_value)) {
+                return
+            }
+            option.product_option_value.forEach((option_value, kk) => {
+                if (option_value.option_value_id !== payload.option_value_a) {
+                    return
+                }
+                result.o_key = k
+                result.ov_key = kk
+            })
+        })
+        return result
+    }
 }
 
 // actions
@@ -191,118 +241,87 @@ const actions = {
         }
         commit('setQuantity', q)
     },
-    radioHandler({ commit, dispatch, getters }, payload) {
+    radioHandler({ commit, state, dispatch, getters }, payload) {
         let o_key = payload.o_key
         let ov_key = payload.ov_key
         let status = payload.status
 
         dispatch('clearSelectionForOption', o_key)
-        if (!state.options[o_key].product_option_value[ov_key].disabled_by_selection) {
-            commit('setOptionSelectStatus', {o_key, ov_key, status})
+        commit('setOptionSelectStatus', {o_key, ov_key, status:true})
 
-            if (status === true) {
-                dispatch('updateSelectionFromGenerated', {o_key, ov_key})
-                dispatch('makeOnlyOneActive', o_key)
-            }
+        let active_comb = getters.isCombinationActive
+        if (active_comb === false) {
+            dispatch('unselectAllBut', o_key)
+            dispatch('findCombination', o_key)
         }
 
-        if (!getters.isAnythingSelected) {
-            dispatch('clearDisableForAll')
-        }
     },
     clearSelectionForOption({ commit, state }, o_key) {
-        if (!has(state.options, o_key)) {
-            return
-        }
-
+        if (!has(state.options, o_key)) { return }
         let option = state.options[o_key]
-
         if (!isArray(option.product_option_value)
         || isEmpty(option.product_option_value)) {
             return
         }
-
         option.product_option_value.forEach((value, ov_key) => {
             commit('setOptionSelectStatus', {o_key, ov_key, status:false})
         })
     },
-    clearDisableForAll({ commit, state }) {
-        state.options.forEach((option, o_key) => {
-            if (!isArray(option.product_option_value)
-            || isEmpty(option.product_option_value)) {
-                return
+    unselectAllBut({ commit, state, dispatch }, o_key) {
+        if (!has(state.options, o_key)) { return }
+        state.options.forEach((value, key) => {
+            if (key !== o_key) {
+                dispatch('clearSelectionForOption', key)
             }
-
-            option.product_option_value.forEach((option_value, ov_key) => {
-                commit('setOptionDisabledStatus', {o_key, ov_key, status:false})
-            })
         })
     },
-    updateSelectionFromGenerated({ commit, state }, payload) {
-        if (!has(state.options, payload.o_key)) {
-            return
-        }
+    findCombination({ commit, state, getters }) {
+        let one = first(getters.getActiveOptions)
+        let find = false
 
-        let option = state.options[payload.o_key]
+        if (!isUndefined(one)) {
+            state.full_combinations.forEach((comb, i) => {
+                if (find !== false) { return }
+                comb.required.forEach((req) => {
+                    if (find !== false) { return }
+                    if (isEqual(one, req)) {
+                        find = true
 
-        if (!isArray(option.product_option_value)
-        || isEmpty(option.product_option_value)) {
-            return
-        }
+                        // MAKE COMBINATION ACTIVE
+                        comb.required.forEach((req) => {
+                            if (!isEqual(one, req)) {
 
-        option.product_option_value.forEach((option_value, ov_key) => {
+                                let real_keys = getters.getKeysForRealOptions(
+                                    {option_a:req.option_a, option_value_a:req.option_value_a})
 
-            if (payload.ov_key !== ov_key) {
-                return
-            }
-
-            let active_option = option.option_id
-            let active_option_value = option_value.option_value_id
-
-            state.combinations_for_options.forEach((comb) => {
-                if (comb.active_option === active_option
-                && comb.active_option_value === active_option_value) {
-
-                    comb.generated_statuses.forEach((g_option_value, g_o_key) => {
-                        g_option_value.product_option_value.forEach((g_status, g_ov_key) => {
-                            commit('setOptionDisabledStatus',
-                                {o_key:g_o_key, ov_key:g_ov_key, status:!g_status})
+                                if (real_keys.o_key !== false && real_keys.ov_key !== false) {
+                                    commit('setOptionSelectStatus',
+                                        {o_key:real_keys.o_key, ov_key:real_keys.ov_key, status:true})
+                                }
+                            }
                         })
-                    })
 
-                }
-            })
-
-        })
-    },
-    makeOnlyOneActive({ commit, state }, o_key) {
-        if (!has(state.options, o_key)) {
-            return
-        }
-
-        let option = state.options[o_key]
-
-        if (!isArray(option.product_option_value)
-        || isEmpty(option.product_option_value)) {
-            return
-        }
-
-        let check = false
-
-        option.product_option_value.forEach((option_value) => {
-            if (option_value.selected === true) {
-                check = true
-            }
-        })
-
-        if (check === true) {
-            option.product_option_value.forEach((option_value, ov_key) => {
-                if (option_value.selected !== true) {
-                    commit('setOptionDisabledStatus', {o_key, ov_key, status:true})
-                }
+                    }
+                })
             })
         }
     },
+    // updateDisabled({ commit, state, getters }) {
+    //     let options = getters.getActiveOptions
+    //     let options_keys = getters.getActiveOptionsKeys
+
+    //     state.full_combinations.forEach((comb, index) => {
+    //         if (!isEqual(options, comb.required)) {
+    //             comb.required.forEach((req) => {
+    //                 if (!isEmpty(options)) {
+    //                     options.forEach((o) => {
+
+    //                     })
+    //                 }
+    //             }
+    //         }
+    //     })
+    // },
 
     addToCartRequest({ commit, state, rootState, dispatch, getters }) {
         this.dispatch('header/setLoadingStatus', true)

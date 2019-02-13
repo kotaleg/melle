@@ -214,9 +214,8 @@ class ControllerExtensionModuleMelle extends Controller
             $state['default_values'] = $this->model_extension_module_super_offers->getDefaultValues($product_id, $product_info);
 
             $state['is_options_for_product'] = (bool)$this->model_extension_module_super_offers->isOptionsForProduct($product_id);
+
             $state['options'] = $this->model_extension_module_super_offers->getOptions($product_id);
-            $state['combinations_for_options'] = $this->model_extension_module_super_offers->getCombinationsForOptions(
-                $product_id, $state['options']);
             $state['full_combinations'] = $this->model_extension_module_super_offers->getFullCombinations($product_id);
         }
 

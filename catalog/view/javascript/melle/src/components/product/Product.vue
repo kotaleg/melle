@@ -45,7 +45,7 @@
 
          <div class="prod-card__form-group prod-card__form-group--price">
             <div class="prod-card__price">
-               <span class="prod-card__price-default">{{ getPrice }} <span class="ruble-sign">Р</span></span>
+               <span class="prod-card__price-default">{{ getActivePrice }} <span class="ruble-sign">Р</span></span>
                <div class="prod-card__form-group prod-card__form-group--rating">
                   <div class="star-rating star-rating--span">
                     <span v-for="r in getRating" :class="['fa', 'fa-lg', {'fa-star': r === true, 'fa-star-o': r === false}]" />
@@ -86,12 +86,12 @@ export default {
     computed: {
         ...mapGetters('product', [
             'getRating',
-            'getPrice',
             'isSpecial',
             'getSpecial',
             'getActiveMaxQuantity',
             'getFormValue',
             'getStateValue',
+            'getActivePrice',
         ]),
         ...mapState('product', [
             'product_id',
