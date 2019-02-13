@@ -294,7 +294,6 @@ const actions = {
                         // MAKE COMBINATION ACTIVE
                         comb.required.forEach((req) => {
                             if (!isEqual(one, req)) {
-
                                 let real_keys = getters.getKeysForRealOptions(
                                     {option_a:req.option_a, option_value_a:req.option_value_a})
 
@@ -362,6 +361,24 @@ const actions = {
                         {o_key:o_key, ov_key:ov_key, status:true})
                 }
             })
+        })
+    },
+    selectFirstCombination({ commit, state, getters }) {
+        let picked = false
+        state.full_combinations.forEach((comb) => {
+            if (picked !== false) { return }
+            if (comb.quantity > 0) {
+                comb.required.forEach((req) => {
+                    picked = true
+                    let real_keys = getters.getKeysForRealOptions(
+                        {option_a:req.option_a, option_value_a:req.option_value_a})
+
+                    if (real_keys.o_key !== false && real_keys.ov_key !== false) {
+                        commit('setOptionSelectStatus',
+                            {o_key:real_keys.o_key, ov_key:real_keys.ov_key, status:true})
+                    }
+                })
+            }
         })
     },
 

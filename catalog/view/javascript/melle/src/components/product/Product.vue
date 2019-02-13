@@ -121,6 +121,9 @@ export default {
     created() {
         this.$store.dispatch('product/initData')
     },
+    mounted() {
+        this.$store.dispatch('product/selectFirstCombination')
+    },
 }
 </script>
 
