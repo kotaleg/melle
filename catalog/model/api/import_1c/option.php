@@ -60,8 +60,6 @@ class ModelApiImport1COption extends Model
                         $option_id = $this->getOptionByImportId($option->id);
                     }
 
-                    $old_values = $this->getOptionValues($option_id);
-
                     if (isset($option->variants) && is_array($option->variants)) {
                         $option_values = array();
                         foreach ($option->variants as $k => $variant) {
@@ -73,20 +71,11 @@ class ModelApiImport1COption extends Model
                             }
 
                             $image = '';
-                            if (array_key_exists($variant->id, $old_values)) {
-                                $image = $old_values[$variant->id]['image'];
-                            }
 
-                            if (empty($image)) {
-                                $o = $this->getOptionByName(trim($variant->value));
-                                if ($o && !empty($o['image'])) {
-                                    $image = $o['image'];
-                                }
-                            }
+                            $img = $this->getColorByImportID($option->id);
+                            if ($img) { $image = $img; }
 
-                            if (empty($image)) {
-                                $find_image++;
-                            }
+                            if (empty($image)) { $find_image++; }
 
                             $option_values[] = array(
                                 'image' => $image,
@@ -212,8 +201,6 @@ class ModelApiImport1COption extends Model
             if ($o) {
                 $i++;
                 $this->updateOptionImage($o['option_value_id'], $image);
-            } else {
-                //
             }
         }
     }
@@ -235,5 +222,14 @@ class ModelApiImport1COption extends Model
         $this->db->query("UPDATE " . DB_PREFIX . "option_value
             SET image = '" . $this->db->escape($image) . "'
             WHERE option_value_id = '" . (int)$option_value_id . "'");
+    }
+
+    public function getColorByImportID($import_id)
+    {
+        $color_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "color_images`
+            WHERE `import_id` = '".$this->db->escape($option_value['import_id'])."'");
+        if (isset($color_query->row['image']) && !empty($color_query->row['image'])) {
+            return $color_query->row['image'];
+        }
     }
 }
