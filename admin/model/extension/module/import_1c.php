@@ -211,8 +211,8 @@ class ModelExtensionModuleImport1C extends Model
 
     public function getColorByImportID($import_id)
     {
-        $color_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "color_images`
-            WHERE `import_id` = '".$this->db->escape($option_value['import_id'])."'");
+        $color_query = $this->db->query("SELECT * FROM `". DB_PREFIX ."color_images`
+            WHERE `import_id` = '". $this->db->escape($import_id) ."'");
         if (isset($color_query->row['image']) && !empty($color_query->row['image'])) {
             return $color_query->row['image'];
         }
