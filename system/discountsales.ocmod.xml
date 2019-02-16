@@ -37,23 +37,34 @@
             ]]></add>
         </operation>
 
-        <operation>
-            <search><![CDATA[$product_data[] = array(]]></search>
+        <!-- <operation>
+            <search><![CDATA[return $product_data;]]></search>
             <add position="before"><![CDATA[
                 /* DISCOUNT SALES */
-                $this->load->model('extension/total/discountsales');
-                $ds_data = $this->model_extension_total_discountsales->setNewPrice(
-                    $product_query->row['product_id'],$price,$option_price,json_decode($cart['option']),$cart['quantity']);
+                if ((in_array(__FUNCTION__, array('getProducts')))) {
+                    $this->load->model('extension/total/discountsales');
+
+                    foreach ($product_data as $pd_key => $pd) {
+                        $ds_data = $this->model_extension_total_discountsales->setNewPrice(
+                            $pd['product_id'], $pd['price'], 0, json_decode($pd['ds_cart_option']), $pd['quantity']);
+                        if (isset($ds_data['price']) ) {
+                            $product_data[$pd_key]['price'] = $ds_data['price'];
+                            $product_data[$pd_key]['total'] = $ds_data['price'] * $pd['quantity'];
+                        }
+                    }
+                }
                 /* DISCOUNT SALES */
             ]]></add>
-        </operation>
+        </operation> -->
 
         <operation>
             <search><![CDATA['cart_id'         => $cart['cart_id'],]]></search>
             <add position="before"><![CDATA[
                 /* DISCOUNT SALES */
-                'ds_price'        => $ds_data['price'],
-                'ds_option_price' => $ds_data['option_price'],
+                'ds_price'          => $price,
+                'ds_option_price'   => $option_price,
+                'ds_cart_option'    => $cart['option'],
+                'ds_quantity'       => $cart['quantity'],
                 /* DISCOUNT SALES */
             ]]></add>
         </operation>

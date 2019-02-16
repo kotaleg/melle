@@ -155,28 +155,36 @@
   }
   &__footer {
       font-weight: 900;
-    display: flex;
+    // display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 60px;
+    // height: 60px;
     margin-bottom: 30px;
-    padding: 0 20px;
+    padding: 20px;
     background-color: white;
       border: 1px solid black;
     @include mobile {
       padding: 0 5px;
     }
   }
-  &__clean button {
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-size: 14px;
+  &__clean {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+
+    & button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 14px;
+    }
   }
   &__full-price {
     color: #2b2a29;
     font-size: 18px;
+    text-align: right;
   }
   &__clean>a {
       color: whitesmoke !important;

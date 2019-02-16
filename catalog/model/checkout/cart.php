@@ -67,7 +67,7 @@ class ModelCheckoutCart extends Model
                     'cart_id'       => (int) $product['cart_id'],
                     'product_id'    => $product['product_id'],
                     'thumb'         => $image,
-                    'name'          => $product['name'],
+                    'name'          => (isset($product['h1'])) ? $product['h1'] : $product['name'],
                     'model'         => $product['model'],
                     'manufacturer'  => $manufacturer,
                     'option'        => $option_data,
@@ -129,14 +129,14 @@ class ModelCheckoutCart extends Model
         $state['totals'] = array();
 
         foreach ($totals as $total) {
-            if (strcmp($total['code'], 'sub_total') === 0) {
-                $state['total'] = $total['value'];
+            if (strcmp($total['code'], 'total') === 0) {
+                $state['total'] = $this->model_tool_base->formatMoney($total['value']);
+            } else {
+                $state['totals'][] = array(
+                    'title' => $total['title'],
+                    'text'  => $this->model_tool_base->formatMoney($total['value'])
+                );
             }
-
-            $state['totals'][] = array(
-                'title' => $total['title'],
-                'text'  => $this->currency->format($total['value'], $this->session->data['currency'])
-            );
         }
 
         return $state;

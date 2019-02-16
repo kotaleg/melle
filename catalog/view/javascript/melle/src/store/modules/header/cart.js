@@ -9,6 +9,7 @@ const state = {
     'count': 0,
     'products': [],
     'total': 0,
+    'totals': [],
 
     'is_checkout': false,
 

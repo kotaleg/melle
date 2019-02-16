@@ -69,7 +69,8 @@ const getters = {
         return state.default_values.price
     },
     isSpecial: state => {
-        return state.default_values.special === true
+        return state.default_values.special !== false
+            && state.default_values.special > 0
     },
     getSpecial: state => {
         return state.default_values.special
@@ -363,7 +364,7 @@ const actions = {
             })
         })
     },
-    selectFirstCombination({ commit, state, getters }) {
+    selectFirstCombination({ commit, state, dispatch, getters }) {
         let picked = false
         state.full_combinations.forEach((comb) => {
             if (picked !== false) { return }

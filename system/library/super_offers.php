@@ -276,6 +276,13 @@ class super_offers
                     }
                     $products_data[$pd_key]['stock'] = $stock;
 
+                    /* SPECIAL FIX */
+                    // if (isset($pd['ds_price']) && isset($pd['ds_option_price'])) {
+                    //     $ds_price = ($pd['ds_price'] + $pd['ds_option_price']);
+                    //     if ($ds_price > 0) { $combination['price'] = $ds_price; }
+                    // }
+                    /* SPECIAL FIX */
+
                     $products_data[$pd_key]['max_quantity'] = $quantity;
                     $products_data[$pd_key]['price'] = $combination['price'];
                     $products_data[$pd_key]['total'] = $combination['price'] * (int)$products_data[$pd_key]['quantity'];

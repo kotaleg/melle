@@ -52,6 +52,21 @@
                     $product_data = $this->super_offers->fixProducts($product_data);
                 }
                 // SUPER OFFERS END
+
+                /* DISCOUNT SALES */
+                if ((in_array(__FUNCTION__, array('getProducts')))) {
+                    $this->load->model('extension/total/discountsales');
+
+                    foreach ($product_data as $pd_key => $pd) {
+                        $ds_data = $this->model_extension_total_discountsales->setNewPrice(
+                            $pd['product_id'], $pd['price'], 0, json_decode($pd['ds_cart_option']), $pd['quantity']);
+                        if (isset($ds_data['price'])) {
+                            $product_data[$pd_key]['price'] = $ds_data['price'];
+                            $product_data[$pd_key]['total'] = $ds_data['price'] * $pd['quantity'];
+                        }
+                    }
+                }
+                /* DISCOUNT SALES */
             ]]></add>
         </operation>
     </file>

@@ -38,6 +38,13 @@ const getters = {
     getPrice: state => key => {
         return state.products[key].default_values.price
     },
+    isSpecial: state => key => {
+        return state.products[key].default_values.special !== false
+            && state.products[key].default_values.special > 0
+    },
+    getSpecial: state => key => {
+        return state.products[key].default_values.special
+    },
     getProductsForGTM: state => {
         let products = []
         state.products.forEach((item, i) => {

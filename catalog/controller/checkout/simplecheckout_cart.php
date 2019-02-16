@@ -294,7 +294,7 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
                     'key'       => isset($product['key']) ? $product['key'] : '',
                     'cart_id'   => isset($product['cart_id']) ? $product['cart_id'] : '',
                     'thumb'     => $image,
-                    'name'      => $product['name'],
+                    'name'      => (isset($product['h1'])) ? $product['h1'] : $product['name'],
                     'model'     => $product['model'],
                     'minimum'   => $product['minimum'],
                     'option'    => $option_data,

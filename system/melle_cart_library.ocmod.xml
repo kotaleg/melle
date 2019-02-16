@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_cart_library</name>
+    <code>melle_cart_library</code>
+    <description>Melle Cart [Library]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="system/library/cart/cart.php">
+        <operation error="skip">
+            <search><![CDATA['name'            => $product_query->row['name'],]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                'h1'            => $product_query->row['h1'],
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>
