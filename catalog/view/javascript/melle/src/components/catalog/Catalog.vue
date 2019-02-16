@@ -16,14 +16,14 @@
                       <h3 @click="gtmProductClick(i)" class="ivanitemtitle"><a :href="p.href">{{ p.h1 }}</a></h3>
                    </div>
                    <div class="col-xs-7">
-                        <span v-if="isSpecial" class="catalog__item-price-old">
+                        <span v-if="isSpecial(i)" class="catalog__item-price-old">
                             {{ getPrice(i) }} <span class="ruble-sign">Р</span>
                         </span>
-                        <span v-if="isSpecial" class="catalog__item-price-default">
+                        <span v-if="isSpecial(i)" class="catalog__item-price-default">
                             {{ getSpecial(i) }} <span class="ruble-sign">Р</span>
                         </span>
 
-                        <span v-if="!isSpecial" class="catalog__item-price-default">
+                        <span v-if="!isSpecial(i)" class="catalog__item-price-default">
                             {{ getPrice(i) }} <span class="ruble-sign">Р</span></span>
                    </div>
                    <div class="col-xs-5">
