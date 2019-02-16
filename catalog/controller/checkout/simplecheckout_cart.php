@@ -21,6 +21,8 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
         $this->language->load('checkout/cart');
         $this->language->load('checkout/simplecheckout');
 
+        $this->load->model('tool/base');
+
         $get_route = isset($_GET['route']) ? $_GET['route'] : (isset($_GET['_route_']) ? $_GET['_route_'] : '');
 
         if ($get_route == 'checkout/simplecheckout_cart') {
@@ -108,13 +110,13 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
         if (!empty($minAmount) && $minAmount > $cartSubtotal) {
             $this->simplecheckout->addError('cart');
             $this->simplecheckout->blockOrder();
-            $this->_templateData['error_warning'] = sprintf($this->language->get('error_min_amount'),$this->simplecheckout->formatCurrency($minAmount));
+            $this->_templateData['error_warning'] = sprintf($this->language->get('error_min_amount'),$this->model_tool_base->formatMoney($minAmount));
         }
 
         if (!empty($maxAmount) && $maxAmount < $cartSubtotal) {
             $this->simplecheckout->blockOrder();
             $this->simplecheckout->addError('cart');
-            $this->_templateData['error_warning'] = sprintf($this->language->get('error_max_amount'),$this->simplecheckout->formatCurrency($maxAmount));
+            $this->_templateData['error_warning'] = sprintf($this->language->get('error_max_amount'),$this->model_tool_base->formatMoney($maxAmount));
         }
 
         if (!empty($minQuantity) && $minQuantity > $cartQuantity) {
@@ -254,13 +256,13 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
             }
 
             if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-                $price = $this->simplecheckout->formatCurrency($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
+                $price = $this->model_tool_base->formatMoney($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
             } else {
                 $price = false;
             }
 
             if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-                $total = $this->simplecheckout->formatCurrency($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity']);
+                $total = $this->model_tool_base->formatMoney($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity']);
             } else {
                 $total = false;
             }
@@ -278,13 +280,13 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
                     );
 
                     if ($product['recurring']['trial']) {
-                        $recurring = sprintf($this->language->get('text_trial_description'), $this->simplecheckout->formatCurrency($this->tax->calculate($product['recurring']['trial_price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax'))), $product['recurring']['trial_cycle'], $frequencies[$product['recurring']['trial_frequency']], $product['recurring']['trial_duration']) . ' ';
+                        $recurring = sprintf($this->language->get('text_trial_description'), $this->model_tool_base->formatMoney($this->tax->calculate($product['recurring']['trial_price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax'))), $product['recurring']['trial_cycle'], $frequencies[$product['recurring']['trial_frequency']], $product['recurring']['trial_duration']) . ' ';
                     }
 
                     if ($product['recurring']['duration']) {
-                        $recurring .= sprintf($this->language->get('text_payment_description'), $this->simplecheckout->formatCurrency($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax'))), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
+                        $recurring .= sprintf($this->language->get('text_payment_description'), $this->model_tool_base->formatMoney($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax'))), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
                     } else {
-                        $recurring .= sprintf($this->language->get('text_payment_until_canceled_description'), $this->simplecheckout->formatCurrency($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax'))), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
+                        $recurring .= sprintf($this->language->get('text_payment_until_canceled_description'), $this->model_tool_base->formatMoney($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax'))), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
                     }
                 }
 
@@ -317,11 +319,11 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
                     );
 
                     if ($product['recurring_trial']) {
-                        $recurring_price = $this->simplecheckout->formatCurrency($this->tax->calculate($product['recurring_trial_price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax')));
+                        $recurring_price = $this->model_tool_base->formatMoney($this->tax->calculate($product['recurring_trial_price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax')));
                         $profile_description = sprintf($this->language->get('text_trial_description'), $recurring_price, $product['recurring_trial_cycle'], $frequencies[$product['recurring_trial_frequency']], $product['recurring_trial_duration']) . ' ';
                     }
 
-                    $recurring_price = $this->simplecheckout->formatCurrency($this->tax->calculate($product['recurring_price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax')));
+                    $recurring_price = $this->model_tool_base->formatMoney($this->tax->calculate($product['recurring_price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax')));
 
                     if ($product['recurring_duration']) {
                         $profile_description .= sprintf($this->language->get('text_payment_description'), $recurring_price, $product['recurring_cycle'], $frequencies[$product['recurring_frequency']], $product['recurring_duration']);
@@ -375,7 +377,7 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
                 $this->_templateData['vouchers'][] = array(
                     'key'         => $key,
                     'description' => $voucher['description'],
-                    'amount'      => $this->simplecheckout->formatCurrency($voucher['amount'])
+                    'amount'      => $this->model_tool_base->formatMoney($voucher['amount'])
                 );
             }
         }
@@ -441,7 +443,7 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
                 $sort_order[$key] = $value['sort_order'];
 
                 if (!isset($value['text'])) {
-                    $totals[$key]['text'] = $this->simplecheckout->formatCurrency($value['value']);
+                    $totals[$key]['text'] = $this->model_tool_base->formatMoney($value['value']);
                 }
             }
 
@@ -475,7 +477,7 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
         $currentTheme = $this->config->get('config_template');
 
         if ($currentTheme == 'shoppica' || $currentTheme == 'shoppica2') {
-            $this->_templateData['cart_total'] = $this->simplecheckout->formatCurrency($total);
+            $this->_templateData['cart_total'] = $this->model_tool_base->formatMoney($total);
         } else {
             $minicart = $this->simplecheckout->getSettingValue('minicartText', 'cart');
 
@@ -500,12 +502,12 @@ class ControllerCheckoutSimpleCheckoutCart extends SimpleController {
 
                 $replace = array(
                     '{quantity}' => $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0),
-                    '{total}' => $this->simplecheckout->formatCurrency($total)
+                    '{total}' => $this->model_tool_base->formatMoney($total)
                 );
 
                 $this->_templateData['cart_total'] = str_replace($find, $replace, $text_items);
             } else {
-                $this->_templateData['cart_total'] = sprintf($text_items, $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->simplecheckout->formatCurrency($total));
+                $this->_templateData['cart_total'] = sprintf($text_items, $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->model_tool_base->formatMoney($total));
             }
         }
 

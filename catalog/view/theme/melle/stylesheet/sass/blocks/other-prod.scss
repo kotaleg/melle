@@ -4,7 +4,7 @@
 
 
 
-  margin-bottom: 35px;
+  margin-bottom: -60px;
   ul {
     padding: 0;
   }
@@ -86,7 +86,7 @@
 
 
   &__item:not(:nth-child(4n+4)) {
-    margin-right: 4%;
+    margin-right: 3%;
     @include tablet {
       margin-right: 0;
     }

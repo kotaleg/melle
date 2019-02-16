@@ -52,7 +52,6 @@ class ModelApiImport1CProduct extends Model
                     'jan' => '',
                     'isbn' => '',
                     'mpn' => '',
-                    'image' => '',
                     'location' => '',
                     'quantity' => 0,
                     'minimum' => 1,
@@ -75,8 +74,12 @@ class ModelApiImport1CProduct extends Model
                     'height' => '',
                     'width' => '',
                     'manufacturer_id' => '',
-                    'product_image' => array(),
                 );
+
+                if (isset($parsed->only_changes) && !$parsed->only_changes) {
+                    $d_['image'] = '';
+                    $d_['product_image'] = array();
+                }
 
                 // IMAGE
                 if ($product->pictures) {
@@ -619,10 +622,10 @@ class ModelApiImport1CProduct extends Model
             }
         }
 
-        $this->db->query("DELETE FROM " . DB_PREFIX . "product_image
+        if (isset($data['product_image'])) {
+            $this->db->query("DELETE FROM " . DB_PREFIX . "product_image
             WHERE product_id = '" . (int)$product_id . "'");
 
-        if (isset($data['product_image'])) {
             foreach ($data['product_image'] as $product_image) {
                 $this->db->query("INSERT INTO " . DB_PREFIX . "product_image
                     SET product_id = '" . (int)$product_id . "',

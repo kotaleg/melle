@@ -83,25 +83,6 @@ class ModelApiImport1C extends Model
         $this->load->model('api/import_1c/category');
         $this->model_api_import_1c_category->clearCategoriesWithoutDescription();
 
-        // REMOVE UNUSED IMAGES
-        $unused_count = 0;
-        $d = new \import_1c\import_1c_dir;
-        $images = $d::scanDir(DIR_IMAGE.'catalog/import_files/',
-            array('*.jpg', '*.png', '*.JPG'));
-
-        $this->load->model('api/import_1c/product');
-        foreach ($images as $img) {
-            if (!$this->model_api_import_1c_product->
-                isImageForProduct(str_replace(DIR_IMAGE, '', $img))) {
-                @unlink($img);
-                $unused_count++;
-            }
-        }
-
-        if ($unused_count > 0) {
-            $json['message'][] = "Удалено {$unused_count} ненужных изображений";
-        }
-
         $json['success'] = true;
 
         return $json;
@@ -193,6 +174,13 @@ class ModelApiImport1C extends Model
             $parsed = $this->import_1c->parse();
 
             if (isset($parsed->only_changes) && !$parsed->only_changes) {
+
+                // REMOVE UNUSED IMAGES
+                $unused_count = $this->clearUnusedImages();
+                if ($unused_count > 0) {
+                    $json['message'][] = "Удалено {$unused_count} ненужных изображений";
+                }
+
                 $json['message'][] = "Полный импорт";
             } else {
                 $json['message'][] = "Малый импорт";
@@ -228,14 +216,14 @@ class ModelApiImport1C extends Model
                 }
 
                 if (!isset($json['success']) || $json['success'] != false) {
-                    if ($this->renameFile($realpath) === true) {
+                    // if ($this->renameFile($realpath) === true) {
                         $json['success'] = true;
                         $this->extra[$filetype]['finished'] = true;
                         $json['message'][] = "Файл `{$filename}` обработан.";
-                    } else {
-                        $json['success'] = false;
-                        $json['error'][] = 'Не удалось переименовать файл.';
-                    }
+                    // } else {
+                    //     $json['success'] = false;
+                    //     $json['error'][] = 'Не удалось переименовать файл.';
+                    // }
                 }
             } else {
                 $json['success'] = true;
@@ -355,5 +343,24 @@ class ModelApiImport1C extends Model
     {
         $this->db->query("UPDATE `". DB_PREFIX ."category`
             SET `status` = '".(bool)false."'");
+    }
+
+    private function clearUnusedImages()
+    {
+        $unused_count = 0;
+        $d = new \import_1c\import_1c_dir;
+        $images = $d::scanDir(DIR_IMAGE.'catalog/import_files/',
+            array('*.jpg', '*.png', '*.JPG'));
+
+        $this->load->model('api/import_1c/product');
+        foreach ($images as $img) {
+            if (!$this->model_api_import_1c_product->
+                isImageForProduct(str_replace(DIR_IMAGE, '', $img))) {
+                @unlink($img);
+                $unused_count++;
+            }
+        }
+
+        return $unused_count;
     }
 }

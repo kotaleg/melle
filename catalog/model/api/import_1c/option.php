@@ -72,7 +72,7 @@ class ModelApiImport1COption extends Model
 
                             $image = '';
 
-                            $img = $this->getColorByImportID($option->id);
+                            $img = $this->getColorByImportID($variant->id);
                             if ($img) { $image = $img; }
 
                             if (empty($image)) { $find_image++; }
@@ -196,6 +196,8 @@ class ModelApiImport1COption extends Model
 
             $image = 'catalog/colors/'.basename($ci['image']);
 
+            $this->saveColorImage($ci['c_id'], $image);
+
             $o = $this->getOptionValueByImportId($ci['c_id']);
             // $o = $this->getOptionByName($ci['name']);
             if ($o) {
@@ -224,10 +226,26 @@ class ModelApiImport1COption extends Model
             WHERE option_value_id = '" . (int)$option_value_id . "'");
     }
 
+    public function saveColorImage($import_id, $image_path)
+    {
+        $this->load->model('extension/pro_patch/db');
+        $sql = $this->model_extension_pro_patch_db->sqlOnDuplicateUpdateBuilder(
+                'color_images',
+                array(
+                    'import_id' => array(
+                        'update'    => false,
+                        'data'      => $import_id,
+                    ),
+                    'image' => $image_path,
+                ));
+
+        $this->db->query($sql);
+    }
+
     public function getColorByImportID($import_id)
     {
         $color_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "color_images`
-            WHERE `import_id` = '".$this->db->escape($option_value['import_id'])."'");
+            WHERE `import_id` = '".$this->db->escape($import_id)."'");
         if (isset($color_query->row['image']) && !empty($color_query->row['image'])) {
             return $color_query->row['image'];
         }

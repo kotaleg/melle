@@ -103,7 +103,7 @@
 }
 .simplecheckout-block {
     clear: both;
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
 }
 .simplecheckout-block-content {
     padding: 10px;
@@ -785,4 +785,8 @@
 }
 .simplecheckout-summary-totals .simplecheckout-cart-total {
     border: 0;
+}
+
+.row-customer_email{
+    margin-bottom: 0px;
 }

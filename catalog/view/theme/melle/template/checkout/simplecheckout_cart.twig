@@ -17,7 +17,7 @@
                <tr>
                   <th>Товар</th>
                   <th></th>
-                  <th>Опции</th>
+                  <th>Цвет/размер</th>
                   <th>Цена</th>
                   <th>Кол-во</th>
                   <th>Сумма</th>
@@ -51,7 +51,7 @@
                               </a>
                            </div>
                            {% if product['model'] %}
-                           <div class="basket-orders__article"><span>артикул: </span><span>{{product['model']}}</span></div>
+                           <div class="basket-orders__article"><!-- <span></span><span>{{product['model']}}</span> --></div>
                            {% endif %}
                            {% if product['manufacturer'] %}
                            <div class="basket-orders__article"><span>производитель: </span><span>{{product['manufacturer']}}</span></div>
@@ -67,10 +67,10 @@
                            <div class="basket-orders__size">
                               <div class="options">
                                {% for option in product['option'] %}
-                               &nbsp;<span> - {{ option['name'] }}: {{ option['value'] }}</span><br />
+                               &nbsp;<span> {{ option['name'] }}: {{ option['value'] }}</span><br />
                                {% endfor %}
                                {% if product['recurring'] is not empty %}
-                               - <span>{{ text_payment_profile }}: {{ product['profile_name'] }}</span>
+                               <span>{{ text_payment_profile }}: {{ product['profile_name'] }}</span>
                                {% endif %}
                                </div>
                                {% if product['reward'] %}
