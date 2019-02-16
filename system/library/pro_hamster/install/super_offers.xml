@@ -86,4 +86,24 @@
         </operation>
     </file>
 
+
+    <file path="catalog/model/extension/total/discountsales.php">
+        <operation error="skip">
+            <search><![CDATA[if ($recurring_query->num_rows) {]]></search>
+            <add position="before"><![CDATA[
+                // SUPER OFFERS START
+                if ((in_array(__FUNCTION__, array('getProduct')))
+                && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/super_offers.json')) {
+                    $this->load->model('extension/module/super_offers');
+                    $so_lowest = $this->model_extension_module_super_offers->getLowestPrice($product_id);
+
+                    if ($so_lowest && ($price <= 0 || $price > $so_lowest)) {
+                        $price = $so_lowest;
+                    }
+                }
+                // SUPER OFFERS END
+            ]]></add>
+        </operation>
+    </file>
+
 </modification>
