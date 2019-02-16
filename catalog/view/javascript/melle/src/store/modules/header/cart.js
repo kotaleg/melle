@@ -77,6 +77,10 @@ const actions = {
                     commit('setTotal', res.data.total)
                 }
 
+                if (has(res.data, 'totals')) {
+                    commit('setTotals', res.data.totals)
+                }
+
                 if (has(res.data, 'products')) {
                     commit('setProducts', res.data.products)
                 }
@@ -177,6 +181,9 @@ const mutations = {
     },
     setTotal(state, total) {
         Vue.set(state, 'total', total)
+    },
+    setTotals(state, totals) {
+        Vue.set(state, 'totals', totals)
     },
     setProducts(state, products) {
         Vue.set(state, 'products', products)
