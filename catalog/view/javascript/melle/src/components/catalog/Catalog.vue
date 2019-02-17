@@ -7,7 +7,7 @@
             :class="['catalog__item', p.znachek_class]">
 
              <a @click="gtmProductClick(i)" :href="p.href" class="catalog__item-link">
-                <img :src="p.image">
+                <img :src="p.image" :alt="p.h1">
              </a>
 
              <div class="catalog__item-ivaninfo">

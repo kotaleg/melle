@@ -36,7 +36,7 @@
                       <div class="search-block">
                          <div class="search-modal__form">
                             <input name="q" type="search" v-model="search" @keyup.enter="searchAction">
-                            <input type="submit" value="" @click="searchAction" class="cursorred">
+                            <input type="submit" value="" @click="searchAction" class="cursorred" aria-label="Поиск">
                         </div>
                       </div>
                    </li>
