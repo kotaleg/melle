@@ -86,7 +86,7 @@ class ModelExtensionModuleImport1C extends Model
         $progresses = array();
         $query = $this->db->query("SELECT DISTINCT `progress_id`
             FROM `". DB_PREFIX . $this->db->escape(self::ACTION_TABLE) ."`
-            WHERE `create_date` >= DATE_SUB(NOW(), INTERVAL 1 HOUR)
+            WHERE `create_date` >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
             ORDER BY `progress_id` DESC");
 
         foreach ($query->rows as $v) {
@@ -202,7 +202,7 @@ class ModelExtensionModuleImport1C extends Model
 
             $this->model_user_api->addApiSession($this->config->get('config_api_id'), $session->getId(), $this->request->server['REMOTE_ADDR']);
 
-            $session->data['api_id'] = $api_info['api_id'];
+            $session->data['api_id'] = $this->config->get('config_api_id');
 
             return $session->getId();
         }

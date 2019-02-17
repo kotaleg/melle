@@ -48,12 +48,12 @@ class ModelApiImport1C extends Model
         $json = array();
 
         // REMOVE OLD ONES
-        foreach (glob("{$this->exchange_path}*{__OLD*,__FINISHED*}", GLOB_BRACE) as $file) {
-            if (is_file($file)) {
-                @unlink($file);
-                $json['message'][] = 'Файл `'.basename($file).'` удален';
-            }
-        }
+        // foreach (glob("{$this->exchange_path}*{__OLD*,__FINISHED*}", GLOB_BRACE) as $file) {
+        //     if (is_file($file)) {
+        //         @unlink($file);
+        //         $json['message'][] = 'Файл `'.basename($file).'` удален';
+        //     }
+        // }
 
         // MARK AS OLD (PREVIOUS FILES)
         foreach (glob("{$this->exchange_path}*.xml") as $file) {
@@ -181,9 +181,9 @@ class ModelApiImport1C extends Model
                     $json['message'][] = "Удалено {$unused_count} ненужных изображений";
                 }
 
-                $json['message'][] = "Полный импорт";
+                $json['message'][] = "-- Полный импорт --";
             } else {
-                $json['message'][] = "Малый импорт";
+                $json['message'][] = "-- Малый импорт --";
             }
 
             switch ($filetype) {
@@ -216,14 +216,14 @@ class ModelApiImport1C extends Model
                 }
 
                 if (!isset($json['success']) || $json['success'] != false) {
-                    // if ($this->renameFile($realpath) === true) {
+                    if ($this->renameFile($realpath) === true) {
                         $json['success'] = true;
                         $this->extra[$filetype]['finished'] = true;
                         $json['message'][] = "Файл `{$filename}` обработан.";
-                    // } else {
-                    //     $json['success'] = false;
-                    //     $json['error'][] = 'Не удалось переименовать файл.';
-                    // }
+                    } else {
+                        $json['success'] = false;
+                        $json['error'][] = 'Не удалось переименовать файл.';
+                    }
                 }
             } else {
                 $json['success'] = true;
@@ -309,6 +309,12 @@ class ModelApiImport1C extends Model
         // OFFERS
         $this->load->model('api/import_1c/offer');
         $this->model_api_import_1c_offer->action($parsed, $languages);
+
+        if (!$parsed->only_changes) {
+            // DISCOUNT
+            $this->load->model('api/import_1c/discount');
+            $this->model_api_import_1c_discount->action($parsed);
+        }
 
         return true;
     }

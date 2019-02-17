@@ -478,10 +478,6 @@ class ModelExtensionTotalDiscountSales extends Model
 
     }
 
-
-
-
-
     public function setNewPrice($product_id_distrib, $price, $option_price,$cart_option=array(),$cart_quantity)
     {
         $result = array(
@@ -852,6 +848,7 @@ class ModelExtensionTotalDiscountSales extends Model
 
         return $result;
     }
+
     function cmp_obj($a, $b){
         if ($a["sales_limitation"] == $b["sales_limitation"]) {
         return 0;
@@ -898,6 +895,7 @@ class ModelExtensionTotalDiscountSales extends Model
             }
         }
     }
+
     private function setIntervalCategory($discountssales_category){
         $this->max_interval_category = array();
         $products = array();
@@ -1473,6 +1471,7 @@ class ModelExtensionTotalDiscountSales extends Model
             }
         }
     }
+
     private function deleteDisableRowsCategory(&$discountssales_category){
 
         if(!$this->products_whis_base_discounts){
@@ -1506,6 +1505,7 @@ class ModelExtensionTotalDiscountSales extends Model
             }
         }
     }
+
     private function deleteDisableRowsManufacturer(&$discountssales_manufacturer){
 
         if(!$this->products_whis_base_discounts){
@@ -1538,6 +1538,7 @@ class ModelExtensionTotalDiscountSales extends Model
             }
         }
     }
+
     private function deleteDisableRowsComlect(&$discountssales_complect){
 
         if(!$this->products_whis_base_discounts){
@@ -1660,14 +1661,16 @@ class ModelExtensionTotalDiscountSales extends Model
         return $result;
     }
 
-        private function getFloat($string){
-            $find = array('-',',',' ');
-            $replace = array('.','.','');
-            $result = (float)str_replace($find, $replace, $string);
-            return $result;
-        }
+    private function getFloat($string)
+    {
+        $find = array('-',',',' ');
+        $replace = array('.','.','');
+        $result = (float)str_replace($find, $replace, $string);
+        return $result;
+    }
 
-        public function getProduct($product_id) {
+    public function getProduct($product_id)
+    {
         $product_data = array();
 
         $stock = true;
@@ -1772,7 +1775,8 @@ class ModelExtensionTotalDiscountSales extends Model
         return $product_data[0];
     }
 
-        public function getProductsToCart() {
+    public function getProductsToCart()
+    {
         $product_data = array();
                 $cart_query_rows = array();
 

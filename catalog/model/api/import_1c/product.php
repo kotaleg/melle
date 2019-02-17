@@ -37,7 +37,10 @@ class ModelApiImport1CProduct extends Model
     {
         if (isset($parsed->catalog->products)) {
 
+            $json_global = array();
             $already_moved_images = 0;
+            $not_category = array();
+            $not_manufacturer = array();
 
             foreach ($parsed->catalog->products as $product) {
 
@@ -160,6 +163,10 @@ class ModelApiImport1CProduct extends Model
                                     $d_['product_category'] = array(
                                         0 => $category_id,
                                     );
+                                } else {
+                                    // if (!in_array($option_data['import_id'], $not_category)) {
+                                    //     $not_category[] = $option_data['import_id'];
+                                    // }
                                 }
                                 unset($category_id);
                                 break;
@@ -216,6 +223,10 @@ class ModelApiImport1CProduct extends Model
                             }
                         }
                         $d_['product_category'][] = $category_id;
+                    } else {
+                        if (!in_array($product->group->id, $not_category)) {
+                            $not_category[] = $product->group->id;
+                        }
                     }
                     unset($category_id);
                 }
@@ -225,6 +236,10 @@ class ModelApiImport1CProduct extends Model
                     $manufacturer_id = $this->getManufacturerByImportId($product->producer->id);
                     if ($manufacturer_id) {
                         $d_['manufacturer_id'] = $manufacturer_id;
+                    } else {
+                        if (!in_array($product->producer->id, $not_manufacturer)) {
+                            $not_manufacturer[] = $product->producer->id;
+                        }
                     }
                     unset($manufacturer_id);
                 }
@@ -242,12 +257,19 @@ class ModelApiImport1CProduct extends Model
             }
 
             if ($already_moved_images) {
-                $json['message'] = array();
-                $json['message'][] = "Уже перемещенных изображений {$already_moved_images}";
-
-                // SAVE TO LOG
-                $this->model_api_import_1c_progress->parseJson($json);
+                $json_global['message'][] = "Уже перемещенных изображений {$already_moved_images}";
             }
+
+            if (count($not_category) > 0) {
+                $json_global['message'][] = "Не найдено категорий ".count($not_category);
+            }
+
+            if (count($not_manufacturer) > 0) {
+                $json_global['message'][] = "Не найдено производителей ".count($not_manufacturer);
+            }
+
+            // SAVE TO LOG
+            $this->model_api_import_1c_progress->parseJson($json_global);
         }
     }
 
@@ -622,6 +644,17 @@ class ModelApiImport1CProduct extends Model
             }
         }
 
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_to_category
+            WHERE product_id = '" . (int)$product_id . "'");
+
+        if (isset($data['product_category'])) {
+            foreach ($data['product_category'] as $category_id) {
+                $this->db->query("INSERT INTO " . DB_PREFIX . "product_to_category
+                    SET product_id = '" . (int)$product_id . "',
+                        category_id = '" . (int)$category_id . "'");
+            }
+        }
+
         if (isset($data['product_image'])) {
             $this->db->query("DELETE FROM " . DB_PREFIX . "product_image
             WHERE product_id = '" . (int)$product_id . "'");
@@ -699,6 +732,35 @@ class ModelApiImport1CProduct extends Model
                 WHERE `image` = '".$this->db->escape($path)."'");
             if ($query->num_rows) {
                 return true;
+            }
+        }
+    }
+
+    public function getAllProductsIds()
+    {
+        $products = array();
+        $query = $this->db->query("SELECT p.product_id FROM " . DB_PREFIX . "product p
+            ORDER BY p.product_id");
+
+        foreach ($query->rows as $p) {
+            if (isset($p['product_id'])) {
+                $products[] = $p['product_id'];
+            }
+        }
+
+        return $products;
+    }
+
+    public function clearCategoriesWithoutDescription()
+    {
+        $query = $this->db->query("SELECT c.category_id, cd.name FROM " . DB_PREFIX . "category c
+            LEFT JOIN " . DB_PREFIX . "category_description cd
+            ON (c.category_id = cd.category_id)
+            ORDER BY c.sort_order, LCASE(cd.name)");
+
+        foreach ($query->rows as $cat) {
+            if (empty($cat['name'])) {
+                $this->deleteCategory($cat['category_id']);
             }
         }
     }

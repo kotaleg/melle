@@ -23,59 +23,59 @@ class ModelApiImport1CCategory extends Model
 
     public function action($parsed, $languages)
     {
-        if (isset($parsed->classificator->options)
-            && is_array($parsed->classificator->options)) {
+        // if (isset($parsed->classificator->options)
+        //     && is_array($parsed->classificator->options)) {
 
-            foreach ($parsed->classificator->options as $option) {
-                switch (trim($option->name)) {
-                    case self::CATEGORY:
-                        foreach ($option->variants as $k => $item) {
+        //     foreach ($parsed->classificator->options as $option) {
+        //         switch (trim($option->name)) {
+        //             case self::CATEGORY:
+        //                 foreach ($option->variants as $k => $item) {
 
-                            $cd = array();
-                            foreach ($languages as $l) {
-                                $cd[$l] = array(
-                                    'name'  => trim($item->value),
-                                    'description' => '',
-                                    'meta_title' => trim($item->value),
-                                    'meta_description' => '',
-                                    'meta_keyword' => '',
-                                );
-                            }
+        //                     $cd = array();
+        //                     foreach ($languages as $l) {
+        //                         $cd[$l] = array(
+        //                             'name'  => trim($item->value),
+        //                             'description' => '',
+        //                             'meta_title' => trim($item->value),
+        //                             'meta_description' => '',
+        //                             'meta_keyword' => '',
+        //                         );
+        //                     }
 
-                            $d_ = array(
-                                'import_id' => $item->id,
-                                'parent_id' => 0,
-                                'column' => 1,
-                                'sort_order' => $k,
-                                'status' => 1,
-                                'category_description' => $cd,
-                                'category_store' => array(
-                                    0 => $this->config->get('config_store_id'),
-                                ),
-                            );
+        //                     $d_ = array(
+        //                         'import_id' => $item->id,
+        //                         'parent_id' => 0,
+        //                         'column' => 1,
+        //                         'sort_order' => $k,
+        //                         'status' => 1,
+        //                         'category_description' => $cd,
+        //                         'category_store' => array(
+        //                             0 => $this->config->get('config_store_id'),
+        //                         ),
+        //                     );
 
-                            if (!$this->model_api_import_1c_helper->isImportRecordExist(
-                                self::CATEGORY_TABLE, $item->id)) {
-                                $this->addCategory($d_);
-                            } else {
-                                // TODO: edit category?
-                                // $this->editCategory($item->id, $d_);
-                            }
-                        }
-                        break;
+        //                     if (!$this->model_api_import_1c_helper->isImportRecordExist(
+        //                         self::CATEGORY_TABLE, $item->id)) {
+        //                         $this->addCategory($d_);
+        //                     } else {
+        //                         // TODO: edit category?
+        //                         // $this->editCategory($item->id, $d_);
+        //                     }
+        //                 }
+        //                 break;
 
-                    case self::COLLECTION:
-                        $this->model_api_import_1c_group->action(
-                            trim($option->name), $languages);
-                        break;
+        //             case self::COLLECTION:
+        //                 $this->model_api_import_1c_group->action(
+        //                     trim($option->name), $languages);
+        //                 break;
 
-                    case self::MATERIAL:
-                        $this->model_api_import_1c_group->action(
-                            trim($option->name), $languages);
-                        break;
-                }
-            }
-        }
+        //             case self::MATERIAL:
+        //                 $this->model_api_import_1c_group->action(
+        //                     trim($option->name), $languages);
+        //                 break;
+        //         }
+        //     }
+        // }
 
         // GROUP FIX
         if (isset($parsed->classificator->groups)
