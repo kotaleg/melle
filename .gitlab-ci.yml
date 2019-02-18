@@ -7,6 +7,7 @@ before_script:
   - apt-get install -qq gnupg1
   - apt-get install -qq gnupg2
   - apt-get install -qq zip unzip
+  - apt-get install -qq p7zip-full
   - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get update -qq
