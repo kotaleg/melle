@@ -26,10 +26,10 @@ deploy_stage:
     - master
   script:
     # CLEAR OPENCART
-    - rm ./API ./PLAN ./MOVE.todo ./melle-new.sublime-project ./get_url.js ./get_url_pvz.js
+    - rm ./API ./PLAN ./MOVE.todo ./melle-new.sublime-project -f
 
     # YARN RUN
-    # - rm ./yarn.lock ./mix-manifest.json
+    # - rm ./yarn.lock ./mix-manifest.json -f
     # - yarn install
     # - yarn run prod
     # - yarn run prod-import1c
@@ -37,10 +37,10 @@ deploy_stage:
     # - yarn run prod-offers
 
     # CLEAR AFTER YARN
-    - rm ./yarn.lock
-    - rm ./package.json
-    - rm ./webpack*
-    - rm ./catalog/view/javascript/melle/src/
-    - rm ./admin/view/javascript/import_1c/src/
-    - rm ./admin/view/javascript/super_offers/src/
-    - rm ./admin/view/javascript/super_offers_admin/src/
+    - rm ./yarn.lock -f
+    - rm ./package.json -f
+    - rm ./webpack* -f
+    - rm ./catalog/view/javascript/melle/src/ -f
+    - rm ./admin/view/javascript/import_1c/src/ -f
+    - rm ./admin/view/javascript/super_offers/src/ -f
+    - rm ./admin/view/javascript/super_offers_admin/src/ -f
