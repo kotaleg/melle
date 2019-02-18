@@ -1,22 +1,14 @@
 image: ubuntu:18.04
 
-# cache:
-#   paths:
-#     - node_modules/
-
 before_script:
   - apt-get update && apt-get install -y --no-install-recommends -qq apt-utils
-  # - apt-get install -qq curl
-  # - apt-get install -qq gnupg
-  # - apt-get install -qq gnupg1
-  # - apt-get install -qq gnupg2
-  # - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-  # - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get install -y -qq sshpass
-  # - apt-get install -y -qq nodejs
-  # - apt-get install -y -qq npm
-  # - apt-get install -y -qq yarn
-  # - yarn --version
+  - apt-get install -y -qq nodejs
+  - nodejs --version
+  - apt-get install -y -qq npm
+  - npm --version
+  - apt-get install -y -qq yarn
+  - yarn --version
 
 deploy_stage:
   stage: deploy
@@ -33,14 +25,15 @@ deploy_stage:
     - mv ./admin/config.test.php ./admin/config.php
 
     # YARN RUN
-    # - rm ./yarn.lock ./mix-manifest.json -f
-    # - yarn install
-    # - yarn run prod
-    # - yarn run prod-import1c
-    # - yarn run prod-offersadmin
-    # - yarn run prod-offers
+    - rm ./yarn.lock ./mix-manifest.json -f
+    - yarn install
+    - yarn run prod
+    - yarn run prod-import1c
+    - yarn run prod-offersadmin
+    - yarn run prod-offers
 
     # CLEAR AFTER YARN
+    - rm -R ./node_modules/ -f
     - rm ./yarn.lock -f
     - rm ./package.json -f
     - rm ./webpack* -f
