@@ -24,4 +24,5 @@ deploy_stage:
   only:
     - master
   script:
+    - chmod +x ./build.sh
     - ./build.sh
