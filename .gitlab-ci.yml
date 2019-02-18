@@ -14,8 +14,8 @@ before_script:
   # - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   # - apt-get update -qq
   # - apt-get install -y sshpass -qq
-  # - apt-get install nodejs -qq
-  # - apt-get install npm -qq
+  # - apt-get install -y nodejs -qq
+  # - apt-get install -y npm -qq
   # - apt-get install -y yarn -qq
   # - yarn --version
 
@@ -49,3 +49,8 @@ deploy_stage:
     - rm -R ./admin/view/javascript/import_1c/src/ -f
     - rm -R ./admin/view/javascript/super_offers/src/ -f
     - rm -R ./admin/view/javascript/super_offers_admin/src/ -f
+
+    # CLONE TO PROD
+    - sshpass -V
+    - export SSHPASS=$K8S_SECRET_SSH
+    - sshpass -e scp -o stricthostkeychecking=no -r ./index.php web@91.226.80.187:/home/web/work.melle.online/www
