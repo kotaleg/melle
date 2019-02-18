@@ -1,10 +1,13 @@
 
 BACKUP_DIR=/home/web/work.melle.online/backup/$(date +%F--%N)
-
-echo $BACKUP_DIR
+WORK_DIR=/home/web/work.melle.online/www/
 
 mkdir $BACKUP_DIR
 
-mv -v /home/web/work.melle.online/www/ $BACKUP_DIR
+if [ -d "$WORK_DIR" ]; then
+    mv -v $WORK_DIR $BACKUP_DIR
+fi
 
-mkdir /home/web/work.melle.online/www/
+if [ ! -d "$WORK_DIR" ]; then
+    mkdir /home/web/work.melle.online/www/
+fi

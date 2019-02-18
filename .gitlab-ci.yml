@@ -54,4 +54,4 @@ deploy_stage:
     - export SSHPASS=$K8S_SECRET_SSH
     - sshpass -e ssh -o stricthostkeychecking=no web@91.226.80.187 "bash -s" < ./build/backup.sh
     - rm -R ./build/ -f
-    - sshpass -e scp -o stricthostkeychecking=no -r ./index.php web@91.226.80.187:/home/web/work.melle.online/www
+    - sshpass -e scp -o stricthostkeychecking=no -r . web@91.226.80.187:/home/web/work.melle.online/www
