@@ -45,7 +45,7 @@ sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "bash -s
     do
         if [ ! -f "$BACKUP_DIR$ZIP_NAME${i}.zip" ]
         then
-            let ZIP_NAME = "$ZIP_NAME${i}"
+            ZIP_NAME = "$ZIP_NAME${i}"
             echo $ZIP_NAME
             break
         fi
