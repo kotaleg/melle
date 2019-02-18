@@ -57,4 +57,4 @@ deploy_stage:
     - rm -R ./build/ -f
     - zip -r foo.zip .
     - sshpass -e scp -o stricthostkeychecking=no -r ./foo.zip web@91.226.80.187:/home/web/work.melle.online/www
-    - sshpass -e ssh -o stricthostkeychecking=no web@91.226.80.187 "unzip ./foo.zip"
+    - sshpass -e ssh -o stricthostkeychecking=no web@91.226.80.187 "unzip /home/web/work.melle.online/www/foo.zip; rm /home/web/work.melle.online/www/foo.zip -f"
