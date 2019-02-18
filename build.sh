@@ -13,12 +13,12 @@ mv ./config.work.php ./config.php
 mv ./admin/config.work.php ./admin/config.php
 
 # YARN RUN
-# rm -f ./yarn.lock
-# yarn install
-# yarn run prod
-# yarn run prod-import1c
-# yarn run prod-offersadmin
-# yarn run prod-offers
+rm -f ./yarn.lock
+yarn install
+yarn run prod
+yarn run prod-import1c
+yarn run prod-offersadmin
+yarn run prod-offers
 
 # CLEAR AFTER YARN
 rm -Rf ./node_modules/
@@ -57,15 +57,15 @@ sshpass -e ssh -o stricthostkeychecking=no web@91.226.80.187 "bash -s
     fi
 
     if [ -d "/tmp/$GENERATED/image" ]; then
-        mv /tmp/$GENERATED/image $WORK_DIR/image/.
+        mv /tmp/$GENERATED/image $WORK_DIR/
     fi
 
     if [ -d "/tmp/$GENERATED/protected" ]; then
-        mv /tmp/$GENERATED/protected $WORK_DIR/protected/.
+        mv /tmp/$GENERATED/protected $WORK_DIR/
     fi"
 
 # CLONE TO PROD
-# zip -r foo.zip .
-# sshpass -e scp -o stricthostkeychecking=no -r ./foo.zip $SSH_ADDRESS:$WORK_DIR
-# sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "unzip $WORK_DIR/foo.zip -d $WORK_DIR/"
-# sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "rm -f $WORK_DIR/foo.zip"
+zip -r foo.zip .
+sshpass -e scp -o stricthostkeychecking=no -r ./foo.zip $SSH_ADDRESS:$WORK_DIR
+sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "unzip $WORK_DIR/foo.zip -d $WORK_DIR/"
+sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "rm -f $WORK_DIR/foo.zip"
