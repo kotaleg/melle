@@ -39,13 +39,14 @@ sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "bash -s
         mkdir $BACKUP_DIR
     fi
 
-    ZIP_NAME=backup-
+    ZIP_NAME=backup
 
     for i in {1..1000}
     do
         if [ ! -f "$BACKUP_DIR$ZIP_NAME${i}.zip" ]
         then
             let ZIP_NAME = "$ZIP_NAME${i}"
+            echo $ZIP_NAME
             break
         fi
     done
@@ -53,11 +54,14 @@ sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "bash -s
     if [ -d "$WORK_DIR" ]; then
         cd $WORK_DIR
 
-        7z a -tzip $WORK_DIR/$ZIP_NAME.zip $WORK_DIR -x!image -x!protected
-        mv -v $WORK_DIR/$ZIP_NAME.zip $BACKUP_DIR
+        7z a -tzip $WORK_DIR/$ZIP_NAME.zip $WORK_DIR -x\!image -x\!protected
+
+        if [ ! -f "$BACKUP_DIR$ZIP_NAME.zip" ]
+            mv -v $WORK_DIR/$ZIP_NAME.zip $BACKUP_DIR
+        fi
 
         rm -rf $WORK_DIR/.*
-        rm -rf !(image|protected)
+        rm -rf \!(image|protected)
     fi
 
     if [ ! -d "$WORK_DIR" ]; then
