@@ -1,0 +1,39 @@
+image: ubuntu:18.04
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+  - apt-get update -qq
+  - apt-get install -y -qq sshpass
+  - apt-get install -y -qq yarn
+  - yarn --version
+
+deploy_stage:
+  stage: deploy
+  environment: Staging
+  only:
+    - master
+  script:
+    # CLEAR OPENCART
+    - rm ./API ./PLAN ./MOVE.todo ./melle-new.sublime-project ./get_url.js ./get_url_pvz.js
+
+    # YARN RUN
+    - rm ./yarn.lock ./mix-manifest.json
+    - yarn install
+    - yarn run prod
+    - yarn run prod-import1c
+    - yarn run prod-offersadmin
+    - yarn run prod-offers
+
+    # CLEAR AFTER YARN
+    - rm ./yarn.lock ./mix-manifest.json
+    - rm ./package.json
+    - rm ./webpack*
+    - rm ./catalog/view/javascript/melle/src/
+    - rm ./admin/view/javascript/import_1c/src/
+    - rm ./admin/view/javascript/super_offers/src/
+    - rm ./admin/view/javascript/super_offers_admin/src/
