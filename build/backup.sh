@@ -8,7 +8,7 @@ mkdir $BACKUP_DIR
 if [ -d "$WORK_DIR" ]; then
     zip -r $ZIP_NAME $WORK_DIR
     mv -v $WORK_DIR$ZIP_NAME $BACKUP_DIR
-    rm -rf "$WORK_DIR"*
+    rm -rf "$WORK_DIR"{*,.*}
 fi
 
 if [ ! -d "$WORK_DIR" ]; then
