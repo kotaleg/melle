@@ -38,7 +38,7 @@ sshpass -e ssh -o stricthostkeychecking=no web@91.226.80.187 "bash -s
     mkdir $BACKUP_DIR
 
     if [ -d "$WORK_DIR" ]; then
-        zip -r $ZIP_NAME $WORK_DIR -x "$WORK_DIRimage" "$WORK_DIRprotected" "$WORK_DIRbuild.sh"
+        zip -r $ZIP_NAME $WORK_DIR -x "$WORK_DIR/image" "$WORK_DIR/protected" "$WORK_DIR/build.sh"
         mv -v $WORK_DIR/$ZIP_NAME $BACKUP_DIR
 
         if [ -d "$WORK_DIR/image" ]; then
