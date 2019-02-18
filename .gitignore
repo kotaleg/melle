@@ -24,12 +24,6 @@ yarn-error.log*
 *.phpintel
 
 # Opencart
-system/storage/modification*
-system/storage/cache*
-system/storage/download*
-system/storage/logs*
-system/storage/upload*
-system/storage/session*
 install/*
 php.ini*
 

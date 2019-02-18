@@ -1,11 +1,11 @@
-# bash
+#!/bin/bash
 shopt -s extglob
 
-GENERATED=$(date +%F--%N)
-BACKUP_DIR=/home/web/work.melle.online/backup/$GENERATED
-WORK_DIR=/home/web/work.melle.online/www
-ZIP_NAME=www.zip
 SSH_ADDRESS=web@91.226.80.187
+
+GENERATED=$(date +%F--%N)
+BACKUP_DIR=/home/web/work.melle.online/backup/$(date +%F)
+WORK_DIR=/home/web/work.melle.online/www
 
 # CONFIG FILES
 rm -f ./config.php ./admin/config.php
@@ -35,37 +35,38 @@ rm -v !("config.php"|"index.php"|".htaccess"|"robots.txt"|"build.sh")
 sshpass -V
 export SSHPASS=$K8S_SECRET_SSH
 sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "bash -s
-    # mkdir $BACKUP_DIR
+    if [ ! -d "$BACKUP_DIR" ]; then
+        mkdir $BACKUP_DIR
+    fi
+
+    ZIP_NAME=backup-
+
+    for i in {1..1000}
+    do
+        if [ ! -f "$BACKUP_DIR$ZIP_NAME${i}.zip" ]
+        then
+            let ZIP_NAME = "$ZIP_NAME${i}"
+            break
+        fi
+    done
 
     if [ -d "$WORK_DIR" ]; then
-        # 7z a -tzip $WORK_DIR$ZIP_NAME $WORK_DIR -x!image -x!protected -x!build.sh
-        # mv -v $WORK_DIR/$ZIP_NAME $BACKUP_DIR
+        cd $WORK_DIR
 
-        if [ -d "$WORK_DIR/image" ]; then
-            mv $WORK_DIR/image /tmp/$GENERATED
-        fi
+        7z a -tzip $WORK_DIR/$ZIP_NAME.zip $WORK_DIR -x!image -x!protected
+        mv -v $WORK_DIR/$ZIP_NAME.zip $BACKUP_DIR
 
-        if [ -d "$WORK_DIR/protected" ]; then
-            mv $WORK_DIR/protected /tmp/$GENERATED
-        fi
-
-        rm -rf "$WORK_DIR/"{*,.*}
+        rm -rf $WORK_DIR/.*
+        rm -rf !(image|protected)
     fi
 
     if [ ! -d "$WORK_DIR" ]; then
         mkdir $WORK_DIR
     fi
-
-    if [ -d "/tmp/$GENERATED/image" ]; then
-        mv /tmp/$GENERATED/image $WORK_DIR/
-    fi
-
-    if [ -d "/tmp/$GENERATED/protected" ]; then
-        mv /tmp/$GENERATED/protected $WORK_DIR/
-    fi"
+"
 
 # CLONE TO PROD
-zip -r foo.zip .
+7z a -tzip foo.zip -x!build.sh
 sshpass -e scp -o stricthostkeychecking=no -r ./foo.zip $SSH_ADDRESS:$WORK_DIR
 sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "7z -y x $WORK_DIR/foo.zip -o$WORK_DIR/"
 sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "rm -f $WORK_DIR/foo.zip"
