@@ -28,6 +28,11 @@ deploy_stage:
     # CLEAR OPENCART
     - rm ./API ./PLAN ./MOVE.todo ./melle-new.sublime-project -f
 
+    # CONFIG FILES
+    - rm ./config.php ./admin/config.php -f
+    - mv ./config.test.php ./config.php
+    - mv ./admin/config.test.php ./admin/config.php
+
     # YARN RUN
     # - rm ./yarn.lock ./mix-manifest.json -f
     # - yarn install
@@ -39,8 +44,8 @@ deploy_stage:
     # CLEAR AFTER YARN
     - rm ./yarn.lock -f
     - rm ./package.json -f
-    - rm ./webpack* -f
-    - rm ./catalog/view/javascript/melle/src/ -f
-    - rm ./admin/view/javascript/import_1c/src/ -f
-    - rm ./admin/view/javascript/super_offers/src/ -f
-    - rm ./admin/view/javascript/super_offers_admin/src/ -f
+    - rm ./webpack*
+    - rm -R ./catalog/view/javascript/melle/src/ -f
+    - rm -R ./admin/view/javascript/import_1c/src/ -f
+    - rm -R ./admin/view/javascript/super_offers/src/ -f
+    - rm -R ./admin/view/javascript/super_offers_admin/src/ -f
