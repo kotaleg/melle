@@ -43,7 +43,7 @@ deploy_stage:
     # CLEAR AFTER YARN
     - rm ./yarn.lock -f
     - rm ./package.json -f
-    - rm ./webpack*
+    - rm ./webpack* -f
     - rm -R ./catalog/view/javascript/melle/src/ -f
     - rm -R ./admin/view/javascript/import_1c/src/ -f
     - rm -R ./admin/view/javascript/super_offers/src/ -f
@@ -52,7 +52,11 @@ deploy_stage:
     # CLONE TO PROD
     - sshpass -V
     - export SSHPASS=$K8S_SECRET_SSH
-    - sshpass -e stricthostkeychecking=no ssh web@91.226.80.187 "bash -s" < ./backup.sh
+    - sshpass -e stricthostkeychecking=no ssh web@91.226.80.187 "bash -s
+        BACKUP_DIR=/home/web/work.melle.online/backup/$(date +%F--%N)
+        echo $BACKUP_DIR
+        mkdir $BACKUP_DIR
+        mv -v /home/web/work.melle.online/www/* $BACKUP_DIR"
 
     # - sshpass  mv  -v ~/Downloads/* ~/Videos/
     # - sshpass -e scp -o stricthostkeychecking=no -r ./index.php web@91.226.80.187:/home/web/work.melle.online/www
