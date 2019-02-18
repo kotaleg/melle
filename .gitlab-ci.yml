@@ -5,18 +5,17 @@ image: ubuntu:18.04
 #     - node_modules/
 
 before_script:
-  - apt-get update && apt-get install -y --no-install-recommends apt-utils -qq
-  # - apt-get install curl -qq
-  # - apt-get install gnupg -qq
-  # - apt-get install gnupg1 -qq
-  # - apt-get install gnupg2 -qq
+  - apt-get update && apt-get install -y --no-install-recommends -qq apt-utils
+  # - apt-get install -qq curl
+  # - apt-get install -qq gnupg
+  # - apt-get install -qq gnupg1
+  # - apt-get install -qq gnupg2
   # - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   # - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-  # - apt-get update -qq
-  - apt-get install -y sshpass -qq
-  # - apt-get install -y nodejs -qq
-  # - apt-get install -y npm -qq
-  # - apt-get install -y yarn -qq
+  - apt-get install -y -qq sshpass
+  # - apt-get install -y -qq nodejs
+  # - apt-get install -y -qq npm
+  # - apt-get install -y -qq yarn
   # - yarn --version
 
 deploy_stage:
@@ -53,6 +52,7 @@ deploy_stage:
     # CLONE TO PROD
     - sshpass -V
     - export SSHPASS=$K8S_SECRET_SSH
-    - "sshpass -e scp -o stricthostkeychecking=no web@91.226.80.187: mkdir /home/web/work.melle.online/backup/$(date +%F)--$RANDOM"
+    - cat ./build.sh | sshpass -e scp -o stricthostkeychecking=no web@91.226.80.187
+
     # - sshpass  mv  -v ~/Downloads/* ~/Videos/
     # - sshpass -e scp -o stricthostkeychecking=no -r ./index.php web@91.226.80.187:/home/web/work.melle.online/www
