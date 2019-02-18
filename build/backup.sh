@@ -5,4 +5,6 @@ echo $BACKUP_DIR
 
 mkdir $BACKUP_DIR
 
-mv -v /home/web/work.melle.online/www/* $BACKUP_DIR
+mv -v /home/web/work.melle.online/www/ $BACKUP_DIR
+
+mkdir /home/web/work.melle.online/www/
