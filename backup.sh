@@ -1,5 +1,6 @@
 
 BACKUP_DIR=/home/web/work.melle.online/backup/$(date +%F--%N)
+
 echo $BACKUP_DIR
 
 mkdir $BACKUP_DIR
