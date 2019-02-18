@@ -67,5 +67,5 @@ sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "bash -s
 # CLONE TO PROD
 zip -r foo.zip .
 sshpass -e scp -o stricthostkeychecking=no -r ./foo.zip $SSH_ADDRESS:$WORK_DIR
-sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "7z -y e $WORK_DIR/foo.zip -o$WORK_DIR/"
+sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "7z -y x $WORK_DIR/foo.zip -o$WORK_DIR/"
 sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "rm -f $WORK_DIR/foo.zip"
