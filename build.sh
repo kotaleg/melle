@@ -35,11 +35,11 @@ rm -v !("config.php"|"index.php"|".htaccess"|"robots.txt"|"build.sh")
 sshpass -V
 export SSHPASS=$K8S_SECRET_SSH
 sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "bash -s
-    mkdir $BACKUP_DIR
+    # mkdir $BACKUP_DIR
 
     if [ -d "$WORK_DIR" ]; then
-        7z a -tzip $WORK_DIR$ZIP_NAME $WORK_DIR -x!image -x!protected -x!build.sh
-        mv -v $WORK_DIR/$ZIP_NAME $BACKUP_DIR
+        # 7z a -tzip $WORK_DIR$ZIP_NAME $WORK_DIR -x!image -x!protected -x!build.sh
+        # mv -v $WORK_DIR/$ZIP_NAME $BACKUP_DIR
 
         if [ -d "$WORK_DIR/image" ]; then
             mv $WORK_DIR/image /tmp/$GENERATED
