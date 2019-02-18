@@ -38,7 +38,7 @@ sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "bash -s
     mkdir $BACKUP_DIR
 
     if [ -d "$WORK_DIR" ]; then
-        zip -qq -r $ZIP_NAME $WORK_DIR -x "$WORK_DIR/image/*" -x "$WORK_DIR/protected/*" -x "$WORK_DIR/build.sh"
+        7z a -tzip $WORK_DIR$ZIP_NAME $WORK_DIR -x!image -x!protected -x!build.sh
         mv -v $WORK_DIR/$ZIP_NAME $BACKUP_DIR
 
         if [ -d "$WORK_DIR/image" ]; then
@@ -67,5 +67,5 @@ sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "bash -s
 # CLONE TO PROD
 zip -r foo.zip .
 sshpass -e scp -o stricthostkeychecking=no -r ./foo.zip $SSH_ADDRESS:$WORK_DIR
-sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "unzip -qq $WORK_DIR/foo.zip -d $WORK_DIR/"
+sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "7z -y e $WORK_DIR/foo.zip -o$WORK_DIR/"
 sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS "rm -f $WORK_DIR/foo.zip"
