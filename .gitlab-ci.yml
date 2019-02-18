@@ -6,6 +6,7 @@ before_script:
   - apt-get install -qq gnupg
   - apt-get install -qq gnupg1
   - apt-get install -qq gnupg2
+  - apt-get install -qq zip unzip
   - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get update -qq
@@ -54,4 +55,6 @@ deploy_stage:
     - export SSHPASS=$K8S_SECRET_SSH
     - sshpass -e ssh -o stricthostkeychecking=no web@91.226.80.187 "bash -s" < ./build/backup.sh
     - rm -R ./build/ -f
-    - sshpass -e scp -o stricthostkeychecking=no -r . web@91.226.80.187:/home/web/work.melle.online/www
+    - zip -r foo.zip .
+    - sshpass -e scp -o stricthostkeychecking=no -r ./foo.zip web@91.226.80.187:/home/web/work.melle.online/www
+    - sshpass -e ssh -o stricthostkeychecking=no web@91.226.80.187 "unzip ./foo.zip"
