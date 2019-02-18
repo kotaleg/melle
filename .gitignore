@@ -30,7 +30,6 @@ system/storage/download*
 system/storage/logs*
 system/storage/upload*
 system/storage/session*
-image/cache*
 install/*
 php.ini*
 
