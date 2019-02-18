@@ -53,4 +53,6 @@ deploy_stage:
     # CLONE TO PROD
     - sshpass -V
     - export SSHPASS=$K8S_SECRET_SSH
-    - sshpass -e scp -o stricthostkeychecking=no -r ./index.php web@91.226.80.187:/home/web/work.melle.online/www
+    - "sshpass -e scp -o stricthostkeychecking=no web@91.226.80.187: mkdir /home/web/work.melle.online/backup/$(date +%F)--$RANDOM"
+    # - sshpass  mv  -v ~/Downloads/* ~/Videos/
+    # - sshpass -e scp -o stricthostkeychecking=no -r ./index.php web@91.226.80.187:/home/web/work.melle.online/www
