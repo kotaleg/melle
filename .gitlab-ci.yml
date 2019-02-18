@@ -1,22 +1,22 @@
 image: ubuntu:18.04
 
 before_script:
-  - apt-get update && apt-get install -y --no-install-recommends -qq apt-utils
-  - apt-get install -qq curl
-  - apt-get install -qq gnupg
-  - apt-get install -qq gnupg1
-  - apt-get install -qq gnupg2
-  - apt-get install -qq zip unzip
-  - apt-get install -qq p7zip-full
+  - apt-get -qq update && apt-get -qq install -y --no-install-recommends apt-utils
+  - apt-get -qq install curl
+  - apt-get -qq install gnupg
+  - apt-get -qq install gnupg1
+  - apt-get -qq install gnupg2
+  - apt-get -qq install zip unzip
+  - apt-get -qq install p7zip-full
   - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-  - apt-get update -qq
-  - apt-get install -y -qq sshpass
-  - apt-get install -y -qq nodejs
+  - apt-get -qqupdate
+  - apt-get -qq install -y sshpass
+  - apt-get -qq install -y nodejs
   - nodejs --version
-  - apt-get install -y -qq npm
+  - apt-get -qq install -y npm
   - npm --version
-  - apt-get install -y -qq yarn
+  - apt-get -qq install -y yarn
   - yarn --version
 
 deploy_stage:
