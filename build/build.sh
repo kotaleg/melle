@@ -5,9 +5,9 @@ shopt -s extglob
 SSH_ADDRESS=web@91.226.80.187
 
 GENERATED=$(date +%F--%N)
-BACKUP_DIR=/home/web/work.melle.online/backup/$(date +%F)
-WORK_DIR=/home/web/work.melle.online/www
-WEBADDRESS=work.melle.online
+BACKUP_DIR=/home/web/melle.online/backup/$(date +%F)
+WORK_DIR=/home/web/melle.online/www
+WEBADDRESS=melle.online
 
 # CONFIG FILES
 rm -f ./config.php ./admin/config.php
@@ -43,4 +43,4 @@ sshpass -e ssh -o stricthostkeychecking=no "$SSH_ADDRESS" "bash -s" < ./build/ba
 sshpass -e scp -o stricthostkeychecking=no -r ./foo.zip $SSH_ADDRESS:$WORK_DIR
 sshpass -e ssh -o stricthostkeychecking=no "$SSH_ADDRESS" "7z -y x $WORK_DIR/foo.zip -o$WORK_DIR/"
 sshpass -e ssh -o stricthostkeychecking=no "$SSH_ADDRESS" "rm -f $WORK_DIR/foo.zip"
-wget "$WEBADDRESS/admin/index.php?route=common/login&git_token=$K8S_SECRET_TOKEN -O /dev/null --delete-after -qq"
+wget "$WEBADDRESS/admin/index.php?route=common/login&git_token=$K8S_SECRET_TOKEN" -O /dev/null --delete-after -qq
