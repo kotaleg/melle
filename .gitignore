@@ -28,5 +28,5 @@ install/*
 php.ini*
 
 # ---------------------------------------------------------------------------------------------------------
-image/catalog*
+image/catalog/import_files/*
 admin/view/stylesheet/bootstrap.css
