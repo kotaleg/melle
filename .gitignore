@@ -30,3 +30,5 @@ php.ini*
 # ---------------------------------------------------------------------------------------------------------
 image/catalog/import_files/*
 admin/view/stylesheet/bootstrap.css
+get_url.js
+get_url_pvz.js
