@@ -1,4 +1,4 @@
-#!/bin/bash
+shopt -s extglob
 
 if [ ! -d "$1" ]; then
     mkdir "$1"
@@ -19,14 +19,16 @@ done
 if [ -d "$2" ]; then
     cd "$2"
 
-    7z a -tzip "$2/$ZIP_NAME.zip" "$2" -x\!image -x\!protected
+    if [ "$(pwd)" = "$2" ]; then
+        7z a -tzip "$ZIP_NAME.zip" . -x\!image -x\!protected
 
-    if [ ! -f "$1/$ZIP_NAME.zip" ]
-        mv -v "$2/$ZIP_NAME.zip" "$1"
+        if [ ! -f "$1/$ZIP_NAME.zip" ]; then
+            mv -v "$2/$ZIP_NAME.zip" "$1"
+        fi
+
+        rm -rf .*
+        rm -rf !(image|protected)
     fi
-
-    rm -rf "$2/.*"
-    rm -rf \!(image|protected)
 fi
 
 if [ ! -d "$2" ]; then
