@@ -55,6 +55,11 @@
 <script src="{{base}}catalog/view/javascript/melle/query/old.js"></script>
 
 <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&amp;render=explicit" async defer></script>
+
+{% if checkout %}
+<script src="{{base}}catalog/view/javascript/bootstrap/js/bootstrap.min.js"></script>
+{% endif %}
+
 {% for script in scripts %}
 <script src="{{ script }}" type="text/javascript"></script>
 {% endfor %}

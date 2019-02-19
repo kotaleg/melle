@@ -88,17 +88,27 @@ const actions = {
             commit('setData', data)
         })
     },
-    loadMoreRequest: debounce(({ commit, state, rootState, rootGetters, dispatch, getters }, reload) => {
+    loadMoreRequest: debounce(({ commit, state, rootState, rootGetters, dispatch, getters }, payload) => {
         dispatch('header/setLoadingStatus', true, {root:true})
         dispatch('header/setSidebarLoadingStatus', true, {root:true})
 
-        dispatch('updateRouterParams')
-
         let filter_data = clone(rootState.filter.filter_data)
-        if (reload !== true) { filter_data.page += 1 }
-        if (rootGetters['filter/isFilterChanged'] || reload) {
+        if (has(payload, 'reload')
+        && payload.reload !== true) {
+            filter_data.page += 1
+        }
+
+        if (rootGetters['filter/isFilterChanged']
+        || (has(payload, 'reload') && payload.reload == true)) {
             filter_data.page = 1
         }
+
+        if (has(payload, 'clear')
+        && payload.clear === true) {
+            filter_data = {}
+        }
+
+        dispatch('updateRouterParams')
 
         shop.makeRequest(
             {
@@ -107,7 +117,8 @@ const actions = {
             },
             res => {
                 if (has(res.data, 'products') && isArray(res.data.products)) {
-                    if (reload !== true && !rootGetters['filter/isFilterChanged']) {
+                    if ((has(payload, 'reload') && payload.reload !== true)
+                    && !rootGetters['filter/isFilterChanged']) {
                         res.data.products.forEach((product) => {
                             commit('addProduct', product)
                         })

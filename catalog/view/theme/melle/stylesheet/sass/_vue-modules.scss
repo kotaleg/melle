@@ -325,8 +325,11 @@
   }
 }
 
+.show-shitty-results {
+    display: none !important;
+}
 .catalog__sidebar {
-    .show-shitty-results {
+    .clear-shitty-results {
         display: none;
     }
 }

@@ -58,6 +58,12 @@ class ControllerCommonFooter extends Controller {
 
         $data['scripts'] = $this->document->getScripts('footer');
 
+        $data['checkout'] = false;
+        $this->load->model('tool/base');
+        if ($this->model_tool_base->getPageType() == 'checkout') {
+            $data['checkout'] = true;
+        }
+
 
         return $this->load->view('common/footer', $data);
     }

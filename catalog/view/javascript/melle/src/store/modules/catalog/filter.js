@@ -110,6 +110,21 @@ const actions = {
         commit('updateFilterValue', {k:'order', v})
         dispatch('catalog/loadMoreRequest', null, {root:true})
     }, 100),
+    clearSelection({ commit }) {
+        commit('updateFilterValue', {k: 'min_price', v: 0})
+        commit('updateFilterValue', {k: 'max_price', v: 0})
+        commit('updateFilterValue', {k: 'min_den', v: 0})
+        commit('updateFilterValue', {k: 'max_den', v: 0})
+        commit('updateFilterValue', {k: 'hit', v: false})
+        commit('updateFilterValue', {k: 'neww', v: false})
+        commit('updateFilterValue', {k: 'act', v: false})
+        commit('updateFilterValue', {k: 'material', v: ''})
+        commit('updateFilterValue', {k: 'color', v: ''})
+        commit('updateFilterValue', {k: 'size', v: ''})
+        commit('updateFilterValue', {k: 'manufacturers', v: []})
+
+        this.dispatch('catalog/loadMoreRequest', {reload:true})
+    },
 }
 
 // mutations

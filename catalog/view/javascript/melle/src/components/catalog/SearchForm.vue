@@ -52,7 +52,7 @@ export default {
         ]),
 
         searchIt() {
-            this.loadMoreRequest(true)
+            this.loadMoreRequest({reload: true})
         },
     },
 }

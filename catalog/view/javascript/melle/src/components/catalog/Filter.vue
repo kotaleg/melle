@@ -119,6 +119,7 @@
 
             <div class="filter__buttons">
                 <input type="submit" value="Показать" class="show-shitty-results" />
+                <button @click="clearSelection" type="button" class="clear-shitty-results">Сбросить</button>
             </div>
 
          </form>
@@ -201,6 +202,7 @@ export default {
             'updateFromSlider',
             'updateManufacturerStatus',
             'updateSelectValue',
+            'clearSelection',
         ]),
         ...mapActions('header', [
             'openSidebar',

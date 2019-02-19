@@ -1,37 +1,37 @@
 <?php
 // HTTP
-define('HTTP_SERVER', 'http://test.melle.online/admin/');
-define('HTTP_CATALOG', 'http://test.melle.online/');
+define('HTTP_SERVER', 'http://localhost/302/melle/admin/');
+define('HTTP_CATALOG', 'http://localhost/302/melle/');
 
 // HTTPS
-define('HTTPS_SERVER', 'http://test.melle.online/admin/');
-define('HTTPS_CATALOG', 'http://test.melle.online/');
+define('HTTPS_SERVER', 'http://localhost/302/melle/admin/');
+define('HTTPS_CATALOG', 'http://localhost/302/melle/');
 
 // DIR
-define('DIR_APPLICATION', '/home/web/test.melle.online/www/admin/');
-define('DIR_SYSTEM', '/home/web/test.melle.online/www/system/');
-define('DIR_DATABASE', '/home/web/test.melle.online/www/system/database/');
-define('DIR_LANGUAGE', '/home/web/test.melle.online/www/admin/language/');
-define('DIR_TEMPLATE', '/home/web/test.melle.online/www/admin/view/template/');
-define('DIR_CONFIG', '/home/web/test.melle.online/www/system/config/');
-define('DIR_IMAGE', '/home/web/test.melle.online/www/image/');
-define('DIR_DOWNLOAD', '/home/web/test.melle.online/www/system/storage/download/');
-define('DIR_CACHE', '/home/web/test.melle.online/www/system/storage/cache/');
-define('DIR_LOGS', '/home/web/test.melle.online/www/system/storage/logs/');
+define('DIR_APPLICATION', 'C:/XAMP71/htdocs/302/melle/admin/');
+define('DIR_SYSTEM', 'C:/XAMP71/htdocs/302/melle/system/');
+define('DIR_DATABASE', 'C:/XAMP71/htdocs/302/melle/system/database/');
+define('DIR_LANGUAGE', 'C:/XAMP71/htdocs/302/melle/admin/language/');
+define('DIR_TEMPLATE', 'C:/XAMP71/htdocs/302/melle/admin/view/template/');
+define('DIR_CONFIG', 'C:/XAMP71/htdocs/302/melle/system/config/');
+define('DIR_IMAGE', 'C:/XAMP71/htdocs/302/melle/image/');
+define('DIR_DOWNLOAD', 'C:/XAMP71/htdocs/302/melle/system/storage/download/');
+define('DIR_CACHE', 'C:/XAMP71/htdocs/302/melle/system/storage/cache/');
+define('DIR_LOGS', 'C:/XAMP71/htdocs/302/melle/system/storage/logs/');
 
-define('DIR_MODIFICATION', '/home/web/test.melle.online/www/system/storage/modification/');
-define('DIR_UPLOAD', '/home/web/test.melle.online/www/system/storage/upload/');
+define('DIR_MODIFICATION', 'C:/XAMP71/htdocs/302/melle/system/storage/modification/');
+define('DIR_UPLOAD', 'C:/XAMP71/htdocs/302/melle/system/storage/upload/');
 define('DIR_STORAGE', DIR_SYSTEM . 'storage/');
-define('DIR_SESSION', '/home/web/test.melle.online/www/system/storage/session/');
+define('DIR_SESSION', 'C:/XAMP71/htdocs/302/melle/system/storage/session/');
 
-define('DIR_CATALOG', '/home/web/test.melle.online/www/catalog/');
+define('DIR_CATALOG', 'C:/XAMP71/htdocs/302/melle/catalog/');
 
 // DB
 define('DB_DRIVER', 'mysqli');
 define('DB_HOSTNAME', 'localhost');
-define('DB_USERNAME', 'melle');
-define('DB_PASSWORD', 'DA3NFzABRoFnnzjt');
-define('DB_DATABASE', 'melle-test');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', 'root');
+define('DB_DATABASE', 'opencart__302_10');
 define('DB_PORT', '3306');
 define('DB_PREFIX', 'oc_');
 // OpenCart API
