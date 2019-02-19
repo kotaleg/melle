@@ -45,10 +45,10 @@ class ControllerCheckoutSuccess extends Controller {
             'href' => $this->url->link('checkout/checkout', '', true)
         );
 
-        $data['breadcrumbs'][] = array(
-            'text' => $this->language->get('text_success'),
-            'href' => $this->url->link('checkout/success')
-        );
+        // $data['breadcrumbs'][] = array(
+        //     'text' => $this->language->get('text_success'),
+        //     'href' => $this->url->link('checkout/success')
+        // );
 
         if ($this->customer->isLogged()) {
             $data['text_message'] = sprintf($this->language->get('text_customer'), $this->url->link('account/account', '', true), $this->url->link('account/order', '', true), $this->url->link('account/download', '', true), $this->url->link('information/contact'));

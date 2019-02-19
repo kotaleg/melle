@@ -4,8 +4,8 @@ define('HTTP_SERVER', 'http://melle.online/admin/');
 define('HTTP_CATALOG', 'http://melle.online/');
 
 // HTTPS
-define('HTTPS_SERVER', 'http://melle.online/admin/');
-define('HTTPS_CATALOG', 'http://melle.online/');
+define('HTTPS_SERVER', 'https://melle.online/admin/');
+define('HTTPS_CATALOG', 'https://melle.online/');
 
 // DIR
 define('DIR_APPLICATION', '/home/web/melle.online/www/admin/');

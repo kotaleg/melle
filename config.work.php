@@ -3,7 +3,7 @@
 define('HTTP_SERVER', 'http://melle.online/');
 
 // HTTPS
-define('HTTPS_SERVER', 'http://melle.online/');
+define('HTTPS_SERVER', 'https://melle.online/');
 
 // DIR
 define('DIR_APPLICATION', '/home/web/melle.online/www/catalog/');
