@@ -27,7 +27,7 @@ define('DB_DRIVER', 'mysqli');
 define('DB_HOSTNAME', 'localhost');
 define('DB_USERNAME', 'melle');
 define('DB_PASSWORD', 'DA3NFzABRoFnnzjt');
-define('DB_DATABASE', 'melle-test');
+define('DB_DATABASE', 'melle-work');
 define('DB_PORT', '3306');
 define('DB_PREFIX', 'oc_');
 ?>
