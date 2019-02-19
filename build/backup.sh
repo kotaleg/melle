@@ -8,7 +8,7 @@ ZIP_NAME=backup
 
 for i in {1..1000}
 do
-    if [ ! -f "$1$ZIP_NAME${i}.zip" ]
+    if [ ! -f "$1/$ZIP_NAME${i}.zip" ]
     then
         ZIP_NAME="$ZIP_NAME${i}"
         echo "$ZIP_NAME"
@@ -21,7 +21,7 @@ if [ -d "$2" ]; then
 
     7z a -tzip "$2/$ZIP_NAME.zip" "$2" -x\!image -x\!protected
 
-    if [ ! -f "$1$ZIP_NAME.zip" ]
+    if [ ! -f "$1/$ZIP_NAME.zip" ]
         mv -v "$2/$ZIP_NAME.zip" "$1"
     fi
 
