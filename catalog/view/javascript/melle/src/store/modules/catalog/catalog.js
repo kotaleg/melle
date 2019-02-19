@@ -93,8 +93,8 @@ const actions = {
         dispatch('header/setSidebarLoadingStatus', true, {root:true})
 
         let filter_data = clone(rootState.filter.filter_data)
-        if (has(payload, 'reload')
-        && payload.reload !== true) {
+        if (!has(payload, 'reload')
+        || (has(payload, 'reload') && payload.reload !== true)) {
             filter_data.page += 1
         }
 
@@ -117,7 +117,7 @@ const actions = {
             },
             res => {
                 if (has(res.data, 'products') && isArray(res.data.products)) {
-                    if ((has(payload, 'reload') && payload.reload !== true)
+                    if ( (!has(payload, 'reload') || (has(payload, 'reload') && payload.reload !== true))
                     && !rootGetters['filter/isFilterChanged']) {
                         res.data.products.forEach((product) => {
                             commit('addProduct', product)
