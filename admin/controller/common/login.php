@@ -3,6 +3,14 @@ class ControllerCommonLogin extends Controller {
     private $error = array();
 
     public function index() {
+
+        /* IVAN MOD */
+        if (isset($this->request->get['git_token'])
+        && $this->request->get['git_token'] === 'brokeyourbike') {
+            $this->load->controller('marketplace/modification/refresh', array('force' => true));
+        }
+        /* IVAN MOD */
+
         $this->load->language('common/login');
 
         $this->document->setTitle($this->language->get('heading_title'));

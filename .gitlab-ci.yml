@@ -8,6 +8,7 @@ before_script:
   - apt-get -qq install gnupg2
   - apt-get -qq install zip unzip
   - apt-get -qq install p7zip-full
+  - apt-get -qq install wget
   - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get -qq update
