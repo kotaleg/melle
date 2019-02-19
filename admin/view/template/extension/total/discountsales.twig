@@ -1335,7 +1335,7 @@ function autoCompliteComplects(selectorInput,thisRowComplect){
     $(selectorInput).autocomplete({
             'source': function(request, response) {
                     $.ajax({
-                            url: 'index.php?route=catalog/product/autocomplete&token={{token}}&filter_name=' +  encodeURIComponent(request),
+                            url: '{{product_autocomplete_link}}&filter_name=' +  encodeURIComponent(request),
                             dataType: 'json',
                             success: function(json) {
 
@@ -1644,7 +1644,7 @@ function addDiscountComplectsRow(){
 function getNotifications() {
     $.ajax({
             type: 'GET',
-            url: 'index.php?route=total/discountsales/getNotifications&token={{token}}',
+            url: '{{get_notifications_link}}',
             dataType: 'json',
             success: function(json) {
                     if (json['error']) {

@@ -353,6 +353,9 @@ class ControllerExtensionTotalDiscountSales extends Controller
             $data['discountsales_complect_status_together'] = $this->config->get('discountsales_complect_status_together');
         }
 
+        $data['product_autocomplete_link'] = $this->model_extension_pro_patch_url->ajax('catalog/product/autocomplete');
+        $data['get_notifications_link'] = $this->model_extension_pro_patch_url->ajax('extension/total/discountsales/getNotifications');
+
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
