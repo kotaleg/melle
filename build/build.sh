@@ -35,7 +35,7 @@ rm -v !("config.php"|"index.php"|".htaccess"|"robots.txt")
 # BACKUP
 sshpass -V
 export SSHPASS=$K8S_SECRET_SSH
-sshpass -e ssh -o stricthostkeychecking=no "$SSH_ADDRESS" "bash -s" < $HERE/backup.sh $BACKUP_DIR $WORK_DIR
+sshpass -e ssh -o stricthostkeychecking=no "$SSH_ADDRESS" "bash -s" < ./build/backup.sh $BACKUP_DIR $WORK_DIR
 
 # CLONE TO PROD
 7z a -tzip foo.zip -x\!build -x\!.git
