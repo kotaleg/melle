@@ -20,7 +20,7 @@ if [ -d "$2" ]; then
     cd "$2"
 
     if [ "$(pwd)" = "$2" ]; then
-        7z a -tzip "$ZIP_NAME.zip" . -x\!image -x\!protected
+        7z a -tzip "$ZIP_NAME.zip" . -x\!image -x\!protected -x\!system/storage
 
         if [ ! -f "$1/$ZIP_NAME.zip" ]; then
             mv -v "$2/$ZIP_NAME.zip" "$1"
