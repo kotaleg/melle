@@ -1331,7 +1331,8 @@ function getBigNumTo(nameInput){
     }
 }
 
-function autoCompliteComplects(selectorInput,thisRowComplect){
+function autoCompliteComplects(selectorInput, thisRowComplect){
+    $(selectorInput).parent().find('.dropdown-menu').remove()
     $(selectorInput).autocomplete({
             'source': function(request, response) {
                     $.ajax({
