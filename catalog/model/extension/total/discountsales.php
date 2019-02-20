@@ -478,7 +478,7 @@ class ModelExtensionTotalDiscountSales extends Model
 
     }
 
-    public function setNewPrice($product_id_distrib, $price, $option_price,$cart_option=array(),$cart_quantity)
+    public function setNewPrice($product_id_distrib, $price, $option_price, $cart_option=array(), $cart_quantity)
     {
         $result = array(
             'price' => $price,
