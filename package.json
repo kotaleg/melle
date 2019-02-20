@@ -18,7 +18,9 @@
     "watch-offersadmin": "npm run watch -- --env.mixfile=webpack.offers.mix",
     "prod-offersadmin": "npm run production -- --env.mixfile=webpack.offers.mix",
     "watch-offers": "npm run watch -- --env.mixfile=webpack.offers-real.mix",
-    "prod-offers": "npm run production -- --env.mixfile=webpack.offers-real.mix"
+    "prod-offers": "npm run production -- --env.mixfile=webpack.offers-real.mix",
+    "watch-discount": "npm run watch -- --env.mixfile=webpack.discount.mix",
+    "prod-discount": "npm run production -- --env.mixfile=webpack.discount.mix"
   },
   "devDependencies": {
     "axios": "^0.18.0",

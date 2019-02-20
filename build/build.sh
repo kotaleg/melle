@@ -21,6 +21,7 @@ yarn run prod
 yarn run prod-import1c
 yarn run prod-offersadmin
 yarn run prod-offers
+yarn run prod-discount
 
 # CLEAR AFTER YARN
 rm -Rf ./.git/
@@ -29,6 +30,7 @@ rm -Rf ./catalog/view/javascript/melle/src/
 rm -Rf ./admin/view/javascript/import_1c/src/
 rm -Rf ./admin/view/javascript/super_offers/src/
 rm -Rf ./admin/view/javascript/super_offers_admin/src/
+rm -Rf ./admin/view/javascript/pro_discount/src/
 
 # REMOVE ALL BUT
 rm -v !("config.php"|"index.php"|".htaccess"|"robots.txt")
