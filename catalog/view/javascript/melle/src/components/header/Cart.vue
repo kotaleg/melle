@@ -41,14 +41,10 @@
 
             <div class="basket-modal__footer">
                 <div v-if="hasProducts" v-for="(total, i) in totals" class="basket-modal__full-price">
-                    <span>
-                        {{ total.title }}: </span><span>{{ total.text }} <span class="ruble-sign">Р</span>
-                    </span>
+                    <span v-html="total.title"></span>: <span>{{ total.text }} <span class="ruble-sign">Р</span></span>
                 </div>
                 <div v-if="hasProducts" class="basket-modal__full-price">
-                    <span>
-                        ИТОГО: </span><span class="boldPrice">{{ total }} <span class="ruble-sign">Р</span>
-                    </span>
+                    <span>ИТОГО: </span><span class="boldPrice">{{ total }} <span class="ruble-sign">Р</span></span>
                 </div>
                 <div class="basket-modal__clean">
                     <a v-if="hasProducts" :href="checkout_link">Оформить заказ</a>
