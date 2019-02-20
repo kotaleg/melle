@@ -395,6 +395,11 @@ class ControllerMailOrder extends Controller {
 
     // Admin Alert Mail
     public function alert(&$route, &$args) {
+
+        /* IVAN MODIFICATION START */
+        return;
+        /* IVAN MODIFICATION END */
+
         if (isset($args[0])) {
             $order_id = $args[0];
         } else {
