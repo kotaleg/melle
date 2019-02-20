@@ -37,9 +37,9 @@ class ControllerApiShipping extends Controller {
                     $json['error']['firstname'] = $this->language->get('error_firstname');
                 }
 
-                if ((utf8_strlen(trim($this->request->post['lastname'])) < 1) || (utf8_strlen(trim($this->request->post['lastname'])) > 32)) {
-                    $json['error']['lastname'] = $this->language->get('error_lastname');
-                }
+                // if ((utf8_strlen(trim($this->request->post['lastname'])) < 1) || (utf8_strlen(trim($this->request->post['lastname'])) > 32)) {
+                //     $json['error']['lastname'] = $this->language->get('error_lastname');
+                // }
 
                 if ((utf8_strlen(trim($this->request->post['address_1'])) < 3) || (utf8_strlen(trim($this->request->post['address_1'])) > 128)) {
                     $json['error']['address_1'] = $this->language->get('error_address_1');
