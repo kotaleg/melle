@@ -5,6 +5,7 @@ class ControllerExtensionModuleSlideshow extends Controller {
 
         $this->load->model('design/banner');
         $this->load->model('tool/image');
+        $this->load->model('tool/base');
 
         $this->document->addStyle('catalog/view/javascript/melle/query/swiper/swiper.min.css');
         // $this->document->addStyle('catalog/view/javascript/jquery/swiper/css/opencart.css');
@@ -19,7 +20,7 @@ class ControllerExtensionModuleSlideshow extends Controller {
                 $data['banners'][$result['sort_order']][mb_strtolower($result['title'])] = array(
                     'title' => $result['title'],
                     'link'  => $result['link'],
-                    'image' => $this->model_tool_image->resize($result['image'], $setting['width'], $setting['height'])
+                    'image' => $this->model_tool_base->getBase() . 'image/' . $result['image'],
                 );
             }
         }
