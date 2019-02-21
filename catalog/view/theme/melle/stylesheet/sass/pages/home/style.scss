@@ -383,11 +383,11 @@ top: 0!important;
 .swiper-slide {
   height: 100%;
   background-size: cover; 
-//  background-position: center;
-//  background-repeat: no-repeat;
-    display: flex;
-    margin-top:80px;
-}
+  background-position: center;
+  background-repeat: no-repeat;
+//    display: flex;
+//    margin-top:80px;
+} 
 
 .swiper-slide a {
   display: block;
