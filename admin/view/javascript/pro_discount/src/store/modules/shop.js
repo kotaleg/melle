@@ -132,7 +132,6 @@ const actions = {
     },
     saveDiscount({ commit, state, dispatch }) {
         commit('setLoadingStatus', true)
-        console.log(state);
         shop.makeRequest(
             {
                 url: state.save_discount,

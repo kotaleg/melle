@@ -35794,7 +35794,6 @@ var state = {
             dispatch = _ref8.dispatch;
 
         commit('setLoadingStatus', true);
-        console.log(state);
         __WEBPACK_IMPORTED_MODULE_2__api_shop__["a" /* default */].makeRequest({
             url: state.save_discount,
             discount: state.discount

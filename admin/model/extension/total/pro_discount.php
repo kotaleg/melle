@@ -122,8 +122,8 @@ class ModelExtensionTotalProDiscount extends Model
         $q = $this->db->query("SELECT `discount_id`
             FROM `". DB_PREFIX . self::DISCOUNT_TABLE ."`");
 
-        foreach ($q->rows as $id) {
-            $d = $this->getDiscount($id);
+        foreach ($q->rows as $item) {
+            $d = $this->getDiscount($item['discount_id']);
             if ($d) { $discounts[] = $d; }
         }
 
@@ -154,7 +154,7 @@ class ModelExtensionTotalProDiscount extends Model
             'finish_date' => '',
         );
 
-        if ($discount_id !== null) {
+        if ($discount_id) {
             $q = $this->db->query("SELECT *
                 FROM `". DB_PREFIX . self::DISCOUNT_TABLE ."`
                 WHERE `discount_id` = '" . (int)$discount_id . "'");
@@ -207,7 +207,7 @@ class ModelExtensionTotalProDiscount extends Model
             $discount['manufacturers'] = array();
             $discount['customers'] = array();
 
-            if ($discount_id !== null) {
+            if ($discount_id) {
                 // CATEGORY
                 $category_q = $this->db->query("SELECT dd.category_id AS id
                     FROM `". DB_PREFIX . self::CATEGORY_TABLE ."` dd
