@@ -21,7 +21,7 @@ yarn run prod
 yarn run prod-import1c
 yarn run prod-offersadmin
 yarn run prod-offers
-yarn run prod-discount
+# yarn run prod-discount
 
 # CLEAR AFTER YARN
 rm -Rf ./.git/
