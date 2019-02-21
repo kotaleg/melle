@@ -1,15 +1,37 @@
 <div id="swip{{ module }}" class="swiper-container">
     <div class="swiper-wrapper">
         {% for item in banners %}
-            <div class="swiper-slide" style="background-image: url({{ item.image }});">
+
+            {% if item.small %}
+            <div class="swiper-slide small" style="background-image: url({{item.small.image}});">
                 <a href="{{ item.link }}">
-                    <img src="{{ item.image }}" alt="{{ item.title }}">
+                    <img src="{{item.small.image}}" alt="{{ item.title }}">
                 </a>
             </div>
+            {% endif %}
+
+            {% if item.medium %}
+            <div class="swiper-slide medium" style="background-image: url({{item.medium.image}});">
+                <a href="{{ item.link }}">
+                    <img src="{{item.medium.image}}" alt="{{ item.title }}">
+                </a>
+            </div>
+            {% endif %}
+
+            {% if item.big %}
+            <div class="swiper-slide big" style="background-image: url({{item.big.image}});">
+                <a href="{{ item.link }}">
+                    <img src="{{item.big.image}}" alt="{{ item.title }}">
+                </a>
+            </div>
+            {% endif %}
+
         {% endfor %}
     </div>
     <div class="swiper-pagination"></div>
 </div>
+
+
 
 <script type="text/javascript">
 var swiper{{ module }} = new Swiper('#swip{{ module }}', {

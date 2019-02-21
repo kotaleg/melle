@@ -16,7 +16,7 @@ class ControllerExtensionModuleSlideshow extends Controller {
 
         foreach ($results as $result) {
             if (is_file(DIR_IMAGE . $result['image'])) {
-                $data['banners'][] = array(
+                $data['banners'][$result['sort_order']][mb_strtolower($result['title'])] = array(
                     'title' => $result['title'],
                     'link'  => $result['link'],
                     'image' => $this->model_tool_image->resize($result['image'], $setting['width'], $setting['height'])
@@ -25,7 +25,6 @@ class ControllerExtensionModuleSlideshow extends Controller {
         }
 
         $data['module'] = $module++;
-        $data['type'] = mb_strtolower($setting['name']);
 
         return $this->load->view('extension/module/slideshow', $data);
     }
