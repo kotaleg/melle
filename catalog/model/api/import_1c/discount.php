@@ -14,7 +14,6 @@ class ModelApiImport1CDiscount extends Model
 
         $this->load->model('api/import_1c/helper');
         $this->load->model('api/import_1c/progress');
-        $this->load->model('api/import_1c/progress');
         $this->load->model('api/import_1c/product');
         $this->load->model('extension/module/pro_znachek');
     }

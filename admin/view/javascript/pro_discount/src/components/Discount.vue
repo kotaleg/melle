@@ -1,7 +1,5 @@
 <template>
     <form class="form-horizontal">
-
-
             <div class="form-group">
                 <label class="col-sm-3 col-lg-2 control-label">Название</label>
                 <div class="col-sm-9 col-lg-5">
@@ -174,20 +172,12 @@
                         placeholder="Пользователи"
                         :noResultsText="text_no_results"
                         :loadingText="text_loading"
-                        :defaultOptions="all_products"
+                        :defaultOptions="all_customers"
                         :load-options="loadCustomers"
                         :async="true"
                         v-model="customers" />
                 </div>
             </div>
-
-
-
-
-
-
-
-
     </form>
 </template>
 

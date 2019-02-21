@@ -30,7 +30,7 @@
 
     <file path="system/library/cart/cart.php">
         <operation error="skip">
-            <search><![CDATA[$this->db = $registry->get('db');]]></search>
+            <search><![CDATA[$this->weight = $registry->get('weight');]]></search>
             <add position="after"><![CDATA[
                 // SUPER OFFERS START
                 if ((in_array(__FUNCTION__, array('__construct'))) && !isset($this->super_offers)
@@ -53,20 +53,12 @@
                 }
                 // SUPER OFFERS END
 
-                /* DISCOUNT SALES */
-                if ((in_array(__FUNCTION__, array('getProducts')))) {
-                    $this->load->model('extension/total/discountsales');
-
-                    foreach ($product_data as $pd_key => $pd) {
-                        $ds_data = $this->model_extension_total_discountsales->setNewPrice(
-                            $pd['product_id'], $pd['price'], 0, json_decode($pd['ds_cart_option']), $pd['quantity']);
-                        if (isset($ds_data['price'])) {
-                            $product_data[$pd_key]['price'] = $ds_data['price'];
-                            $product_data[$pd_key]['total'] = $ds_data['price'] * $pd['quantity'];
-                        }
-                    }
+                /* PRO DISCOUNT */
+                if ((in_array(__FUNCTION__, array('getProducts'))) && isset($this->pro_discount)
+                && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/pro_discount.json')) {
+                    $product_data = $this->pro_discount->fixTotal($product_data);
                 }
-                /* DISCOUNT SALES */
+                /* PRO DISCOUNT */
             ]]></add>
         </operation>
     </file>

@@ -28,6 +28,7 @@ class ModelExtensionTotalProDiscount extends Model
         $this->load->model('extension/pro_patch/db');
 
         $this->setting = $this->model_extension_pro_patch_setting->getSetting($this->codename);
+        $this->pro_discount = new \pro_discount($registry);
     }
 
     public function createTables()
@@ -208,41 +209,11 @@ class ModelExtensionTotalProDiscount extends Model
             $discount['customers'] = array();
 
             if ($discount_id) {
-                // CATEGORY
-                $category_q = $this->db->query("SELECT dd.category_id AS id
-                    FROM `". DB_PREFIX . self::CATEGORY_TABLE ."` dd
-                    WHERE dd.discount_id = '" . (int)$discount_id . "'");
-
-                foreach ($category_q->rows as $item) {
-                    $discount['categories'][] = (int)$item['id'];
-                }
-
-                // PRODUCT
-                $product_q = $this->db->query("SELECT dd.product_id AS id
-                    FROM `". DB_PREFIX . self::PRODUCT_TABLE ."` dd
-                    WHERE dd.discount_id = '" . (int)$discount_id . "'");
-
-                foreach ($product_q->rows as $item) {
-                    $discount['products'][] = $item['id'];
-                }
-
-                // MANUFACTURER
-                $manufacturer_q = $this->db->query("SELECT dd.manufacturer_id AS id
-                    FROM `". DB_PREFIX . self::MANUFACTURER_TABLE ."` dd
-                    WHERE dd.discount_id = '" . (int)$discount_id . "'");
-
-                foreach ($manufacturer_q->rows as $item) {
-                    $discount['manufacturers'][] = (int)$item['id'];
-                }
-
-                // CUSTOMER
-                $customer_q = $this->db->query("SELECT dd.customer_id AS id
-                    FROM `". DB_PREFIX . self::CUSTOMER_TABLE ."` dd
-                    WHERE dd.discount_id = '" . (int)$discount_id . "'");
-
-                foreach ($customer_q->rows as $item) {
-                    $discount['customers'][] = (int)$item['id'];
-                }
+                $extra = $this->pro_discount->getDiscountExtra($discount_id);
+                $discount['categories'] = $extra['categories'];
+                $discount['products'] = $extra['products'];
+                $discount['manufacturers'] = $extra['manufacturers'];
+                $discount['customers'] = $extra['customers'];
             }
         }
 
@@ -286,18 +257,20 @@ class ModelExtensionTotalProDiscount extends Model
                         '". (int)$data['sort_order'] ."',
                         '". (int)$data['start_sum'] ."',
                         '". (int)$data['start_count'] ."',
-                        '". $this->db->escape($data['sum_and_count']) ."',
-                        '". $this->db->escape($data['registered_only']) ."',
+                        '". (bool)$data['sum_and_count'] ."',
+                        '". (bool)$data['registered_only'] ."',
                         '". (int)$data['value'] ."',
                         '". $this->db->escape($data['sign']) ."',
                         '". (int)$data['products_count'] ."',
                         '". (int)$data['count_like'] ."',
-                        '". $this->db->escape($data['status']) ."',
+                        '". (bool)$data['status'] ."',
                         '". $this->db->escape($data['name']) ."',
                         '". $this->db->escape($data['description']) ."',
                         '". $this->db->escape( date("Y-m-d H:i:s", strtotime($data['start_date'])) ) ."',
                         '". $this->db->escape( date("Y-m-d H:i:s", strtotime($data['finish_date'])) ) ."'
                     )");
+
+                $data['discount_id'] = $this->db->getLastId();
 
                 $json['success'][] = 'Скидка создана';
             } else {
@@ -306,50 +279,50 @@ class ModelExtensionTotalProDiscount extends Model
                         `sort_order` = '". (int)$data['sort_order'] ."',
                         `start_sum` = '". (int)$data['start_sum'] ."',
                         `start_count` = '". (int)$data['start_count'] ."',
-                        `sum_and_count` = '". $this->db->escape($data['sum_and_count']) ."',
-                        `registered_only` = '". $this->db->escape($data['registered_only']) ."',
+                        `sum_and_count` = '". (int)$data['sum_and_count'] ."',
+                        `registered_only` = '". (int)$data['registered_only'] ."',
                         `value` = '". (int)$data['value'] ."',
                         `sign` = '". $this->db->escape($data['sign']) ."',
                         `products_count` = '". (int)$data['products_count'] ."',
                         `count_like` = '". (int)$data['count_like'] ."',
-                        `status` = '". $this->db->escape($data['status']) ."',
+                        `status` = '". (int)$data['status'] ."',
                         `name` = '". $this->db->escape($data['name']) ."',
                         `description` = '". $this->db->escape($data['description']) ."',
                         `start_date` = '". $this->db->escape( date("Y-m-d H:i:s", strtotime($data['start_date'])) ) ."',
                         `finish_date` = '". $this->db->escape( date("Y-m-d H:i:s", strtotime($data['finish_date'])) ) ."'
-                    WHERE `discount_id` = '" . (int)$discount_id . "'");
-
-                $this->db->query("DELETE FROM `". DB_PREFIX . self::CATEGORY_TABLE ."`
                     WHERE `discount_id` = '" . (int)$data['discount_id'] . "'");
-                $this->db->query("DELETE FROM `". DB_PREFIX . self::MANUFACTURER_TABLE ."`
-                    WHERE `discount_id` = '" . (int)$data['discount_id'] . "'");
-                $this->db->query("DELETE FROM `". DB_PREFIX . self::PRODUCT_TABLE ."`
-                    WHERE `discount_id` = '" . (int)$data['discount_id'] . "'");
-                $this->db->query("DELETE FROM `". DB_PREFIX . self::CUSTOMER_TABLE ."`
-                    WHERE `discount_id` = '" . (int)$data['discount_id'] . "'");
-
-                foreach ($data['categories'] as $id) {
-                    $this->db->query("INSERT INTO `". DB_PREFIX . self::CATEGORY_TABLE ."`
-                        SET discount_id = '" . (int)$data['discount_id'] . "',
-                            category_id = '" . (int)$id . "'");
-                }
-                foreach ($data['manufacturers'] as $id) {
-                    $this->db->query("INSERT INTO `". DB_PREFIX . self::MANUFACTURER_TABLE ."`
-                        SET discount_id = '" . (int)$data['discount_id'] . "',
-                            manufacturer_id = '" . (int)$id . "'");
-                }
-                foreach ($data['products'] as $id) {
-                    $this->db->query("INSERT INTO `". DB_PREFIX . self::PRODUCT_TABLE ."`
-                        SET discount_id = '" . (int)$data['discount_id'] . "',
-                            product_id = '" . (int)$id . "'");
-                }
-                foreach ($data['customers'] as $id) {
-                    $this->db->query("INSERT INTO `". DB_PREFIX . self::CUSTOMER_TABLE ."`
-                        SET discount_id = '" . (int)$data['discount_id'] . "',
-                            customer_id = '" . (int)$id . "'");
-                }
 
                 $json['success'][] = 'Данные скидки обновлены';
+            }
+
+            $this->db->query("DELETE FROM `". DB_PREFIX . self::CATEGORY_TABLE ."`
+                WHERE `discount_id` = '" . (int)$data['discount_id'] . "'");
+            $this->db->query("DELETE FROM `". DB_PREFIX . self::MANUFACTURER_TABLE ."`
+                WHERE `discount_id` = '" . (int)$data['discount_id'] . "'");
+            $this->db->query("DELETE FROM `". DB_PREFIX . self::PRODUCT_TABLE ."`
+                WHERE `discount_id` = '" . (int)$data['discount_id'] . "'");
+            $this->db->query("DELETE FROM `". DB_PREFIX . self::CUSTOMER_TABLE ."`
+                WHERE `discount_id` = '" . (int)$data['discount_id'] . "'");
+
+            foreach ($data['categories'] as $id) {
+                $this->db->query("INSERT INTO `". DB_PREFIX . self::CATEGORY_TABLE ."`
+                    SET discount_id = '" . (int)$data['discount_id'] . "',
+                        category_id = '" . (int)$id . "'");
+            }
+            foreach ($data['manufacturers'] as $id) {
+                $this->db->query("INSERT INTO `". DB_PREFIX . self::MANUFACTURER_TABLE ."`
+                    SET discount_id = '" . (int)$data['discount_id'] . "',
+                        manufacturer_id = '" . (int)$id . "'");
+            }
+            foreach ($data['products'] as $id) {
+                $this->db->query("INSERT INTO `". DB_PREFIX . self::PRODUCT_TABLE ."`
+                    SET discount_id = '" . (int)$data['discount_id'] . "',
+                        product_id = '" . (int)$id . "'");
+            }
+            foreach ($data['customers'] as $id) {
+                $this->db->query("INSERT INTO `". DB_PREFIX . self::CUSTOMER_TABLE ."`
+                    SET discount_id = '" . (int)$data['discount_id'] . "',
+                        customer_id = '" . (int)$id . "'");
             }
 
             $json['saved'] = true;

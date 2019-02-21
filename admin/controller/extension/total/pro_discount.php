@@ -68,6 +68,13 @@ class ControllerExtensionTotalProDiscount extends Controller
                 }
 
                 $this->model_extension_pro_patch_setting->editSetting($this->type, $this->codename, $post, $this->store_id);
+
+                // MODIFICATION
+                $this->model_extension_pro_patch_modification->modificationHandler($this->codename, false);
+                if (isset($parsed['status']) && $parsed['status']) {
+                    $this->model_extension_pro_patch_modification->modificationHandler($this->codename, true);
+                }
+
                 $json['success'][] = $this->language->get('success_setting_saved');
             }
         }

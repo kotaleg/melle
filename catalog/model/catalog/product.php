@@ -1,5 +1,13 @@
 <?php
 class ModelCatalogProduct extends Model {
+
+    function __construct($registry)
+    {
+        parent::__construct($registry);
+        $this->pro_discount = new \pro_discount($registry);
+    }
+
+
     public function updateViewed($product_id) {
         $this->db->query("UPDATE " . DB_PREFIX . "product SET viewed = (viewed + 1) WHERE product_id = '" . (int)$product_id . "'");
     }
