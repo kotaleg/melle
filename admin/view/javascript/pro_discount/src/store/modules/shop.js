@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isEmpty } from 'lodash'
+import { isUndefined, isEmpty, has, clone } from 'lodash'
 
 import shop from '../../api/shop'
 import notify from '../../components/partial/notify'
@@ -26,12 +26,23 @@ const state = {
     text_enabled: '',
     text_disabled: '',
     text_success: '',
+    text_no_results: '',
 
     cancel: '',
     save: '',
     is_loading: false,
+    is_edit: false,
 
-    sales: [],
+    discounts: [],
+
+    all_categories: [],
+    all_manufacturers: [],
+    all_products: [],
+    all_customers: [],
+    all_types: [],
+    all_signs: [],
+
+    discount: {},
 }
 
 // getters
@@ -45,6 +56,9 @@ const getters = {
     getSettingValue: (state) => (index) => {
         return state.setting[index]
     },
+    getDiscountValue: (state) => (index) => {
+        return state.discount[index]
+    },
 }
 
 // actions
@@ -57,36 +71,188 @@ const actions = {
     updateSetting({ commit }, payload) {
         commit('updateSetting', payload)
     },
+    updateDiscountValue({ commit }, payload) {
+        commit('updateDiscountValue', payload)
+    },
     setLoadingStatus({ commit }, status) {
         commit('setLoadingStatus', status)
     },
-    fetchImports({ commit }) {
-        commit('setUpdateStatus', true)
+    setEditStatus({ commit }, status) {
+        commit('setEditStatus', status)
+    },
+    getDiscounts({ commit, state }) {
+        commit('setLoadingStatus', true)
         shop.makeRequest(
             {
-                url: state.get_running_imports,
+                url: state.get_discounts,
             },
             res => {
-                commit('setUpdateStatus', false)
-                if (!isUndefined(res.data.imports)) {
-                    commit('updateImports', res.data.imports)
+                commit('setLoadingStatus', false)
+                if (has(res.data, 'discounts')) {
+                    commit('updateValue',
+                        {k:'discounts', v:res.data.discounts})
                 }
                 notify.messageHandler(res.data)
             }
         )
     },
-    importSEOData({ commit }) {
-        commit('setUpdateStatus', true)
+    editDiscount({ commit, state }, discount_id) {
+        commit('setLoadingStatus', true)
         shop.makeRequest(
             {
-                url: state.import_seo_data,
+                url: state.get_discount,
+                discount_id: discount_id,
             },
             res => {
-                commit('setUpdateStatus', false)
+                commit('setLoadingStatus', false)
+                if (has(res.data, 'discount')) {
+                    commit('updateValue',
+                        {k:'discount', v:res.data.discount})
+                    commit('setEditStatus', true)
+                }
+                if (has(res.data, 'all_categories')) {
+                    commit('updateValue',
+                        {k:'all_categories', v:res.data.all_categories})
+                }
+                if (has(res.data, 'all_manufacturers')) {
+                    commit('updateValue',
+                        {k:'all_manufacturers', v:res.data.all_manufacturers})
+                }
+                if (has(res.data, 'all_products')) {
+                    commit('updateValue',
+                        {k:'all_products', v:res.data.all_products})
+                }
+                if (has(res.data, 'all_customers')) {
+                    commit('updateValue',
+                        {k:'all_customers', v:res.data.all_customers})
+                }
                 notify.messageHandler(res.data)
             }
         )
     },
+    saveDiscount({ commit, state, dispatch }) {
+        commit('setLoadingStatus', true)
+        console.log(state);
+        shop.makeRequest(
+            {
+                url: state.save_discount,
+                discount: state.discount,
+            },
+            res => {
+                commit('setLoadingStatus', false)
+                if (has(res.data, 'saved')
+                && res.data.saved === true) {
+                    commit('setEditStatus', true)
+                    dispatch('getDiscounts')
+                }
+                notify.messageHandler(res.data)
+            }
+        )
+    },
+    removeDiscount({ commit, state, dispatch }, discount_id) {
+        commit('setLoadingStatus', true)
+        shop.makeRequest(
+            {
+                url: state.remove_discount,
+                discount_id: discount_id,
+            },
+            res => {
+                commit('setLoadingStatus', false)
+                notify.messageHandler(res.data)
+                dispatch('getDiscounts')
+            }
+        )
+    },
+    flipDiscount({ commit, state, dispatch }, discount_id) {
+        commit('setLoadingStatus', true)
+        shop.makeRequest(
+            {
+                url: state.flip_discount_status,
+                discount_id: discount_id,
+            },
+            res => {
+                commit('setLoadingStatus', false)
+                notify.messageHandler(res.data)
+                dispatch('getDiscounts')
+            }
+        )
+    },
+
+    searchManufacturersRequest({ commit, state, rootState, dispatch }, query) {
+        return new Promise((resolve, reject) => {
+            shop.getFromServer(
+                {
+                    url: state.get_manufacturers,
+                    params: {q:query}
+                },
+                res => {
+                    if (!isUndefined(res.manufacturers)) {
+                        commit('updateValue',
+                            {k:'all_manufacturers', v: res.manufacturers})
+                    }
+                    notify.messageHandler(res)
+                    resolve(state.all_manufacturers)
+                }
+            )
+        })
+    },
+    searchCategoriesRequest({ commit, state, rootState, dispatch }, query) {
+        return new Promise((resolve, reject) => {
+            shop.getFromServer(
+                {
+                    url: state.get_categories,
+                    params: {q:query}
+                },
+                res => {
+                    if (!isUndefined(res.categories)) {
+                        commit('updateValue',
+                            {k:'all_categories', v: res.categories})
+                    }
+                    notify.messageHandler(res)
+                    resolve(state.all_categories)
+                }
+            )
+        })
+    },
+    searchProductsRequest({ commit, state, rootState, dispatch }, query) {
+        return new Promise((resolve, reject) => {
+            shop.getFromServer(
+                {
+                    url: state.get_products,
+                    params: {q:query}
+                },
+                res => {
+                    if (!isUndefined(res.products)) {
+                        commit('updateValue',
+                            {k:'all_products', v: res.products})
+                    }
+                    notify.messageHandler(res)
+                    resolve(state.all_products)
+                }
+            )
+        })
+    },
+    searchCustomersRequest({ commit, state, rootState, dispatch }, query) {
+        return new Promise((resolve, reject) => {
+            shop.getFromServer(
+                {
+                    url: state.get_customers,
+                    params: {q:query}
+                },
+                res => {
+                    if (!isUndefined(res.customers)) {
+                        commit('updateValue',
+                            {k:'all_customers', v: res.customers})
+                    }
+                    notify.messageHandler(res)
+                    resolve(state.all_customers)
+                }
+            )
+        })
+    },
+
+
+
 }
 
 // mutations
@@ -99,14 +265,17 @@ const mutations = {
     setLoadingStatus(state, status) {
         Vue.set(state, 'is_loading', status)
     },
-    setUpdateStatus(state, status) {
-        Vue.set(state, 'is_updating', status)
+    setEditStatus(state, status) {
+        Vue.set(state, 'is_edit', status)
     },
-    updateSetting(state, {index, value}) {
-        Vue.set(state.setting, index, value)
+    updateSetting(state, {k, v}) {
+        Vue.set(state.setting, k, v)
     },
-    updateImports(state, imports) {
-        Vue.set(state, 'imports', imports)
+    updateDiscountValue(state, {k, v}) {
+        Vue.set(state.discount, k, v)
+    },
+    updateValue(state, {k, v}) {
+        Vue.set(state, k, v)
     },
 }
 

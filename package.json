@@ -23,6 +23,7 @@
     "prod-discount": "npm run production -- --env.mixfile=webpack.discount.mix"
   },
   "devDependencies": {
+    "@riophae/vue-treeselect": "^0.0.38",
     "axios": "^0.18.0",
     "cross-env": "^5.2.0",
     "es6-promise": "^4.2.4",
@@ -50,6 +51,8 @@
     "vue-simple-progress": "^1.1.0",
     "vue-slider-component": "^2.8.6",
     "vue-the-mask": "^0.11.1",
+    "vue2-datepicker": "^2.10.0",
+    "vuejs-datepicker": "^1.5.4",
     "vuex": "^3.0.1",
     "webpack-obfuscator": "^0.18.0"
   }

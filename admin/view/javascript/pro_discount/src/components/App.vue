@@ -14,6 +14,15 @@
 
             <template slot="buttons">
                 <button
+                    v-if="!is_edit"
+                    @click="editDiscount(false)"
+                    data-toggle="tooltip"
+                    title="Добавить скидку"
+                    class="btn btn-danger">
+                    <i class="fa fa-plus"/>
+                </button>
+                <button
+                    v-if="!is_edit"
                     @click="saveAndStay"
                     data-toggle="tooltip"
                     :title="button_save_and_stay"
@@ -27,13 +36,12 @@
                     class="btn btn-primary">
                     <i class="fa fa-save"/>
                 </button>
-                <a
-                    :href="cancel"
+                <button
+                    @click="cancelRoutine"
                     data-toggle="tooltip"
-                    :title="button_cancel"
                     class="btn btn-default">
                     <i class="fa fa-reply"/>
-                </a>
+                </button>
             </template>
 
             <breadcrumbs
@@ -44,86 +52,21 @@
             <panel-default
                 :title="text_edit">
 
-                <form class="form-horizontal">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="col-sm-3 col-lg-2 control-label">{{ text_status }}</label>
-                            <div class="col-sm-9 col-lg-5">
-                                <toggle-button
-                                    v-model="status"
-                                    :width="100"
-                                    :height="25"
-                                    :labels="getToggleStates"/>
-                            </div>
+                <form v-if="!is_edit" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label">{{ text_status }}</label>
+                        <div class="col-sm-9 col-lg-5">
+                            <toggle-button
+                                v-model="status"
+                                :width="100"
+                                :height="25"
+                                :labels="getToggleStates"/>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <file-upload
-                            :url="upload_seo_file"
-                            accept=".xml"
-                            btn-label="Выберите SEO файл"
-                            btn-uploading-label="Обработка.."
-                            @change="onFileChange"
-                            @success="onFileSuccess"
-                            @error="onFileError" />
                     </div>
                 </form>
 
-                <div v-if="imports">
-                    <hr>
-
-                    <div v-for="(imp, k) in imports" class="import-box">
-                        <div class="col-sm-12 imp-head">
-                            <h3>Прогресс № {{ imp.id }} <i v-if="is_updating" class="fa fa-cog fa-spin fa-fw"></i></h3>
-                            <span>Загружено файлов: {{ imp.files_uploaded }}</span>
-                            <span>Обработано файлов: {{ imp.files_processed }}</span>
-                        </div>
-
-                        <div class="col-md-6">
-                            <h4>Вызовы:</h4>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                      <tr>
-                                        <th>Тип</th>
-                                        <th>Режим</th>
-                                        <th>Файл</th>
-                                        <th>Дата</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(act) in imp.actions">
-                                            <td>{{ act.type }}</td>
-                                            <td>{{ act.mode }}</td>
-                                            <td>{{ act.filename }}</td>
-                                            <td>{{ act.create_date }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-md-6">
-                            <h4>Логи:</h4>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                      <tr>
-                                        <th>Сообщение</th>
-                                        <th>Дата</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(log) in imp.logs" :class="log.type">
-                                            <td>{{ log.message }}</td>
-                                            <td>{{ log.create_date }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <discounts v-if="!is_edit" />
+                <discount v-if="is_edit" />
 
             </panel-default>
         </div>
@@ -132,7 +75,7 @@
 </template>
 
 <script>
-import { isUndefined, extend } from 'lodash'
+import { isUndefined, isEmpty, extend } from 'lodash'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.min.css'
@@ -143,6 +86,8 @@ import notify from './partial/notify'
 import PageHeader from './partial/PageHeader.vue'
 import Breadcrumbs from './partial/Breadcrumbs.vue'
 import Panel from './partial/Panel.vue'
+import Discounts from './Discounts.vue'
+import Discount from './Discount.vue'
 
 export default {
     components: {
@@ -151,6 +96,8 @@ export default {
         'page-header': PageHeader,
         'breadcrumbs': Breadcrumbs,
         'panel-default': Panel,
+        Discounts,
+        Discount,
     },
     computed: {
         ...mapState('shop', [
@@ -167,16 +114,15 @@ export default {
             'text_close',
             'text_cancel',
             'text_warning',
-            'text_logs',
             'text_actions',
 
             'cancel',
             'save',
             'setting',
             'is_loading',
-            'is_updating',
-            'imports',
-            'upload_seo_file',
+            'is_edit',
+
+            'discounts',
         ]),
         ...mapGetters('shop', [
             'getToggleStates',
@@ -184,38 +130,21 @@ export default {
         ]),
         status: {
             get () { return this.getSettingValue('status') },
-            set (value) { this.updateSetting({index: 'status', value}) }
+            set (v) { this.updateSetting({k: 'status', v}) }
         },
-    },
-    data () {
-        return {
-            polling: null,
-        }
+
+        emptyDiscounts() {
+            return isEmpty(this.discounts)
+        },
     },
     methods: {
         ...mapActions('shop', [
-            'updateSetting',
             'setLoadingStatus',
-            'fetchImports',
-            'importSEOData',
+            'editDiscount',
+            'updateSetting',
+            'setEditStatus',
+            'saveDiscount',
         ]),
-
-        pollData () {
-            this.polling = setInterval(() => {
-                this.fetchImports()
-            }, 3000)
-        },
-
-        onFileChange(res) {
-            notify.messageHandler(res)
-            this.setLoadingStatus(false)
-        },
-        onFileSuccess(e) {
-            this.importSEOData()
-        },
-        onFileError() {
-            console.log('UPLOAD FILE ERROR');
-        },
 
         saveAndStay() {
             this.setLoadingStatus(true)
@@ -226,6 +155,11 @@ export default {
             })
         },
         saveAndGo() {
+            if (this.is_edit) {
+                this.saveDiscount()
+                return
+            }
+
             this.setLoadingStatus(true)
             let data = extend({}, this.setting, { url: this.save })
             shop.postSettingData(data, res => {
@@ -237,13 +171,17 @@ export default {
                 }, 1500)
             })
         },
+        cancelRoutine() {
+            if (this.is_edit) {
+                this.setEditStatus(false)
+                return
+            }
+            window.location.href = this.cancel
+        }
     },
     created() {
         this.$store.dispatch('shop/initData')
-        this.pollData()
-    },
-    beforeDestroy () {
-        clearInterval(this.polling)
+        this.$store.dispatch('shop/getDiscounts')
     },
 }
 </script>
@@ -252,27 +190,5 @@ export default {
 // NOTIFICATION
 .vue-notification {
   font-size: 14px;
-}
-
-.mt-30 {
-    margin-top: 30px;
-}
-
-.import-box {
-    .imp-head {
-        margin-bottom: 20px;
-    }
-    margin-bottom: 50px;
-}
-
-.file-upload {
-    .input-wrapper {
-        height: 45px !important;
-        .file-upload-label {
-            .file-upload-icon {
-                display: none !important;
-            }
-        }
-    }
 }
 </style>

@@ -19,4 +19,14 @@ export default {
             cb(response)
         })
     },
+    async getFromServer(data, cb, errorCb) {
+        let params = !isUndefined(data.params) ? data.params : {}
+        const response = await Vue.prototype.$http.post(data.url, params)
+
+        if (!isUndefined(response.data)) {
+            cb(response.data)
+        } else {
+            errorCb(response)
+        }
+    },
 }

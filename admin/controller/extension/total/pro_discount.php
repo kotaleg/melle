@@ -54,6 +54,39 @@ class ControllerExtensionTotalProDiscount extends Controller
         $this->response->setOutput($this->model_extension_pro_patch_load->view($this->route, $data));
     }
 
+    public function save()
+    {
+        $json = $this->model_extension_pro_patch_permission->validateRoute($this->route);
+
+        if (!isset($json['error'])) {
+            $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+            if ($parsed) {
+                $post = array();
+
+                foreach ($parsed as $k => $v) {
+                    $post["{$this->codename}_{$k}"] = $v;
+                }
+
+                $this->model_extension_pro_patch_setting->editSetting($this->type, $this->codename, $post, $this->store_id);
+                $json['success'][] = $this->language->get('success_setting_saved');
+            }
+        }
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function install()
+    {
+        $this->model_extension_pro_patch_permission->addPermission($this->codename, true);
+        $this->extension_model->createTables();
+    }
+
+    public function uninstall()
+    {
+        $this->extension_model->dropTables();
+        $this->model_extension_pro_patch_modification->modificationHandler($this->codename, false);
+    }
+
     public function getState()
     {
         // HEADING
@@ -63,7 +96,7 @@ class ControllerExtensionTotalProDiscount extends Controller
             'text_edit', 'text_yes', 'text_no', 'text_enabled', 'text_disabled',
             'text_deleted', 'text_undefined', 'text_status', 'text_success', 'text_warning',
             'text_close', 'text_cancel', 'text_setting', 'text_debug', 'text_no', 'text_yes',
-            'text_fee', 'text_access_code',
+            'text_fee', 'text_access_code', 'text_no_results', 'text_loading',
 
             'button_save_and_stay', 'button_save', 'button_cancel', 'button_edit', 'button_delete',
 
@@ -99,6 +132,21 @@ class ControllerExtensionTotalProDiscount extends Controller
         $state['get_cancel'] = $this->model_extension_pro_patch_url->getExtensionAjax('total');
         $state['save'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/save");
 
+        $state['get_discounts'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/get_discounts");
+        $state['get_discount'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/get_discount");
+        $state['save_discount'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/save_discount");
+        $state['remove_discount'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/remove_discount");
+        $state['flip_discount_status'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/flip_discount_status");
+
+        $state['get_manufacturers'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/get_manufacturers");
+        $state['get_categories'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/get_categories");
+        $state['get_products'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/get_products");
+        $state['get_customers'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/get_customers");
+
+        // ALL
+        $state['all_types'] = $this->extension_model->prepareForTree($this->extension_model->getAllTypes());
+        $state['all_signs'] = $this->extension_model->prepareForTree($this->extension_model->getAllSigns());
+
         // SETTING
         $state['setting'] = $this->setting;
         if (isset($state['setting']['status']) && $state['setting']['status']) {
@@ -109,36 +157,133 @@ class ControllerExtensionTotalProDiscount extends Controller
         return $state;
     }
 
-    public function save()
+    public function get_discounts()
+    {
+        $json['discounts'] = $this->extension_model->getDiscounts();
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function get_discount()
+    {
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        if (isset($parsed['discount_id'])) {
+
+            if (empty($parsed['discount_id'])) { $parsed['discount_id'] = null; }
+            $json['discount'] = $this->extension_model->getDiscount($parsed['discount_id'], true);
+
+            // ALL
+            $json['all_manufacturers'] = $this->extension_model->prepareForTree(
+                $this->extension_model->getAllManufacturers(null, $parsed['discount_id']));
+            $json['all_categories'] = $this->extension_model->prepareForTree(
+                $this->extension_model->getAllCategories(null, $parsed['discount_id']));
+            $json['all_products'] = $this->extension_model->prepareForTree(
+                $this->extension_model->getAllProducts(null, $parsed['discount_id']));
+            $json['all_customers'] = $this->extension_model->prepareForTree(
+                $this->extension_model->getAllCustomers(null, $parsed['discount_id']));
+
+        } else {
+            $json['error'][] = $this->language->get('error_corrupted_request');
+        }
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function save_discount()
     {
         $json = $this->model_extension_pro_patch_permission->validateRoute($this->route);
 
         if (!isset($json['error'])) {
             $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
-            if ($parsed) {
-                $post = array();
 
-                foreach ($parsed as $k => $v) {
-                    $post["{$this->codename}_{$k}"] = $v;
-                }
-
-                $this->model_extension_pro_patch_setting->editSetting($this->type, $this->codename, $post, $this->store_id);
-                $json['success'][] = $this->language->get('success_setting_saved');
+            if (isset($parsed['discount'])) {
+                $result = $this->extension_model->saveDiscount($parsed['discount']);
+                $json = array_merge_recursive($json, $result);
+            } else {
+                $json['error'][] = $this->language->get('error_corrupted_request');
             }
         }
 
         $this->response->setOutput(json_encode($json));
     }
 
-    public function install()
+    public function remove_discount()
     {
-        $this->model_extension_pro_patch_permission->addPermission($this->codename, true);
-        $this->extension_model->createTables();
+        $json = $this->model_extension_pro_patch_permission->validateRoute($this->route);
+
+        if (!isset($json['error'])) {
+            $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+            if (isset($parsed['discount_id'])) {
+                $result = $this->extension_model->removeDiscount($parsed['discount_id']);
+            } else {
+                $json['error'][] = $this->language->get('error_corrupted_request');
+            }
+        }
+
+        $this->response->setOutput(json_encode($json));
     }
 
-    public function uninstall()
+    public function flip_discount_status()
     {
-        $this->extension_model->dropTables();
-        $this->model_extension_pro_patch_modification->modificationHandler($this->codename, false);
+        $json = $this->model_extension_pro_patch_permission->validateRoute($this->route);
+
+        if (!isset($json['error'])) {
+            $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+            if (isset($parsed['discount_id'])) {
+                $json['discounts'] = $this->extension_model->flipDiscountStatus($parsed['discount_id']);
+            } else {
+                $json['error'][] = $this->language->get('error_corrupted_request');
+            }
+        }
+
+        $this->response->setOutput(json_encode($json));
     }
+
+    public function get_manufacturers()
+    {
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        $q = (isset($parsed['q'])) ? $parsed['q'] : null;
+        $m = $this->extension_model->getAllManufacturers($q);
+        $json['manufacturers'] = $this->extension_model->prepareForTree($m);
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function get_categories()
+    {
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        $q = (isset($parsed['q'])) ? $parsed['q'] : null;
+        $m = $this->extension_model->getAllCategories($q);
+        $json['categories'] = $this->extension_model->prepareForTree($m);
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function get_products()
+    {
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        $q = (isset($parsed['q'])) ? $parsed['q'] : null;
+        $m = $this->extension_model->getAllProducts($q);
+        $json['products'] = $this->extension_model->prepareForTree($m);
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function get_customers()
+    {
+        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
+
+        $q = (isset($parsed['q'])) ? $parsed['q'] : null;
+        $m = $this->extension_model->getAllCustomers($q);
+        $json['customers'] = $this->extension_model->prepareForTree($m);
+
+        $this->response->setOutput(json_encode($json));
+    }
+
 }
