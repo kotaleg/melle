@@ -4,7 +4,7 @@
 
             {% if item.small %}
             <div class="swiper-slide small" style="background-image: url({{item.small.image}});">
-                <a href="{{ item.link }}">
+                <a href="{{ item.small.link }}">
                     <img src="{{item.small.image}}" alt="{{ item.title }}">
                 </a>
             </div>
@@ -12,7 +12,7 @@
 
             {% if item.medium %}
             <div class="swiper-slide medium" style="background-image: url({{item.medium.image}});">
-                <a href="{{ item.link }}">
+                <a href="{{ item.medium.link }}">
                     <img src="{{item.medium.image}}" alt="{{ item.title }}">
                 </a>
             </div>
@@ -20,7 +20,7 @@
 
             {% if item.big %}
             <div class="swiper-slide big" style="background-image: url({{item.big.image}});">
-                <a href="{{ item.link }}">
+                <a href="{{ item.big.link }}">
                     <img src="{{item.big.image}}" alt="{{ item.title }}">
                 </a>
             </div>
