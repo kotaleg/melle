@@ -4,9 +4,29 @@
  */
 class ModelExtensionModuleSizeList extends Model
 {
+    private $codename = 'size_list';
+    private $route = 'extension/module/size_list';
+
+    const IMAGE_TABLE = 'sl_images';
+    const PRODUCT_TABLE = 'sl_product';
+
     public function getSizeList($product_id)
     {
-        // 600,400
-        return 'http://localhost/302/melle/image/cache/catalog/import_files/ff/ffaddeaf3bc811e8814c83293523b991_ca7694073bd211e8814c83293523b991-365x458.jpg';
+        $image = false;
+
+        $q = $this->db->query("SELECT i.image
+            FROM `". DB_PREFIX . self::IMAGE_TABLE ."` i
+            LEFT JOIN `". DB_PREFIX . self::PRODUCT_TABLE ."` p
+            ON(i.image_id = p.image_id)
+            WHERE p.product_id = '". (int)$product_id ."'
+            LIMIT 1");
+
+        if ($q->row && isset($q->row['image'])) {
+            $this->load->model('tool/image');
+            $img = $this->model_tool_image->resize($q->row['image'], 600, 400);
+            if ($img) { $image = $img; }
+        }
+
+        return $image;
     }
 }
