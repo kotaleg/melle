@@ -15,7 +15,7 @@ mv ./config.work.php ./config.php
 mv ./admin/config.work.php ./admin/config.php
 
 # YARN RUN
-rm -f ./yarn.lock
+# rm -f ./yarn.lock
 yarn install
 yarn run prod
 yarn run prod-import1c
