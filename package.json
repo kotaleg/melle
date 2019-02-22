@@ -20,7 +20,9 @@
     "watch-offers": "npm run watch -- --env.mixfile=webpack.offers-real.mix",
     "prod-offers": "npm run production -- --env.mixfile=webpack.offers-real.mix",
     "watch-discount": "npm run watch -- --env.mixfile=webpack.discount.mix",
-    "prod-discount": "npm run production -- --env.mixfile=webpack.discount.mix"
+    "prod-discount": "npm run production -- --env.mixfile=webpack.discount.mix",
+    "watch-sizelist": "npm run watch -- --env.mixfile=webpack.sizelist.mix",
+    "prod-sizelist": "npm run production -- --env.mixfile=webpack.sizelist.mix"
   },
   "devDependencies": {
     "@riophae/vue-treeselect": "^0.0.38",

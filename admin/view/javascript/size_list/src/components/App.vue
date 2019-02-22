@@ -15,7 +15,7 @@
             <template slot="buttons">
                 <button
                     v-if="!is_edit"
-                    @click="editDiscount(false)"
+                    @click="editItem(false)"
                     data-toggle="tooltip"
                     title="Добавить скидку"
                     class="btn btn-danger">
@@ -65,8 +65,8 @@
                     </div>
                 </form>
 
-                <discounts v-if="!is_edit" />
-                <discount v-if="is_edit" />
+                <items v-if="!is_edit" />
+                <item v-if="is_edit" />
 
             </panel-default>
         </div>
@@ -85,8 +85,8 @@ import notify from './partial/notify'
 import PageHeader from './partial/PageHeader.vue'
 import Breadcrumbs from './partial/Breadcrumbs.vue'
 import Panel from './partial/Panel.vue'
-import Discounts from './Discounts.vue'
-import Discount from './Discount.vue'
+import Items from './Items.vue'
+import Item from './Item.vue'
 
 export default {
     components: {
@@ -94,8 +94,8 @@ export default {
         'page-header': PageHeader,
         'breadcrumbs': Breadcrumbs,
         'panel-default': Panel,
-        Discounts,
-        Discount,
+        Items,
+        Item,
     },
     computed: {
         ...mapState('shop', [
@@ -132,10 +132,10 @@ export default {
     methods: {
         ...mapActions('shop', [
             'setLoadingStatus',
-            'editDiscount',
+            'editItem',
             'updateSetting',
             'setEditStatus',
-            'saveDiscount',
+            'saveItem',
         ]),
 
         saveAndStay() {
@@ -148,7 +148,14 @@ export default {
         },
         saveAndGo() {
             if (this.is_edit) {
-                this.saveDiscount()
+                let arr = $('#sl-form').serializeArray()
+                let data = {}
+
+                arr.forEach((item) => {
+                    data[item.name] = item.value
+                })
+
+                this.saveItem(data)
                 return
             }
 
@@ -173,7 +180,7 @@ export default {
     },
     created() {
         this.$store.dispatch('shop/initData')
-        this.$store.dispatch('shop/getDiscounts')
+        this.$store.dispatch('shop/getItems')
     },
 }
 </script>

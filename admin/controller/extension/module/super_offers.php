@@ -270,5 +270,6 @@ class ControllerExtensionModuleSuperOffers extends Controller
     {
         $this->extension_model->dropTables();
         $this->model_extension_pro_patch_modification->modificationHandler($this->codename, false);
+        $this->uninstallEvents();
     }
 }
