@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isInteger, isEmpty, isArray, isEqual, has, first } from 'lodash'
+import { isUndefined, isInteger, isEmpty, isArray, isString, isEqual, has, first } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -68,9 +68,12 @@ const getters = {
     getPrice: state => {
         return state.default_values.price
     },
-    isSpecial: state => {
-        return state.default_values.special !== false
-            && state.default_values.special > 0
+    isSpecial: (state, getters) => {
+        let t = getters.getSpecial
+        if (isString(t)) {
+            t = t.replace(/\s+/g, '')
+        }
+        return getters.getSpecial !== false && t > 0
     },
     getSpecial: state => {
         return state.default_values.special
