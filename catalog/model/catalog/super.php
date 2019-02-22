@@ -92,10 +92,8 @@ class ModelCatalogSuper extends Model
             $d_['znachek_class'] = $this->model_extension_module_pro_znachek->getZnachekClass($p['znachek']);
 
             // SPECIAL TEXT
-            if ($p['znachek'] == 'act') {
-                $this->load->model('extension/total/pro_discount');
-                $d_['special_text'] = $this->model_extension_total_pro_discount->getSpecialText($p['product_id']);
-            }
+            $this->load->model('extension/total/pro_discount');
+            $d_['special_text'] = $this->model_extension_total_pro_discount->getSpecialText($p['product_id']);
 
             $result['products'][] = $d_;
         }

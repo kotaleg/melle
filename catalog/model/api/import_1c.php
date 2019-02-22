@@ -79,6 +79,16 @@ class ModelApiImport1C extends Model
             }
         }
 
+        /* PRO DISCOUNT */
+        if ((in_array(__FUNCTION__, array('actionCatalogInit')))
+        && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/pro_discount.json')) {
+            if (!$this->model_extension_pro_patch_db->isColumnExist(self::PRODUCT_TABLE, 'shitty_discount')) {
+                $this->db->query("ALTER TABLE `". DB_PREFIX . $this->db->escape(self::PRODUCT_TABLE) . "`
+                    ADD COLUMN `". $this->db->escape('shitty_discount') . "` tinyint(1) NOT NULL;");
+            }
+        }
+        /* PRO DISCOUNT */
+
         // CLEAR ELEMENTS WITHOUD DESCRIPTION
         $this->load->model('api/import_1c/category');
         $this->model_api_import_1c_category->clearCategoriesWithoutDescription();
