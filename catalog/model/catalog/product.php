@@ -55,6 +55,7 @@ class ModelCatalogProduct extends Model {
                 'small_description' => $query->row['small_description'],
                 'znachek'           => $query->row['znachek'],
                 'sitemap_p'         => $query->row['sitemap_p'],
+                'shitty_discount'   => $query->row['shitty_discount'],
             );
         } else {
             return false;
@@ -181,17 +182,21 @@ class ModelCatalogProduct extends Model {
             }
         }
 
-        // HIT && NEW && ACT
-        if (isset($data['hit']) || isset($data['neww']) || isset($data['act'])) {
+        // HIT && NEW
+        if (isset($data['hit']) || isset($data['neww'])) {
             $znachki = [];
             if (isset($data['hit']) && $data['hit'] === true) { $znachki[] = 'hit'; }
             if (isset($data['neww']) && $data['neww'] === true) { $znachki[] = 'neww'; }
-            if (isset($data['act']) && $data['act'] === true) { $znachki[] = 'act'; }
 
             $znachki = $this->model_extension_pro_patch_db->prepareSqlParents($znachki);
             if (!empty($znachki)) {
                 $sql .= " AND p.znachek IN (" . $znachki . ")";
             }
+        }
+
+        // ACT
+        if (isset($data['act']) && $data['act'] === true) {
+            $sql .= " AND p.shitty_discount = '". (int)true ."' ";
         }
 
         // MIN PRICE
@@ -632,17 +637,21 @@ class ModelCatalogProduct extends Model {
             }
         }
 
-        // HIT && NEW && ACT
-        if (isset($data['hit']) || isset($data['neww']) || isset($data['act'])) {
+        // HIT && NEW
+        if (isset($data['hit']) || isset($data['neww'])) {
             $znachki = [];
             if (isset($data['hit']) && $data['hit'] === true) { $znachki[] = 'hit'; }
             if (isset($data['neww']) && $data['neww'] === true) { $znachki[] = 'neww'; }
-            if (isset($data['act']) && $data['act'] === true) { $znachki[] = 'act'; }
 
             $znachki = $this->model_extension_pro_patch_db->prepareSqlParents($znachki);
             if (!empty($znachki)) {
                 $sql .= " AND p.znachek IN (" . $znachki . ")";
             }
+        }
+
+        // ACT
+        if (isset($data['act']) && $data['act'] === true) {
+            $sql .= " AND p.shitty_discount = '". (int)true ."' ";
         }
 
         // MIN PRICE
@@ -816,17 +825,21 @@ class ModelCatalogProduct extends Model {
 
         $this->load->model('extension/pro_patch/db');
 
-        // HIT && NEW && ACT
-        if (isset($data['hit']) || isset($data['neww']) || isset($data['act'])) {
+        // HIT && NEW
+        if (isset($data['hit']) || isset($data['neww'])) {
             $znachki = [];
             if (isset($data['hit']) && $data['hit'] === true) { $znachki[] = 'hit'; }
             if (isset($data['neww']) && $data['neww'] === true) { $znachki[] = 'neww'; }
-            if (isset($data['act']) && $data['act'] === true) { $znachki[] = 'act'; }
 
             $znachki = $this->model_extension_pro_patch_db->prepareSqlParents($znachki);
             if (!empty($znachki)) {
                 $sql .= " AND p.znachek IN (" . $znachki . ")";
             }
+        }
+
+        // ACT
+        if (isset($data['act']) && $data['act'] === true) {
+            $sql .= " AND p.shitty_discount = '". (int)true ."' ";
         }
 
         // MIN PRICE
@@ -982,17 +995,21 @@ class ModelCatalogProduct extends Model {
             }
         }
 
-        // HIT && NEW && ACT
-        if (isset($data['hit']) || isset($data['neww']) || isset($data['act'])) {
+        // HIT && NEW
+        if (isset($data['hit']) || isset($data['neww'])) {
             $znachki = [];
             if (isset($data['hit']) && $data['hit'] === true) { $znachki[] = 'hit'; }
             if (isset($data['neww']) && $data['neww'] === true) { $znachki[] = 'neww'; }
-            if (isset($data['act']) && $data['act'] === true) { $znachki[] = 'act'; }
 
             $znachki = $this->model_extension_pro_patch_db->prepareSqlParents($znachki);
             if (!empty($znachki)) {
                 $sql .= " AND p.znachek IN (" . $znachki . ")";
             }
+        }
+
+        // ACT
+        if (isset($data['act']) && $data['act'] === true) {
+            $sql .= " AND p.shitty_discount = '". (int)true ."' ";
         }
 
         // MIN PRICE
@@ -1143,17 +1160,21 @@ class ModelCatalogProduct extends Model {
             }
         }
 
-        // HIT && NEW && ACT
-        if (isset($data['hit']) || isset($data['neww']) || isset($data['act'])) {
+        // HIT && NEW
+        if (isset($data['hit']) || isset($data['neww'])) {
             $znachki = [];
             if (isset($data['hit']) && $data['hit'] === true) { $znachki[] = 'hit'; }
             if (isset($data['neww']) && $data['neww'] === true) { $znachki[] = 'neww'; }
-            if (isset($data['act']) && $data['act'] === true) { $znachki[] = 'act'; }
 
             $znachki = $this->model_extension_pro_patch_db->prepareSqlParents($znachki);
             if (!empty($znachki)) {
                 $sql .= " AND p.znachek IN (" . $znachki . ")";
             }
+        }
+
+        // ACT
+        if (isset($data['act']) && $data['act'] === true) {
+            $sql .= " AND p.shitty_discount = '". (int)true ."' ";
         }
 
         // MIN PRICE
@@ -1299,17 +1320,21 @@ class ModelCatalogProduct extends Model {
             }
         }
 
-        // HIT && NEW && ACT
-        if (isset($data['hit']) || isset($data['neww']) || isset($data['act'])) {
+        // HIT && NEW
+        if (isset($data['hit']) || isset($data['neww'])) {
             $znachki = [];
             if (isset($data['hit']) && $data['hit'] === true) { $znachki[] = 'hit'; }
             if (isset($data['neww']) && $data['neww'] === true) { $znachki[] = 'neww'; }
-            if (isset($data['act']) && $data['act'] === true) { $znachki[] = 'act'; }
 
             $znachki = $this->model_extension_pro_patch_db->prepareSqlParents($znachki);
             if (!empty($znachki)) {
                 $sql .= " AND p.znachek IN (" . $znachki . ")";
             }
+        }
+
+        // ACT
+        if (isset($data['act']) && $data['act'] === true) {
+            $sql .= " AND p.shitty_discount = '". (int)true ."' ";
         }
 
         // MIN PRICE
