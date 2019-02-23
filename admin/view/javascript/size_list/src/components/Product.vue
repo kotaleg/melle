@@ -64,6 +64,7 @@ export default {
         ...mapActions('shop', [
             'updateItemValue',
             'updateValue',
+            'searchShitRequest',
         ]),
 
         loadShit({ action, searchQuery, callback }) {
