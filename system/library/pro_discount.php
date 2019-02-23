@@ -24,8 +24,8 @@ class pro_discount
         $this->customer = $registry->get('customer');
         $this->cart = $registry->get('cart');
 
-        $this->cart_total = $extra['cart_total'];
-        $this->cart_count = $extra['cart_count'];
+        $this->cart_total = (isset($extra['cart_total'])) ? $extra['cart_total'] : 0;
+        $this->cart_count = (isset($extra['cart_count'])) ? $extra['cart_count'] : 0;
 
         if ($this->cart) {
             $this->cart_total = $this->cart->getTotal();
@@ -168,6 +168,18 @@ class pro_discount
         return $new_special;
     }
 
+    public function getSpecialText($product_id)
+    {
+        $text = false;
+
+        $total = $this->getTotal($product_id, 10000000, 0);
+        if ($total && isset($total['count_like'])) {
+            $text = "{$total['count']} по цене {$total['count_like']}";
+        }
+
+        return $text;
+    }
+
     public function fixTotal($products_data)
     {
         foreach ($products_data as $pd_key => $pd) {
@@ -271,6 +283,7 @@ class pro_discount
 
         $total = array(
             'count' => $discount['products_count'],
+            'count_like' => $discount['count_like'],
             'price' => $price * $discount['count_like'],
         );
 

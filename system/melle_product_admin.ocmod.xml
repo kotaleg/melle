@@ -21,12 +21,12 @@
 
         <operation error="skip">
             <search><![CDATA[, date_added = NOW(), date_modified = NOW()");]]></search>
-            <add position="replace"><![CDATA[, date_added = NOW(), date_modified = NOW(), `znachek` = '".$this->db->escape($data['znachek'])."', `import_id` = '".$this->db->escape($data['import_id'])."', `sitemap_p` = '".$this->db->escape($data['sitemap_p'])."'");]]></add>
+            <add position="replace"><![CDATA[, date_added = NOW(), date_modified = NOW(), `znachek` = '".$this->db->escape($data['znachek'])."', `shitty_discount` = '".$this->db->escape($data['shitty_discount'])."', `import_id` = '".$this->db->escape($data['import_id'])."', `sitemap_p` = '".$this->db->escape($data['sitemap_p'])."'");]]></add>
         </operation>
 
         <operation error="skip">
             <search><![CDATA[, date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");]]></search>
-            <add position="replace"><![CDATA[, date_modified = NOW(), `znachek` = '".$this->db->escape($data['znachek'])."', `import_id` = '".$this->db->escape($data['import_id'])."', `sitemap_p` = '".$this->db->escape($data['sitemap_p'])."' WHERE product_id = '" . (int)$product_id . "'");]]></add>
+            <add position="replace"><![CDATA[, date_modified = NOW(), `znachek` = '".$this->db->escape($data['znachek'])."', `shitty_discount` = '".$this->db->escape($data['shitty_discount'])."', `import_id` = '".$this->db->escape($data['import_id'])."', `sitemap_p` = '".$this->db->escape($data['sitemap_p'])."' WHERE product_id = '" . (int)$product_id . "'");]]></add>
         </operation>
 
         <operation error="skip">
@@ -54,6 +54,14 @@
                     $data['znachek'] = $product_info['znachek'];
                 } else {
                     $data['znachek'] = '';
+                }
+
+                if (isset($this->request->post['shitty_discount'])) {
+                    $data['shitty_discount'] = $this->request->post['shitty_discount'];
+                } elseif (!empty($product_info)) {
+                    $data['shitty_discount'] = $product_info['shitty_discount'];
+                } else {
+                    $data['shitty_discount'] = '';
                 }
 
                 if (isset($this->request->post['sitemap_p'])) {
@@ -124,6 +132,8 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label" for="input-znachek">{{ entry_znachek }}</label>
                     <div class="col-sm-10">
+                      <input type="hidden" name="shitty_discount" value="{{ shitty_discount }}" />
+
                       <select name="znachek" id="input-znachek" class="form-control">
                         <option value="0">{{ text_none }}</option>
                         {% for zkey, z in znachki %}

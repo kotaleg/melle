@@ -1,0 +1,13 @@
+<div class="tab-pane" id="tab-size-list">
+    <div id="size_list-mount">
+        <{{codename}}_product></{{codename}}_product>
+    </div>
+</div>
+
+<script type="text/javascript">
+window.__{{codename}}__ = {{state}};
+</script>
+
+{% for script in pro_scripts %}
+<script type="text/javascript" src="{{ script }}?{{ random(777) }}"></script>
+{% endfor %}

@@ -86,4 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* PRODUCT IMAGE END */
+
+    /* FANCY START */
+    $('[data-fancybox]').fancybox({
+        // Options will go here
+    });
+    /* FANCY END */
 });

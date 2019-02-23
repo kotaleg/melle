@@ -237,7 +237,7 @@ class ControllerProductProduct extends Controller {
             $data['recently_viewed'] = $this->model_extension_module_pro_recently->getProductsPrepared();
             $this->model_extension_module_pro_recently->addProduct($product_id);
 
-            $data['znachek'] = $this->model_extension_module_pro_znachek->getZnachek($product_info['znachek']);
+            $data['znachek'] = $this->model_extension_module_pro_znachek->getZnachek($product_info['znachek'], true);
             $data['h1'] = $product_info['h1'];
 
             $this->load->controller('extension/module/melle/initProduct', $product_id);

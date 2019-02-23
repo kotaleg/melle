@@ -58,6 +58,7 @@ class ModelCatalogSuper extends Model
                 'special' => 0,
                 'rating' => $p['rating'],
                 'reviews_count' => $p['reviews'],
+                'special_text' => false,
 
                 'quantity' => 1,
                 'default_values' => $this->model_extension_module_super_offers->getDefaultValues($p['product_id'], $p),
@@ -89,6 +90,10 @@ class ModelCatalogSuper extends Model
 
             $d_['znachek'] = $this->model_extension_module_pro_znachek->getZnachek($p['znachek']);
             $d_['znachek_class'] = $this->model_extension_module_pro_znachek->getZnachekClass($p['znachek']);
+
+            // SPECIAL TEXT
+            $this->load->model('extension/total/pro_discount');
+            $d_['special_text'] = $this->model_extension_total_pro_discount->getSpecialText($p['product_id']);
 
             $result['products'][] = $d_;
         }

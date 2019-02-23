@@ -211,6 +211,9 @@ class ControllerExtensionModuleMelle extends Controller
             $state['current_category'] = $this->model_tool_base->getCurrentCategoryName();
             $state['quantity'] = 1;
 
+            $this->load->model('extension/module/size_list');
+            $state['size_list'] = $this->model_extension_module_size_list->getSizeList($product_id);
+
             $state['default_values'] = $this->model_extension_module_super_offers->getDefaultValues($product_id, $product_info);
 
             $state['is_options_for_product'] = (bool)$this->model_extension_module_super_offers->isOptionsForProduct($product_id);

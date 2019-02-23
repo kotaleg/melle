@@ -29,7 +29,7 @@ class ControllerCommonFooter extends Controller {
         $data['wishlist'] = $this->url->link('account/wishlist', '', true);
         $data['newsletter'] = $this->url->link('account/newsletter', '', true);
 
-        // $data['powered'] = sprintf($this->language->get('text_powered'), $this->config->get('config_name'), date('Y', time()));
+        $data['powered'] = $this->language->get('text_powered');
 
         // Whos Online
         if ($this->config->get('config_customer_online')) {
@@ -58,12 +58,8 @@ class ControllerCommonFooter extends Controller {
 
         $data['scripts'] = $this->document->getScripts('footer');
 
-        $data['checkout'] = false;
         $this->load->model('tool/base');
-        if ($this->model_tool_base->getPageType() == 'checkout') {
-            $data['checkout'] = true;
-        }
-
+        $data['pagetype'] = $this->model_tool_base->getPageType();
 
         return $this->load->view('common/footer', $data);
     }

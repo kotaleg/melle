@@ -23,6 +23,12 @@
                         </span>
                     </label>
 
+                    <a v-if="size_list && o.class == 'size'"
+                        id="tablitsa-razmerov"
+                        data-fancybox=""
+                        class="hidden-sm"
+                        :href="size_list">таблица<br>размеров</a>
+
                 </div>
             </div>
          </div>
@@ -101,6 +107,7 @@ export default {
         ...mapState('product', [
             'product_id',
             'options',
+            'size_list',
         ]),
 
         quantity: {
