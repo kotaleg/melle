@@ -21,7 +21,7 @@
         </table>
 
         <div v-if="emptyItems" class="alert alert-info" role="alert">
-            У вас пока нет скидок
+            У вас пока нет ни одной таблицы
         </div>
     </div>
 </template>

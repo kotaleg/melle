@@ -8,7 +8,7 @@ class ModelExtensionModuleProZnachek extends Model
     {
         return array(
             'new'   => 'Значек "Новинка"',
-            // 'act'   => 'Значек "Акция"',
+            'act'   => 'Значек "Акция"',
             'hit'   => 'Значек "Хит"',
         );
     }

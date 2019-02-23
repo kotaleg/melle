@@ -6,6 +6,8 @@ class ModelApiImport1CDiscount extends Model
 
     const PRODUCT_TABLE = 'product';
 
+    const DISCOUNT = 'act';
+
     function __construct($registry)
     {
         parent::__construct($registry);
@@ -49,18 +51,6 @@ class ModelApiImport1CDiscount extends Model
                     $check = true;
                 }
 
-                /* PRO DISCOUNT */
-                if ((in_array(__FUNCTION__, array('action')))
-                && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/pro_discount.json')) {
-                    $s = $this->model_extension_total_pro_discount->getSpecialPrice($product_id, 0);
-                    $t = $this->model_extension_total_pro_discount->getSpecialText($product_id);
-
-                    if ($s || $t !== false) {
-                        $check = true;
-                    }
-                }
-                /* PRO DISCOUNT */
-
                 if ($check === true) {
                     $this->setDiscountZnachek($product_id);
                     $count++;
@@ -95,12 +85,20 @@ class ModelApiImport1CDiscount extends Model
         $this->db->query("UPDATE `". DB_PREFIX ."product`
             SET `shitty_discount` = ''
             WHERE `shitty_discount` = '". (int)true ."'");
+
+        $this->db->query("UPDATE `". DB_PREFIX ."product`
+            SET `znachek` = ''
+            WHERE `znachek` = '". self::DISCOUNT ."'");
     }
 
     public function setDiscountZnachek($product_id)
     {
         $this->db->query("UPDATE `". DB_PREFIX ."product`
             SET `shitty_discount` = '". (int)true ."'
+            WHERE `product_id` = '". (int)$product_id ."'");
+
+        $this->db->query("UPDATE `". DB_PREFIX ."product`
+            SET `znachek` = '". self::DISCOUNT ."'
             WHERE `product_id` = '". (int)$product_id ."'");
     }
 

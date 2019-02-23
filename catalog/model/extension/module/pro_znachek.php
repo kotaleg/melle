@@ -53,7 +53,7 @@ class ModelExtensionModuleProZnachek extends Model
     {
         return array(
             'new'   => 'Новинка',
-            // 'act'   => 'Акция',
+            'act'   => 'Акция',
             'hit'   => 'Хит',
         );
     }
