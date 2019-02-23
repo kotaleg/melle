@@ -132,6 +132,26 @@ class ModelCatalogProduct extends Model {
                 if (!empty($data['filter_description'])) {
                     $sql .= " OR pd.description LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
                 }
+
+                /* H1 START */
+                if (!empty($data['filter_h1'])) {
+                    $sql .= " OR pd.h1 LIKE '%" . $this->db->escape($data['filter_name']) . "%' ";
+                }
+                /* H1 END */
+
+                /* SMALL DESCRIPTION START */
+                if (!empty($data['filter_sd'])) {
+                    $sql .= " OR pd.small_description LIKE '%" . $this->db->escape($data['filter_name']) . "%' ";
+                }
+                /* SMALL DESCRIPTION END */
+
+                /* ATTRIBUTE START */
+                if (!empty($data['filter_attributes'])) {
+                    $sql .= " OR (SELECT COUNT(pattr.attribute_id) FROM " . DB_PREFIX . "product_attribute pattr
+                        WHERE pattr.product_id = p.product_id
+                        AND pattr.text LIKE '%" . $this->db->escape($data['filter_name']) . "%') > 0 ";
+                }
+                /* ATTRIBUTE END */
             }
 
             if (!empty($data['filter_name']) && !empty($data['filter_tag'])) {
@@ -590,6 +610,26 @@ class ModelCatalogProduct extends Model {
                 if (!empty($data['filter_description'])) {
                     $sql .= " OR pd.description LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
                 }
+
+                /* H1 START */
+                if (!empty($data['filter_h1'])) {
+                    $sql .= " OR pd.h1 LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
+                }
+                /* H1 END */
+
+                /* SMALL DESCRIPTION START */
+                if (!empty($data['filter_sd'])) {
+                    $sql .= " OR pd.small_description LIKE '%" . $this->db->escape($data['filter_name']) . "%' ";
+                }
+                /* SMALL DESCRIPTION END */
+
+                /* ATTRIBUTE START */
+                if (!empty($data['filter_attributes'])) {
+                    $sql .= " OR (SELECT COUNT(pattr.attribute_id) FROM " . DB_PREFIX . "product_attribute pattr
+                        WHERE pattr.product_id = p.product_id
+                        AND pattr.text LIKE '%" . $this->db->escape($data['filter_name']) . "%') > 0 ";
+                }
+                /* ATTRIBUTE END */
             }
 
             if (!empty($data['filter_name']) && !empty($data['filter_tag'])) {

@@ -51,6 +51,14 @@ class ModelApiImport1CDiscount extends Model
                     $check = true;
                 }
 
+                /* PRO DISCOUNT */
+                if ((in_array(__FUNCTION__, array('action')))
+                && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/pro_discount.json')) {
+                    $t = $this->model_extension_total_pro_discount->getSpecialText($product_id);
+                    if ($t !== false) { $check = true; }
+                }
+                /* PRO DISCOUNT */
+
                 if ($check === true) {
                     $this->setDiscountZnachek($product_id);
                     $count++;

@@ -467,6 +467,10 @@ class ModelCatalogSuper extends Model
         $prepared = array(
             'filter_category_id'  => $category_id,
             'filter_sub_category' => true,
+            'filter_description'  => true,
+            'filter_h1'           => true,
+            'filter_attributes'   => true,
+            'filter_sd'           => true,
             'sort'                => $sort,
             'order'               => $order,
             'start'               => ($page - 1) * $limit,
