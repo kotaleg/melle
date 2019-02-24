@@ -218,6 +218,11 @@ class ControllerMailOrder extends Controller {
             }
 
             $data['products'][] = array(
+
+                /* IVAN MOD START */
+                'href'     => $this->url->link('product/product', 'product_id=' . $order_product['product_id'], true),
+                /* IVAN MOD END */
+
                 'name'     => $order_product['name'],
                 'model'    => $order_product['model'],
                 'option'   => $option_data,

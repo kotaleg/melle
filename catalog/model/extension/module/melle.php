@@ -37,6 +37,24 @@ class ModelExtensionModuleMelle extends Controller
                 );
             }
 
+            $cc_add = $this->model_catalog_category->getAdditionalCats($cat['category_id']);
+            foreach ($cc_add as $cat3) {
+                $check = true;
+                foreach ($cc as $cat2) {
+                    if ($cat3['category_id'] == $cat2['category_id']) {
+                        $check = false;
+                        break;
+                    }
+                }
+
+                if ($check) {
+                    $children[] = array(
+                        'title'     => $cat3['name'],
+                        'url'       => $this->model_extension_pro_patch_url->ajax('product/category', 'path=' . $cat['category_id'] .'_'. $cat3['category_id']),
+                    );
+                }
+            }
+
             $menu[] = array(
                 'title'     => $cat['name'],
                 'url'       => $this->model_extension_pro_patch_url->ajax('product/category', 'path=' . $cat['category_id']),

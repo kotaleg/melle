@@ -66,4 +66,31 @@ class ModelCatalogCategory extends Model {
 
         return $query->row['total'];
     }
+
+    /* ADIIDTIONAL PARENT START */
+    public function getAdditionalCats($parent_id)
+    {
+        $result = array();
+
+        $query = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "additional_parent`
+            WHERE parent_id = '" . (int)$parent_id . "'");
+
+        foreach ($query->rows as $item) {
+
+            if ($item['category_id'] === $parent_id) {
+                continue;
+            }
+
+            $cat = $this->getCategory($item['category_id']);
+            if (!$cat) { continue; }
+
+            $result[] = array(
+                'category_id' => $item['category_id'],
+                'name' => $cat['name'],
+            );
+        }
+
+        return $result;
+    }
+    /* ADIIDTIONAL PARENT END */
 }

@@ -55,6 +55,16 @@ class ModelCatalogCategory extends Model {
             }
         }
 
+        /* ADIIDTIONAL PARENT START */
+        if (isset($data['addidional_category'])) {
+            foreach ($data['addidional_category'] as $parent_id) {
+                $this->db->query("INSERT INTO " . DB_PREFIX . "additional_parent
+                    SET category_id = '" . (int)$category_id . "',
+                        parent_id = '" . (int)$parent_id . "'");
+            }
+        }
+        /* ADIIDTIONAL PARENT END */
+
         $this->cache->delete('category');
 
         return $category_id;
@@ -161,6 +171,19 @@ class ModelCatalogCategory extends Model {
             }
         }
 
+        /* ADIIDTIONAL PARENT START */
+        $this->db->query("DELETE FROM " . DB_PREFIX . "additional_parent
+            WHERE category_id = '" . (int)$category_id . "'");
+
+        if (isset($data['addidional_category'])) {
+            foreach ($data['addidional_category'] as $parent_id) {
+                $this->db->query("INSERT INTO " . DB_PREFIX . "additional_parent
+                    SET category_id = '" . (int)$category_id . "',
+                        parent_id = '" . (int)$parent_id . "'");
+            }
+        }
+        /* ADIIDTIONAL PARENT END */
+
         $this->cache->delete('category');
     }
 
@@ -182,8 +205,36 @@ class ModelCatalogCategory extends Model {
         $this->db->query("DELETE FROM " . DB_PREFIX . "seo_url WHERE query = 'category_id=" . (int)$category_id . "'");
         $this->db->query("DELETE FROM " . DB_PREFIX . "coupon_category WHERE category_id = '" . (int)$category_id . "'");
 
+        /* ADIIDTIONAL PARENT START */
+        $this->db->query("DELETE FROM " . DB_PREFIX . "additional_parent
+            WHERE category_id = '" . (int)$category_id . "'");
+        /* ADIIDTIONAL PARENT END */
+
         $this->cache->delete('category');
     }
+
+    /* ADIIDTIONAL PARENT START */
+    public function getAdditionalParents($category_id)
+    {
+        $result = array();
+
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "additional_parent`
+            WHERE category_id = '" . (int)$category_id . "'");
+
+        foreach ($query->rows as $item) {
+
+            $cat = $this->getCategory($item['parent_id']);
+            if (!$cat) { continue; }
+
+            $result[] = array(
+                'category_id' => $item['parent_id'],
+                'name' => $cat['name'],
+            );
+        }
+
+        return $result;
+    }
+    /* ADIIDTIONAL PARENT END */
 
     public function repairCategories($parent_id = 0) {
         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category WHERE parent_id = '" . (int)$parent_id . "'");

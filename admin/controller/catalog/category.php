@@ -497,6 +497,17 @@ class ControllerCatalogCategory extends Controller {
             $data['category_layout'] = array();
         }
 
+        /* ADIIDTIONAL PARENT START */
+        if (isset($this->request->post['addidional_category'])) {
+            $data['addidional_category'] = $this->request->post['addidional_category'];
+        } elseif (isset($this->request->get['category_id'])) {
+            $data['addidional_category'] = $this->model_catalog_category->getAdditionalParents($this->request->get['category_id']);
+        } else {
+            $data['addidional_category'] = array();
+        }
+        /* ADIIDTIONAL PARENT END */
+
+
         $this->load->model('design/layout');
 
         $data['layouts'] = $this->model_design_layout->getLayouts();

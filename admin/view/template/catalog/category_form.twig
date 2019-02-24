@@ -92,6 +92,23 @@
                   {% endif %}
                 </div>
               </div>
+
+              <!-- ДОПОЛНИТЕЛЬНЫЕ РОДИТЕЛИ -->
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-addcategory"><span data-toggle="tooltip" title="Дополнительные родители для категории. Только для меню.">Дополнительные родители</span></label>
+                <div class="col-sm-10">
+                  <input type="text" name="addcategory" value="" placeholder="Дополнительные родители" id="input-addcategory" class="form-control" />
+                  <div id="category-addcategory" class="well well-sm" style="height: 150px; overflow: auto;">
+                    {% for ac in addidional_category %}
+                    <div id="category-addcategory{{ ac.category_id }}"><i class="fa fa-minus-circle"></i> {{ ac.name }}
+                      <input type="hidden" name="addidional_category[]" value="{{ ac.category_id }}" />
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <!-- ДОПОЛНИТЕЛЬНЫЕ РОДИТЕЛИ -->
+
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="input-filter"><span data-toggle="tooltip" title="{{ help_filter }}">{{ entry_filter }}</span></label>
                 <div class="col-sm-10">
@@ -306,4 +323,41 @@ $('#category-filter').delegate('.fa-minus-circle', 'click', function() {
   <script type="text/javascript"><!--
 $('#language a:first').tab('show');
 //--></script></div>
+
+<script type="text/javascript">
+$('input[name=\'addcategory\']').autocomplete({
+    'source': function(request, response) {
+        $.ajax({
+            url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+                json.unshift({
+                    category_id: 0,
+                    name: '{{ text_none }}'
+                });
+
+                response($.map(json, function(item) {
+                    return {
+                        label: item['name'],
+                        value: item['category_id']
+                    }
+                }));
+            }
+        });
+    },
+    'select': function(item) {
+        $('input[name=\'addcategory\']').val('');
+
+        $('#category-addcategory' + item['value']).remove();
+
+        $('#category-addcategory').append('<div id="category-addcategory' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="addidional_category[]" value="' + item['value'] + '" /></div>');
+    }
+});
+
+$('#category-addcategory').delegate('.fa-minus-circle', 'click', function() {
+    $(this).parent().remove();
+});
+</script>
+
+
 {{ footer }}
