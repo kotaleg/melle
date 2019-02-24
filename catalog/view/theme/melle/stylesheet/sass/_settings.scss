@@ -107,6 +107,6 @@ img {
   }
   @include mobile {
     width: auto;
-    margin: 0 15px;
+    margin: 0 auto !important;
   }
 }
