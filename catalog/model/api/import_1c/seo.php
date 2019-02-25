@@ -36,7 +36,7 @@ class ModelApiImport1CSeo extends Model
 
             foreach ($allowed as $k => $v) {
                 if ($this->model_extension_pro_patch_db->isColumnExist(
-                    self::PRODUCT_DESCRIPTION_TABLE, 'shitty_discount')) {
+                    self::PRODUCT_DESCRIPTION_TABLE, $k)) {
                     $allowed[$k] = true;
                 }
             }

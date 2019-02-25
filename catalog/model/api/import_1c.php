@@ -331,8 +331,6 @@ class ModelApiImport1C extends Model
 
     private function _seoRoutine($parsed)
     {
-
-
         // SEO
         $this->load->model('api/import_1c/seo');
         $this->model_api_import_1c_seo->action($parsed);

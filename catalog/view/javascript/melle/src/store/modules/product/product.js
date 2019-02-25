@@ -115,7 +115,22 @@ const getters = {
                     options.push({
                         option_a: option.option_id,
                         option_value_a: option_value.option_value_id,
-
+                    })
+                }
+            })
+        })
+        return options
+    },
+    getOptionsForReview: state => {
+        let options = []
+        state.options.forEach((option) => {
+            if (!isArray(option.product_option_value)
+            || isEmpty(option.product_option_value)) {
+                return
+            }
+            option.product_option_value.forEach((option_value) => {
+                if (option_value.selected === true) {
+                    options.push({
                         option_name: option.name,
                         option_value_name: option_value.name,
                     })
