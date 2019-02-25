@@ -45,7 +45,7 @@ const actions = {
     updateFormValue({ commit }, payload) {
         commit('updateFormValue', payload)
     },
-    addReviewRequest({ commit, state, rootState, dispatch }) {
+    addReviewRequest({ commit, state, rootGetters, dispatch }) {
         this.dispatch('header/setLoadingStatus', true)
 
         return new Promise((resolve, reject) => {
@@ -53,6 +53,7 @@ const actions = {
 
             let form = clone(state.form)
             form['product_id'] = state.product_id
+            form['options'] = rootGetters['product/getActiveOptions']
 
             shop.makeRequest(
                 {

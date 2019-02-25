@@ -82,13 +82,13 @@ const actions = {
         )
     },
     importSEOData({ commit }) {
-        commit('setUpdateStatus', true)
+        commit('setLoadingStatus', true)
         shop.makeRequest(
             {
                 url: state.import_seo_data,
             },
             res => {
-                commit('setUpdateStatus', false)
+                commit('setLoadingStatus', false)
                 notify.messageHandler(res.data)
             }
         )

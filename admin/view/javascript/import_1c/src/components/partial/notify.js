@@ -22,6 +22,13 @@ export default {
                     text: element,
                 })
             }, this)
+        } else if (data.message && isArray(data.message)) {
+            data.message.forEach(function(element) {
+                Vue.prototype.$notify({
+                    group: Vue.prototype.$codename,
+                    text: element,
+                })
+            }, this)
         }
     },
 }

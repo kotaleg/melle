@@ -329,6 +329,15 @@ class ModelApiImport1C extends Model
         return true;
     }
 
+    private function _seoRoutine($parsed)
+    {
+
+
+        // SEO
+        $this->load->model('api/import_1c/seo');
+        $this->model_api_import_1c_seo->action($parsed);
+    }
+
     private function renameFile($path, $postfix = '__FINISHED')
     {
         $progress_id = $this->model_api_import_1c_progress->getProgressId();

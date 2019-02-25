@@ -115,6 +115,9 @@ const getters = {
                     options.push({
                         option_a: option.option_id,
                         option_value_a: option_value.option_value_id,
+
+                        option_name: option.name,
+                        option_value_name: option_value.name,
                     })
                 }
             })

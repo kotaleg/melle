@@ -5,6 +5,7 @@ class ModelApiImport1CProduct extends Model
     private $route = 'api/import_1c/product';
 
     const PRODUCT_TABLE = 'product';
+    const PRODUCT_DESCRIPTION_TABLE = 'product_description';
 
     const CATEGORY = 'Категория';
     const COLLECTION = 'Коллекция';
@@ -763,5 +764,12 @@ class ModelApiImport1CProduct extends Model
                 $this->deleteCategory($cat['category_id']);
             }
         }
+    }
+
+    public function updateProductDescriptionColumn($product_id, $column, $value)
+    {
+        $this->db->query("UPDATE ". DB_PREFIX . self::PRODUCT_DESCRIPTION_TABLE ."
+            SET `". $this->db->escape($column) ."` = '" . $this->db->escape($value) . "'
+            WHERE product_id = '" . (int)$product_id . "'");
     }
 }

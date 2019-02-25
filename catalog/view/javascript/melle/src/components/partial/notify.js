@@ -15,9 +15,7 @@ export default {
                 Vue.prototype.$notify({
                     group: codename,
                     type: 'success',
-                    // title: store.state.header.text_success,
                     text: element,
-                    // duration: -1,
                 })
             }, this)
         } else if (has(data, 'error') && isArray(data.error)) {
@@ -25,9 +23,7 @@ export default {
                 Vue.prototype.$notify({
                     group: codename,
                     type: 'warn',
-                    // title: store.state.header.text_warning,
                     text: element,
-                    // duration: -1,
                 })
             }, this)
         }

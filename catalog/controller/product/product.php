@@ -620,6 +620,7 @@ class ControllerProductProduct extends Controller {
                     'name' => $parsed['form']['name'],
                     'text' => $parsed['form']['message'],
                     'rating' => $parsed['form']['rating'],
+                    'options' => $json['form_error']['options'],
                 ));
                 $json['sent'] = true;
                 $json['success'][] = $this->language->get('text_success');

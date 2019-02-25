@@ -23,7 +23,7 @@ class ControllerApiLogin extends Controller
             }
 
             if (!in_array($this->request->server['REMOTE_ADDR'], $ip_data)) {
-                $json['error']['ip'] = sprintf($this->language->get('error_ip'), $this->request->server['REMOTE_ADDR']);
+                $json['error'][] = sprintf($this->language->get('error_ip'), $this->request->server['REMOTE_ADDR']);
             }
 
             if (!$json) {
@@ -39,7 +39,7 @@ class ControllerApiLogin extends Controller
                 // Create Token
                 $json['api_token'] = $session->getId();
             } else {
-                $json['error']['key'] = $this->language->get('error_key');
+                $json['error'][] = $this->language->get('error_key');
             }
         }
 
