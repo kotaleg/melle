@@ -20,18 +20,6 @@ class ModelCatalogReview extends Model {
             $message .= $this->language->get('text_review') . "\n";
             $message .= html_entity_decode($data['text'], ENT_QUOTES, 'UTF-8') . "\n\n";
 
-            if (isset($data['options']) && is_array($data['options'])) {
-                $message .= html_entity_decode('Выбранные опции:', ENT_QUOTES, 'UTF-8') . "\n";
-
-                foreach ($data['options'] as $o) {
-                    if (isset($o['option_name']) && isset($o['option_value_name'])) {
-                        $message .= html_entity_decode("{$o['option_name']}: {$o['option_value_name']}", ENT_QUOTES, 'UTF-8') . "\n";
-                    }
-                }
-
-                $message .= "\n";
-            }
-
             $mail = new Mail($this->config->get('config_mail_engine'));
             $mail->parameter = $this->config->get('config_mail_parameter');
             $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');

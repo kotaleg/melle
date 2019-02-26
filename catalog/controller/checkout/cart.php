@@ -671,17 +671,14 @@ class ControllerCheckoutCart extends Controller {
             if ($product_info && !isset($json['error'])) {
 
                 $selected_options = array();
-                $product_options = $this->model_catalog_product->getProductOptions($product_id);
 
-                foreach ($product_options as $product_option) {
-                    if (isset($options[$product_option['product_option_id']])) {
-                        foreach ($product_option['product_option_value'] as $pov) {
-                            if ($options[$product_option['product_option_id']] == $pov['product_option_value_id']) {
-                                $selected_options[] = array(
-                                    'name'  => $product_option['name'],
-                                    'value' => $pov['name'],
-                                );
-                            }
+                if (isset($parsed['options']) && is_array($parsed['options'])) {
+                    foreach ($parsed['options'] as $o) {
+                        if (isset($o['option_name']) && isset($o['option_value_name'])) {
+                            $selected_options[] = array(
+                                'name' => (string)$o['option_name'],
+                                'value' => (string)$o['option_value_name'],
+                            );
                         }
                     }
                 }

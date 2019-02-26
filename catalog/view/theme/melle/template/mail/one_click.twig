@@ -11,8 +11,8 @@
 {{ quantity }}
 
 {% if options %}
-Опции:
+Выбранные опции:
 {% for o in options %}
-<span>{{o.name}}: </span><span>{{o.value}}</span>
+<span>{{o.name}}: </span><span>{{o.value}}</span><br>
 {% endfor %}
 {% endif %}
