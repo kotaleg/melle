@@ -53,7 +53,6 @@ const actions = {
 
             let form = clone(state.form)
             form['product_id'] = state.product_id
-            form['options'] = rootGetters['product/getOptionsForReview']
 
             shop.makeRequest(
                 {
