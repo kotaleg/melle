@@ -121,7 +121,7 @@ const getters = {
         })
         return options
     },
-    getOptionsForReview: state => {
+    getOptionsForOneClick: state => {
         let options = []
         state.options.forEach((option) => {
             if (!isArray(option.product_option_value)
@@ -433,14 +433,14 @@ const actions = {
         )
     },
 
-    oneClickRequest({ commit, state, rootState, dispatch }, payload) {
+    oneClickRequest({ commit, state, rootState, dispatch, getters }, payload) {
         this.dispatch('header/setLoadingStatus', true)
         shop.makeRequest(
             {
                 url: rootState.cart.buy_one_click,
                 product_id: state.product_id,
                 quantity: state.quantity,
-                options: getters.getOptionsForCart,
+                options: getters.getOptionsForOneClick,
                 name: payload.name,
                 phone: payload.phone,
                 agree: payload.agree,

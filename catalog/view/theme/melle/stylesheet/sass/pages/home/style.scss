@@ -9,7 +9,7 @@ abbr {
   border-bottom: none;
 }
 
-abbr {
+abbr { 
   text-decoration: none;
 }
 
@@ -1228,3 +1228,6 @@ footer {
     background-image: url("https://melle.online/image/catalog/sliders/mobile/37_image_small.jpg") !important;
 }
 
+.swiper-slide>a>img{
+    display: none;
+}
