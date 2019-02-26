@@ -695,7 +695,7 @@ class ControllerCheckoutCart extends Controller {
                 $mail->setFrom($this->config->get('config_email'));
                 $mail->setSender(html_entity_decode($parsed['name'], ENT_QUOTES, 'UTF-8'));
                 $mail->setSubject(html_entity_decode(sprintf('Заказ в один клик %s', $parsed['name']), ENT_QUOTES, 'UTF-8'));
-                $mail->setText($this->load->view('mail/one_click', array(
+                $mail->setHtml($this->load->view('mail/one_click', array(
                     'phone' => filter_var($parsed['phone'], FILTER_SANITIZE_NUMBER_INT),
                     'name' => $parsed['name'],
                     'quantity' => $quantity,
