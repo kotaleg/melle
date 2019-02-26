@@ -509,8 +509,9 @@ body, td {
                                         <p><b>Товар:</b> <a href="{{ product }}">{{ product_name }}</a></p>
                                         <p><b>Кол-во:</b> {{ quantity }}</p>
 
-                                        {% for o in options %}
+                                        {% if options %}
                                         <p><b>Выбранные опции:</b></p>
+                                        {% for o in options %}
                                         <p><span>{{o.name}}: </span><span>{{o.value}}</span></p>
                                         {% endfor %}
                                         {% endif %}
