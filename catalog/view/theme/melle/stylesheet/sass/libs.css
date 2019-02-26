@@ -1291,7 +1291,8 @@ img {
 }
 
 .main-page--error {
-    display: flex
+    display: flex;
+    margin-bottom: 0px;
 }
 
 .btn-link,.main-page--error {
