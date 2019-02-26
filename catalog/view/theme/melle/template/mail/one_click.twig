@@ -504,24 +504,18 @@ body, td {
                                 <td class="w30" width="30"></td>
                                 <td class="w580" width="580">
                                     <repeater>
-                                        Телефон:
-                                        {{ phone }}
+                                        <p><b>Телефон:</b> {{ phone }}</p>
+                                        <p><b>Имя:</b> {{ name }}</p>
+                                        <p><b>Товар:</b> <a href="{{ product }}">{{ product_name }}</a></p>
+                                        <p><b>Кол-во:</b> {{ quantity }}</p>
 
-                                        Имя:
-                                        {{ name }}
-
-                                        Товар:
-                                        {{ product }}
-
-                                        Кол-во:
-                                        {{ quantity }}
-
-                                        {% if options %}
-                                        Выбранные опции:
                                         {% for o in options %}
-                                        <span>{{o.name}}: </span><span>{{o.value}}</span><br>
+                                        <p><b>Выбранные опции:</b></p>
+                                        <p><span>{{o.name}}: </span><span>{{o.value}}</span></p>
                                         {% endfor %}
                                         {% endif %}
+
+                                        <p><b>Условия приняты:</b> {% if agree %}ДА{% else %}НЕТ{% endif %}</p>
                                     </repeater>
                                 </td>
                                 <td class="w30" width="30"></td>

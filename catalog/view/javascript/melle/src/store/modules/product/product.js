@@ -433,7 +433,7 @@ const actions = {
         )
     },
 
-    oneClickRequest({ commit, state, rootState, dispatch }, payload) {
+    oneClickRequest({ commit, state, rootState, dispatch, getters }, payload) {
         this.dispatch('header/setLoadingStatus', true)
         shop.makeRequest(
             {

@@ -504,13 +504,9 @@ body, td {
                                 <td class="w30" width="30"></td>
                                 <td class="w580" width="580">
                                     <repeater>
-                                        Телефон:
-                                        {{ phone }}
-
-                                        Сообщение:
-                                        {{ message }}
-
-                                        Условия приняты: {% if agree %}ДА{% else %}НЕТ{% endif %}
+                                        <p><b>Телефон:</b> {{ phone }}</p>
+                                        <p><b>Сообщение:</b> {{ message }}</p>
+                                        <p><b>Условия приняты:</b> {% if agree %}ДА{% else %}НЕТ{% endif %}</p>
                                     </repeater>
                                 </td>
                                 <td class="w30" width="30"></td>

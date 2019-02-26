@@ -700,6 +700,7 @@ class ControllerCheckoutCart extends Controller {
                     'name' => $parsed['name'],
                     'quantity' => $quantity,
                     'product' => $this->model_extension_pro_patch_url->ajax('product/product', 'product_id=' . $product_id),
+                    'product_name' => (isset($product_info['h1'])) ? $product_info['h1'] : $product_info['name'],
                     'options' => $selected_options,
                 )));
                 $mail->send();

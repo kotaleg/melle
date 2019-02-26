@@ -504,24 +504,24 @@ body, td {
                                 <td class="w30" width="30"></td>
                                 <td class="w580" width="580">
                                     <repeater>
-                                        {{ text_welcome }}
+                                        <p>{{ text_welcome }}</p>
 
                                         {% if not approval %}
-                                        {{ text_login }}
+                                        <p>{{ text_login }}</p>
 
-                                        {{ login }}
+                                        <p>{{ login }}</p>
 
-                                        {{ text_service }}
+                                        <p>{{ text_service }}</p>
 
-                                        {{ text_thanks }}
-                                        {{ store }}
+                                        <p>{{ text_thanks }}</p>
+                                        <p>{{ store }}</p>
                                         {% else %}
-                                        {{ text_approval }}
+                                        <p>{{ text_approval }}</p>
 
-                                        {{ login }}
+                                        <p>{{ login }}</p>
 
-                                        {{ text_thanks }}
-                                        {{ store }}
+                                        <p>{{ text_thanks }}</p>
+                                        <p>{{ store }}</p>
                                         {% endif %}
                                     </repeater>
                                 </td>
