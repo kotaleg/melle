@@ -461,9 +461,7 @@ text-transform: uppercase;
 #absolutDostavim + #absolutDostavim{
 	display:none;
 }
-.address-filter{
-display:none
-}
+
 /*.button31 {
   position: relative;
   z-index: 1;
@@ -475,9 +473,7 @@ display:none
   background: #ddd;
   box-shadow: 0 1px rgba(0,0,0,.1) inset, 0 1px #fff;
 }*/
-input.address-filter {
-    display: none;
-}
+
 @-webkit-keyframes rotate31 {
   100% {-webkit-transform: rotate(360deg);}
 }

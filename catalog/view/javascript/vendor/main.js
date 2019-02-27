@@ -143,7 +143,33 @@ $(sityDostavim).keyup(function(I){
 	
 }	
 	
-
+//25.02.2019
+    // Сортировка списка ПВЗ по первым буквам фильтра
+    jQuery('input.address-filter').keyup(function(e){
+        if (e.keyCode === 40) {            
+            if (!jQuery('.pvz-item.selected').length) {
+				
+                jQuery('.pvz-item').not('.hidden').first().addClass('selected').attr('tabindex', '0').focus();
+                jQuery('.address-filter').val(jQuery('.pvz-item.selected').text());
+            } else {
+                jQuery('.pvz-item.selected').focus();                
+            };            
+        } else if (e.keyCode === 38) {
+            jQuery('.pvz-item.selected').focus(); 
+        } else {
+            jQuery('.pvz-item.selected').removeClass('selected');
+            var sortVal = jQuery.trim(jQuery(this).val().toLowerCase().split(',')[0]);
+            console.log(sortVal);
+            jQuery('.pvz-item').map(function(){ 
+                if (jQuery(this).text().split(',')[0].toLowerCase().indexOf(sortVal) + 1){
+                    jQuery(this).removeClass('hidden');
+                } else {
+                    jQuery(this).addClass('hidden');
+                };
+            });        
+        }
+    });
+//25.02.2019
 
 function phoneDostavim(phone){
 					//начало функции mask (Маска для телефона)
@@ -241,9 +267,10 @@ if (typeof (reloadAll) === "function")
 		var nameDostavim = '#customer_firstname';
 		var telDostavim = '#customer_telephone';
 		var emailDostavim = '#customer_email';
-		//var addressDostavim = '#payment_address_address_1';//#shipping_address_address_1';
-		window.addressDostavim = '#shipping_address_address_1';//#shipping_address_address_1';
-		var labeladress='label[for="shipping_address_address_1"]';
+		//var addressDostavim = '#payment_address_address_2';//#shipping_address_address_2';
+		window.addressDostavim = '#shipping_address_address_2';//#shipping_address_address_2';
+		window.addressDostavim2 = '#shipping_address_address_1';//#shipping_address_address_2';
+		var labeladress='label[for="shipping_address_address_2"]';
 		var CommentDostavim = '#comment';
 		var sityDostavim = '#shipping_address_city';//#shipping_address_city';
 		var regionDostavim = '#shipping_address_zone_id';
@@ -255,7 +282,8 @@ if (typeof (reloadAll) === "function")
 		var telDostavim = '#checkout_customer_main_telephone';
 		var emailDostavim = '#checkout_customer_main_email';
 		//var addressDostavim = '#checkout_customer_main_address_1';
-		window.addressDostavim = '#checkout_customer_main_address_1';
+		window.addressDostavim = '#checkout_customer_main_address_2';
+		window.addressDostavim2 = '#checkout_customer_main_address_1';//#shipping_address_address_2';
 		var CommentDostavim = '#checkout_customer_main_comment';
 		var labeladress='label[for="shipping_address_address_1"]';
 		var sityDostavim = '#checkout_customer_main_city';
@@ -284,9 +312,9 @@ if (typeof (reloadAll) === "function")
         }	
 		else
 		{
-			//$(addressDostavim).val('');
-			//$(addressDostavim).attr('value','');
-			//$('span.hidepvz').css('display','none');
+			$(addressDostavim).val('');
+			$(addressDostavim).attr('value','');
+			$('span.hidepvz').css('display','none');
 		}
 
 //здесь мы берем стандартную функцию live и адаптируем под все версии Jquery
@@ -485,6 +513,32 @@ var options2 = [];
 					});
     
     // Проверка заполнения полей
+	
+//25.02.2019					
+                    jQuery('.pvz-item').keyup(function(e){
+                        e.preventDefault();               
+                        if (e.keyCode === 40) {
+                            jQuery(this).removeClass('selected').attr('tabindex', '-1');
+                            var currentPvz = jQuery(this).nextAll('.pvz-item:not(.hidden)').first();
+                            currentPvz.addClass('selected').attr('tabindex', '0').focus();
+                            jQuery('.address-filter').val(currentPvz.text());
+                        } else if (e.keyCode === 38) {
+                            jQuery(this).removeClass('selected').attr('tabindex', '-1');
+                            var currentPvz = jQuery(this).prevAll('.pvz-item:not(.hidden)').first();
+                            currentPvz.addClass('selected').attr('tabindex', '0').focus();
+                            jQuery('.address-filter').val(currentPvz.text());
+                        } else if (e.keyCode === 13) {                            
+                            if (jQuery(this).hasClass('selected')) {
+                                jQuery('#contactChoice3').prop('checked', true);
+                                jQuery('.pvz-list-link').html(jQuery(this).html());
+                                jQuery('.pvz-div').hide();       
+                            }                            
+                        } else {
+                            
+                        };        
+                        jQuery(addressDostavim).val(jQuery(this).text());
+                    });
+//25.02.2019	
 
 
 	//var checkFormPhone = function(formVal) {

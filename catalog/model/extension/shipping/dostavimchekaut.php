@@ -920,13 +920,15 @@ for ($i = 0; $i < count($dslist); $i++) {
         $parametrsWidth = $parametrs->deliveryMethods[3]->width;
         $parametrsHeight = $parametrs->deliveryMethods[3]->height;
         $parametrsWeigh = $parametrs->deliveryMethods[3]->weight;
-
+		
+		
+		$priceProduct = 0;
 		foreach ($products as $i => $item) {
-				$priceProduct =	$item['total'];
+				$priceProduct =	$item['total']+$priceProduct;
 		}
 
-		if(stristr($address['address_1'], '::', true)){
-			$deliveryService1 = explode("::", $address['address_1']);
+		if(stristr($address['address_2'], '::', true)){
+			$deliveryService1 = explode("::", $address['address_2']);
 			$deliveryService = $deliveryService1[1];
 			$deliveryServiceForReplace = $deliveryService1[1];
 			$deliveryAddressForReplace = $deliveryService1[0];
@@ -938,9 +940,9 @@ for ($i = 0; $i < count($dslist); $i++) {
         $deliveryServiceSD = '';  //может понадобиться в 1.5
 
 		//17.01.2019
-		$limit = explode("::", $address['address_1']);
+		$limit = explode("::", $address['address_2']);
 		if (isset($limit[1])){
-			$deliveryAddressGet = explode("::", $address['address_1']);
+			$deliveryAddressGet = explode("::", $address['address_2']);
 			$deliveryService = $deliveryAddressGet[1];
 			$deliveryServiceAddress = $deliveryAddressGet[0];
 			$deliveryServiceSD = $deliveryAddressGet[2];
@@ -1046,9 +1048,9 @@ for ($i = 0; $i < count($dslist); $i++) {
 		$orderCost = $variableOrderCost;
         $deliveryServiceSD = '';  //может понадобиться в 1.5
 
-		$limit = explode("::", $address['address_1']);
+		$limit = explode("::", $address['address_2']);
 		if (isset($limit[1])){
-			$deliveryAddressGet = explode("::", $address['address_1']);
+			$deliveryAddressGet = explode("::", $address['address_2']);
 			$deliveryService = $deliveryAddressGet[1];
 			$deliveryServiceAddress = $deliveryAddressGet[0];
 			$deliveryServiceSD = $deliveryAddressGet[2];
@@ -1336,6 +1338,10 @@ for ($i = 0; $i < count($dslist); $i++) {
 				}
 			}
 		}
+		
+		$this->log->write(print_r($moscow_dostavim["value"],true));
+		$this->log->write(print_r($address["city"],true));
+		$this->log->write(print_r($priceProduct,true));
 
 		if(isset($deliveryServiceForReplace))
 		{

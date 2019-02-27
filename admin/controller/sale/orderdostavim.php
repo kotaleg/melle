@@ -1175,7 +1175,13 @@ function GetGuidCityAndRegion($partName)
 				'country'   => $order_info['shipping_country']
 			);
 			
-			$data['adressdostavim'] = $order_info['shipping_address_1'];			
+			if((empty($order_info['shipping_address_2']))or(!isset($order_info['shipping_address_2'])))
+			{
+				$data['adressdostavim'] = $order_info['shipping_address_1'];	
+			}
+			else
+			$data['adressdostavim'] = $order_info['shipping_address_2'];
+		
 			$data['citydostavim'] = $order_info['shipping_city'];			
 			$data['zonedostavim'] = $order_info['shipping_zone'];
 
