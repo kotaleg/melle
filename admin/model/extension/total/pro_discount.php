@@ -245,6 +245,11 @@ class ModelExtensionTotalProDiscount extends Model
             $json['error'][] = 'Неверная единица измерения скидки';
         }
 
+        if (!$data['categories'] && !$data['manufacturers']
+        && !$data['products'] && !$data['customers']) {
+            $data['status'] = false;
+        }
+
         if (!isset($json['error'])) {
 
             if (!$data['discount_id']) {
@@ -360,7 +365,7 @@ class ModelExtensionTotalProDiscount extends Model
 
     /* CATEGORIES */
 
-    public function getAllCategories($query = null, $discount_id = null)
+    public function getAllCategories($query = null, $discount_id = null, $limit = 20)
     {
         $sql = "SELECT c.category_id AS id, cd.name
             FROM `". DB_PREFIX . "category` c
@@ -382,14 +387,16 @@ class ModelExtensionTotalProDiscount extends Model
             $sql .= " AND cd.name LIKE '%" . $this->db->escape($query) . "%' ";
         }
 
-        $sql .= " LIMIT 20";
+        if ($limit !== null) {
+            $sql .= " LIMIT {$limit}";
+        }
 
         return $this->db->query($sql)->rows;
     }
 
     /* MANUFACTURERS */
 
-    public function getAllManufacturers($query = null, $discount_id = null)
+    public function getAllManufacturers($query = null, $discount_id = null, $limit = 20)
     {
         $sql = "SELECT m.manufacturer_id AS id, m.name
             FROM `". DB_PREFIX . "manufacturer` m";
@@ -407,14 +414,16 @@ class ModelExtensionTotalProDiscount extends Model
             $sql .= " {$glue} m.name LIKE '%" . $this->db->escape($query) . "%' ";
         }
 
-        $sql .= " LIMIT 20";
+        if ($limit !== null) {
+            $sql .= " LIMIT {$limit}";
+        }
 
         return $this->db->query($sql)->rows;
     }
 
     /* CUSTOMERS */
 
-    public function getAllCustomers($query = null, $discount_id = null)
+    public function getAllCustomers($query = null, $discount_id = null, $limit = 20)
     {
         $sql = "SELECT c.customer_id AS id, c.email AS name
             FROM `". DB_PREFIX ."customer` c";
@@ -432,14 +441,16 @@ class ModelExtensionTotalProDiscount extends Model
             $sql .= " {$glue} c.email LIKE '%" . $this->db->escape($query) . "%' ";
         }
 
-        $sql .= " LIMIT 20";
+        if ($limit !== null) {
+            $sql .= " LIMIT {$limit}";
+        }
 
         return $this->db->query($sql)->rows;
     }
 
     /* PRODUCTS */
 
-    public function getAllProducts($query = null, $discount_id = null)
+    public function getAllProducts($query = null, $discount_id = null, $limit = 20)
     {
         $sql = "SELECT p.product_id AS id, pd.h1, pd.name
             FROM `". DB_PREFIX . "product` p
@@ -462,7 +473,9 @@ class ModelExtensionTotalProDiscount extends Model
             $sql .= " OR pd.h1 LIKE '%" . $this->db->escape($query) . "%' ";
         }
 
-        $sql .= " LIMIT 20";
+        if ($limit !== null) {
+            $sql .= " LIMIT {$limit}";
+        }
 
         return $this->db->query($sql)->rows;
     }

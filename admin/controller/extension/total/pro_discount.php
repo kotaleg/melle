@@ -182,13 +182,13 @@ class ControllerExtensionTotalProDiscount extends Controller
 
             // ALL
             $json['all_manufacturers'] = $this->extension_model->prepareForTree(
-                $this->extension_model->getAllManufacturers(null, $parsed['discount_id']));
+                $this->extension_model->getAllManufacturers(null, $parsed['discount_id'], null));
             $json['all_categories'] = $this->extension_model->prepareForTree(
-                $this->extension_model->getAllCategories(null, $parsed['discount_id']));
+                $this->extension_model->getAllCategories(null, $parsed['discount_id'], null));
             $json['all_products'] = $this->extension_model->prepareForTree(
-                $this->extension_model->getAllProducts(null, $parsed['discount_id']));
+                $this->extension_model->getAllProducts(null, $parsed['discount_id'], null));
             $json['all_customers'] = $this->extension_model->prepareForTree(
-                $this->extension_model->getAllCustomers(null, $parsed['discount_id']));
+                $this->extension_model->getAllCustomers(null, $parsed['discount_id'], null));
 
         } else {
             $json['error'][] = $this->language->get('error_corrupted_request');
