@@ -1224,10 +1224,12 @@ footer {
 .panel-buttons__mail-link > svg {
   fill: #fff !important;
 }
-.phoneSlide{
-    background-image: url("https://melle.online/image/catalog/sliders/mobile/37_image_small.jpg") !important;
-}
+
 
 .swiper-slide>a>img{
     display: none;
+}
+
+.medium{
+    background-position: 0px 100px !important;
 }
