@@ -372,15 +372,18 @@ class ModelApiImport1C extends Model
     {
         $unused_count = 0;
         $d = new \import_1c\import_1c_dir;
-        $images = $d::scanDir(DIR_IMAGE.'catalog/import_files/',
+
+        if (is_dir(DIR_IMAGE.'catalog/import_files/')) {
+            $images = $d::scanDir(DIR_IMAGE.'catalog/import_files/',
             array('*.jpg', '*.png', '*.JPG'));
 
-        $this->load->model('api/import_1c/product');
-        foreach ($images as $img) {
-            if (!$this->model_api_import_1c_product->
-                isImageForProduct(str_replace(DIR_IMAGE, '', $img))) {
-                @unlink($img);
-                $unused_count++;
+            $this->load->model('api/import_1c/product');
+            foreach ($images as $img) {
+                if (!$this->model_api_import_1c_product->
+                    isImageForProduct(str_replace(DIR_IMAGE, '', $img))) {
+                    @unlink($img);
+                    $unused_count++;
+                }
             }
         }
 
