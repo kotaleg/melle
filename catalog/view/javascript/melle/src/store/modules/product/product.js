@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { isUndefined, isInteger, isEmpty, isArray, isString, isEqual, has, first } from 'lodash'
 
 import shop from '../../../api/shop'
+import productApi from '../../../api/productApi'
 import notify from '../../../components/partial/notify'
 import Errors from '../../../components/partial/errors'
 
@@ -157,8 +158,10 @@ const getters = {
     isCombinationActive: (state, getters) => {
         let result = false
         let options = getters.getActiveOptions
+        options = productApi.clearOptions(options)
         state.full_combinations.forEach((comb, index) => {
-            if (isEqual(options, comb.required)) {
+            let rr = productApi.clearOptions(comb.required)
+            if (isEqual(options, rr)) {
                 result = index
             }
         })
@@ -308,16 +311,17 @@ const actions = {
         if (!isUndefined(one)) {
             state.full_combinations.forEach((comb, i) => {
                 if (find !== false) { return }
+
                 comb.required.forEach((req) => {
                     if (find !== false) { return }
                     if (isEqual(one, req)) {
                         find = true
 
                         // MAKE COMBINATION ACTIVE
-                        comb.required.forEach((req) => {
-                            if (!isEqual(one, req)) {
+                        comb.required.forEach((req_) => {
+                            if (!isEqual(one, req_)) {
                                 let real_keys = getters.getKeysForRealOptions(
-                                    {option_a:req.option_a, option_value_a:req.option_value_a})
+                                    {option_a:req_.option_a, option_value_a:req_.option_value_a})
 
                                 if (real_keys.o_key !== false && real_keys.ov_key !== false) {
                                     commit('setOptionSelectStatus',
@@ -347,16 +351,17 @@ const actions = {
     },
     updateDisabled({ commit, state, getters }) {
         let options = getters.getActiveOptions
+        options = productApi.clearOptions(options)
 
         let allowed = []
         options.forEach((o) => {
             state.full_combinations.forEach((comb) => {
                 comb.required.forEach((req) => {
                     if (comb.quantity > 0 && isEqual(req, o)) {
-                        comb.required.forEach((req) => {
+                        comb.required.forEach((req_) => {
                             allowed.push({
-                                option_a: req.option_a,
-                                option_value_a: req.option_value_a,
+                                option_a: req_.option_a,
+                                option_value_a: req_.option_value_a,
                             })
                         })
                     }
