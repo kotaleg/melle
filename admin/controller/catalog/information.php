@@ -364,6 +364,17 @@ class ControllerCatalogInformation extends Controller {
             $data['bottom'] = 0;
         }
 
+        /* IVAN MOD */
+        if (isset($this->request->post['link'])) {
+            $data['link'] = $this->request->post['link'];
+        } elseif (!empty($information_info)) {
+            $data['link'] = $information_info['link'];
+        } else {
+            $data['link'] = '';
+        }
+        $data['entry_link'] = 'Ссылка';
+        /* IVAN MOD */
+
         if (isset($this->request->post['status'])) {
             $data['status'] = $this->request->post['status'];
         } elseif (!empty($information_info)) {

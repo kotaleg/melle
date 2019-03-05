@@ -5,16 +5,17 @@ class ControllerCommonFooter extends Controller {
 
         $this->load->model('catalog/information');
 
-        // $data['informations'] = array();
+        $data['informations'] = array();
 
-        // foreach ($this->model_catalog_information->getInformations() as $result) {
-        //     if ($result['bottom']) {
-        //         $data['informations'][] = array(
-        //             'title' => $result['title'],
-        //             'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'])
-        //         );
-        //     }
-        // }
+        foreach ($this->model_catalog_information->getInformations() as $result) {
+            if ($result['bottom']) {
+                $data['informations'][] = array(
+                    'link'  => (isset($result['link']) && $result['link']) ? $result['link'] : false,
+                    'title' => $result['title'],
+                    'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'])
+                );
+            }
+        }
 
         $data['contact'] = $this->url->link('information/contact');
         $data['return'] = $this->url->link('account/return/add', '', true);

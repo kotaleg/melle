@@ -1,7 +1,21 @@
 <?php
 class ModelCatalogInformation extends Model {
+
+    /* IVAN MOD */
+    function __construct($registry)
+    {
+        parent::__construct($registry);
+
+        $this->load->model('extension/pro_patch/db');
+        if (!$this->model_extension_pro_patch_db->isColumnExist('information', 'link')) {
+            $this->db->query("ALTER TABLE `". DB_PREFIX . $this->db->escape('information') . "`
+                ADD COLUMN `". $this->db->escape('link') . "` varchar(255) NOT NULL;");
+        }
+    }
+    /* IVAN MOD */
+
     public function addInformation($data) {
-        $this->db->query("INSERT INTO " . DB_PREFIX . "information SET sort_order = '" . (int)$data['sort_order'] . "', bottom = '" . (isset($data['bottom']) ? (int)$data['bottom'] : 0) . "', status = '" . (int)$data['status'] . "'");
+        $this->db->query("INSERT INTO " . DB_PREFIX . "information SET sort_order = '" . (int)$data['sort_order'] . "', bottom = '" . (isset($data['bottom']) ? (int)$data['bottom'] : 0) . "', link = '" . (isset($data['link']) ? $this->db->escape($data['link']) : '') . "', status = '" . (int)$data['status'] . "'");
 
         $information_id = $this->db->getLastId();
 
@@ -38,7 +52,7 @@ class ModelCatalogInformation extends Model {
     }
 
     public function editInformation($information_id, $data) {
-        $this->db->query("UPDATE " . DB_PREFIX . "information SET sort_order = '" . (int)$data['sort_order'] . "', bottom = '" . (isset($data['bottom']) ? (int)$data['bottom'] : 0) . "', status = '" . (int)$data['status'] . "' WHERE information_id = '" . (int)$information_id . "'");
+        $this->db->query("UPDATE " . DB_PREFIX . "information SET sort_order = '" . (int)$data['sort_order'] . "', bottom = '" . (isset($data['bottom']) ? (int)$data['bottom'] : 0) . "', link = '" . (isset($data['link']) ? $this->db->escape($data['link']) : '') . "', status = '" . (int)$data['status'] . "' WHERE information_id = '" . (int)$information_id . "'");
 
         $this->db->query("DELETE FROM " . DB_PREFIX . "information_description WHERE information_id = '" . (int)$information_id . "'");
 

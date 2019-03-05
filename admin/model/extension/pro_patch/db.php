@@ -15,6 +15,17 @@ class ModelExtensionProPatchDb extends Model
         }
     }
 
+    public function isColumnExist($table_name, $column_name)
+    {
+        $query = $this->db->query("SHOW COLUMNS FROM `". DB_PREFIX . $this->db->escape($table_name) ."`
+            LIKE '". $this->db->escape($column_name) ."';");
+        if ($query->num_rows) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function sqlOnDuplicateUpdateBuilder($table_name, $update_data)
     {
         if (!is_array($update_data) || empty($update_data)) { return false; }
