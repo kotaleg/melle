@@ -114,10 +114,14 @@ class ControllerMailOrder extends Controller {
             $data['order_status'] = '';
         }
 
-        if ($comment) {
+        if ($comment && $notify) {
             $data['comment'] = nl2br($comment);
         } else {
             $data['comment'] = '';
+        }
+
+        if (!$data['comment']) {
+            $data['comment'] = $order_info['comment'];
         }
 
         if ($order_info['payment_address_format']) {
