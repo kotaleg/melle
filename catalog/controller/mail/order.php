@@ -114,7 +114,7 @@ class ControllerMailOrder extends Controller {
             $data['order_status'] = '';
         }
 
-        if ($comment && $notify) {
+        if ($comment) {
             $data['comment'] = nl2br($comment);
         } else {
             $data['comment'] = '';
