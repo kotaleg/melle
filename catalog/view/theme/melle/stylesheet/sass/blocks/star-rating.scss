@@ -1,5 +1,7 @@
 .star-rating {
   font-size: 0;
+    @include mobile{
+margin-bottom: 8px;}
   &__ico {
     color: #d5d5d5;
 
