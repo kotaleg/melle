@@ -596,6 +596,7 @@ function GetGuidCityAndRegion($key, $city, $region, $fillRegion)
         if (!object.properties._data.iconContent) {
             jQuery(".pvz-list-link").html(object.properties._data.balloonContent);
 			jQuery(window.addressDostavim).val(object.properties._data.balloonContent.split(">")[1]+"::"+object.properties._data.serviceId+"::"+object.properties._data.id+"::3::");
+			jQuery(window.addressDostavim2).val(object.properties._data.balloonContent.split(">")[1]);
 			//jQuery(addressDostavim).val(jQuery(this).attr("serviceid")+": "+jQuery(this).text());
             jQuery(".address-filter").attr("pvzId", object.properties._data.id);
             jQuery(".address-filter").attr("serviceId", object.properties._data.serviceId);
@@ -1429,7 +1430,7 @@ for ($i = 0; $i < count($dslist); $i++) {
 					'tax_class_id' => $delivery['tax_class_id'],
 					'text' => $price_dostavim0.'р.'
 				);
-
+				$sort_order[1] = $delivery['sort_order'];
 					continue;
 
 				}
@@ -1442,7 +1443,7 @@ for ($i = 0; $i < count($dslist); $i++) {
 					'tax_class_id' => $delivery['tax_class_id'],
 					'text' => $price_dostavim1.'р.'
 				);
-
+				$sort_order[2] = $delivery['sort_order'];
 					continue;
 
 				}
@@ -1455,9 +1456,9 @@ for ($i = 0; $i < count($dslist); $i++) {
 					'title'        => '<label><span id="nameChoice3">'.$deliveryMethodsFrontName2.'</span> - '.$deliveryMethodsFrontCountDay2.' дн <br></label>',
 					'cost'         => $price_dostavim2,
 					'tax_class_id' => $delivery['tax_class_id'],
-					'text' => $price_dostavim2.'р.<br>'.'</b></td></tr><tr> <td colspan="3">'.$vidgetContent2.$vidgetContent3.$vidgetContent4.'</td></tr>'
+					'text' => $price_dostavim2.'р.<br>'
 				);
-
+				$sort_order[3] = $delivery['sort_order'];
 
 				}
 					continue;
@@ -1470,8 +1471,9 @@ for ($i = 0; $i < count($dslist); $i++) {
 					'title'        => '<label><span id="nameChoice4">'.$deliveryMethodsFrontName3.'</span> - '.$deliveryMethodsFrontCountDay3.' дн <br></label>',
 					'cost'         => $price_dostavim3,
 					'tax_class_id' => $delivery['tax_class_id'],
-					'text' => $price_dostavim3.'р.'.'</b></td></tr><tr> <td colspan="3">'.$vidgetContent0.'</td></tr>'.'<span id="tokenDostavim" style="display:none">'.$tokenDostavim.'</span>'.'</label>'.$vidgetContent5.'<label style="display:none">'.$vidgetContent3
+					'text' => $price_dostavim3.'р.'
 				);
+								$sort_order[4] = $delivery['sort_order'];
 				}
 					continue;
 			}
@@ -1485,14 +1487,16 @@ for ($i = 0; $i < count($dslist); $i++) {
 					'title'        => '<label><span id="nameChoice5">'.$deliveryMethodsFrontName4.'</span> - '.$deliveryMethodsFrontCountDay4.' дн <br></label>',
 					'cost'         => $price_dostavim4,
 					'tax_class_id' => $delivery['tax_class_id'],
-					'text' => $price_dostavim4.'р.'.'</b></td></tr><tr> <td colspan="3">'.$vidgetContent0.'</td></tr>'.'<span id="tokenDostavim" style="display:none">'.$tokenDostavim.'</span>'.'</label>'.$vidgetContent5.'<hr id="forvidget" style="margin: 0px !important;"><label style="display:none">'.$vidgetContent3
+					'text' => $price_dostavim4.'р.'
 				);
+								$sort_order[5] = $delivery['sort_order'];
 				}
 					continue;
 			   }
 			     continue;
 		    }
 
+			if(($i!=1)or($i!=2)or($i!=3)or($i!=4)or($i!=5)){	
 				$quote_data['dostavimchekaut' . $i] = array(
 					'code' => 'dostavimchekaut.dostavimchekaut' . $i,
 					'title' => $delivery['name'],
@@ -1500,7 +1504,8 @@ for ($i = 0; $i < count($dslist); $i++) {
 					'tax_class_id' => $delivery['tax_class_id'],
 					'text' => $this->currency->format($this->tax->calculate($delivery['cost'], $delivery['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'])
 				);
-
+				$sort_order[$i] = $delivery['sort_order'];
+			}
 
 
 
@@ -1508,7 +1513,20 @@ for ($i = 0; $i < count($dslist); $i++) {
 				$sort_order[$i] = $delivery['sort_order'];
 			}
 
-			//array_multisort($sort_order, SORT_ASC, $quote_data);
+			if (isset($quote_data['dostavimchekaut3']['title'])){	
+				$quote_data['dostavimchekaut3']['title'] = $quote_data['dostavimchekaut3']['title'];	
+				$quote_data['dostavimchekaut3']['text'] = $quote_data['dostavimchekaut3']['text'].'</b></td></tr><tr> <td colspan="3">'.$vidgetContent2.$vidgetContent4.$vidgetContent0.'</td></tr>'.$vidgetContent5.$vidgetContent3.'<span id="tokenDostavim" style="display:none">'.$tokenDostavim.'</span>';		
+			}
+
+			if (isset($quote_data['dostavimchekaut4']['title'])){			
+				$quote_data['dostavimchekaut4']['text'] = $quote_data['dostavimchekaut4']['text'];					
+			}	
+			
+			if (isset($quote_data['dostavimchekaut5']['title'])){							
+				$quote_data['dostavimchekaut5']['text'] = $quote_data['dostavimchekaut5']['text'];
+			}
+			
+			array_multisort($sort_order, SORT_ASC, $quote_data);
 
 			$method_data = array(
 				'code'       => 'dostavimchekaut',

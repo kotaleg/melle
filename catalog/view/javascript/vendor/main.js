@@ -12,7 +12,10 @@ window.customerVarPhone = false;
 
 
 
-//===================================deliveryCity===================================================
+
+function main(){
+	
+	//===================================deliveryCity===================================================
 function sityApiDostavim(sityDostavim, regionDostavim){
 	$(sityDostavim).after('<div id="search_advice_wrapper"></div>');
 $(sityDostavim).keyup(function(I){
@@ -252,9 +255,6 @@ function reloadDostavim(){
 									}
 }
 
-function main(){
-	
-	
 	//здесь проверяем сколько раз перезагружалась симпла	
 	
 setTimeout(function() { 
@@ -468,6 +468,7 @@ var options2 = [];
                       // Обработчик клика по пункту списка ПВЗ
                     jQuery('.pvz-item').click(function(){
 						jQuery(addressDostavim).val(jQuery(this).text()+' ::'+jQuery(this).attr("serviceid")+'::'+jQuery(this).attr("pvzId")+'::3::');
+						jQuery(addressDostavim2).val(jQuery(this).text());
 						
 						jQuery(addressDostavim).attr('pvzId',jQuery(this).attr('pvzId'));
 						
@@ -496,6 +497,7 @@ var options2 = [];
 						e.preventDefault();
 						
 						jQuery(addressDostavim).val(jQuery(this).text()+' ::'+jQuery(this).attr("serviceid")+'::'+jQuery(this).attr("pvzcode")+'::3::');
+						jQuery(addressDostavim2).val(jQuery(this).text());
 						jQuery(addressDostavim).attr('pvzId',jQuery(this).attr('pvzId'));
 						
 						jQuery('.pvz-list-link').html(jQuery(this).html());
