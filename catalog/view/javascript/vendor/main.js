@@ -271,6 +271,7 @@ if (typeof (reloadAll) === "function")
 		window.addressDostavim = '#shipping_address_address_2';//#shipping_address_address_2';
 		window.addressDostavim2 = '#shipping_address_address_1';//#shipping_address_address_2';
 		var labeladress='label[for="shipping_address_address_2"]';
+		var labeladress2='label[for="shipping_address_address_1"]';
 		var CommentDostavim = '#comment';
 		var sityDostavim = '#shipping_address_city';//#shipping_address_city';
 		var regionDostavim = '#shipping_address_zone_id';
@@ -286,6 +287,7 @@ if (typeof (reloadAll) === "function")
 		window.addressDostavim2 = '#checkout_customer_main_address_1';//#shipping_address_address_2';
 		var CommentDostavim = '#checkout_customer_main_comment';
 		var labeladress='label[for="shipping_address_address_1"]';
+		var labeladress2='label[for="shipping_address_address_2"]';
 		var sityDostavim = '#checkout_customer_main_city';
 		var regionDostavim = '#checkout_customer_main_zone_id';
 		var indexDostavim = '#checkout_customer_main_postcode';
@@ -301,19 +303,37 @@ if (typeof (reloadAll) === "function")
         //if($('input:radio[value="dostavimchekaut.dostavimchekaut2"]').prop("checked")){
 		//         $('span.hidepvz').css('display','none');
         //}	
-        if($('input:radio[value="dostavimchekaut.dostavimchekaut3"]').prop("checked")){
+		
+		
+		$('input[value="dostavimchekaut.dostavimchekaut3"]').change(function() {
+							$(addressDostavim).val('');
+				$(addressDostavim).attr('value','');
+				$(addressDostavim2).val('');
+				$(addressDostavim2).attr('value','');	
+		});
+		
+		
+        if($('input:radio[value="dostavimchekaut.dostavimchekaut3"]').prop("checked")){	
+	
+
+		
 		        $('span.hidepvz').css('display','block');
 				$(addressDostavim).attr('readonly','readonly');
 				$(addressDostavim).css('display','none');
-				$(labeladress).attr('style','display:none !important');				
+				$(addressDostavim2).css('display','none');
+				$(labeladress).attr('style','display:none !important');	
+				$(labeladress2).attr('style','display:none !important');				
 				var $parents = $(addressDostavim).parents('tr');  //21.12.2018 
 				$parents.css('display','none'); //21.12.2018
 				
         }	
 		else
 		{
-			$(addressDostavim).val('');
-			$(addressDostavim).attr('value','');
+			//$(addressDostavim).val('');
+			//$(addressDostavim).attr('value','');
+				$(addressDostavim).attr('readonly','readonly');
+				$(addressDostavim).css('display','none');
+				$(labeladress).attr('style','display:none !important');
 			$('span.hidepvz').css('display','none');
 		}
 

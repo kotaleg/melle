@@ -488,3 +488,9 @@ section[data-layout="col"] .catalog__content {
     line-height: 50px;
   }
 }
+
+#melle-mount{
+    @include mobile{
+    width: 97%;
+    }
+}
