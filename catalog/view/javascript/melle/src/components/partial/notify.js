@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import { isArray, has } from 'lodash'
-import store from '../../store/index'
 
 export default {
     messageHandler(data, codename = false) {

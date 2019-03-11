@@ -127,37 +127,73 @@ class ModelApiImport1COffer extends Model
             // USE PREPARED DATA
             foreach ($prepared as $product_id => $data) {
 
-                // CLEAR OLD OPTIONS
-                $this->model_api_import_1c_product->deleteProductOptions($product_id);
+                // CLEAR OLD COMBINATIONS
                 $this->model_extension_module_super_offers->clearForProduct($product_id);
 
                 foreach ($data['options'] as $option_id) {
 
                     // ASSIGN OPTIONS TO PRODUCT
-                    $po = $this->addProductOption($product_id, array(
-                        'option_id' => $option_id,
-                        'required' => true,
-                    ));
+                    $po = $this->getProductOption($product_id, $option_id);
+
+                    if (!$po) {
+                        $po = $this->addProductOption($product_id, array(
+                            'option_id' => $option_id,
+                            'required' => true,
+                        ));
+                    }
 
                     foreach ($data['options_full'] as $of) {
                         if ($of['option_id'] == $option_id) {
-                            $pov = $this->addProductOptionValue($product_id, array(
+
+                            if (!$this->isProductOptionValue($product_id, array(
                                 'option_id' => $option_id,
                                 'product_option_id' => $po,
                                 'option_value_id' => $of['option_value_id'],
-                                'quantity' => 0,
-                                'subtract' => true,
-                                'price' => 0,
-                                'price_prefix' => '+',
-                                'points' => 0,
-                                'points_prefix' => '+',
-                                'weight' => 0,
-                                'weight_prefix' => '+',
-                            ));
+                            ))) {
+
+                                $pov = $this->addProductOptionValue($product_id, array(
+                                    'option_id' => $option_id,
+                                    'product_option_id' => $po,
+                                    'option_value_id' => $of['option_value_id'],
+                                    'quantity' => 0,
+                                    'subtract' => true,
+                                    'price' => 0,
+                                    'price_prefix' => '+',
+                                    'points' => 0,
+                                    'points_prefix' => '+',
+                                    'weight' => 0,
+                                    'weight_prefix' => '+',
+                                ));
+                                unset($pov);
+                            }
+
                         }
                     }
 
+                    unset($po);
                 }
+
+                // CLEAR UNUSED OPTIONS
+                foreach ($this->getProductOptions($product_id) as $po) {
+                    if (!in_array($po['option_id'], $data['options'])) {
+                        $this->deleteProductOption($product_id, $po['product_option_id']);
+                    }
+                }
+
+                foreach ($this->getProductOptionValues($product_id) as $pov) {
+                    $check = false;
+                    foreach ($data['options_full'] as $of) {
+                        if ($pov['option_value_id'] == $of['option_value_id']
+                        && $pov['option_id'] == $of['option_id']) {
+                            $check = true;
+                        }
+                    }
+
+                    if ($check === false) {
+                        $this->deleteProductOptionValue($pov['product_option_value_id']);
+                    }
+                }
+
 
                 // ADD COMBINATIONS
                 if ($data['combinations']) {
@@ -212,14 +248,30 @@ class ModelApiImport1COffer extends Model
 
     private function isProductOption($product_id, $option_id)
     {
+        if ($this->getProductOption($product_id, $option_id)) {
+            return true;
+        }
+        return false;
+    }
+
+    private function getProductOption($product_id, $option_id)
+    {
         $query = $this->db->query("SELECT `product_option_id`
             FROM `". DB_PREFIX ."product_option`
             WHERE `product_id` = '".$this->db->escape($product_id)."'
             AND `option_id` = '".$this->db->escape($option_id)."'");
         if ($query->row) {
-            return true;
-        } else {
-            return false;
+            return $query->row['product_option_id'];
+        }
+    }
+
+    private function getProductOptions($product_id)
+    {
+        $query = $this->db->query("SELECT `product_option_id`, `option_id`
+            FROM `". DB_PREFIX ."product_option`
+            WHERE `product_id` = '".$this->db->escape($product_id)."'");
+        if ($query->rows) {
+            return $query->rows;
         }
     }
 
@@ -265,5 +317,39 @@ class ModelApiImport1COffer extends Model
                 weight_prefix = '" . $this->db->escape($data['weight_prefix']) . "'");
 
         return $this->db->getLastId();
+    }
+
+    private function getProductOptionValues($product_id)
+    {
+        $query = $this->db->query("SELECT *
+            FROM `". DB_PREFIX ."product_option_value`
+            WHERE `product_id` = '".$this->db->escape($product_id)."'");
+        if ($query->rows) {
+            return $query->rows;
+        }
+    }
+
+    public function deleteProductOptionValue($product_option_value_id)
+    {
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_option_value
+            WHERE product_option_value_id = '" . (int)$product_option_value_id . "'");
+    }
+
+    public function deleteProductOption($product_id, $product_option_id)
+    {
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_option
+            WHERE product_id = '" . (int)$product_id . "'
+            AND product_option_id = '" . (int)$product_option_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_option_value
+            WHERE product_id = '" . (int)$product_id . "'
+            AND product_option_id = '" . (int)$product_option_id . "'");
+    }
+
+    public function deleteProductOptions($product_id)
+    {
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_option
+            WHERE product_id = '" . (int)$product_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "product_option_value
+            WHERE product_id = '" . (int)$product_id . "'");
     }
 }

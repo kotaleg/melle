@@ -287,7 +287,9 @@ class super_offers
                     $products_data[$pd_key]['price'] = $combination['price'];
                     $products_data[$pd_key]['total'] = $combination['price'] * (int)$products_data[$pd_key]['quantity'];
 
-                    $products_data[$pd_key]['name'] = $combination['product_code'];
+                    if (!empty($combination['product_code'])) {
+                        $products_data[$pd_key]['name'] = $combination['product_code'];
+                    }
                 }
             }
         }

@@ -34,6 +34,7 @@ class ModelApiImport1COption extends Model
             && is_array($parsed->classificator->options)) {
 
             $find_image = 0;
+            $imported = array();
 
             foreach ($parsed->classificator->options as $option) {
                 if (in_array(trim($option->name), $this->getAllowedOptions())) {
@@ -85,8 +86,15 @@ class ModelApiImport1COption extends Model
                             );
                         }
 
-                        $this->deleteOldValues($option_id);
-                        $this->addOptionValues($option_id, $option_values);
+                        foreach ($option_values as $value) {
+                            $ov = $this->getOptionValueByImportId($value['import_id']);
+                            if ($ov && isset($ov['option_value_id'])) {
+                                $this->updateOptionValue($option_id, $ov['option_value_id'], $value);
+                            } else {
+                                $this->addOptionValues($option_id, array($value));
+                            }
+                        }
+
                     }
                 }
             }
@@ -160,6 +168,32 @@ class ModelApiImport1COption extends Model
         }
     }
 
+    private function updateOptionValue($option_id, $option_value_id, $data)
+    {
+        $this->db->query("UPDATE " . DB_PREFIX . "option_value
+            SET image = '" . $this->db->escape($data['image']) . "',
+                sort_order = '" . (int)$data['sort_order'] . "'
+            WHERE option_value_id = '" . (int)$option_value_id . "'");
+
+        if (isset($data['option_value_description']) && $data['option_value_description']) {
+            $this->setOptionValueDescription($option_id, $option_value_id, $data['option_value_description']);
+        }
+    }
+
+    private function setOptionValueDescription($option_id, $option_value_id, $data)
+    {
+        $this->db->query("DELETE FROM " . DB_PREFIX . "option_value_description
+            WHERE option_value_id = '" . (int)$option_value_id . "'");
+
+        foreach ($data as $language_id => $option_value_description) {
+            $this->db->query("INSERT INTO " . DB_PREFIX . "option_value_description
+                SET option_value_id = '" . (int)$option_value_id . "',
+                    language_id = '" . (int)$language_id . "',
+                    option_id = '" . (int)$option_id . "',
+                    name = '" . $this->db->escape($option_value_description['name']) . "'");
+        }
+    }
+
     public function getOptionValues($option_id)
     {
         $option_value_data = array();
@@ -182,8 +216,10 @@ class ModelApiImport1COption extends Model
 
     private function deleteOldValues($option_id)
     {
-        $this->db->query("DELETE FROM " . DB_PREFIX . "option_value WHERE option_id = '" . (int)$option_id . "'");
-        $this->db->query("DELETE FROM " . DB_PREFIX . "option_value_description WHERE option_id = '" . (int)$option_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "option_value
+            WHERE option_id = '" . (int)$option_id . "'");
+        $this->db->query("DELETE FROM " . DB_PREFIX . "option_value_description
+            WHERE option_id = '" . (int)$option_id . "'");
     }
 
     public function importColorCubs()
