@@ -142,6 +142,7 @@ const actions = {
                 if (has(res.data, 'saved')
                 && res.data.saved === true) {
                     commit('setEditStatus', true)
+                    dispatch('editDiscount', res.data.discount_id)
                     dispatch('getDiscounts')
                 }
                 notify.messageHandler(res.data)

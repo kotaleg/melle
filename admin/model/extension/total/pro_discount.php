@@ -330,6 +330,7 @@ class ModelExtensionTotalProDiscount extends Model
                         customer_id = '" . (int)$id . "'");
             }
 
+            $json['discount_id'] = $data['discount_id'];
             $json['saved'] = true;
         }
 
