@@ -1,0 +1,12 @@
+<ul class="news__list">
+
+    {% for post in posts %}
+    <li class="news__item">
+        {% include template('extension/d_blog_module/post_thumb') with post %}
+    </li>
+    {% endfor %}
+
+    <div class="pagination__wrap">
+        {{pagination}}
+    </div>
+</ul>

@@ -1,0 +1,217 @@
+{
+    "codename": "d_blog_module_pack",
+    "version": "3.1.2",
+    "name": "Blog module Pack",
+    "description": "Pack of modules and themes to make your blog module groundbreaking",
+    "index": "extension/module/d_blog_module",
+    "author": {
+        "name": "Dreamvention",
+        "email": "info@dreamvention.com",
+        "url": "https://dreamvention.com/"
+    },
+    "opencart_version": [
+        "2.0.1.0",
+        "2.0.1.1",
+        "2.0.2.0",
+        "2.0.3.1",
+        "2.1.0.1",
+        "2.1.0.2",
+        "2.2.0.0",
+        "2.3.0.0",
+        "2.3.0.1",
+        "2.3.0.2",
+        "3.0.0.0",
+        "3.0.1.1",
+        "3.0.1.2",
+        "3.0.2.0",
+        "3.0.3.1"
+    ],
+    "type": "module",
+    "license": {
+        "type": "commercial",
+        "url": "https://shopunity.net/licenses/commercial"
+    },
+    "install": {
+        "url": "extension/extension/module/install&extension=d_blog_module"
+    },
+    "uninstall": {
+        "url": "extension/extension/module/uninstall&extension=d_blog_module"
+    },
+    "support": {
+        "email": "support@dreamvention.com",
+        "url": "https://dreamvention.ee/support"
+    },
+    "required": {
+        "d_opencart_patch": ">= 1.0.0",
+        "d_twig_manager": ">=1.0.0",
+        "d_blog_module": ">= 3.0.0",
+        "d_bootstrap_switch": ">= 3.3.3",
+        "d_fileinput": ">= 1.0.0",
+        "d_export_import": ">= 1.0.0",
+        "d_seo_module_blog": ">= 3.0.0"
+    },
+    "files": [
+        "system/library/d_shopunity/extension/d_blog_module_pack.json",
+        "system/config/d_blog_module_pack.php",
+        "system/config/d_export_import/d_blog_module_category.php",
+        "system/config/d_export_import/d_blog_module_category_3x.php",
+        "system/config/d_export_import/d_blog_module_post.php",
+        "system/config/d_export_import/d_blog_module_post_3x.php",
+        "system/config/d_export_import/d_blog_module_review.php",
+        "system/config/d_export_import/d_blog_module_review_3x.php",
+        "system/config/d_export_import/d_blog_module_author.php",
+        "system/config/d_export_import/d_blog_module_author_3x.php",
+
+        "admin/controller/extension/d_export_import_module/d_blog_module_category.php",
+        "admin/model/extension/d_export_import_module/d_blog_module_category.php",
+        "admin/language/en-gb/extension/d_export_import_module/d_blog_module_category.php",
+        "admin/language/en-gb/extension/d_export_import_module/d_blog_module_post.php",
+        "admin/language/en-gb/extension/d_export_import_module/d_blog_module_author.php",
+        "admin/language/en-gb/extension/d_export_import_module/d_blog_module_review.php",
+        "admin/language/en-gb/extension/d_export_import_module/d_blog_module_category_3x.php",
+        "admin/language/en-gb/extension/d_export_import_module/d_blog_module_post_3x.php",
+        "admin/language/en-gb/extension/d_export_import_module/d_blog_module_author_3x.php",
+        "admin/language/en-gb/extension/d_export_import_module/d_blog_module_review_3x.php",
+
+        "admin/controller/extension/module/d_blog_module_category.php",
+        "admin/model/extension/module/d_blog_module_category.php",
+        "admin/language/en-gb/extension/module/d_blog_module_category.php",
+        "admin/view/template/extension/module/d_blog_module_category.twig",
+        "catalog/controller/extension/module/d_blog_module_category.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_category.twig",
+
+        "admin/controller/extension/module/d_blog_module_latest_posts.php",
+        "admin/model/extension/module/d_blog_module_latest_posts.php",
+        "admin/language/en-gb/extension/module/d_blog_module_latest_posts.php",
+        "admin/view/template/extension/module/d_blog_module_latest_posts.twig",
+        "catalog/controller/extension/module/d_blog_module_latest_posts.php",
+        "catalog/model/extension/module/d_blog_module_latest_posts.php",
+        "catalog/language/en-gb/extension/module/d_blog_module_latest_posts.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_latest_posts.twig",
+
+        "admin/controller/extension/module/d_blog_module_featured_posts.php",
+        "admin/model/extension/module/d_blog_module_featured_posts.php",
+        "admin/language/en-gb/extension/module/d_blog_module_featured_posts.php",
+        "admin/view/template/extension/module/d_blog_module_featured_posts.twig",
+        "catalog/controller/extension/module/d_blog_module_featured_posts.php",
+        "catalog/language/en-gb/extension/module/d_blog_module_featured_posts.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_featured_posts.twig",
+
+
+        "admin/controller/extension/module/d_blog_module_popular_posts.php",
+        "admin/model/extension/module/d_blog_module_popular_posts.php",
+        "admin/language/en-gb/extension/module/d_blog_module_popular_posts.php",
+        "admin/view/template/extension/module/d_blog_module_popular_posts.twig",
+        "catalog/controller/extension/module/d_blog_module_popular_posts.php",
+        "catalog/model/extension/module/d_blog_module_popular_posts.php",
+        "catalog/language/en-gb/extension/module/d_blog_module_popular_posts.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_popular_posts.twig",
+
+
+        "admin/controller/extension/module/d_blog_module_related_post.php",
+        "admin/model/extension/module/d_blog_module_related_post.php",
+        "admin/language/en-gb/extension/module/d_blog_module_related_post.php",
+        "admin/view/template/extension/module/d_blog_module_related_post.twig",
+        "catalog/controller/extension/module/d_blog_module_related_post.php",
+        "catalog/model/extension/module/d_blog_module_related_post.php",
+        "catalog/language/en-gb/extension/module/d_blog_module_related_post.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_related_post.twig",
+
+
+        "admin/controller/extension/module/d_blog_module_related_product.php",
+        "admin/model/extension/module/d_blog_module_related_product.php",
+        "admin/language/en-gb/extension/module/d_blog_module_related_product.php",
+        "admin/view/template/extension/module/d_blog_module_related_product.twig",
+        "catalog/controller/extension/module/d_blog_module_related_product.php",
+        "catalog/model/extension/module/d_blog_module_related_product.php",
+        "catalog/language/en-gb/extension/module/d_blog_module_related_product.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_related_product.twig",
+
+
+        "admin/controller/extension/module/d_blog_module_relat_post_to_prod.php",
+        "admin/model/extension/module/d_blog_module_relat_post_to_prod.php",
+        "admin/language/en-gb/extension/module/d_blog_module_relat_post_to_prod.php",
+        "admin/view/template/extension/module/d_blog_module_relat_post_to_prod.twig",
+        "catalog/controller/extension/module/d_blog_module_relat_post_to_prod.php",
+        "catalog/model/extension/module/d_blog_module_relat_post_to_prod.php",
+        "catalog/language/en-gb/extension/module/d_blog_module_relat_post_to_prod.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_relat_post_to_prod.twig",
+
+
+        "admin/controller/extension/module/d_blog_module_date.php",
+        "admin/model/extension/module/d_blog_module_date.php",
+        "admin/language/en-gb/extension/module/d_blog_module_date.php",
+        "admin/view/template/extension/module/d_blog_module_date.twig",
+        "catalog/controller/extension/module/d_blog_module_date.php",
+        "catalog/model/extension/module/d_blog_module_date.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_date.twig",
+
+
+        "admin/controller/extension/module/d_blog_module_search.php",
+        "admin/model/extension/module/d_blog_module_search.php",
+        "admin/language/en-gb/extension/module/d_blog_module_search.php",
+        "admin/view/template/extension/module/d_blog_module_search.twig",
+        "catalog/controller/extension/module/d_blog_module_search.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_search.twig",
+        "catalog/language/en-gb/extension/module/d_blog_module_search.php",
+
+
+        "admin/controller/extension/module/d_blog_module_tags.php",
+        "admin/model/extension/module/d_blog_module_tags.php",
+        "admin/language/en-gb/extension/module/d_blog_module_tags.php",
+        "admin/view/template/extension/module/d_blog_module_tags.twig",
+        "catalog/controller/extension/module/d_blog_module_tags.php",
+        "catalog/model/extension/module/d_blog_module_tags.php",
+        "catalog/view/theme/default/template/extension/module/d_blog_module_tags.twig",
+
+        "system/config/d_blog_module_layout/timeline.php",
+        "system/config/d_blog_module_layout/masonry.php",
+        "system/config/d_blog_module_demo/d_blog_module_pack.php",
+        "system/config/d_blog_module_demo/d_blog_module_pack.sql",
+
+        "catalog/view/theme/default/template/extension/d_blog_module/layout_masonry.twig",
+        "catalog/view/theme/default/template/extension/d_blog_module/layout_timeline.twig",
+
+        "catalog/view/theme/default/stylesheet/d_blog_module/theme/blackwood.scss",
+        "catalog/view/theme/default/stylesheet/d_blog_module/theme/blackwood.css.map",
+        "catalog/view/theme/default/stylesheet/d_blog_module/theme/blackwood.css",
+        "catalog/view/theme/default/stylesheet/d_blog_module/theme/macart.scss",
+        "catalog/view/theme/default/stylesheet/d_blog_module/theme/macart.css.map",
+        "catalog/view/theme/default/stylesheet/d_blog_module/theme/macart.css",
+        "catalog/view/theme/default/stylesheet/d_blog_module/theme/gradepixel.scss",
+        "catalog/view/theme/default/stylesheet/d_blog_module/theme/gradepixel.css.map",
+        "catalog/view/theme/default/stylesheet/d_blog_module/theme/gradepixel.css"
+
+    ],
+    "dirs":[
+        "catalog/view/theme/default/stylesheet/d_blog_module/layout/timeline",
+        "catalog/view/theme/default/stylesheet/d_blog_module/layout/masonry",
+        "catalog/view/theme/default/javascript/d_blog_module/layout/masonry"
+    ],
+    "changelog": [
+        {
+            "version":"3.1.2",
+            "change": "Added support for OC v3.0.3.1"
+        },
+        {
+            "version":"3.1.1",
+            "change": "Change files structure;"
+        },
+        {
+            "version":"3.1.0",
+            "change": "Added d_blog_module_featured"
+        },
+        {
+            "version":"3.0.2",
+            "change": "Added d_seo_module_blog"
+        },
+        {
+            "version":"3.0.1",
+            "change": "Multimodule Blog Latest posts and Blog Popular posts"
+        },
+        {
+            "version":"3.0.0",
+            "change": "Initial commit"
+        }
+    ]
+}

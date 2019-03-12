@@ -41,9 +41,20 @@ class ControllerStartupSeoUrl extends Controller {
                         $this->request->get['information_id'] = $url[1];
                     }
 
-                    if ($query->row['query'] && $url[0] != 'information_id' && $url[0] != 'manufacturer_id' && $url[0] != 'category_id' && $url[0] != 'product_id') {
+                    /* BLOG MOD START */
+                    if ($url[0] == 'bm_post_id') {
+                        $this->request->get['post_id'] = $url[1];
+                        $this->request->get['route'] = 'extension/d_blog_module/post';
+                    }
+                    if ($url[0] == 'bm_category_id') {
+                        $this->request->get['category_id'] = $url[1];
+                        $this->request->get['route'] = 'extension/d_blog_module/category';
+                    }
+
+                    if ($query->row['query'] && $url[0] != 'information_id' && $url[0] != 'manufacturer_id' && $url[0] != 'category_id' && $url[0] != 'product_id' && $url[0] != 'bm_post_id' && $url[0] != 'bm_category_id') {
                         $this->request->get['route'] = $query->row['query'];
                     }
+                    /* BLOG MOD END */
                 } else {
                     $this->request->get['route'] = 'error/not_found';
 
@@ -100,6 +111,22 @@ class ControllerStartupSeoUrl extends Controller {
                     }
 
                     unset($data[$key]);
+                }
+            }
+        }
+
+
+        foreach ($data as $k => $v) {
+            if ( isset( $data['route'] ) ) {
+                if (($data['route'] == 'extension/d_blog_module/post' && $key == 'post_id') || ($data['route'] == 'extension/d_blog_module/category' && $key == 'category_id')) {
+                    $q = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url
+                        WHERE `query` = 'bm_" . $this->db->escape($key . '=' . (int)$value) . "'
+                        AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
+
+                    if ($q->num_rows && $q->row['keyword']) {
+                        $url .= '/' . $q->row['keyword'];
+                        unset( $data[$key] );
+                    }
                 }
             }
         }

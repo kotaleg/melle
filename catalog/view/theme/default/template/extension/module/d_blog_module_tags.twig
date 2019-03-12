@@ -1,0 +1,10 @@
+{% if tags %}
+<div id="d_blog_module_tags" class="bm bm-module bm-tags">
+	<div class="h2"><span>{{heading_title}}</span></div>
+	<ul class="list-unstyled">
+		{% for tag in tags %}
+		<li><a href="{{tag.href}}">{{tag.title}} <span class="count">({{tag.count_post}})</span></a></li>
+		{% endfor %}
+	</ul>
+</div>
+{% endif %}

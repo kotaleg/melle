@@ -1,0 +1,210 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="form-inline pull-right">
+                {% if stores %}
+                    <select class="form-control" onChange="location='{{ module_link }}&store_id='+$(this).val()">
+                        {% for store in stores %}
+                            {% if store.store_id == store_id %}
+                                <option value="{{ store.store_id }}" selected="selected">{{ store.name }}</option>
+                            {% else %}
+                                <option value="{{ store.store_id }}">{{ store.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                {% endif %}
+                {% if module_id %}
+                    <button id="save_and_stay" data-toggle="tooltip" title="{{ button_save_and_stay }}"
+                            class="btn btn-success"><i class="fa fa-save"></i></button>
+                {% endif %}
+                <button type="submit" form="form" data-toggle="tooltip" title="{{ button_save }}"
+                        class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i
+                            class="fa fa-reply"></i></a>
+            </div>
+            <h1>{{ heading_title }} {{ version }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error.warning %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error.warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if success %}
+            <div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form"
+                      class="form-horizontal">
+                    <div class="form-group require">
+                        <label class="col-sm-2 control-label" for="input_name">{{ entry_name }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="{{ codename }}[name]"
+                                   placeholder="{{ entry_name }}" value="{{ name }}"/>
+                            {% if error_name %}
+                                <div class="text-danger">{{ error_name }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {#<div class="form-group">#}
+                        {#<label class="col-sm-2 control-label" for="input-category">{{ entry_category }}</label>#}
+                        {#<div class="col-sm-10">#}
+                            {#<input type="text" name="category" value="" placeholder="{{ entry_category }}"#}
+                                   {#id="input-category" class="form-control"/>#}
+                            {#<div id="blog-category" class="well well-sm" style="height: 150px; overflow: auto;">#}
+                                {#{% for category in blog_category %}#}
+                                    {#<div id="blog-category{{ category.category_id }}"><i#}
+                                                {#class="fa fa-minus-circle"></i> {{ category.title }}#}
+                                        {#<input type="hidden" name="{{ codename }}[blog_category][]"#}
+                                               {#value="{{ category.category_id }}"/>#}
+                                    {#</div>#}
+                                {#{% endfor %}#}
+                            {#</div>#}
+                            {#<div class="bs-callout bs-callout-warning">#}
+                                {#{{ help_category }}#}
+                            {#</div>#}
+                        {#</div>#}
+                    {#</div>#}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-category">{{ entry_posts }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="posts" value="" placeholder="{{ entry_posts }}" id="input-posts"
+                                   class="form-control"/>
+                            <div id="blog-posts" class="well well-sm" style="height: 150px; overflow: auto;">
+                                {% for post in posts %}
+                                    <div id="blog-post{{ post.post_id }}"><i
+                                                class="fa fa-minus-circle"></i> {{ post.title }}
+                                        <input type="hidden" name="{{ codename }}[posts][]"
+                                               value="{{ post.post_id }}"/>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input_status">{{ entry_status }}</label>
+                        <div class="col-sm-10">
+                            <input type="hidden" name="{{ codename }}[status]" value="0"/>
+                            <input type="checkbox" class="switcher" data-label-text="{{ text_enabled }}"
+                                   id="input_status"
+                                   name="{{ codename }}[status]" {{ status == 1 ? 'checked="checked"' : '' }}
+                                   value="1"/>
+                        </div>
+                    </div><!-- //status -->
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="button_support">{{ entry_support }}</label>
+                        <div class="col-sm-2">
+                            <a href="{{ support_url }}" class="btn btn-success" target="_blank">{{ button_support }} </a>
+                        </div>
+                    </div><!-- //support -->
+                </form>
+                <div style="text-align: center; padding: 30px;">{{text_powered_by}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"><!--
+    $(function () {
+        $(".switcher[type='checkbox']").bootstrapSwitch({
+            'onColor': 'success',
+            'labelWidth': '50',
+            'onText': '{{ text_yes }}',
+            'offText': '{{ text_no }}',
+        });
+
+        $('body').on('change', '#select_config', function () {
+            console.log('#select_config changed')
+            var config = $(this).val();
+            $('body').append('<form action="{{ module_link }}{{ stores ? "&store_id='+$('#store').val() +'" : '' }}" id="config_update" method="post" style="display:none;"><input type="text" name="config" value="' + config + '" /></form>');
+            $('#config_update').submit();
+        });
+
+        $('body').on('click', '#save_and_stay', function () {
+
+            $('.summernote').each(function () {
+                $(this).val($(this).code());
+            });
+            $.ajax({
+                type: 'post',
+                url: $('#form').attr('action') + '&save',
+                data: $('#form').serialize(),
+                beforeSend: function () {
+                    $('#form').fadeTo('slow', 0.5);
+                },
+                complete: function () {
+                    $('#form').fadeTo('slow', 1);
+                },
+                success: function (response) {
+                    console.log(response);
+                }
+            });
+        });
+
+    });
+    {#// Category#}
+    {#$('input[name=\'category\']').autocomplete({#}
+        {#'source': function (request, response) {#}
+            {#$.ajax({#}
+                {#url: '{{ category_autocomplete }}&filter_title=' + encodeURIComponent(request),#}
+                {#dataType: 'json',#}
+                {#success: function (json) {#}
+                    {#response($.map(json, function (item) {#}
+                        {#return {#}
+                            {#label: item['title'],#}
+                            {#value: item['category_id']#}
+                        {#}#}
+                    {#}));#}
+                {#}#}
+            {#});#}
+        {#},#}
+        {#'select': function (item) {#}
+            {#$('input[name=\'category\']').val('');#}
+
+            {#$('#blog-category' + item['value']).remove();#}
+
+            {#$('#blog-category').append('<div id="blog-category' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="{{ codename }}[blog_category][]" value="' + item['value'] + '" /></div>');#}
+        {#}#}
+    {#});#}
+    //posts
+    $('input[name=\'posts\']').autocomplete({
+        'source': function (request, response) {
+            $.ajax({
+                url: '{{ posts_autocomplete }}&filter_title=' + encodeURIComponent(request),
+                dataType: 'json',
+                success: function (json) {
+                    response($.map(json, function (item) {
+                        return {
+                            label: item['title'],
+                            value: item['post_id']
+                        }
+                    }));
+                }
+            });
+        },
+        'select': function (item) {
+            $('input[name=\'posts\']').val('');
+
+            $('#blog-posts' + item['value']).remove();
+
+            $('#blog-posts').append('<div id="blog-post' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="{{ codename }}[posts][]" value="' + item['value'] + '" /></div>');
+        }
+    });
+    $('#blog-posts').delegate('.fa-minus-circle', 'click', function () {
+        $(this).parent().remove();
+    });
+    //--></script>
+{{ footer }}

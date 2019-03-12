@@ -1,0 +1,16 @@
+{% if posts %}
+<section class="news">
+   <div class="news__container container">
+      <div class="news__title">Другие новости</div>
+      <ul class="news__list">
+
+          {% for post in posts %}
+          <li class="news__item">
+              {% include template('extension/d_blog_module/post_thumb') with post %}
+          </li>
+          {% endfor %}
+
+      </ul>
+   </div>
+</section>
+{% endif %}

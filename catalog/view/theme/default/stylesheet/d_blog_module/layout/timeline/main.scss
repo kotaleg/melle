@@ -1,0 +1,152 @@
+$spacing : 100px;
+
+.bm-grid{
+    position: relative;
+    &:before {
+        top: 0;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 1px;
+        background: #d4d4d4;
+        left: 50%;
+        margin-left: -0.5px;
+        @media screen and (max-width: 768px) {
+            left: 31.5px !important;
+        }
+    }
+    &:after{
+        content: " ";
+        clear: both;
+        display: table;
+        width: 100%;
+        width: 10px;
+        height: 10px;
+        background: #d4d4d4;
+        left: 50%;
+        position: relative;
+        margin-left: -5px;
+        border-radius: 100%;
+        margin-bottom: 15px;
+        @media screen and (max-width: 768px) {
+            left: 32px !important;
+        }
+
+    }
+    &-item{
+        width: 50%;
+        float: left;
+        clear: left;
+        position: relative;
+
+       
+        &:nth-child(even){
+            float: right;
+            clear: right;
+            margin-top: $spacing;
+            @media screen and (max-width: 768px) {
+                clear: both;
+            }
+        }
+        &:nth-child(odd){
+            margin-bottom: $spacing;
+            @media screen and (max-width: 768px) {
+                clear: both;
+            }
+        }
+        &:last-child{
+            margin-bottom: 0px;
+        }
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            float: none;
+            margin-top: 0px !important;
+            margin-bottom: $spacing !important;
+        }
+        &-separator{
+            position: absolute;
+            right: 0px;
+            margin-right: -37px;
+            width: 75px;
+            height: 30px;
+            border: 1px solid #d4d4d4;
+            border-radius:30px;
+            background: #fff;
+            text-align: center;
+            padding: 3px;
+            .date-year{
+                font-size: 18px;
+            }
+            @media screen and (max-width: 768px) {
+                left: 0px !important;
+                margin-left: -5px !important;
+            }
+        }
+        &-point{
+            margin-top: 35px;
+            position: absolute;
+            right: 0px;
+            width: 61px;
+            height: 61px;
+            border-radius:100%;
+            background: #fff;
+            border: 1px solid #d4d4d4;
+            margin-right: -30px;
+            text-align: center;
+            padding-top: 12px;
+            .date-published{
+                display: inline-block;
+                display: inline-block;
+                > *{
+                    display: block;
+                }
+                .day{
+                    font-size: 26px;
+                    margin-bottom: 5px;
+                }
+                .month{
+                    font-size: 10px;
+                    line-height: 1;
+                    width: 100%;
+                }
+                .year{
+                    font-size: 16px;
+                    display: none;
+                }
+            }
+
+            @media screen and (max-width: 768px) {
+                left: 0px !important;
+                margin-left: 0px !important;
+            }
+        }
+
+        &-body{
+            margin-right: 50px;
+
+            @media screen and (max-width: 768px) {
+                margin-right: 0px !important;
+                margin-left: 80px !important;
+            }
+        }
+
+
+        &:nth-child(even){
+            .bm-grid-item-separator{
+                left: 0px;
+                margin-left: -37px;
+            }
+            .bm-grid-item-point{
+                left: 0px;
+                margin-left: -30px;
+            }
+            .bm-grid-item-body{
+                margin-right: 0px;
+                margin-left: 50px;
+            }
+        }
+
+
+
+    }
+}

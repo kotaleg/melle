@@ -1,0 +1,14 @@
+<div class="news__item-img-wrap"><a href="{{post.href}}"><img src="{{post.thumb}}" alt="{{post.image_alt}}" title="{{post.image_title}}" class="news__item-img"></a></div>
+<div class="news__item-inner">
+    {% if setting.post_thumb.date_display %}
+    <div class="news__item-data">{{post.date_published}}</div>
+    {% endif %}
+
+   <a href="{{post.href}}" class="news__item-title">{{post.title}}</a>
+    {% if setting.post_thumb.description_display %}
+    <div class="news__item-description">
+       <p>{{post.short_description}}</p>
+    </div>
+    {% endif %}
+   <a href="{{post.href}}" class="news__item-link">Читать дальше</a>
+</div>

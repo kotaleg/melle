@@ -1,0 +1,30 @@
+{{header}}
+<main class="main-page">
+<style>
+{{custom_style}}
+</style>
+{% include template('partial/d_breadcrumb') %}
+
+   {{content_top}}
+
+   <section class="news-one">
+      <div class="news-one__container container">
+         <div class="news-one__title">{{ heading_title }}</div>
+         <div class="news-one__news">
+            {% if thumb %}
+            <img src="{{thumb}}" title="{{image_title}}" alt="{{image_alt}}" class="news-one__news-img">
+            {% endif %}
+
+            {% if setting.post.date_display %}
+            <div class="news-one__news-data"><span>{{date_published}}</span></div>
+            {% endif %}
+
+            {{description}}
+         </div>
+      </div>
+   </section>
+
+   {{content_bottom}}
+
+</main>
+{{footer}}

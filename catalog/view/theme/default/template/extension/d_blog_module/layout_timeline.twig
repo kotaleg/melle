@@ -1,0 +1,33 @@
+{% set year = '' %}
+<div class="bm-posts">
+    <div id="timeline" class="bm-grid">
+        {% for post in posts %}
+            <div class="bm-grid-item" {% if post.animate %}animate="{{post.animate}}"{% endif %}>
+                {% if year != post.post.date_published_year %} 
+                    {% set year = post.post.date_published_year %}
+                    <div class="bm-grid-item-separator">
+                        <div class="date-year">
+                            <span>{{year}}</span>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="bm-grid-item-point animated">
+                    <div class="date-published">
+                        <span class="day">{{ post.post.date_published_day }}</span>
+                        <span class="month">{{ post.post.date_published_month }}</span>
+                        <span class="year">{{ post.post.date_published_year }}</span>
+                    </div>
+                </div>
+                <div class="bm-grid-item-body animated">
+                    {% include template('extension/d_blog_module/post_thumb') with post %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="bm-pagination clearfix">
+        <div class="row">
+            <div class="col-sm-6 text-left">{{pagination}}</div>
+            <div class="col-sm-6 text-right">{{results}}</div>
+        </div>
+    </div>
+</div>

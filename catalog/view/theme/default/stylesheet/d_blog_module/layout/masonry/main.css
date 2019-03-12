@@ -1,0 +1,30 @@
+.bm-grid {
+  margin-right: -15px;
+  margin-left: -15px;
+  /* Base styles */
+  /* Configurate salvattore with media queries */ }
+  .bm-grid .column {
+    float: left;
+    padding: 0 15px; }
+  .bm-grid .size-1of6 {
+    width: 16.66667%; }
+  .bm-grid .size-1of4 {
+    width: 25%; }
+  .bm-grid .size-1of3 {
+    width: 33.33333%; }
+  .bm-grid .size-1of2 {
+    width: 50%; }
+  @media screen and (max-width: 450px) {
+    .bm-grid #timeline[data-columns]::before {
+      content: '1 .column'; } }
+  @media screen and (min-width: 451px) and (max-width: 700px) {
+    .bm-grid #timeline[data-columns]::before {
+      content: '2 .column.size-1of2'; } }
+  @media screen and (min-width: 701px) and (max-width: 850px) {
+    .bm-grid #timeline[data-columns]::before {
+      content: '3 .column.size-1of3'; } }
+  @media screen and (min-width: 851px) {
+    .bm-grid #timeline[data-columns]::before {
+      content: '4 .column.size-1of4'; } }
+
+/*# sourceMappingURL=main.css.map */

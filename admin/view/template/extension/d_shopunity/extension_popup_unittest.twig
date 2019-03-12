@@ -1,0 +1,9 @@
+<div class="extension-popup" id="extension_{{ extension.codename }}">
+    <ol id="tests">
+        {% for test, test_path in extension.tests %}
+            <li id="test_{{test}}">{{test}}</li>
+        {% endfor %}
+    </ol>
+    <textarea id="tests_json" class="hidden">{{extension.tests|json_encode()}}</textarea>
+    <a class="btn btn-success text-start unittest-extension" data-href="{{extension.unittest}}" data-extension_id="{{extension.codename}}" data-codename="{{extension.codename}}" >Runt Tests</a>
+</div>

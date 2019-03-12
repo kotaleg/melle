@@ -1,0 +1,8 @@
+<div id="d_blog_module_date" class="bm bm-module bm-date">
+    <div class="h2"><span>{{heading_title}}</span></div>
+    <ul class="list-unstyled">
+        {% for date in dates %}
+            <li><a href="{{date.href}}">{{date.month}} {{date.year}} <span class="count">({{date.count_post}})<span></a></li>
+        {% endfor %}
+    </ul>
+</div>

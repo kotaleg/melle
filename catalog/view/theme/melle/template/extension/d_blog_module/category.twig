@@ -1,0 +1,28 @@
+{{header}}
+<main class="main-page">
+<style>
+{{custom_style}}
+</style>
+{% include template('partial/d_breadcrumb') %}
+
+   <section class="news">
+      <div class="news__container container">
+         <div class="news__title">{{ heading_title }}</div>
+
+         {% if description %}
+         {{description}}
+         {% endif %}
+
+         {% if posts %}
+            {% include template(layout_template) with posts %}
+         {% endif %}
+
+         {% if not posts %}
+            <p class="bm-empty">{{text_empty}}</p>
+         {% endif %}
+
+      </div>
+   </section>
+
+</main>
+{{footer}}
