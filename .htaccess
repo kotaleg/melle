@@ -1,0 +1,34 @@
+# Options +FollowSymlinks
+
+# Prevent Directoy listing
+Options -Indexes
+
+# Order deny,allow
+# Deny from all
+# Allow from 134.249.231.103
+
+# Prevent Direct Access to files
+<FilesMatch "(?i)((\.tpl|.twig|\.ini|\.log|(?<!robots)\.txt|(?<!index)\.php))">
+ Require all denied
+</FilesMatch>
+
+# SEO URL Settings
+RewriteEngine On
+# If your opencart installation does not run on the main web folder make sure you folder it does run in ie. / becomes /shop/
+
+RewriteBase /
+RewriteRule ^sitemap.xml$ index.php?route=extension/feed/google_sitemap [L]
+RewriteRule ^googlebase.xml$ index.php?route=extension/feed/google_base [L]
+RewriteRule ^system/storage/(.*) index.php?route=error/not_found [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
+RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
+
+# Exception: Images
+SetEnvIfNoCase REQUEST_URI \.(?:gif|jpg|jpeg|png)$ no-gzip dont-vary
+
+# Drop problematic browsers
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
