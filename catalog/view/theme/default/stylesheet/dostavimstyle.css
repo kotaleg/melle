@@ -491,3 +491,7 @@ span.hidepvz{ display:none;}
 		display: none;
 	}
 }
+.simplecheckout-block-content div.radio {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
