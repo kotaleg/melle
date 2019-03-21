@@ -123,9 +123,11 @@ const actions = {
                     if ( (!has(payload, 'reload') || (has(payload, 'reload') && payload.reload !== true))
                     && !rootGetters['filter/isFilterChanged']) {
                         res.data.products.forEach((product) => {
+                            // console.log('addProduct');
                             commit('addProduct', product)
                         })
                     } else {
+                        // console.log('setProducts');
                         commit('setProducts', res.data.products)
                     }
                 }

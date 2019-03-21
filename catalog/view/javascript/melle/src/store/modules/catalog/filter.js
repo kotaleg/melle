@@ -42,7 +42,7 @@ const getters = {
         return state.slider_options[key]
     },
     isFilterChanged: state => {
-        return !isEqual(state.filter_data, state.last_filter)
+        return !isEqual(state.last_filter, state.filter_data)
     },
     isManufacturerSelected: state => key => {
         return state.filter_data.manufacturers[key].checked
@@ -86,8 +86,20 @@ const actions = {
         }
     }, 50),
     updateManufacturerStatus({ commit, state, getters }, k) {
-        let v = !state.filter_data.manufacturers[k].checked
-        commit('updateManufacturerCheckedStatus', {k, v})
+        let s = !getters.isManufacturerSelected(k)
+
+        let m = []
+        if (isArray(state.filter_data.manufacturers)) {
+            forEach(state.filter_data.manufacturers, (val,key) => {
+                m.push({
+                    checked: (k != key) ? val.checked : !val.checked,
+                    label: val.label,
+                    value: val.value,
+                })
+            })
+        }
+
+        commit('updateFilterValue', {k:'manufacturers', v: m})
         this.dispatch('catalog/loadMoreRequest')
     },
     updateFilterData({ commit }, payload) {
@@ -139,9 +151,6 @@ const mutations = {
     },
     updateLastFilterValue(state, {k, v}) {
         Vue.set(state.last_filter, k, v)
-    },
-    updateManufacturerCheckedStatus(state, {k, v}) {
-        Vue.set(state.filter_data.manufacturers[k], 'checked', v)
     },
 }
 
