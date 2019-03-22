@@ -48,12 +48,12 @@ class ModelApiImport1C extends Model
         $json = array();
 
         // REMOVE OLD ONES
-        // foreach (glob("{$this->exchange_path}*{__OLD*,__FINISHED*}", GLOB_BRACE) as $file) {
-        //     if (is_file($file)) {
-        //         @unlink($file);
-        //         $json['message'][] = 'Файл `'.basename($file).'` удален';
-        //     }
-        // }
+        foreach (glob("{$this->exchange_path}*{__OLD*,__FINISHED*}", GLOB_BRACE) as $file) {
+            if (is_file($file) && (time() - filemtime($file) > 259200)) {
+                @unlink($file);
+                $json['message'][] = 'Файл `'.basename($file).'` удален';
+            }
+        }
 
         // MARK AS OLD (PREVIOUS FILES)
         foreach (glob("{$this->exchange_path}*.xml") as $file) {
@@ -226,14 +226,14 @@ class ModelApiImport1C extends Model
                 }
 
                 if (!isset($json['success']) || $json['success'] != false) {
-                    if ($this->renameFile($realpath) === true) {
+                    // if ($this->renameFile($realpath) === true) {
                         $json['success'] = true;
                         $this->extra[$filetype]['finished'] = true;
                         $json['message'][] = "Файл `{$filename}` обработан.";
-                    } else {
-                        $json['success'] = false;
-                        $json['error'][] = 'Не удалось переименовать файл.';
-                    }
+                    // } else {
+                    //     $json['success'] = false;
+                    //     $json['error'][] = 'Не удалось переименовать файл.';
+                    // }
                 }
             } else {
                 $json['success'] = true;
@@ -296,6 +296,8 @@ class ModelApiImport1C extends Model
         // CATEGORY
         $this->load->model('api/import_1c/category');
         $this->model_api_import_1c_category->action($parsed, $languages);
+
+        sleep(10);
 
         // PRODUCTS
         $this->load->model('api/import_1c/product');

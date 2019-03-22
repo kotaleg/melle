@@ -250,6 +250,15 @@ class ModelApiImport1CProduct extends Model
                     $this->addProduct($d_);
                 } else {
                     $product_id = $this->getProductByImportId($product->id);
+
+                    // SAVE CURRENT STATUS
+                    if ($parsed->only_changes) {
+                        $current_status = $this->getProductStatus($product_id);
+                        if ($current_status !== null) {
+                            $d_['status'] = $current_status;
+                        }
+                    }
+
                     $this->editProduct($product_id, $d_);
                 }
 
@@ -676,6 +685,16 @@ class ModelApiImport1CProduct extends Model
         $this->db->query("UPDATE " . DB_PREFIX . "product
             SET status = '" . (int)$status . "'
             WHERE product_id = '" . (int)$product_id . "'");
+    }
+
+    public function getProductStatus($product_id)
+    {
+        $q = $this->db->query("SELECT `status` " . DB_PREFIX . "product
+            WHERE product_id = '" . (int)$product_id . "'");
+
+        if (isset($q->row['status'])) {
+            return (bool)$q->row['status'];
+        }
     }
 
     public function deleteAllProducts()
