@@ -850,19 +850,25 @@ top: 0!important;
 
 /*----- 17.05.2018 -----*/
 /* Правки */
+.menu-search{
+    width: 48%;
+}
 
 .search-block {
   position: relative;
-  width: 288px;
+  width: 100% !important;
   height: 25px;
   display: flex;
+}
+.search-modal__form{
+    width: 100%;
 }
 
 .search-block input[type="search"] {
   display: block;
   padding: 0 10px 0 10px;
   height: 100%;
-  width: 245px;
+  width: 86% !important;
   border: 1px solid #fff;
   background-color: #000;
   color: #fff;
@@ -1232,4 +1238,8 @@ footer {
 
 .medium{
     background-position: 0px 100px !important;
+}
+
+.panel-buttons__mail{
+    display: none !important;
 }
