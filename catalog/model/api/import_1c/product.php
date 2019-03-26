@@ -689,7 +689,7 @@ class ModelApiImport1CProduct extends Model
 
     public function getProductStatus($product_id)
     {
-        $q = $this->db->query("SELECT `status` " . DB_PREFIX . "product
+        $q = $this->db->query("SELECT `status` FROM " . DB_PREFIX . "product
             WHERE product_id = '" . (int)$product_id . "'");
 
         if (isset($q->row['status'])) {
