@@ -589,10 +589,10 @@ class ModelToolSeoPackage extends Model {
           $params = urldecode(http_build_query($data, '', '&'));
         }
 
-        $this->document->addLink($this->url->link($route, $params), 'canonical');
+        $this->document->addLink($this->url->link($route, $params, true), 'canonical');
       }
     } else {
-      $this->document->addLink($this->url->link('common/home'), 'canonical');
+      $this->document->addLink($this->url->link('common/home', '', true), 'canonical');
     }
   }
 
