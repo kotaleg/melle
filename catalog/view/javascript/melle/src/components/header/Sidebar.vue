@@ -108,7 +108,7 @@ export default {
                 handler: (e, el) => {
                     if (this.fullyOpened) {
                         // console.log('click outside SIDEBAR');
-                        this.openSidebar(false)
+                        // this.openSidebar(false)
                     }
                 },
                 middleware: (e, el) => { return true },
