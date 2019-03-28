@@ -1,2 +1,2 @@
 <?php
-require_once(DIR_LANGUAGE.'rusian/feed/advanced_sitemap.php');
+require_once(DIR_LANGUAGE.'russian/feed/advanced_sitemap.php');
