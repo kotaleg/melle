@@ -14,7 +14,7 @@ class ModelApiExport extends Model
         $this->load->model('extension/pro_patch/db');
         $this->load->model('api/import_1c/progress');
 
-        $this->export_path = $this->getRootPath() . 'protected/files/';
+        $this->export_path = $this->getRootPath() . 'exports/';
         $this->extra = $this->model_api_import_1c_progress->getExtra();
     }
 
