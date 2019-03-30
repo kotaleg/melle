@@ -14,7 +14,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
                 if ($product['image']) {
                     $output .= '<url>';
                     $output .= '  <loc>' . $this->url->link('product/product', 'product_id=' . $product['product_id']) . '</loc>';
-                    $output .= '  <changefreq>weekly</changefreq>';
+                    $output .= '  <changefreq>hourly</changefreq>';
                     $output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($product['date_modified'])) . '</lastmod>';
                     $output .= '  <priority>'. round((float) $product['sitemap_p'], 1) .'</priority>';
                     $output .= '  <image:image>';
