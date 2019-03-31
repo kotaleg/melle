@@ -297,8 +297,6 @@ class ModelApiImport1C extends Model
         $this->load->model('api/import_1c/category');
         $this->model_api_import_1c_category->action($parsed, $languages);
 
-        sleep(10);
-
         // PRODUCTS
         $this->load->model('api/import_1c/product');
         $this->model_api_import_1c_product->action($parsed, $languages, $this->exchange_path);

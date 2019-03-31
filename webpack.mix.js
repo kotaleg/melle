@@ -1,5 +1,6 @@
 let path = require('path')
 let mix = require('laravel-mix')
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 const CODENAME = 'melle'
 const CATALOG_JS_PATH = path.join('catalog/view/javascript', CODENAME)
@@ -22,3 +23,9 @@ mix.options({
 if (mix.inProduction()) {
     mix.version();
 }
+
+mix.webpackConfig({
+    plugins: [
+        // new BundleAnalyzerPlugin()
+    ],
+})

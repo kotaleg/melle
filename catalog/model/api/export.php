@@ -29,6 +29,7 @@ class ModelApiExport extends Model
         if (is_file($file)) {
             @unlink($file);
         }
+        $this->createPath($file);
 
         $f = fopen($file, 'w');
 
@@ -83,6 +84,7 @@ class ModelApiExport extends Model
         if (is_file($file)) {
             @unlink($file);
         }
+        $this->createPath($file);
 
         $this->load->model('tool/base');
         $base_path = $this->model_tool_base->getBase();
@@ -110,8 +112,21 @@ class ModelApiExport extends Model
 
                 $dp = $this->model_extension_module_super_offers->getDefaultValues($product_data['product_id'], $product_data);
 
-                if ((int)$dp['price']) {
+                // PASS PRODUCTS
+                $pass = false;
+                if (isset($dp['price'])) {
+                    if ($dp['min_quantity'] <= 0) { $pass = true; }
+                    if ($dp['price'] <= 0) { $pass = true; }
+                } else { $pass = true; }
+
+                if ($pass === false) {
                     $this->_str = '';
+
+                    $price = (int)preg_replace('/\s+/', '', $dp['price']);
+                    $special = (int)preg_replace('/\s+/', '', $dp['special']);
+                    if ($special !== false && $special > 0) {
+                        $price = $special;
+                    }
 
                     $seo_url = $this->getSeoUrl($product_data['product_id']);
                     $breadcrumbs = $this->getBreadcrumbs($product_data['product_id']);
@@ -131,7 +146,7 @@ class ModelApiExport extends Model
                         "<g:availability>in stock</g:availability>".
                         "<g:product_type>". htmlspecialchars($breadcrumbs) ."</g:product_type>".
                         ((!empty($product_data['manufacturer'])) ? "<g:brand>" . htmlspecialchars($product_data['manufacturer']) . "</g:brand>\n" : "") .
-                        "<g:price>". (int)$dp['price'] ." RUB</g:price>\n";
+                        "<g:price>". $price ." RUB</g:price>\n";
 
                     $this->_str .= "</item>\n";
                     fwrite($f, $this->_str);
@@ -166,6 +181,7 @@ class ModelApiExport extends Model
         if (is_file($file)) {
             @unlink($file);
         }
+        $this->createPath($file);
 
         $this->load->model('tool/base');
         $base_path = $this->model_tool_base->getBase();
@@ -209,8 +225,21 @@ class ModelApiExport extends Model
 
                 $dp = $this->model_extension_module_super_offers->getDefaultValues($product_data['product_id'], $product_data);
 
-                if ((int)$dp['price']) {
+                // PASS PRODUCTS
+                $pass = false;
+                if (isset($dp['price'])) {
+                    if ($dp['min_quantity'] <= 0) { $pass = true; }
+                    if ($dp['price'] <= 0) { $pass = true; }
+                } else { $pass = true; }
+
+                if ($pass === false) {
                     $this->_str = '';
+
+                    $price = (int)preg_replace('/\s+/', '', $dp['price']);
+                    $special = (int)preg_replace('/\s+/', '', $dp['special']);
+                    if ($special !== false && $special > 0) {
+                        $price = $special;
+                    }
 
                     $seo_url = $this->getSeoUrl($product_data['product_id']);
                     $cc = $this->getCloseCat($product_data['product_id']);
@@ -223,7 +252,7 @@ class ModelApiExport extends Model
 
                     $this->_str .= "<offer id=\"{$product_data['product_id']}\">\n" .
                         "<url>{$seo_url}</url>\n" .
-                        "<price>". (int)$dp['price'] ."</price>\n" .
+                        "<price>". $price ."</price>\n" .
                         "<currencyId>RUR</currencyId>\n" .
                         "<categoryId>{$cc}</categoryId>\n" .
                         "<picture>{$image}</picture>\n" .
@@ -397,6 +426,15 @@ class ModelApiExport extends Model
                 $this->_str .= "<category id=\"{$cat['category_id']}\" parentId=\"{$parent_id}\">{$group_name}</category>\n";
                 $this->setTree($cat['category_id']);
             }
+        }
+    }
+
+    private function createPath($path)
+    {
+        if (!is_dir(dirname($path))) {
+            $d = new \import_1c\import_1c_dir;
+            $d::createDir(dirname($path));
+            unset($d);
         }
     }
 }
