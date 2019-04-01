@@ -8,7 +8,7 @@ Options -Indexes
 # Allow from 134.249.231.103
 
 # Prevent Direct Access to files
-<FilesMatch "(?i)((\.tpl|.twig|\.ini|\.log|(?<!robots)\.txt|(?<!index)\.php))">
+<FilesMatch "(?i)((\.tpl|.twig|\.ini|\.log|(?<!robots)\.txt))">
  Require all denied
 </FilesMatch>
 

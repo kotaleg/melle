@@ -4,7 +4,7 @@ set_error_handler('var_dump', 0);
 
 function gkd_fatal_handler() {
   $error = error_get_last();
-  
+
   if (!empty($error['type']) && $error['type'] == '1') {
     ob_end_clean();
     if ($error !== NULL) {
@@ -12,7 +12,7 @@ function gkd_fatal_handler() {
     } else {
       echo 'Unknown fatal error';
     }
-    
+
     if (!empty($_SESSION['seopackage_lastItem'])) {
       echo "\n".'Last item id: '.$_SESSION['seopackage_lastItem'];
     }
@@ -24,7 +24,7 @@ class ControllerModuleCompleteSeo extends Controller {
   const MODULE = 'complete_seo';
   const PREFIX = 'mlseo';
   const MOD_FILE = 'seo_package';
-  
+
   private $error = array();
   private $OC_VERSION;
   private $OC_V2;
@@ -43,7 +43,7 @@ class ControllerModuleCompleteSeo extends Controller {
   private $store;
   private $limit = 500;
   private $edit_action = 'edit';
-  
+
   public function __construct($registry) {
     ini_set('memory_limit', -1);
       $this->OC_VERSION = (int) str_replace('.', '', substr(VERSION, 0, 5));
@@ -52,21 +52,21 @@ class ControllerModuleCompleteSeo extends Controller {
       $this->OC_V21X = version_compare(VERSION, '2.1', '>=');
       $this->OC_V22X = version_compare(VERSION, '2.2', '>=');
       $this->OC_V23X = version_compare(VERSION, '2.3', '>=');
-      
+
       if ($this->OC_V23X) {
         $this->EXT_23X = 'extension/';
       }
-      
+
       if (!version_compare(VERSION, '2', '>=')) {
         $this->edit_action = 'update';
       }
-      
+
     parent::__construct($registry);
-    
+
       if (!defined('SEO_PACKAGE_CLI')) {
         $this->token = isset($this->session->data['user_token']) ? 'user_token='.$this->session->data['user_token'] : 'token='.$this->session->data['token'];
       }
-      
+
       if (version_compare(VERSION, '3', '>=')) {
         $this->load->language('extension/module/complete_seo');
         $this->url_alias = 'seo_url';
@@ -74,25 +74,25 @@ class ControllerModuleCompleteSeo extends Controller {
         $this->load->language('module/complete_seo');
         $this->url_alias = 'url_alias';
       }
-    
+
     if ($this->config->get('mlseo_ml_mode')) {
       $this->ml_mode = true;
     }
-    
+
     if ($this->config->get('mlseo_multistore')) {
       $this->multistore_mode = true;
     }
-    
+
     // front url handler
     $this->front_url = new Url(HTTP_CATALOG, $this->config->get('config_secure') ? HTTP_CATALOG : HTTPS_CATALOG);
-    
+
     if ($this->config->get('config_seo_url')) {
       if ($this->OC_V22X) {
         $seourl_file = DIR_SYSTEM.'../catalog/controller/startup/seo_url.php';
       } else {
         $seourl_file = DIR_SYSTEM.'../catalog/controller/common/seo_url.php';
       }
-      
+
       if (isset($vqmod)) {
         require_once($vqmod->modCheck($seourl_file));
       } else if (class_exists('VQMod') && function_exists('modification')) {
@@ -104,13 +104,13 @@ class ControllerModuleCompleteSeo extends Controller {
       } else {
         require_once($seourl_file);
       }
-      
+
       if ($this->OC_V22X) {
         $rewriter = new ControllerStartupSeoUrl($this->registry);
       } else {
         $rewriter = new ControllerCommonSeoUrl($this->registry);
       }
-      
+
       $this->front_url->addRewrite($rewriter);
     }
   }
@@ -130,14 +130,14 @@ class ControllerModuleCompleteSeo extends Controller {
     */
     if (!empty($this->request->get['clear_cli_logs']) && file_exists(DIR_LOGS.'seo_package_cli.log')) {
       unlink(DIR_LOGS.'seo_package_cli.log');
-      
+
       if (version_compare(VERSION, '2', '>=')) {
         $this->response->redirect($this->url->link('module/complete_seo', $this->token, 'SSL'));
       } else {
         $this->redirect($this->url->link('module/complete_seo', $this->token, 'SSL'));
       }
     }
-    
+
     $data['token'] = $this->token;
     $data['_language'] = &$this->language;
     $data['_config'] = &$this->config;
@@ -145,11 +145,11 @@ class ControllerModuleCompleteSeo extends Controller {
     $data['OC_VERSION'] = $this->OC_VERSION;
     $data['OC_V2'] = version_compare(VERSION, '2', '>=');
     $data['OC_V151'] = $this->OC_V151;
-    
+
     $asset_path = 'view/seo_package/';
-    
+
     $this->document->addStyle($asset_path . 'prettyCheckable.css');
-		$this->document->addScript($asset_path . 'prettyCheckable.js');
+    $this->document->addScript($asset_path . 'prettyCheckable.js');
     $this->document->addScript($asset_path . 'itoggle.js');
     $this->document->addScript($asset_path . 'jquery-editable.min.js');
     $this->document->addScript($asset_path . 'select2.min.js');
@@ -158,58 +158,58 @@ class ControllerModuleCompleteSeo extends Controller {
     $this->document->addStyle($asset_path . 'jquery.dataTables.min.css');
     $this->document->addStyle($asset_path . 'select2.min.css');
     //$this->document->addScript($asset_path . 'gkd-script.js');
-    
+
     $data['style_radial_meter'] = file_get_contents($asset_path . 'radial-meter.css');
-    
+
     if (version_compare(VERSION, '2', '<')) {
       $this->document->addScript($asset_path . 'jquery-migrate.js');
       $this->document->addStyle($asset_path . 'awesome/css/font-awesome.min.css');
       $data['style_scoped'] = file_get_contents($asset_path . 'bootstrap.min.css');
-			$data['style_scoped'] .= str_replace('img/', $asset_path . 'img/', file_get_contents($asset_path . 'jquery-editable.css'));
-			$data['style_scoped'] .= str_replace('img/', $asset_path . 'img/', file_get_contents($asset_path . 'gkd-theme.css'));
-			$data['style_scoped'] .= str_replace('img/', $asset_path . 'img/', file_get_contents($asset_path . 'style.css'));
-			$this->document->addScript($asset_path . 'bootstrap.min.js');
+      $data['style_scoped'] .= str_replace('img/', $asset_path . 'img/', file_get_contents($asset_path . 'jquery-editable.css'));
+      $data['style_scoped'] .= str_replace('img/', $asset_path . 'img/', file_get_contents($asset_path . 'gkd-theme.css'));
+      $data['style_scoped'] .= str_replace('img/', $asset_path . 'img/', file_get_contents($asset_path . 'style.css'));
+      $this->document->addScript($asset_path . 'bootstrap.min.js');
     } else {
       $this->document->addStyle($asset_path . 'jquery-editable.css');
       $this->document->addStyle($asset_path . 'gkd-theme.css');
       $this->document->addStyle($asset_path . 'style.css');
     }
-    
+
     $this->document->setTitle(strip_tags($this->language->get('heading_title')));
     $this->load->model('setting/setting');
-    
-    // get languages 
+
+    // get languages
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
-    
+
     $current_lang_codes = array();
-    
+
     foreach ($languages as $k => $language) {
       if ($this->OC_V22X) {
         $languages[$k]['image'] = 'language/'.$language['code'].'/'.$language['code'].'.png';
       } else {
         $languages[$k]['image'] = 'view/image/flags/'. $language['image'];
       }
-      
+
       if ($language['status']) {
         $current_lang_codes[$language['language_id']] = $language['code'];
       }
     }
-    
+
     $data['languages'] = $languages;
-    
+
     /*
     $langCodeToId = $langIdToCode = array();
-    
+
     foreach ($languages as $lang) {
       $langCodeToId[$lang['code']] = $lang['language_id'];
       $langIdToCode[$lang['language_id']] = $lang['code'];
     }
     */
-    
+
     // Store SEO tab
     $this->load->model('setting/store');
-    
+
     $data['stores'] = array();
     $data['stores'][] = array(
       'store_id' => 0,
@@ -226,32 +226,32 @@ class ControllerModuleCompleteSeo extends Controller {
         'name'     => $store['name']
       );
     }
-    
+
     $data['store_id'] = $store_id = 0;
-    
+
     // Overwrite store settings
-		if (isset($this->request->get['store_id']) && $this->request->get['store_id']) {
-			$data['store_id'] = $store_id = (int) $this->request->get['store_id'];
-			
-			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '".$store_id."'");
-			
-			foreach ($query->rows as $setting) {
-				if (!$setting['serialized']) {
-					$this->config->set($setting['key'], $setting['value']);
+    if (isset($this->request->get['store_id']) && $this->request->get['store_id']) {
+      $data['store_id'] = $store_id = (int) $this->request->get['store_id'];
+
+      $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '".$store_id."'");
+
+      foreach ($query->rows as $setting) {
+        if (!$setting['serialized']) {
+          $this->config->set($setting['key'], $setting['value']);
         } else if ($this->OC_V21X) {
-					$this->config->set($setting['key'], json_decode($setting['value'], true));
-				} else {
-					$this->config->set($setting['key'], unserialize($setting['value']));
-				}
-			}
-		}
-    
+          $this->config->set($setting['key'], json_decode($setting['value'], true));
+        } else {
+          $this->config->set($setting['key'], unserialize($setting['value']));
+        }
+      }
+    }
+
     $redirect_store = '';
-    
+
     if ($store_id) {
       $redirect_store = '&store_id=' . $store_id;
     }
-    
+
     // delete extension/module folder on OC 1.5
     if (version_compare(VERSION, '2', '<') && is_dir(DIR_APPLICATION.'controller/extension/module')) {
       //@rename(DIR_APPLICATION.'controller/extension/module', DIR_APPLICATION.'controller/extension/.seo_package');
@@ -259,13 +259,13 @@ class ControllerModuleCompleteSeo extends Controller {
         $this->session->data['error'] = 'OC v1.5 - Please delete the folder ' . DIR_APPLICATION.'controller/extension/module';
       }
     }
-    
+
     // prepare store binding for use with store rewriting
     $lang_to_store = array();
-    
+
     foreach ($data['stores'] as $store) {
       $store_info = $this->model_setting_setting->getSetting('config', $store['store_id']);
-      
+
       if (!empty($store_info['config_language'])) {
         $lang_to_store[$store_info['config_language']] = array(
           'config_url' => !empty($store_info['config_url']) ? rtrim($store_info['config_url'], '/') : rtrim(HTTP_CATALOG, '/'),
@@ -273,22 +273,22 @@ class ControllerModuleCompleteSeo extends Controller {
         );
       }
     }
-    
+
     $data['lang_to_store'] = $lang_to_store;
-    
+
     // module installation check
     if (!$this->user->hasPermission('modify', 'module/complete_seo')) {
       $data['info'] = 'Demonstration mode is read only, no change will be saved.';
     }
-    
+
     if (!function_exists('mb_strtolower')) {
       $this->error['warning'] = 'The php extension mb_string is not installed, the module can work without it but you may experience some incorrect values when generating seo values, it is recommended to enable this extension in php.ini';
     }
-    
+
     if (is_file(DIR_CATALOG.'../vqmod/xml/multilingual_seo.xml')) {
       $this->session->data['error'] = 'Old version of the module detected, please remove this file :<b>/vqmod/xml/multilingual_seo.xml</b>';
     }
-    
+
     if (strpos(strtolower($_SERVER["SERVER_SOFTWARE"]), 'apache') !== false && !is_file(DIR_CATALOG.'../.htaccess')) {
       $this->session->data['error'] = 'htaccess file not found : Please rename <b>.htaccess.txt</b> to <b>.htaccess</b> in order to enable url rewriting';
     }
@@ -306,7 +306,7 @@ class ControllerModuleCompleteSeo extends Controller {
       }
     }
     */
-    
+
     // restore default htaccess
     if ($this->config->get('mlseo_flag') || (isset($this->request->post['mlseo_flag']) && $this->request->post['mlseo_flag'])) {
       $htaccess = @file_get_contents(DIR_CATALOG.'../.htaccess');
@@ -320,27 +320,27 @@ class ControllerModuleCompleteSeo extends Controller {
         }
       }
     }
-    
+
     if (!$this->OC_V22X) {
       $index = file_get_contents(DIR_CATALOG.'../index.php');
         if (strpos($index, 'new multilingual_seo') === false) {
         $this->session->data['error'] = 'Install not complete : multilingual_seo class declaration not found in index.php, maybe the file was not writeable, manual procedure : <br/>- open index.php<br />- find the text (without outter quotes): $languages = array();<br/>- add just below the previous line this text: $multilingual = new multilingual_seo($registry); $multilingual->detect();';
       }
     }
-    
+
     // handle form submit
     if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
       // define multilingual handler
       $this->request->post['mlseo_ml_mode'] = (count($languages) > 1);
       $this->request->post['mlseo_lang_codes'] = $current_lang_codes;
-      
+
       // save store bindings
       $this->request->post['mlseo_lang_to_store'] = $lang_to_store;
-      
+
       unset($this->request->post['langs'], $this->request->post['simulate'], $this->request->post['empty_only'], $this->request->post['redirect_mode']);
       /*<complete*/
       /* now included in main xml
-      // full product path 
+      // full product path
       if (isset($this->request->post['full_product_path']) && is_file(DIR_CATALOG.'../vqmod/xml/full_product_path.xml.disabled')) {
         if (!rename(DIR_CATALOG.'../vqmod/xml/full_product_path.xml.disabled', DIR_CATALOG.'../vqmod/xml/full_product_path.xml'))
           $this->session->data['error'] = 'Error: /vqmod/xml/ is not writeable.';
@@ -350,72 +350,72 @@ class ControllerModuleCompleteSeo extends Controller {
           $this->session->data['error'] = 'Error: /vqmod/xml/ is not writeable.';
       }
       */
-      
+
       // urls management
       foreach($data['languages'] as $lang)
       {
         if (isset($this->request->post['mlseo_urls_'.$lang['code']]))
         $this->request->post['mlseo_urls_'.$lang['code']] =  array_combine($this->request->post['mlseo_urls_'.$lang['code']]['keys'], $this->request->post['mlseo_urls_'.$lang['code']]['values']);
       }
-      
+
       /*complete>*/
       // $this->request->post['mlseo_default_lang'] = (!empty($this->request->post['mlseo_flag_short'])) ? substr($this->config->get('config_language'), 0, 2) : $this->config->get('config_language'); // do not use short code here !
       //$this->request->post['mlseo_default_lang'] = $this->config->get('config_language');
-      $this->model_setting_setting->editSetting('mlseo', $this->request->post, $store_id);    
+      $this->model_setting_setting->editSetting('mlseo', $this->request->post, $store_id);
       $this->session->data['success'] = $this->language->get('text_success');
-      
+
       if (version_compare(VERSION, '2', '>=')) {
         $this->response->redirect($this->url->link('module/complete_seo', $this->token . $redirect_store, 'SSL'));
       } else {
         $this->redirect($this->url->link('module/complete_seo', $this->token . $redirect_store, 'SSL'));
       }
     }
-    
+
     // check tables
     if (version_compare(VERSION, '2.3', '>=') && !$this->config->has('mlseo_default_lang')) {
       $this->install('redir');
     } else {
       $this->db_tables();
     }
-    
+
     // module checks
     if (!extension_loaded('mbstring')) {
       $this->session->data['error'] = 'Warning : PHP extension <b>mbstring</b> not loaded, make sure to enable this extension in order to use correctly the module.';
     }
-    
+
     if (!$store_id) { // do not check in store mode
       if (file_exists(DIR_APPLICATION . 'controller/feed/seopackage_sitemap.php')) {
         @rename(DIR_APPLICATION . 'controller/feed/seopackage_sitemap.php', DIR_APPLICATION . 'controller/feed/seopackage_sitemap.php_disabled');
       }
-      
+
       if ($current_lang_codes !== $this->config->get('mlseo_lang_codes')) {
         $this->session->data['error'] = 'It seems you have modified your languages configuration, please save module options to activate multilingual handling';
       }
-      
+
       if (false && $this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . $this->url_alias . "` LIKE 'language_id'")->row) {
         $has_incorrect_assign = $this->db->query("SELECT ".$this->url_alias."_id FROM " . DB_PREFIX . $this->url_alias . " WHERE (query LIKE 'category_id=%' OR query LIKE 'product_id=%' OR query LIKE 'information_id=%' OR query LIKE 'route=%') AND language_id=0 LIMIT 1")->row;
         if (!empty($has_incorrect_assign[$this->url_alias.'_id'])) {
           $this->session->data['error'] = 'There is some urls which have incorrect language assignation, please go in Mass Update and do a "Clean up"';
         }
       }
-      
+
       if (!$this->config->get('mlseo_ml_mode') && (count($languages) > 1)) {
         $this->session->data['error'] = 'It seems you have installed another language, please save module options to activate multilingual handling';
       }
-      
+
       if ($this->config->get('mlseo_redirect_canonical') && !$this->config->get('mlseo_fpp_bypasscat')) {
         $this->session->data['error'] = 'You have enabled redirect to canonical, you should enable the option Path manager > "Rewrite product path in categories" in order to have the product urls to be always the canonical ones, else it will generate a redirection on each product clicked in categories';
       }
-      
+
       if (!$this->config->get('mlseo_enabled')) {
         $this->session->data['error'] = $this->language->get('error_module_disabled');
       }
     }
     //$data['products'] = $this->db->query("SELECT product_id, name FROM " . DB_PREFIX . "product_description WHERE language_id=" . $this->config->get('config_language_id') . " ORDER BY name")->rows;
-    
+
     $this->load->model('setting/friendlyurls');
     $data['friendly_urls_langs'] = $this->model_setting_friendlyurls->getAvailableLangs();
-    
+
     // version check
     foreach (array(self::MOD_FILE, 'a_'.self::MOD_FILE, 'z_'.self::MOD_FILE) as $mod_file) {
       if (is_file(DIR_SYSTEM.'../vqmod/xml/'.$mod_file.'.xml')) {
@@ -429,11 +429,11 @@ class ControllerModuleCompleteSeo extends Controller {
       } else {
         $data['module_version'] = 'not found';
         $data['module_type'] = '';
- 		  }
-		}
-    
+      }
+    }
+
     $modification_active = false;
-    
+
     if (!$modification_active) {
       if ($data['module_type'] == 'ocmod') {
         $this->session->data['error'] = 'Module modification are not applied<br/>You have installed <b>ocmod</b> version, go to extensions > <a href="'.$this->url->link('extension/modification', $this->token).'">modifications</a> and push refresh button';
@@ -448,16 +448,16 @@ class ControllerModuleCompleteSeo extends Controller {
         $this->session->data['error'] = 'Module modification are not applied<br/>No modification file have been found, there should be the file either in /system/'.self::MOD_FILE.'.ocmod.xml for ocmod version, or in /vqmod/xml/'.self::MOD_FILE.'.xml for vqmod version, please upload the file from module package if it is not yet.';
       }
     }
-    
+
     if (is_file(DIR_SYSTEM.'../vqmod/xml/'.self::MOD_FILE.'.xml') && is_file(DIR_SYSTEM.'../system/'.self::MOD_FILE.'.ocmod.xml')) {
       $this->error['warning'] = 'Warning : both vqmod and ocmod version are installed<br/>- delete /vqmod/xml/'.self::MOD_FILE.'.xml if you want to use ocmod version<br/>- or delete /system/'.self::MOD_FILE.'.ocmod.xml if you want to use vqmod version';
     }
-    
+
     if (isset($this->session->data['success'])) {
       $data['success'] = $this->session->data['success'];
       unset($this->session->data['success']);
     } else $data['success'] = '';
-    
+
     if (isset($this->session->data['error'])) {
       $data['error'] = $this->session->data['error'];
       unset($this->session->data['error']);
@@ -466,7 +466,7 @@ class ControllerModuleCompleteSeo extends Controller {
     } else {
       $data['error'] = '';
     }
-    
+
     if (version_compare(VERSION, '2.1', '>=')) {
       $this->load->model('customer/customer_group');
       $data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
@@ -474,22 +474,22 @@ class ControllerModuleCompleteSeo extends Controller {
       $this->load->model('sale/customer_group');
       $data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
     }
-    
+
     $seo_score = array();
     $seo_score[] = $this->config->get('mlseo_enabled');
-    
+
     $total_score = count($seo_score);
-    
+
     $data['seo_score'] = round(count(array_filter($seo_score)) * 100 / $total_score);
-    
+
     $data['heading_title'] = $this->language->get('module_title');
-    
+
     $data['button_save'] = $this->language->get('button_save');
     $data['button_cancel'] = $this->language->get('button_cancel');
     $data['button_add_module'] = $this->language->get('button_add_module');
     $data['button_remove'] = $this->language->get('button_remove');
-    
-    
+
+
     if (isset($this->error['warning'])) {
       $data['error_warning'] = $this->error['warning'];
     } else {
@@ -511,7 +511,7 @@ class ControllerModuleCompleteSeo extends Controller {
     } else {
       $extension_link = $this->url->link('extension/module', $this->token, 'SSL');
     }
-    
+
     $data['breadcrumbs'][] = array(
       'text'      => $this->language->get('text_module'),
       'href'      => $extension_link,
@@ -523,7 +523,7 @@ class ControllerModuleCompleteSeo extends Controller {
       'href'      => $this->url->link('module/complete_seo', $this->token, 'SSL'),
       'separator' => ' :: '
     );
-    
+
     // is feed installed ?
     if (version_compare(VERSION, '3', '>=')) {
       $this->load->model('setting/extension');
@@ -535,7 +535,7 @@ class ControllerModuleCompleteSeo extends Controller {
       $this->load->model('setting/extension');
       $installed_feeds = $this->model_setting_extension->getInstalled('feed');
     }
-    
+
     if (in_array('advanced_sitemap', $installed_feeds)) {
       $data['link_sitemap'] = $this->url->link('feed/advanced_sitemap', $this->token, 'SSL');
     } else {
@@ -545,53 +545,53 @@ class ControllerModuleCompleteSeo extends Controller {
         $data['link_sitemap'] = $this->url->link('feed/advanced_sitemap', $this->token, 'SSL');
       }
     }
-    
+
     $data['action'] = $this->url->link('module/complete_seo', $this->token . $redirect_store, 'SSL');
     $data['upgrade_url'] = $this->url->link('module/complete_seo/upgrade', $this->token, 'SSL');
-    
+
     $data['cancel'] = $extension_link;
-    
+
     /*complete>*/
 
     /*<complete*/
-    
+
     // CLI logs
     $data['cli_log'] = $data['cli_log_link'] = '';
-    
+
     $file = DIR_LOGS.'seo_package_cli.log';
-    
-		if (file_exists($file)) {
+
+    if (file_exists($file)) {
       $data['cli_log_link'] = $this->url->link('module/complete_seo/save_cli_log', $this->token, 'SSL');
-			$size = filesize($file);
+      $size = filesize($file);
 
-			if ($size >= 5242880) {
-				$suffix = array(
-					'B',
-					'KB',
-					'MB',
-					'GB',
-					'TB',
-					'PB',
-					'EB',
-					'ZB',
-					'YB'
-				);
+      if ($size >= 5242880) {
+        $suffix = array(
+          'B',
+          'KB',
+          'MB',
+          'GB',
+          'TB',
+          'PB',
+          'EB',
+          'ZB',
+          'YB'
+        );
 
-				$i = 0;
+        $i = 0;
 
-				while (($size / 1024) > 1) {
-					$size = $size / 1024;
-					$i++;
-				}
+        while (($size / 1024) > 1) {
+          $size = $size / 1024;
+          $i++;
+        }
 
-				$data['cli_log'] = sprintf($this->language->get('text_cli_log_too_big'), round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i]);
-			} else {
-				$data['cli_log'] = file_get_contents($file);
-			}
-		}
-    
+        $data['cli_log'] = sprintf($this->language->get('text_cli_log_too_big'), round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i]);
+      } else {
+        $data['cli_log'] = file_get_contents($file);
+      }
+    }
+
     $prefix = 'mlseo_';
-    
+
     $params_array = array(
       // main options
       'mlseo_enabled',
@@ -612,12 +612,12 @@ class ControllerModuleCompleteSeo extends Controller {
       'mlseo_format_tag',
       'mlseo_fix_search',
       'mlseo_fix_cart',
-      
+
       // 404 manager
       'mlseo_404_log',
       'mlseo_404_filter',
       'mlseo_404_redir',
-      
+
       // language prefix
       'mlseo_flag_mode',
       'mlseo_store_mode',
@@ -627,44 +627,44 @@ class ControllerModuleCompleteSeo extends Controller {
       'mlseo_flag_upper',
       'mlseo_flag_default',
       'mlseo_flag_custom',
-      
+
       // sort & pagination
       'mlseo_tag',
       'mlseo_sort',
       'mlseo_pagination',
       'mlseo_pagination_fix',
       'mlseo_pagination_canonical',
-      
+
       // reviews
       'mlseo_reviews',
-      
+
       // canonical
       'mlseo_canonical',
-      
+
       // hreflang
       'mlseo_hreflang',
-      
+
       // meta robots
       'mlseo_robots',
       'mlseo_robots_default',
-      
+
       // store seo
       'mlseo_store',
       'mlseo_title_prefix',
       'mlseo_title_suffix',
-      
+
       // store seo
       'mlseo_header_lm_product',
       'mlseo_header_lm_category',
       'mlseo_header_lm_information',
       'mlseo_header_lm_manufacturer',
-      
+
       // Keyword options
       'mlseo_whitespace',
       'mlseo_extension',
       'mlseo_lowercase',
       'mlseo_duplicate',
-      
+
       // auto-update
       'mlseo_insertautotitle',
       'mlseo_editautotitle',
@@ -692,7 +692,7 @@ class ControllerModuleCompleteSeo extends Controller {
       'mlseo_editautotags',
       'mlseo_insertautorelated',
       'mlseo_editautorelated',
-      
+
       // mass update
       'mlseo_product_url_pattern',
       'mlseo_product_title_pattern',
@@ -733,7 +733,7 @@ class ControllerModuleCompleteSeo extends Controller {
       'mlseo_manufacturer_keyword_pattern',
       'mlseo_manufacturer_description_pattern',
       'mlseo_manufacturer_full_desc_pattern',
-      
+
       // rich snippets
       'mlseo_microdata',
       'mlseo_microdata_data',
@@ -743,20 +743,20 @@ class ControllerModuleCompleteSeo extends Controller {
       'mlseo_tcard_data',
       'mlseo_gpublisher',
       'mlseo_gpublisher_data',
-      
+
       // cron
       'mlseo_cron',
       'mlseo_cron_log',
     );
-    
+
     // ML params
     // foreach ($languages as $language) {}
-    
+
     // $data['full_product_path'] = (is_file(DIR_CATALOG.'../vqmod/xml/full_product_path.xml'));
-      
+
     // full product path - start
     $pm_prefix = 'mlseo_fpp_';
-    
+
     $params_array[] = $pm_prefix . 'mode';
     $params_array[] = $pm_prefix . 'depth';
     $params_array[] = $pm_prefix . 'breadcrumbs';
@@ -771,7 +771,7 @@ class ControllerModuleCompleteSeo extends Controller {
     $params_array[] = $pm_prefix . 'remove_tag';
     $params_array[] = $pm_prefix . 'categories';
     $params_array[] = $pm_prefix . 'slash';
-    
+
     // ML params
     foreach ($languages as $language) {
       $params_array[] = $prefix . 'remove_' . $language['language_id'];
@@ -782,15 +782,15 @@ class ControllerModuleCompleteSeo extends Controller {
       $params_array[] = $prefix . 'sortname_' . $language['language_id'];
       $params_array[] = $pm_prefix . 'tag_' . $language['language_id'];
     }
-    
+
     // categories management
     $this->load->model('catalog/category');
     $data['categories'] = $this->model_catalog_category->getCategories(0);
-    
+
     // full product path - end
-    
+
     /*complete>*/
-    
+
     foreach ($params_array as $param_name) {
       if (isset($this->request->post[$param_name])) {
         $data[$param_name] = $this->request->post[$param_name];
@@ -798,12 +798,12 @@ class ControllerModuleCompleteSeo extends Controller {
         $data[$param_name] = is_null($this->config->get($param_name)) ? '' : $this->config->get($param_name);
       }
     }
-    
+
     if (version_compare(VERSION, '2', '>=')) {
       $data['header'] = $this->load->controller('common/header');
       $data['column_left'] = $this->load->controller('common/column_left');
       $data['footer'] = $this->load->controller('common/footer');
-      
+
       if (version_compare(VERSION, '3', '>=')) {
         $this->config->set('template_engine', 'template');
         $this->response->setOutput($this->load->view('module/complete_seo', $data));
@@ -823,7 +823,7 @@ class ControllerModuleCompleteSeo extends Controller {
       $this->response->setOutput(str_replace(array('view/javascript/jquery/jquery-1.6.1.min.js', 'view/javascript/jquery/jquery-1.7.1.min.js', 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'), $asset_path . 'jquery.min.js', $this->render()));
     }
   }
-  
+
   public function save_cli_log() {
     $file = DIR_LOGS.'seo_package_cli.log';
     header('Content-Description: File Transfer');
@@ -834,13 +834,13 @@ class ControllerModuleCompleteSeo extends Controller {
     readfile($file);
     exit;
   }
-  
+
   public function generator_related_product($mode, $simulate, $empty_only, $redirect) {
     $this->load->model('tool/seo_package');
-    
+
     $values = $data = array();
     $data['langs'][0]['lang_img'] = '';
-      
+
     if (isset($this->request->post['mlseo_product_related_samecat'])) {
       $same_cat = $this->request->post['mlseo_product_related_samecat'];
     } else if ($this->config->get('mlseo_product_related_samecat')) {
@@ -848,31 +848,31 @@ class ControllerModuleCompleteSeo extends Controller {
     } else {
       $same_cat = false;
     }
-    
+
     $total = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "product_description pd LEFT JOIN " . DB_PREFIX . "product p ON p.product_id = pd.product_id WHERE language_id=".$this->config->get('config_language_id')." ORDER BY pd.product_id,pd.language_id")->row;
     $this->total_items = $total['total'];
-      
+
     if ($same_cat) {
       $rows = $this->db->query("SELECT pd.*, p.*, (SELECT cp.category_id FROM " . DB_PREFIX . "product_to_category pc LEFT JOIN " . DB_PREFIX . "category_path cp on cp.category_id = pc.category_id WHERE pc.product_id = pd.product_id ORDER BY cp.level DESC LIMIT 1) as category_id FROM " . DB_PREFIX . "product_description pd LEFT JOIN " . DB_PREFIX . "product p ON p.product_id = pd.product_id WHERE language_id=" . $this->config->get('config_language_id') . " ORDER BY pd.product_id,pd.language_id LIMIT ".$this->start.",".$this->limit)->rows;
     } else {
       $rows = $this->db->query("SELECT pd.*, p.* FROM " . DB_PREFIX . "product_description pd LEFT JOIN " . DB_PREFIX . "product p ON p.product_id = pd.product_id WHERE language_id=" . $this->config->get('config_language_id') . " GROUP BY pd.product_id ORDER BY pd.product_id,pd.language_id LIMIT ".$this->start.",".$this->limit)->rows;
       //$rows = $this->db->query("SELECT pd.*, p.*, pc.category_id FROM " . DB_PREFIX . "product_description pd LEFT JOIN " . DB_PREFIX . "product p ON p.product_id = pd.product_id LEFT JOIN " . DB_PREFIX . "product_to_category pc on pd.product_id = pc.product_id WHERE language_id=" . $this->config->get('config_language_id') . " GROUP BY pd.product_id ORDER BY pd.product_id,pd.language_id LIMIT ".$this->start.",".$this->limit)->rows;
     }
-    
+
     foreach ($rows as $row) {
       $this->session->data['seopackage_processed']++;
-      
+
       if (empty($row['product_id'])) continue;
-      
+
       //$rel_count = $this->db->query("SELECT COUNT(*) AS count FROM " . DB_PREFIX . "product_related WHERE product_id = '" . (int) $row['product_id'] . "'")->row;
-      
+
       $related = $this->db->query("SELECT pr.related_id, pd.name FROM " . DB_PREFIX . "product_related pr LEFT JOIN " . DB_PREFIX . "product_description pd ON (pd.product_id = pr.related_id AND pd.language_id='" . (int) $this->config->get('config_language_id')."') WHERE pr.product_id='" . (int) $row['product_id'] . "'")->rows;
-      
+
       $old_related = array();
       foreach ($related as $rel) {
         $old_related[] = '- ' . $rel['name'];
       }
-      
+
       if ($empty_only) {
         if (count($related)) {
           continue;
@@ -882,16 +882,16 @@ class ControllerModuleCompleteSeo extends Controller {
           $this->db->query("DELETE FROM " . DB_PREFIX . "product_related WHERE product_id = '" . (int) $row['product_id'] . "'" );
         }
       }
-      
+
       $prod_name = str_replace(array('%', '#', "'", '"'), '', $row['name']);
       $prod_tag = str_replace(array('%', '#', "'", '"'), '', $row['tag']);
       $prod_desc = str_replace(array('\n', '\r', '%', '#', "'", '"'), '', $row['description']);
       $prod_cat = '';
-      
+
       if ($same_cat && !empty($row['category_id'])) {
         $prod_cat = " AND pc.category_id = '" .$row['category_id'] . "' ";
       }
-      
+
       if (!empty($this->request->post['mlseo_product_related_relevance'])) {
         $relevance = $this->request->post['mlseo_product_related_relevance'];
       } else if ($this->config->get('mlseo_product_related_relevance')) {
@@ -899,7 +899,7 @@ class ControllerModuleCompleteSeo extends Controller {
       } else {
         $relevance = 2;
       }
-      
+
       if (!empty($this->request->post['mlseo_product_related_no'])) {
         $max_items = $this->request->post['mlseo_product_related_no'];
       } else if ($this->config->get('mlseo_product_related_no')) {
@@ -907,9 +907,9 @@ class ControllerModuleCompleteSeo extends Controller {
       } else {
         $max_items = 5;
       }
-      
+
       $results = $this->db->query("SELECT DISTINCT ROUND(MATCH (pd.name, pd.description) AGAINST ('" . $prod_name . " " . $prod_tag . " " . $prod_desc . "'), 0) / 5 as relevance,  p.product_id, pd.name FROM " . DB_PREFIX . "product_description pd LEFT JOIN " . DB_PREFIX . "product p on pd.product_id = p.product_id INNER JOIN " . DB_PREFIX . "product_to_category pc on pd.product_id = pc.product_id WHERE p.product_id <> " . $row['product_id'] . $prod_cat . " AND p.status = 1 GROUP BY p.product_id HAVING relevance >= " . (int) $relevance . " ORDER BY relevance DESC LIMIT 0, " . (int) $max_items)->rows;
-      
+
       $new_related = array();
       foreach ($results as $res) {
         if (!$simulate) {
@@ -920,14 +920,14 @@ class ControllerModuleCompleteSeo extends Controller {
       }
       sort($old_related);
       sort($new_related);
-      
+
       $changed = false;
-      
+
       if (!empty($new_related) && $old_related != $new_related) {
         $changed = true;
         $this->session->data['seopackage_updated']++;
       }
-      
+
       $values[] = array(
         'link' =>  $this->url->link('catalog/product/'.$this->edit_action, $this->token . '&product_id=' . $row['product_id'], 'SSL'),
         'name' =>  $row['name'],
@@ -935,24 +935,24 @@ class ControllerModuleCompleteSeo extends Controller {
         'value' =>  implode("<br/> ", $new_related),
         'changed' =>  $changed,
       );
-      
+
       if (defined('SEO_PACKAGE_CLI')) {
         if ($changed) {
           $this->log('product.related: ' . $row['name'] . ' => ' . "\n\t\t" . implode("\n\t\t", $new_related));
         }
       }
     }
-    
+
     $data['langs'][0]['rows'] = &$values;
     return $data;
   }
-  
+
   public function generator_product($mode, $simulate, $empty_only, $redirect) {
     if ($mode == 'related') return $this->generator_related_product($mode, $simulate, $empty_only, $redirect);
-    
+
     if (!isset($this->request->post['langs'])) { $data['langs'] = array(); die('No language selected');}
-    
-    // get languages 
+
+    // get languages
     $this->load->model('tool/seo_package');
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
@@ -965,12 +965,12 @@ class ControllerModuleCompleteSeo extends Controller {
       }
     }
     unset($languages);
-    
+
     $image_simulate = array();
     if ($mode == 'image_name' && count($this->request->post['langs']) > 1) {
       die('<div class="alert alert-warning"><i class="fa fa-warning"> ' . $this->language->get('text_image_name_lang') . '</i></div>');
     }
-    
+
     switch ($mode) {
       case 'url': $field = 'seo_keyword'; break;
       case 'h1': $field = 'seo_h1'; break;
@@ -985,17 +985,17 @@ class ControllerModuleCompleteSeo extends Controller {
       case 'image_alt': $field = 'image_alt'; break;
       case 'tag': $field = 'tag'; break;
     }
-      
+
     $values = $data = array();
-    
+
     if ($mode == 'store_copy') {
       foreach($this->request->post['langs'] as $lang) {
         if (!$simulate) {
           $this->db->query("DELETE FROM " . DB_PREFIX . "seo_product_description WHERE language_id = '".(int) $lang."' AND store_id = '".(int) $this->store."'");
-          
+
           $this->db->query("INSERT INTO " . DB_PREFIX . "seo_product_description SELECT product_id, '".(int) $lang."', '".(int) $this->store."', name, description, meta_title, meta_description, meta_keyword, image_title, image_alt, seo_h1, seo_h2, seo_h3 FROM " . DB_PREFIX . "product_description d WHERE d.language_id = '".(int) $lang."'");
         }
-        
+
         $data['langs'][$lang]['lang_img'] = $lang_img[$lang];
         $data['langs'][$lang]['rows'][] = array(
           'link' =>  '',
@@ -1005,38 +1005,38 @@ class ControllerModuleCompleteSeo extends Controller {
           'changed' =>  '',
         );
       }
-      
+
       return $data;
     }
-    
+
     foreach($this->request->post['langs'] as $lang)
     {
       $this->config->set('mlseo_current_lang', $lang_code[$lang]);
       $values[$lang]['lang_img'] = $lang_img[$lang];
       $values[$lang]['rows'] = array();
       $change_count = 0;
-      
+
       if (isset($this->request->post['mlseo_product_'.$mode.'_pattern'])) {
         $pattern = $this->request->post['mlseo_product_'.$mode.'_pattern'];
       } else {
         $pattern = $this->config->get('mlseo_product_'.$mode.'_pattern');
       }
-      
+
       if ($this->store) {
         $total = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_to_store s ON (p.product_id = s.product_id) WHERE s.store_id = ".(int) $this->store)->row;
       } else {
         $total = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "product p")->row;
       }
-      
+
       $this->total_items = $total['total'];
-      
+
       $special = '';
       if ($this->config->get('mlseo_special_group')) {
         $special = ", (SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ((ps.date_start = '0000-00-00' OR ps.date_start < NOW()) AND (ps.date_end = '0000-00-00' OR ps.date_end > NOW())) AND ps.customer_group_id = ".(int)$this->config->get('mlseo_special_group')." ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special";
       }
-      
+
       $extra_select = '';
-      
+
       if ($mode == 'url') {
        if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
          $extra_select = ",IFNULL((SELECT keyword FROM " . DB_PREFIX . $this->url_alias . " u WHERE query = CONCAT('product_id=', p.product_id) AND (u.language_id = d.language_id OR u.language_id = 0)  AND (u.store_id = ".(int) $this->store.") LIMIT 1), '') AS seo_keyword";
@@ -1059,34 +1059,41 @@ class ControllerModuleCompleteSeo extends Controller {
         $extra_desc = '';
         $rows = $this->db->query("SELECT d.*, p.*".$special.$extra_select." FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description d ON p.product_id = d.product_id LEFT JOIN " . DB_PREFIX . "product_to_store s ON (p.product_id = s.product_id) WHERE s.store_id = ".(int) $this->store." AND d.language_id=".(int) $lang." ORDER BY d.product_id,d.language_id LIMIT ".$this->start.",".$this->limit)->rows;
       }
-      
+
       foreach ($rows as $row) {
+
+        /* IVAN MOD */
+        if (isset($row['h1']) && !empty($row['h1'])) {
+          $row['name'] = $row['h1'];
+        }
+        /* IVAN MOD */
+
         $this->session->data['seopackage_processed']++;
-        
+
         $_SESSION['seopackage_lastItem'] = $row['product_id'];
-        
+
         if (empty($row['name']) && isset($row['orig_name'])) {
           $row['name'] = $row['orig_name'];
         }
-        
+
         if (empty($row['description']) && isset($row['orig_description'])) {
           $row['description'] = $row['orig_description'];
         }
-        
+
         if (!array_key_exists($field, $row)) continue;
-        
+
         $value = str_replace('[current]', $row[$field], $pattern);
         $value = $this->model_tool_seo_package->transformProduct($value, $lang, $row, $this->store);
-        
+
         if ($mode != 'url' && $this->multistore_mode && $this->store && !$simulate && !isset($row['meta_title'])) {
           $this->db->query("INSERT INTO " . DB_PREFIX . "seo_product_description SET product_id = '" . (int)$row['product_id'] . "', store_id = '" . (int)$this->store . "', language_id = '" . (int)$lang . "'");
         }
-        
+
         // urls
         if ($mode == 'url')
         {
           if ($empty_only && $row['seo_keyword']) continue;
-          
+
           if (!$simulate) {
             if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
               $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = 'product_id=" . $row['product_id'] . "' AND store_id = " . (int)$this->store . " AND language_id IN (".(int) $lang.", 0)");
@@ -1098,9 +1105,9 @@ class ControllerModuleCompleteSeo extends Controller {
               $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = 'product_id=" . $row['product_id'] . "'");
             }
           }
-          
+
           $value = $this->model_tool_seo_package->filter_seo($value, 'product', $row['product_id'], $lang, $simulate);
-          
+
           if (!$simulate) {
             //$this->db->query("UPDATE " . DB_PREFIX . "product_description SET seo_keyword = '". $this->db->escape($value) ."' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . $row['language_id'] . "' ");
             if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
@@ -1119,9 +1126,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h1')
         {
           if ($empty_only && $row['seo_h1']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h1 = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1130,9 +1137,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h2')
         {
           if ($empty_only && $row['seo_h2']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h2 = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1141,9 +1148,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h3')
         {
           if ($empty_only && $row['seo_h3']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h3 = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1153,9 +1160,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'title')
         {
           if ($empty_only && $row['meta_title']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_title = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1165,13 +1172,13 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'keyword')
         {
           if ($empty_only && $row['meta_keyword']) continue;
-          
+
           if (function_exists('mb_strtolower')) {
             $value = mb_strtolower(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
           } else {
             $value = strtolower(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
           }
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_keyword = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1181,9 +1188,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'description')
         {
           if ($empty_only && $row['meta_description']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_description = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1193,9 +1200,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'full_desc')
         {
           if ($empty_only && trim(strip_tags(html_entity_decode($row['description'], ENT_QUOTES, 'UTF-8')))) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET description = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1205,23 +1212,23 @@ class ControllerModuleCompleteSeo extends Controller {
         if ($mode == 'image_name')
         {
           if (!$row['image']) continue;
-          
+
           $img_count = $this->db->query("SELECT COUNT(image) as count FROM " . DB_PREFIX . "product WHERE image='" . $this->db->escape($row['image']) . "'")->row;
           if ($img_count['count'] > 1) continue;
-          
+
           $path = pathinfo($row['image']);
-          
+
           // skip if no extension
           if (empty($path['extension'])) {
             continue;
           }
-          
+
           $filename = $this->model_tool_seo_package->filter_seo($value, 'image', '', $lang);
           $value = $path['dirname'] . '/' . $filename . '.' . $path['extension'];
-          
+
           if ($row['image'] != $value) {
             $x = 1;
-            
+
             if ($simulate) {
               while (file_exists(DIR_IMAGE . $value) || in_array(DIR_IMAGE . $value, $image_simulate)) {
                 $value = $path['dirname'] . '/' . $filename . '-' . $x . '.' . $path['extension'];
@@ -1246,10 +1253,10 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'image_title')
         {
           if ($empty_only && $row['image_title']) continue;
-          
+
           $value = str_replace(array('"', "'"), '', $value);
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET image_title = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1259,10 +1266,10 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'image_alt')
         {
           if ($empty_only && $row['image_alt']) continue;
-          
+
           $value = str_replace(array('"', "'"), '', $value);
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET image_alt = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1272,54 +1279,54 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'tag')
         {
           if ($empty_only && $row['tag']) continue;
-          
+
           if ($lang) {
             $remove = $this->config->get('mlseo_remove_'.$lang);
           } else {
             $remove = $this->config->get('mlseo_remove_'.$this->config->get('config_language_id'));
           }
-          
+
           $value = str_replace('"', '', $value);
-          
+
           if (!empty($remove)) {
             $beforeWord = "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|^)";
             $afterWord =  "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|$)";
             $removeArray = array();
-            
+
             foreach (explode(',', $remove) as $rem) {
               $removeArray[] = '`'.$beforeWord.preg_quote(trim($rem)).$afterWord.'`';
             }
-            
+
             if ($removeArray) {
               $value = preg_replace($removeArray, '$1$2', $value);
             }
           }
-          
+
           if ($this->config->get('mlseo_format_tag')) {
             $value = str_replace('.', ',', $value);
             $value = str_replace(array('  ',' '), ', ', $value);
-            
+
             if (function_exists('mb_strtolower')) {
               $value = trim(mb_strtolower($value), ', ');
             } else {
               $value = trim(strtolower($value), ', ');
             }
           }
-          
+
           $value = preg_replace('/,+/', ',', $value);
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . "product_description SET tag = '" . $this->db->escape($value) . "' WHERE product_id = '" . $row['product_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
           // $field = 'tag';
         }
-        
+
         if (array_key_exists($field, $row)) {
           $changed = !($value === $row[$field]);
         } else {
           $changed = false;
         }
-        
+
         if (!defined('SEO_PACKAGE_CLI')) {
           $values[$lang]['rows'][] = array(
             'link' =>  $this->url->link('catalog/product/'.$this->edit_action, $this->token . '&product_id=' . $row['product_id'], 'SSL'),
@@ -1329,12 +1336,12 @@ class ControllerModuleCompleteSeo extends Controller {
             'changed' =>  $changed,
           );
         }
-        
+
         if ($changed) {
           if (defined('SEO_PACKAGE_CLI')) {
             $this->log('product.' . $mode . ': [' . $lang_code[$lang] . '] ' . $row['name'] . ' => ' . $value);
           }
-          
+
           $change_count++;
           $this->session->data['seopackage_updated']++;
           //Powercache::remove('seo_rewrite', 'product_id=' . $row['product_id']);
@@ -1345,11 +1352,11 @@ class ControllerModuleCompleteSeo extends Controller {
     $data['langs'] = &$values;
     return $data;
   }
-  
+
   public function generator_category($mode, $simulate, $empty_only, $redirect) {
     if (!isset($this->request->post['langs'])) { $data['langs'] = array(); return;}
-    
-    // get languages 
+
+    // get languages
     $this->load->model('tool/seo_package');
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
@@ -1362,7 +1369,7 @@ class ControllerModuleCompleteSeo extends Controller {
       }
     }
     unset($languages);
-    
+
     switch ($mode) {
       case 'url': $field = 'seo_keyword'; break;
       case 'h1': $field = 'seo_h1'; break;
@@ -1373,17 +1380,17 @@ class ControllerModuleCompleteSeo extends Controller {
       case 'description': $field = 'meta_description'; break;
       case 'full_desc': $field = 'description'; break;
     }
-    
+
     $values = $data = array();
-    
+
     if ($mode == 'store_copy') {
       foreach($this->request->post['langs'] as $lang) {
         if (!$simulate) {
           $this->db->query("DELETE FROM " . DB_PREFIX . "seo_category_description WHERE language_id = '".(int) $lang."' AND store_id = '".(int) $this->store."'");
-          
+
           $this->db->query("INSERT INTO " . DB_PREFIX . "seo_category_description SELECT category_id, '".(int) $lang."', '".(int) $this->store."', name, description, meta_title, meta_description, meta_keyword, seo_h1, seo_h2, seo_h3 FROM " . DB_PREFIX . "category_description d WHERE d.language_id = '".(int) $lang."'");
         }
-        
+
         $data['langs'][$lang]['lang_img'] = $lang_img[$lang];
         $data['langs'][$lang]['rows'][] = array(
           'link' =>  '',
@@ -1393,33 +1400,33 @@ class ControllerModuleCompleteSeo extends Controller {
           'changed' =>  '',
         );
       }
-      
+
       return $data;
     }
-    
+
     foreach($this->request->post['langs'] as $lang)
     {
       $this->config->set('mlseo_current_lang', $lang_code[$lang]);
       $values[$lang]['lang_img'] = $lang_img[$lang];
       $values[$lang]['rows'] = array();
       $change_count = 0;
-      
+
       if (isset($this->request->post['mlseo_category_'.$mode.'_pattern'])) {
         $pattern = $this->request->post['mlseo_category_'.$mode.'_pattern'];
       } else {
         $pattern = $this->config->get('mlseo_category_'.$mode.'_pattern');
       }
-      
+
       if ($this->store) {
         $total = $this->db->query("SELECT COUNT(*) as total  FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_to_store s ON (c.category_id = s.category_id) WHERE s.store_id = ".(int) $this->store)->row;
       } else {
         $total = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "category")->row;
       }
-      
+
       $this->total_items = $total['total'];
-      
+
       $extra_select = '';
-      
+
       if ($mode == 'url') {
        if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
          $extra_select = ",IFNULL((SELECT keyword FROM " . DB_PREFIX . $this->url_alias . " u WHERE query = CONCAT('category_id=', d.category_id) AND (u.language_id = d.language_id OR u.language_id = 0) AND (u.store_id = ".(int) $this->store.") LIMIT 1), '') AS seo_keyword";
@@ -1441,30 +1448,30 @@ class ControllerModuleCompleteSeo extends Controller {
         $extra_desc = '';
         $rows = $this->db->query("SELECT d.*, c.*".$extra_select." FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description d ON c.category_id = d.category_id LEFT JOIN " . DB_PREFIX . "category_to_store s ON (c.category_id = s.category_id) WHERE s.store_id = ".(int) $this->store." AND d.language_id=".(int) $lang." ORDER BY d.category_id,d.language_id LIMIT ".$this->start.",".$this->limit)->rows;
       }
-      
+
       foreach ($rows as $row) {
         $this->session->data['seopackage_processed']++;
-        
+
         if (empty($row['name']) && isset($row['orig_name'])) {
           $row['name'] = $row['orig_name'];
         }
-        
+
         if (empty($row['description']) && isset($row['orig_description'])) {
           $row['description'] = $row['orig_description'];
         }
-        
+
         $value = str_replace('[current]', $row[$field], $pattern);
         $value = $this->model_tool_seo_package->transformCategory($value, $lang, $row, $this->store);
-        
+
         if ($mode != 'url' && $this->multistore_mode && $this->store && !$simulate && !isset($row['meta_title'])) {
           $this->db->query("INSERT INTO " . DB_PREFIX . "seo_category_description SET category_id = '" . (int)$row['category_id'] . "', store_id = '" . (int)$this->store . "', language_id = '" . (int)$lang . "'");
         }
-        
+
         // urls
         if ($mode == 'url')
         {
           if ($empty_only && $row['seo_keyword']) continue;
-          
+
           if (!$simulate) {
             if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
               $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = 'category_id=" . $row['category_id'] . "' AND store_id = " . (int)$this->store . " AND language_id IN (".(int) $lang.", 0)");
@@ -1476,9 +1483,9 @@ class ControllerModuleCompleteSeo extends Controller {
               $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = 'category_id=" . $row['category_id'] . "'");
             }
           }
-          
+
           $value = $this->model_tool_seo_package->filter_seo($value, 'category', $row['category_id'], $lang, $simulate);
-          
+
           if (!$simulate) {
             //$this->db->query("UPDATE " . DB_PREFIX . "category_description SET seo_keyword = '". $this->db->escape($value) ."' WHERE category_id = '" . $row['category_id'] . "' AND language_id = '" . $row['language_id'] . "' ");
             if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
@@ -1497,9 +1504,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h1')
         {
           if ($empty_only && $row['seo_h1']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h1 = '" . $this->db->escape($value) . "' WHERE category_id = '" . $row['category_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1508,9 +1515,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h2')
         {
           if ($empty_only && $row['seo_h2']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h2 = '" . $this->db->escape($value) . "' WHERE category_id = '" . $row['category_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1519,9 +1526,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h3')
         {
           if ($empty_only && $row['seo_h3']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h3 = '" . $this->db->escape($value) . "' WHERE category_id = '" . $row['category_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1531,9 +1538,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'title')
         {
           if ($empty_only && $row['meta_title']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_title = '" . $this->db->escape($value) . "' WHERE category_id = '" . $row['category_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1543,13 +1550,13 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'keyword')
         {
           if ($empty_only && $row['meta_keyword']) continue;
-          
+
           if (function_exists('mb_strtolower')) {
             $value = mb_strtolower(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
           } else {
             $value = strtolower(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
           }
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_keyword = '" . $this->db->escape($value) . "' WHERE category_id = '" . $row['category_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1559,9 +1566,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'description')
         {
           if ($empty_only && $row['meta_description']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_description = '" . $this->db->escape($value) . "' WHERE category_id = '" . $row['category_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1571,21 +1578,21 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'full_desc')
         {
           if ($empty_only && trim(strip_tags(html_entity_decode($row['description'], ENT_QUOTES, 'UTF-8')))) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET description = '" . $this->db->escape($value) . "' WHERE category_id = '" . $row['category_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
           // $field = 'description';
         }
-        
+
         if (array_key_exists($field, $row)) {
           $changed = !($value === $row[$field]);
         } else {
           $changed = false;
         }
-        
+
         if (!defined('SEO_PACKAGE_CLI')) {
           $values[$lang]['rows'][] = array(
             'link' =>  $this->url->link('catalog/category/'.$this->edit_action, $this->token . '&category_id=' . $row['category_id'], 'SSL'),
@@ -1595,12 +1602,12 @@ class ControllerModuleCompleteSeo extends Controller {
             'changed' =>  $changed,
           );
         }
-        
+
         if ($changed) {
           if (defined('SEO_PACKAGE_CLI')) {
             $this->log('category.' . $mode . ': [' . $lang_code[$lang] . '] ' . $row['name'] . ' => ' . $value);
           }
-          
+
           $this->session->data['seopackage_updated']++;
           $change_count++;
           //Powercache::remove('seo_rewrite', 'path=', $row['category_id']);
@@ -1611,11 +1618,11 @@ class ControllerModuleCompleteSeo extends Controller {
     $data['langs'] = &$values;
     return $data;
   }
-  
+
   public function generator_information($mode, $simulate, $empty_only, $redirect) {
     if (!isset($this->request->post['langs'])) { $data['langs'] = array(); return;}
-    
-    // get languages 
+
+    // get languages
     $this->load->model('tool/seo_package');
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
@@ -1628,7 +1635,7 @@ class ControllerModuleCompleteSeo extends Controller {
       }
     }
     unset($languages);
-    
+
     switch ($mode) {
       case 'url': $field = 'seo_keyword'; break;
       case 'h1': $field = 'seo_h1'; break;
@@ -1639,17 +1646,17 @@ class ControllerModuleCompleteSeo extends Controller {
       case 'description': $field = 'meta_description'; break;
       case 'full_desc': $field = 'description'; break;
     }
-    
+
     $values = $data = array();
-    
+
     if ($mode == 'store_copy') {
       foreach($this->request->post['langs'] as $lang) {
         if (!$simulate) {
           $this->db->query("DELETE FROM " . DB_PREFIX . "seo_information_description WHERE language_id = '".(int) $lang."' AND store_id = '".(int) $this->store."'");
-          
+
           $this->db->query("INSERT INTO " . DB_PREFIX . "seo_information_description SELECT information_id, '".(int) $lang."', '".(int) $this->store."', title, description, meta_title, meta_description, meta_keyword, seo_h1, seo_h2, seo_h3 FROM " . DB_PREFIX . "information_description d WHERE d.language_id = '".(int) $lang."'");
         }
-        
+
         $data['langs'][$lang]['lang_img'] = $lang_img[$lang];
         $data['langs'][$lang]['rows'][] = array(
           'link' =>  '',
@@ -1659,33 +1666,33 @@ class ControllerModuleCompleteSeo extends Controller {
           'changed' =>  '',
         );
       }
-      
+
       return $data;
     }
-    
+
     foreach($this->request->post['langs'] as $lang)
     {
       $this->config->set('mlseo_current_lang', $lang_code[$lang]);
       $values[$lang]['lang_img'] = $lang_img[$lang];
       $values[$lang]['rows'] = array();
       $change_count = 0;
-      
+
       if (isset($this->request->post['mlseo_information_'.$mode.'_pattern'])) {
         $pattern = $this->request->post['mlseo_information_'.$mode.'_pattern'];
       } else {
         $pattern = $this->config->get('mlseo_information_'.$mode.'_pattern');
       }
-      
+
       if ($this->store) {
         $total = $this->db->query("SELECT COUNT(*) as total  FROM " . DB_PREFIX . "information i LEFT JOIN " . DB_PREFIX . "information_to_store s ON (i.information_id = s.information_id) WHERE s.store_id = ".(int) $this->store)->row;
       } else {
         $total = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "information")->row;
       }
-      
+
       $this->total_items = $total['total'];
-      
+
       $extra_select = '';
-      
+
       if ($mode == 'url') {
         if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
           $extra_select = ",IFNULL((SELECT keyword FROM " . DB_PREFIX . $this->url_alias . " u WHERE query = CONCAT('information_id=', d.information_id) AND (u.language_id = d.language_id OR u.language_id = 0) AND (u.store_id = ".(int) $this->store.") LIMIT 1), '') AS seo_keyword";
@@ -1697,7 +1704,7 @@ class ControllerModuleCompleteSeo extends Controller {
           $extra_select = ",IFNULL((SELECT keyword FROM " . DB_PREFIX . $this->url_alias . " WHERE query = CONCAT('information_id=', d.information_id) LIMIT 1), '') AS seo_keyword";
         }
       }
-      
+
       if ($this->store) {
         $desc_table = 'seo_information_description';
         $extra_desc = "AND store_id = '" . (int)$this->store . "'";
@@ -1708,32 +1715,32 @@ class ControllerModuleCompleteSeo extends Controller {
         $extra_desc = '';
         $rows = $this->db->query("SELECT d.*, i.*".$extra_select." FROM " . DB_PREFIX . "information i LEFT JOIN " . DB_PREFIX . "information_description d ON i.information_id = d.information_id LEFT JOIN " . DB_PREFIX . "information_to_store s ON (i.information_id = s.information_id) WHERE s.store_id = ".(int) $this->store." AND d.language_id=".(int) $lang." ORDER BY d.information_id,d.language_id LIMIT ".$this->start.",".$this->limit)->rows;
       }
-      
+
       //$rows = $this->db->query("SELECT *".$extra_select." FROM " . DB_PREFIX . "information_description d WHERE d.language_id=".(int) $lang." ORDER BY d.information_id LIMIT ".$this->start.",".$this->limit)->rows;
-      
+
       foreach ($rows as $row) {
         $this->session->data['seopackage_processed']++;
-        
+
         if (empty($row['title']) && isset($row['orig_title'])) {
           $row['title'] = $row['orig_title'];
         }
-        
+
         if (empty($row['description']) && isset($row['orig_description'])) {
           $row['description'] = $row['orig_description'];
         }
-        
+
         $value = str_replace('[current]', $row[$field], $pattern);
         $value = $this->model_tool_seo_package->transformInformation($value, $lang, $row, $this->store);
-        
+
         if ($mode != 'url' && $this->multistore_mode && $this->store && !$simulate && !isset($row['meta_title'])) {
           $this->db->query("INSERT INTO " . DB_PREFIX . "seo_information_description SET information_id = '" . (int)$row['information_id'] . "', store_id = '" . (int)$this->store . "', language_id = '" . (int)$lang . "'");
         }
-        
+
         // urls
         if ($mode == 'url')
         {
           if ($empty_only && $row['seo_keyword']) continue;
-          
+
           if (!$simulate) {
             if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
               $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = 'information_id=" . $row['information_id'] . "' AND store_id = " . (int)$this->store . " AND language_id IN (".(int) $lang.", 0)");
@@ -1745,9 +1752,9 @@ class ControllerModuleCompleteSeo extends Controller {
               $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = 'information_id=" . $row['information_id'] . "'");
             }
           }
-          
+
           $value = $this->model_tool_seo_package->filter_seo($value, 'information', $row['information_id'], $lang, $simulate);
-          
+
           if (!$simulate) {
             //$this->db->query("UPDATE " . DB_PREFIX . "information_description SET seo_keyword = '". $this->db->escape($value) ."' WHERE information_id = '" . $row['information_id'] . "' AND language_id = '" . $row['language_id'] . "' ");
             if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
@@ -1766,9 +1773,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h1')
         {
           if ($empty_only && $row['seo_h1']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h1 = '" . $this->db->escape($value) . "' WHERE information_id = '" . $row['information_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1777,9 +1784,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h2')
         {
           if ($empty_only && $row['seo_h2']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h2 = '" . $this->db->escape($value) . "' WHERE information_id = '" . $row['information_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1788,9 +1795,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h3')
         {
           if ($empty_only && $row['seo_h3']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h3 = '" . $this->db->escape($value) . "' WHERE information_id = '" . $row['information_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1800,9 +1807,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'title')
         {
           if ($empty_only && $row['meta_title']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_title = '" . $this->db->escape($value) . "' WHERE information_id = '" . $row['information_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1812,13 +1819,13 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'keyword')
         {
           if ($empty_only && $row['meta_keyword']) continue;
-          
+
           if (function_exists('mb_strtolower')) {
             $value = mb_strtolower(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
           } else {
             $value = strtolower(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
           }
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_keyword = '" . $this->db->escape($value) . "' WHERE information_id = '" . $row['information_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1828,9 +1835,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'description')
         {
           if ($empty_only && $row['meta_description']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_description = '" . $this->db->escape($value) . "' WHERE information_id = '" . $row['information_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -1840,21 +1847,21 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'full_desc')
         {
           if ($empty_only && trim(strip_tags(html_entity_decode($row['description'], ENT_QUOTES, 'UTF-8')))) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET description = '" . $this->db->escape($value) . "' WHERE information_id = '" . $row['information_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
           // $field = 'description';
         }
-        
+
         if (array_key_exists($field, $row)) {
           $changed = !($value === $row[$field]);
         } else {
           $changed = false;
         }
-        
+
         if (!defined('SEO_PACKAGE_CLI')) {
           $values[$lang]['rows'][] = array(
             'link' =>  $this->url->link('catalog/information/'.$this->edit_action, $this->token . '&information_id=' . $row['information_id'], 'SSL'),
@@ -1864,12 +1871,12 @@ class ControllerModuleCompleteSeo extends Controller {
             'changed' =>  $changed,
           );
         }
-        
+
         if ($changed) {
           if (defined('SEO_PACKAGE_CLI')) {
             $this->log('information.' . $mode . ': [' . $lang_code[$lang] . '] ' . $row['title'] . ' => ' . $value);
           }
-          
+
           $this->session->data['seopackage_updated']++;
           $change_count++;
           //Powercache::remove('seo_rewrite', 'information_id=' . $row['information_id']);
@@ -1878,18 +1885,18 @@ class ControllerModuleCompleteSeo extends Controller {
       $values[$lang]['count'] = $change_count;
     }
     $data['langs'] = &$values;
-    
+
     return $data;
   }
-  
+
   public function generator_manufacturer($mode, $simulate, $empty_only, $redirect) {
     if (version_compare(VERSION, '3', '<')) {
       //return $this->generator_manufacturer_old($mode, $simulate, $empty_only, $redirect);
     }
-    
+
     if (!isset($this->request->post['langs'])) { $data['langs'] = array(); return;}
-    
-    // get languages 
+
+    // get languages
     $this->load->model('tool/seo_package');
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
@@ -1902,7 +1909,7 @@ class ControllerModuleCompleteSeo extends Controller {
       }
     }
     unset($languages);
-    
+
     switch ($mode) {
       case 'url': $field = 'seo_keyword'; break;
       case 'h1': $field = 'seo_h1'; break;
@@ -1913,17 +1920,17 @@ class ControllerModuleCompleteSeo extends Controller {
       case 'description': $field = 'meta_description'; break;
       case 'full_desc': $field = 'description'; break;
     }
-    
+
     $values = $data = array();
-    
+
     if ($mode == 'store_copy') {
       foreach($this->request->post['langs'] as $lang) {
         if (!$simulate) {
           $this->db->query("DELETE FROM " . DB_PREFIX . "seo_manufacturer_description WHERE language_id = '".(int) $lang."' AND store_id = '".(int) $this->store."'");
-          
+
           $this->db->query("INSERT INTO " . DB_PREFIX . "seo_manufacturer_description SELECT manufacturer_id, '".(int) $lang."', '".(int) $this->store."', title, description, meta_title, meta_description, meta_keyword, seo_h1, seo_h2, seo_h3 FROM " . DB_PREFIX . "seo_manufacturer_description d WHERE d.language_id = '".(int) $lang."' AND d.store_id = '0'");
         }
-        
+
         $data['langs'][$lang]['lang_img'] = $lang_img[$lang];
         $data['langs'][$lang]['rows'][] = array(
           'link' =>  '',
@@ -1933,33 +1940,33 @@ class ControllerModuleCompleteSeo extends Controller {
           'changed' =>  '',
         );
       }
-      
+
       return $data;
     }
-    
+
     foreach($this->request->post['langs'] as $lang)
     {
       $this->config->set('mlseo_current_lang', $lang_code[$lang]);
       $values[$lang]['lang_img'] = $lang_img[$lang];
       $values[$lang]['rows'] = array();
       $change_count = 0;
-      
+
       if (isset($this->request->post['mlseo_manufacturer_'.$mode.'_pattern'])) {
         $pattern = $this->request->post['mlseo_manufacturer_'.$mode.'_pattern'];
       } else {
         $pattern = $this->config->get('mlseo_manufacturer_'.$mode.'_pattern');
       }
-    
+
       if ($this->store) {
         $total = $this->db->query("SELECT COUNT(*) as total  FROM " . DB_PREFIX . "manufacturer m LEFT JOIN " . DB_PREFIX . "manufacturer_to_store s ON (m.manufacturer_id = s.manufacturer_id) WHERE s.store_id = ".(int) $this->store)->row;
       } else {
         $total = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "manufacturer")->row;
       }
-      
+
       $this->total_items = $total['total'];
-      
+
       $extra_select = '';
-      
+
       if ($mode == 'url') {
         if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
           $extra_select = ",IFNULL((SELECT keyword FROM " . DB_PREFIX . $this->url_alias . " u WHERE query = CONCAT('manufacturer_id=', m.manufacturer_id) AND (u.language_id = ".(int) $lang." OR u.language_id = 0) AND (u.store_id = ".(int) $this->store.") LIMIT 1), '') AS seo_keyword";
@@ -1971,30 +1978,30 @@ class ControllerModuleCompleteSeo extends Controller {
           $extra_select = ",IFNULL((SELECT keyword FROM " . DB_PREFIX . $this->url_alias . " WHERE query = CONCAT('manufacturer_id=', m.manufacturer_id) LIMIT 1), '') AS seo_keyword";
         }
       }
-      
+
       $desc_table = 'seo_manufacturer_description';
       $extra_desc = "AND store_id = '" . (int)$this->store . "'";
       $rows = $this->db->query("SELECT d.*, m.*, d.name as title, m.name as orig_name ".$extra_select." FROM " . DB_PREFIX . "manufacturer m LEFT JOIN " . DB_PREFIX . "manufacturer_to_store s ON (m.manufacturer_id = s.manufacturer_id) LEFT JOIN " . DB_PREFIX . "seo_manufacturer_description d ON (m.manufacturer_id = d.manufacturer_id AND d.language_id=".(int) $lang." AND d.store_id = s.store_id) WHERE s.store_id = ".(int) $this->store." ORDER BY m.manufacturer_id,d.language_id LIMIT ".$this->start.",".$this->limit)->rows;
-      
+
       foreach ($rows as $row) {
         $this->session->data['seopackage_processed']++;
-        
+
         if (empty($row['name']) && isset($row['orig_name'])) {
           $row['name'] = $row['orig_name'];
         }
-        
+
         $value = str_replace('[current]', $row[$field], $pattern);
         $value = $this->model_tool_seo_package->transformManufacturer($value, $lang, $row, $this->store);
-        
+
         if (!$simulate && !isset($row['meta_title'])) {
           $this->db->query("INSERT INTO " . DB_PREFIX . "seo_manufacturer_description SET manufacturer_id = '" . (int)$row['manufacturer_id'] . "', store_id = '" . (int)$this->store . "', language_id = '" . (int)$lang . "'");
         }
-        
+
         // urls
         if ($mode == 'url')
         {
           if ($empty_only && $row['seo_keyword']) continue;
-          
+
           if (!$simulate) {
             if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
               $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = 'manufacturer_id=" . $row['manufacturer_id'] . "' AND store_id = " . (int)$this->store . " AND language_id IN (".(int) $lang.", 0)");
@@ -2006,9 +2013,9 @@ class ControllerModuleCompleteSeo extends Controller {
               $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = 'manufacturer_id=" . $row['manufacturer_id'] . "'");
             }
           }
-          
+
           $value = $this->model_tool_seo_package->filter_seo($value, 'manufacturer', $row['manufacturer_id'], $lang, $simulate);
-          
+
           if (!$simulate) {
             if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
               $this->db->query("INSERT INTO " . DB_PREFIX . $this->url_alias . " SET query = 'manufacturer_id=" . $row['manufacturer_id'] . "', language_id = '" . (int) $lang . "', keyword = '" . $this->db->escape($value) . "', store_id = '" . (int)$this->store . "'");
@@ -2026,9 +2033,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h1')
         {
           if ($empty_only && $row['seo_h1']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h1 = '" . $this->db->escape($value) . "' WHERE manufacturer_id = '" . $row['manufacturer_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -2037,9 +2044,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h2')
         {
           if ($empty_only && $row['seo_h2']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h2 = '" . $this->db->escape($value) . "' WHERE manufacturer_id = '" . $row['manufacturer_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -2048,9 +2055,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'h3')
         {
           if ($empty_only && $row['seo_h3']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET seo_h3 = '" . $this->db->escape($value) . "' WHERE manufacturer_id = '" . $row['manufacturer_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -2060,9 +2067,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'title')
         {
           if ($empty_only && $row['meta_title']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_title = '" . $this->db->escape($value) . "' WHERE manufacturer_id = '" . $row['manufacturer_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -2072,13 +2079,13 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'keyword')
         {
           if ($empty_only && $row['meta_keyword']) continue;
-          
+
           if (function_exists('mb_strtolower')) {
             $value = mb_strtolower(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
           } else {
             $value = strtolower(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
           }
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_keyword = '" . $this->db->escape($value) . "' WHERE manufacturer_id = '" . $row['manufacturer_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -2088,9 +2095,9 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'description')
         {
           if ($empty_only && $row['meta_description']) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET meta_description = '" . $this->db->escape($value) . "' WHERE manufacturer_id = '" . $row['manufacturer_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
@@ -2100,21 +2107,21 @@ class ControllerModuleCompleteSeo extends Controller {
         elseif ($mode == 'full_desc')
         {
           if ($empty_only && trim(strip_tags(html_entity_decode($row['description'], ENT_QUOTES, 'UTF-8')))) continue;
-          
+
           $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-          
+
           if (!$simulate) {
             $this->db->query("UPDATE " . DB_PREFIX . $desc_table . " SET description = '" . $this->db->escape($value) . "' WHERE manufacturer_id = '" . $row['manufacturer_id'] . "' AND language_id = '" . (int) $lang . "' " . $extra_desc);
           }
           // $field = 'description';
         }
-        
+
         if (array_key_exists($field, $row)) {
           $changed = !($value === $row[$field]);
         } else {
           $changed = false;
         }
-        
+
         if (!defined('SEO_PACKAGE_CLI')) {
           $values[$lang]['rows'][] = array(
             'link' =>  $this->url->link('catalog/manufacturer/'.$this->edit_action, $this->token . '&manufacturer_id=' . $row['manufacturer_id'], 'SSL'),
@@ -2124,12 +2131,12 @@ class ControllerModuleCompleteSeo extends Controller {
             'changed' =>  $changed,
           );
         }
-        
+
         if ($changed) {
           if (defined('SEO_PACKAGE_CLI')) {
             $this->log('manufacturer.' . $mode . ': [' . $lang_code[$lang] . '] ' . $row['name'] . ' => ' . $value);
           }
-          
+
           $this->session->data['seopackage_updated']++;
           $change_count++;
           //Powercache::remove('seo_rewrite', 'manufacturer_id=' . $row['manufacturer_id']);
@@ -2138,39 +2145,39 @@ class ControllerModuleCompleteSeo extends Controller {
       $values[$lang]['count'] = $change_count;
     }
     $data['langs'] = &$values;
-    
+
     return $data;
   }
-  
+
   public function generator_manufacturer_old($mode, $simulate, $empty_only, $redirect) {
     $this->load->model('tool/seo_package');
-    
+
     $values = $data = array();
     $values['lang_img'] = '';
     $values['no_old'] = true;
     $values['rows'] = array();
-    
+
     if (isset($this->request->post['mlseo_manufacturer_'.$mode.'_pattern'])) {
       $pattern = $this->request->post['mlseo_manufacturer_'.$mode.'_pattern'];
     } else {
       $pattern = $this->config->get('mlseo_manufacturer_'.$mode.'_pattern');
     }
-    
+
     $total = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "manufacturer")->row;
     $this->total_items = $total['total'];
-    
+
     $rows = $this->db->query("SELECT name, manufacturer_id, IFNULL((SELECT keyword FROM " . DB_PREFIX . $this->url_alias . " WHERE query = CONCAT('manufacturer_id=',manufacturer_id) LIMIT 1), '') AS seo_keyword FROM " . DB_PREFIX . "manufacturer ORDER BY manufacturer_id LIMIT ".$this->start.",".$this->limit)->rows;
-    
+
     foreach ($rows as $row)
     {
       //Powercache::remove('seo_rewrite', 'manufacturer_id=' . $row['manufacturer_id']);
       $value = str_replace('[current]', $row['seo_keyword'], $pattern);
       $value = $this->model_tool_seo_package->transformManufacturer($value, false, $row, $this->store);
-      
+
       if ($mode == 'url')
       {
         if ($empty_only && $row['seo_keyword']) continue;
-        
+
         $value = $this->model_tool_seo_package->filter_seo($value, 'manufacturer', $row['manufacturer_id'], '', $simulate);
 
         if (!$simulate) {
@@ -2179,7 +2186,7 @@ class ControllerModuleCompleteSeo extends Controller {
           } else {
             $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = 'manufacturer_id=" . $row['manufacturer_id'] . "'");
           }
-          
+
           if ($this->ml_mode) {
             $this->db->query("INSERT INTO " . DB_PREFIX . $this->url_alias . " SET query = 'manufacturer_id=" . $row['manufacturer_id'] . "', language_id = 0, keyword = '" . $this->db->escape($value) . "'");
           } else {
@@ -2187,7 +2194,7 @@ class ControllerModuleCompleteSeo extends Controller {
           }
         }
       }
-      
+
       if (!defined('SEO_PACKAGE_CLI')) {
         $values['rows'][] = array(
           'link' =>  $this->url->link('catalog/manufacturer/'.$this->edit_action, $this->token . '&manufacturer_id=' . $row['manufacturer_id'], 'SSL'),
@@ -2197,23 +2204,23 @@ class ControllerModuleCompleteSeo extends Controller {
           'changed' =>  $row['seo_keyword'] != $value,
         );
       }
-      
+
       if (defined('SEO_PACKAGE_CLI')) {
         $this->log('manufacturer.' . $mode . ': ' . $row['name'] . ' => ' . $value);
       }
     }
     $data['langs'][0] = &$values;
-    
+
     return $data;
     }
-  
+
   public function generator_redirect($mode, $simulate, $empty_only, $redirect) {
     $data = array();
-    
+
     $this->load->model('tool/seo_package');
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
-    
+
     foreach ($languages as $language) {
       $lang_code[$language['language_id']] = $language['code'];
       if ($this->OC_V22X) {
@@ -2222,28 +2229,28 @@ class ControllerModuleCompleteSeo extends Controller {
         $lang_img[$language['language_id']] = 'view/image/flags/'. $language['image'];
       }
     }
-    
+
     // define('FRONT_MODEL_LOADER', true);
-    
-    // require_once(VQMod::modCheck(DIR_CATALOG . 'controller/common/seo_url.php')); 
+
+    // require_once(VQMod::modCheck(DIR_CATALOG . 'controller/common/seo_url.php'));
     // $this->seo_url = new ControllerCommonSeoUrl($this->registry);
     //$this->seo_url->index();
-    
+
     foreach($this->request->post['langs'] as $lang)
     {
       $values = array();
       $values['lang_img'] = $lang_img[$lang];
       $values['no_old'] = true;
       $values['rows'] = array();
-      
+
       $this->config->set('mlseo_cache', false);
-      
+
       $this->config->set('config_language_id', (int) $lang);
       $this->config->set('config_language', $lang_code[$lang]);
       $this->session->data['language'] = $lang_code[$lang];
-      
+
       $type = $mode;
-      
+
       switch($type) {
         case 'information':
           $route = 'information/information';
@@ -2263,46 +2270,46 @@ class ControllerModuleCompleteSeo extends Controller {
           $field = $param = 'manufacturer_id';
           break;
       }
-      
+
       $total = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . $type)->row;
       $this->total_items = $total['total'];
-      
+
       if ($type == 'category') {
         $rows = $this->getCategories(0, '', " LIMIT " . $this->start . "," . $this->limit);
       } else {
         $rows = $this->db->query("SELECT " . $field . " FROM " . DB_PREFIX . $type . " ORDER BY " . $field . " LIMIT " . $this->start . "," . $this->limit)->rows;
       }
-      
+
       foreach ($rows as $row) {
         $this->session->data['seopackage_processed']++;
-        
+
         $this->config->set('config_store_id', $this->store);
-        
+
         $url = $this->front_url->link($route, $param . '=' . $row[$param]);
-        
+
         // get relative url
         $rel_url = str_replace(array(HTTP_SERVER, HTTP_CATALOG), '/', $url);
-         
+
         $redir = $route . '&' . $param . '=' . $row[$param];
-        
+
         // do not redirect default links
         if (strpos($url, 'index.php?route=') !== false) continue;
-        
+
         //if ($empty_only && $row['seo_keyword']) continue;
-        
+
         $count = $this->db->query("SELECT COUNT(*) as count FROM " . DB_PREFIX . "url_redirect WHERE query = '" . $this->db->escape($rel_url) . "' AND redirect = '" . $this->db->escape($redir) . "' AND language_id = '" . (int) $lang . "'")->row;
-        
+
         if ($count['count']) {
           $changed = 0;
         } else {
           if (!$simulate) {
             $this->db->query("INSERT INTO " . DB_PREFIX . "url_redirect SET query = '" . $this->db->escape($rel_url) . "', redirect = '" . $this->db->escape($redir) . "', language_id = '" . (int) $lang . "'");
           }
-          
+
           $changed = 1;
           $this->session->data['seopackage_updated']++;
         }
-        
+
         if (!defined('SEO_PACKAGE_CLI')) {
         $values['rows'][] = array(
           'link' =>  str_replace(HTTP_SERVER, '../', $url),
@@ -2312,26 +2319,26 @@ class ControllerModuleCompleteSeo extends Controller {
           'changed' =>  $changed,
         );
         }
-      
+
         if (defined('SEO_PACKAGE_CLI')) {
           if ($changed) {
             $this->log('redirect.' . $mode . ': ' . $rel_url . ' => ' . str_replace(HTTP_SERVER, '../', $url));
           }
         }
       }
-      
+
       $data['langs'][$lang] = $values;
       $data['langs'][$lang]['count'] = count($values['rows']);
-      
+
       if ($type == 'manufacturer') {
         $data['langs'][$lang]['lang_img'] = false;
         break;
       }
     }
-    
+
     return $data;
   }
-  
+
   public function generator_report($mode, $simulate, $empty_only, $redirect) {
     $values = $data = array();
     $values['lang_img'] = '';
@@ -2342,9 +2349,9 @@ class ControllerModuleCompleteSeo extends Controller {
     $data['col1'] = $this->language->get('text_query');
     $data['col2'] = $this->language->get('text_keyword');
     $data['col3'] = $this->language->get('text_status');
-    
+
     $urls = $this->db->query("SELECT query, keyword FROM " . DB_PREFIX . $this->url_alias . " WHERE keyword = ''")->rows;
-    
+
     foreach($urls as $url) {
       $values['rows'][] = array(
         'name' =>  $url['query'],
@@ -2353,14 +2360,14 @@ class ControllerModuleCompleteSeo extends Controller {
         'changed' =>  0,
       );
     }
-    
+
     //$urls = $this->db->query("SELECT count(*) AS count, query, keyword FROM " . DB_PREFIX . $this->url_alias . " GROUP BY keyword")->rows;
     if ($this->ml_mode && $this->config->get('mlseo_duplicate')) {
       $urls = $this->db->query("SELECT count(*) AS count, query, keyword, language_id  FROM " . DB_PREFIX . $this->url_alias . " GROUP BY query, keyword, language_id")->rows;
     } else {
       $urls = $this->db->query("SELECT count(*) AS count, query, keyword  FROM " . DB_PREFIX . $this->url_alias . " GROUP BY query, keyword")->rows;
     }
-    
+
     foreach($urls as $url) {
       if ($url['keyword'] && $url['count']> 1) {
         $duplicates = $this->db->query("SELECT query, keyword FROM " . DB_PREFIX . $this->url_alias . " WHERE keyword = '".$url['keyword']."'")->rows;
@@ -2374,13 +2381,13 @@ class ControllerModuleCompleteSeo extends Controller {
         }
       }
     }
-    
+
     $data['langs'][0] = &$values;
     //$data['langs'][0]['count'] = count($urls);
-    
+
     return $data;
   }
-  
+
   public function generator_robots($mode, $simulate, $empty_only, $redirect) {
     $values = $data = array();
     $values['lang_img'] = '';
@@ -2392,10 +2399,10 @@ class ControllerModuleCompleteSeo extends Controller {
     $data['col1'] = $this->language->get('text_query');
     $data['col2'] = $this->language->get('text_keyword');
     $data['col3'] = $this->language->get('text_status');
-    
+
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
-    
+
     foreach ($languages as $language) {
       $lang_code[$language['language_id']] = $language['code'];
       if ($this->OC_V22X) {
@@ -2404,12 +2411,12 @@ class ControllerModuleCompleteSeo extends Controller {
         $lang_img[$language['language_id']] = 'view/image/flags/'. $language['image'];
       }
     }
-    
+
     $fh = fopen(DIR_CATALOG.'../robots.txt', 'w') or die('robots.txt can not be written, please check rights');
     fwrite($fh, 'User-agent: *');
-    
+
     $query = $this->db->query("SELECT product_id FROM " . DB_PREFIX . "product WHERE meta_robots IN ('noindex', 'none')")->rows;
-    
+
     foreach ($query as $product) {
       foreach ($this->request->post['langs'] as $lang) {
         $this->config->set('config_language_id', (int) $lang);
@@ -2417,13 +2424,13 @@ class ControllerModuleCompleteSeo extends Controller {
         $this->session->data['language'] = $lang_code[$lang];
 
         $this->session->data['seopackage_processed']++;
-        
+
         $this->config->set('config_store_id', $this->store);
-        
+
         $url = str_replace(array(HTTP_CATALOG, HTTPS_CATALOG), '/', $this->front_url->link('product/product', 'product_id=' . $product['product_id']));
-        
+
         fwrite($fh, "\n" . 'Disallow: ' . $url);
-      
+
         $values['rows'][] = array(
           'name' =>  '',
           'old_value' =>  '',
@@ -2432,23 +2439,23 @@ class ControllerModuleCompleteSeo extends Controller {
         );
       }
     }
-    
+
     fclose($fh);
-    
+
     $data['langs'][0] = &$values;
-    
+
     return $data;
   }
-  
+
   protected function getCategories($parent_id, $current_path = '', $limits = '') {
     $route = 'product/category';
     $field = 'category_id';
     $param = 'path';
-    
+
     $categories = array();
 
     $results = $this->db->query("SELECT category_id FROM " . DB_PREFIX . "category WHERE parent_id = " . (int) $parent_id . " ORDER BY " . $field . $limits)->rows;;
-    
+
     foreach ($results as $result) {
       if (!$current_path) {
         $new_path = $result['category_id'];
@@ -2466,10 +2473,10 @@ class ControllerModuleCompleteSeo extends Controller {
 
     return $categories;
   }
-  
+
   public function generator_cache($mode, $simulate, $empty_only, $redirect) {
     $data = array();
-    
+
     $this->load->model('tool/seo_package');
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
@@ -2481,7 +2488,7 @@ class ControllerModuleCompleteSeo extends Controller {
         $lang_img[$language['language_id']] = 'view/image/flags/'. $language['image'];
       }
     }
-    
+
     if ($mode == 'delete') {
       $values = array();
       $values['lang_img'] = '';
@@ -2504,12 +2511,12 @@ class ControllerModuleCompleteSeo extends Controller {
       $data['langs'][$lang]['count'] = count($values['rows']);
       return $data;
     }
-    
+
     $data['simulate'] = false;
 
     //define('FRONT_MODEL_LOADER', true);
-    
-    //require_once(VQMod::modCheck(DIR_CATALOG . 'controller/common/seo_url.php')); 
+
+    //require_once(VQMod::modCheck(DIR_CATALOG . 'controller/common/seo_url.php'));
     //$this->seo_url = new ControllerCommonSeoUrl($this->registry);
 
     foreach($this->request->post['langs'] as $lang)
@@ -2518,13 +2525,13 @@ class ControllerModuleCompleteSeo extends Controller {
       $values['lang_img'] = $lang_img[$lang];
       $values['no_old'] = true;
       $values['rows'] = array();
-    
+
       Powercache::delete('seo_rewrite.' . (int) $lang);
-      
+
       $this->config->set('config_language_id', (int) $lang);
       $this->config->set('config_language', $lang_code[$lang]);
       $this->session->data['language'] = $lang_code[$lang];
-      
+
       $types = array('product', 'information');
       $this->total_items = 0;
       foreach ($types as $type)
@@ -2544,17 +2551,17 @@ class ControllerModuleCompleteSeo extends Controller {
             $param = 'path';
             break;
           }
-        
+
         $total = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . $type."_description WHERE language_id=".(int)$lang)->row;
         $this->total_items += $total['total'];
-        
+
         $rows = $this->db->query("SELECT ".$field.", seo_keyword, language_id FROM " . DB_PREFIX . $type."_description WHERE language_id=".(int)$lang . " ORDER BY ".$field." LIMIT ".$this->start.",".$this->limit)->rows;
         foreach ($rows as $row)
         {
-          
+
           //$url = $this->front_link($route, $param . '=' . $row[$field]);
           $url = $this->front_url->link($route, $param . '=' . $row[$field]);
-          
+
           $values['rows'][] = array(
             'link' =>  str_replace(HTTP_SERVER, '../', $url),
             'name' =>  'index.php?route=' . $route . '&' . $param . '=' . $row[$field],
@@ -2571,7 +2578,7 @@ class ControllerModuleCompleteSeo extends Controller {
             {
               //$url = $this->url->link('product/product', 'path=' . $path . '&product_id=' . $row['product_id']);
               $url = $this->front_url->link('product/product', 'path=' . $path . '&product_id=' . $row['product_id']);
-              
+
               $values['rows'][] = array(
                 'link' =>  str_replace(HTTP_SERVER, '../', $url),
                 'name' =>  'index.php?route=product/product&path=' . $path . '&product_id=' . $row['product_id'],
@@ -2581,25 +2588,25 @@ class ControllerModuleCompleteSeo extends Controller {
               );
             }
           }
-          
+
           //Powercache::add('seo_rewrite', $row['language_id'] . '-route=product/product&product_id=' . $row['product_id'], $url);
-          
+
         }
       }
-      
+
       $data['langs'][$lang] = $values;
       $data['langs'][$lang]['count'] = count($values['rows']);
     }
-    
+
     return $data;
   }
-  
+
   public function generator_cleanup($mode, $simulate, $empty_only, $redirect) {
     $values = $data = array();
     $values['lang_img'] = '';
     $values['no_old'] = true;
     $values['rows'] = array();
-    
+
     if ($mode == 'url') {
       if ($this->ml_mode) {
         $urls = $this->db->query("SELECT * FROM " . DB_PREFIX . $this->url_alias . " WHERE (query LIKE 'category_id=%' OR query LIKE 'product_id=%' OR query LIKE 'information_id=%' OR query LIKE 'route=%') AND language_id=0")->rows;
@@ -2607,7 +2614,7 @@ class ControllerModuleCompleteSeo extends Controller {
         //$urls = $this->db->query("SELECT * FROM " . DB_PREFIX . $this->url_alias . " WHERE (query LIKE 'category_id=%' OR query LIKE 'product_id=%' OR query LIKE 'route=%')")->rows;
         $urls = array();
       }
-      
+
       foreach ($urls as $url)
       {
         $values['rows'][] = array(
@@ -2617,20 +2624,20 @@ class ControllerModuleCompleteSeo extends Controller {
           'changed' =>  0,
         );
       }
-      
+
       if (!$simulate) {
         // Copy keyword values to item tables - Common to all modules - copy first without language id to be sure to have it in case of not defined
         $this->db->query("UPDATE `" . DB_PREFIX . "product_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'product_id=%' AND d.product_id = REPLACE(u.query, 'product_id=', '')");
         $this->db->query("UPDATE `" . DB_PREFIX . "category_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'category_id=%' AND d.category_id = REPLACE(u.query, 'category_id=', '')");
         $this->db->query("UPDATE `" . DB_PREFIX . "information_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'information_id=%' AND d.information_id = REPLACE(u.query, 'information_id=', '')");
-        
+
         if ($this->ml_mode) {
           $this->db->query("UPDATE `" . DB_PREFIX . "product_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'product_id=%' AND d.product_id = REPLACE(u.query, 'product_id=', '') AND d.language_id = u.language_id");
           $this->db->query("UPDATE `" . DB_PREFIX . "category_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'category_id=%' AND d.category_id = REPLACE(u.query, 'category_id=', '') AND d.language_id = u.language_id");
           $this->db->query("UPDATE `" . DB_PREFIX . "information_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'information_id=%' AND d.information_id = REPLACE(u.query, 'information_id=', '') AND d.language_id = u.language_id");
         }
       }
-      
+
       if (!$simulate) {
         if ($this->ml_mode) {
           $this->db->query("UPDATE " . DB_PREFIX . $this->url_alias . " SET language_id = ".(int) $this->config->get('config_language_id')." WHERE (query LIKE 'category_id=%' OR query LIKE 'product_id=%' OR query LIKE 'information_id=%' OR query LIKE 'route=%') AND language_id=0");
@@ -2639,7 +2646,7 @@ class ControllerModuleCompleteSeo extends Controller {
           //$this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE (query LIKE 'category_id=%' OR query LIKE 'product_id=%' OR query LIKE 'route=%')");
         }
       }
-        
+
       $data['langs'][0] = &$values;
       $data['langs'][0]['count'] = count($urls);
     } else if ($mode == 'duplicate') {
@@ -2647,15 +2654,15 @@ class ControllerModuleCompleteSeo extends Controller {
       $data['col1'] = $this->language->get('text_query');
       $data['col2'] = $this->language->get('text_keyword');
       $data['col3'] = $this->language->get('text_status');
-    
+
       $deleted = 0;
-      
+
       if ($this->ml_mode) {
         $urls = $this->db->query("SELECT count(*) AS count, query, keyword, language_id  FROM " . DB_PREFIX . $this->url_alias . " GROUP BY query, keyword, language_id")->rows;
       } else {
         $urls = $this->db->query("SELECT count(*) AS count, query, keyword  FROM " . DB_PREFIX . $this->url_alias . " GROUP BY query, keyword")->rows;
       }
-      
+
       foreach($urls as $url) {
         if ($url['count'] > 1) {
           if (!$simulate) {
@@ -2675,14 +2682,14 @@ class ControllerModuleCompleteSeo extends Controller {
           $deleted++;
         }
       }
-      
+
       $data['langs'][0] = &$values;
       $data['langs'][0]['count'] = $deleted;
     }
-      
+
       return $data;
   }
-  
+
   public function get_value() {
     $store = (int) $this->request->get['store'];
     $type = $this->request->get['type'];
@@ -2690,23 +2697,23 @@ class ControllerModuleCompleteSeo extends Controller {
     $lang = (int) $this->request->get['lang'];
     $item_id = (int) $this->request->get['id'];
     $store_id = isset($this->request->get['store']) ? (int) $this->request->get['store'] : 0;
-    
+
     if ($store_id) {
-			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '".$store_id."'");
-			
-			foreach ($query->rows as $setting) {
-				if (!$setting['serialized']) {
-					$this->config->set($setting['key'], $setting['value']);
+      $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '".$store_id."'");
+
+      foreach ($query->rows as $setting) {
+        if (!$setting['serialized']) {
+          $this->config->set($setting['key'], $setting['value']);
         } else if ($this->OC_V21X) {
-					$this->config->set($setting['key'], json_decode($setting['value'], true));
-				} else {
-					$this->config->set($setting['key'], unserialize($setting['value']));
-				}
-			}
-		}
-    
+          $this->config->set($setting['key'], json_decode($setting['value'], true));
+        } else {
+          $this->config->set($setting['key'], unserialize($setting['value']));
+        }
+      }
+    }
+
     $lgCodes = $this->config->get('mlseo_lang_codes');
-      
+
     if (!empty($lgCodes[$lang])) {
       $this->config->set('mlseo_current_lang', $lgCodes[$lang]);
     }
@@ -2714,8 +2721,8 @@ class ControllerModuleCompleteSeo extends Controller {
     if (!in_array($type, array('product', 'category', 'information', 'manufacturer'))) {
       return '';
     }
-    
-    
+
+
     if ($fields == 'all') {
       if ($type == 'product') {
         $fields = array('seo_keyword', 'seo_h1', 'seo_h2', 'seo_h3', 'image_alt', 'image_title', 'meta_title', 'meta_keyword', 'meta_description', 'tag');
@@ -2723,15 +2730,15 @@ class ControllerModuleCompleteSeo extends Controller {
         $fields = array('seo_keyword', 'seo_h1', 'seo_h2', 'seo_h3', 'meta_title', 'meta_keyword', 'meta_description');
       }
     }
-    
+
     if (empty($fields)) {
       return '';
     }
-    
+
     $values = array();
-    
+
     foreach ((array) $fields as $field) {
-      
+
       switch ($field) {
         case 'seo_keyword': $mode = 'url'; break;
         case 'seo_h1': $mode = 'h1'; break;
@@ -2752,7 +2759,7 @@ class ControllerModuleCompleteSeo extends Controller {
       //$row = $this->request->post[$type.'_description'][$lang];
       $row = $this->request->post;
       $row[$type.'_id'] = $item_id;
-      
+
       // set substore values
       if ($store_id && !empty($row['seo_'.$type.'_description'][$store_id])) {
         if (isset($row[$type.'_description'])) {
@@ -2763,59 +2770,59 @@ class ControllerModuleCompleteSeo extends Controller {
           }
         }
       }
-      
+
       $pattern = $this->config->get('mlseo_'.$type.'_'.$mode.'_pattern');
-      
+
       if ($type == 'manufacturer') {
         $pattern = str_replace('[current]', $row['seo_'.$type.'_description'][$store_id][$lang][$field], $pattern);
       } else {
         $pattern = str_replace('[current]', $row[$type.'_description'][$lang][$field], $pattern);
       }
-      
+
       $this->load->model('tool/seo_package');
-      
+
       $value = $this->model_tool_seo_package->{'transform'.ucfirst($type)}($pattern, $lang, $row, $store_id, true);
-      
+
       if ($field == 'tag') {
         if ($lang) {
           $remove = $this->config->get('mlseo_remove_'.$lang);
         } else {
           $remove = $this->config->get('mlseo_remove_'.$this->config->get('config_language_id'));
         }
-        
+
         $value = str_replace('"', '', $value);
-        
+
         if (!empty($remove)) {
           $beforeWord = "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|^)";
           $afterWord =  "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|$)";
           $removeArray = array();
-          
+
           foreach (explode(',', $remove) as $rem) {
             $removeArray[] = '`'.$beforeWord.preg_quote(trim($rem)).$afterWord.'`';
           }
-          
+
           if ($removeArray) {
             $value = preg_replace($removeArray, '$1$2', $value);
           }
         }
-        
+
         if ($this->config->get('mlseo_format_tag')) {
           $value = str_replace('.', ',', $value);
           $value = str_replace(array('  ',' '), ', ', $value);
           $value = trim(mb_strtolower($value), ', ');
         }
-        
+
         $value = preg_replace('/,+/', ',', $value);
       }
-      
+
       if ($field == 'seo_keyword') {
         $value = $this->model_tool_seo_package->filter_seo($value, $type, $row[$type.'_id'], $lang);
       }
-      
+
       if ($mode == 'full_desc') {
         $value = nl2br($value);
       }
-      
+
       if ($mode == 'keyword') {
         if (function_exists('mb_strtolower')) {
           $value = mb_strtolower($value);
@@ -2823,53 +2830,53 @@ class ControllerModuleCompleteSeo extends Controller {
           $value = strtolower($value);
         }
       }
-      
+
       if ($store || $type == 'manufacturer') {
         $values['seo_'.$type.'_description['.$store.']['.$lang.']['.$field.']'] = $value;
       } else {
         $values[$type.'_description['.$lang.']['.$field.']'] = $value;
       }
     }
-    
+
     echo json_encode($values);
     exit;
   }
-  
+
   public function generator($type = '', $mode = '', $redirect = '') {
     //sleep (2);
-    
+
     $this->session->data['seopackage_processed'] = 0;
     $this->session->data['seopackage_updated'] = 0;
-    
+
     $benchmark = false;
     if ($benchmark) {
       ini_set('memory_limit', -1);
       set_time_limit(3600);
     }
     $this->start_time = microtime(true)*1000;
-    
+
     $data['OC_V2'] = version_compare(VERSION, '2', '>=');
-    
+
     $this->load->language('module/complete_seo');
-    
+
     if (defined('SEO_PACKAGE_CLI')) {
       $this->start = 0;
       $this->limit = 9999999999;
     } else {
       $this->start = (int) $this->request->get['start'];
     }
-      
+
     $this->store = isset($this->request->get['store']) ? $this->request->get['store'] : 0;
-    
+
     if (!$this->start) unset($this->session->data['kwCountArray']);
-    
+
     if (!$type && !isset($this->request->get['type'])) return;
     if (!$mode && !isset($this->request->get['mode'])) return;
-    
+
     if (!$type) $type = $this->request->get['type'];
     if (!$mode) $mode = $this->request->get['mode'];
     if (!$redirect) $redirect = !empty($this->request->get['redirect']) ? $this->request->get['redirect'] : false;
-    
+
     $data['type'] = $type;
     $data['mode'] = $mode;
     $data['simulate'] = $simulate = !empty($this->request->post['simulate']);
@@ -2877,33 +2884,33 @@ class ControllerModuleCompleteSeo extends Controller {
       $data['simulate'] = $simulate = true;
     }
     $data['empty_only'] = $empty_only = !empty($this->request->post['empty_only']);
-    
+
     $res = $this->{'generator_'.$type}($mode, $simulate, $empty_only, $redirect);
-    
+
     $data['_language'] = $this->language;
     $data['_config'] = $this->config;
     $data['_url'] = $this->url;
     $data['token'] = $this->token;
-    
+
     if ($benchmark) {
       $end_time = microtime(true)*1000;
       var_dump('time: '. ((int)($end_time - $this->start_time) /1000). 's');
       var_dump('mem peak: ' . memory_get_peak_usage()/1000000);
       die;
     }
-    
+
     $processed = $this->start + $this->limit;
-    
+
     if ($processed > $this->total_items) {
       $processed = $this->total_items;
     }
-    
+
     if (!$this->total_items) {
       $progress = 100;
     } else {
       $progress = round(($processed / $this->total_items) * 100);
     }
-    
+
     echo json_encode(array(
       'success'=> 1,
       'processed' => $processed,
@@ -2921,44 +2928,44 @@ class ControllerModuleCompleteSeo extends Controller {
     }
     */
   }
-  
+
   /*<complete*/
 
   public function cli($params = '') {
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
-    
+
     $start_time = time();
-    
+
     foreach ($languages as $language) {
       $this->request->post['langs'][] = $language['language_id'];
     }
 
     $this->session->data['seopackage_processed'] = 0;
     $this->session->data['seopackage_updated'] = 0;
-    
+
     $this->start = 0;
     $this->limit = 9999999999;
-      
+
     $this->store = isset($this->request->get['store']) ? $this->request->get['store'] : 0;
-    
+
     // overwrite store settings
     if ($this->store) {
-			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '".$this->store."'");
-			
-			foreach ($query->rows as $setting) {
-				if (!$setting['serialized']) {
-					$this->config->set($setting['key'], $setting['value']);
+      $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '".$this->store."'");
+
+      foreach ($query->rows as $setting) {
+        if (!$setting['serialized']) {
+          $this->config->set($setting['key'], $setting['value']);
         } else if ($this->OC_V21X) {
-					$this->config->set($setting['key'], json_decode($setting['value'], true));
-				} else {
-					$this->config->set($setting['key'], unserialize($setting['value']));
-				}
-			}
-		}
-    
+          $this->config->set($setting['key'], json_decode($setting['value'], true));
+        } else {
+          $this->config->set($setting['key'], unserialize($setting['value']));
+        }
+      }
+    }
+
     $params = $this->config->get('mlseo_cron');
-    
+
     if (isset($_GET['product']) || isset($_GET['category']) || isset($_GET['information']) || isset($_GET['manufacturer']) || isset($_GET['redirect'])) {
       $params = $_GET;
     } else {
@@ -2968,19 +2975,19 @@ class ControllerModuleCompleteSeo extends Controller {
         return;
       }
     }
-    
+
     $simulation = isset($params['simulation']) && $params['simulation'];
     $empty_only = isset($params['empty_only']) && $params['empty_only'];
-    
+
     $simu = $simulation ? 'SIMULATION MODE - ' : '';
     $this->log(PHP_EOL . '----------------------------- CLI Request - ' . $simu . date('d/m/Y H:i:s') . ' - Store ' . $this->store . ' -----------------------------', 'report');
-    
+
     foreach (array('product', 'category', 'information', 'manufacturer', 'redirect') as $mode) {
       if (!empty($_GET[$mode])) {
         $params['update'][$mode] = (array) $_GET[$mode];
       }
     }
-    
+
     if (count($params['update'])) {
       foreach ($params['update'] as $type => $modes) {
         foreach ($modes as $mode) {
@@ -2988,51 +2995,51 @@ class ControllerModuleCompleteSeo extends Controller {
         }
       }
     }
-    
+
     $total_time = time() - $start_time;
     $hours = floor($total_time/3600);
     $mins = floor(($total_time-($hours * 3600))/60);
     $secs = $total_time-($hours * 3600)-($mins * 60);
     $process_time = '';
-    
+
     if ($hours) {
       $process_time = $hours . ' ' . $this->language->get('text_hours');
     }
-    
+
     if ($hours || $mins) {
       $process_time .= ($hours ? ', ': '') . $mins . ' ' . $this->language->get('text_minutes');
     }
-    
+
     if ($hours || $mins || $secs) {
       $process_time .= ($mins ? ' and ' : '') . $secs . ' ' . $this->language->get('text_seconds');
     } else if (!$process_time) {
       $process_time .= '1 ' . $this->language->get('text_seconds');
     }
-    
+
     $this->log(PHP_EOL .  'Process terminated:', 'report');
     $this->log('- Total items: ' . $this->session->data['seopackage_processed'], 'report');
     $this->log('- Total updated: ' . $this->session->data['seopackage_updated'], 'report');
     $this->log('- Total process time: ' . $process_time, 'report');
     $this->log('-------------------------------------------------------------------------------------------------------' . PHP_EOL, 'report');
-    
+
     echo 'Process terminated - Processed: ' . $this->session->data['seopackage_processed'] . ' - Updated: ' . $this->session->data['seopackage_updated'] . ' - Total time: '. $process_time;
   }
-  
+
   public function editor_data() {
     // DataTables PHP library
     $this->load->model('tool/seo_package_editor');
     $this->load->model('tool/image');
-    
+
     if (!isset($this->request->get['type'])) return;
     if (!isset($this->request->get['lang'])) return;
-    
+
     $type = $this->request->get['type'];
     $lang = (int) $this->request->get['lang'];
     $store = (int) $this->request->get['store'];
-    
+
     // php 5.2 doesn't support anonymous functions
     if (!function_exists('inlineeditor_image')) {
-      function inlineeditor_image($d, $row, $type, $_this) { 
+      function inlineeditor_image($d, $row, $type, $_this) {
         if ($d && file_exists(DIR_IMAGE . $d)) {
             $img = $_this->model_tool_image->resize($d, 40, 40);
           } else {
@@ -3067,18 +3074,18 @@ class ControllerModuleCompleteSeo extends Controller {
     if (!function_exists('inlineeditor_related')) {
       function inlineeditor_related($d, $row, $type) {
         $rel_names = array();
-        
+
         $output = '<div class="select2-input"><div class="editable-input"><select multiple="multiple" data-pk="' . $row[$type.'_id'] . '" data-col="related">';
-        
+
         foreach ($d['rows'] as $rel) {
           $rel_names[] = $rel['name'];
           $output .= '<option value="' . $rel['related_id'] . '" selected="selected">' . $rel['name'] . '</option>';
         }
-  
+
         $output .= '</select></div>';
         $output .= '<div class="editable-buttons"><button type="submit" class="select2-submit"><i class="fa fa-check"></i></button></div></div>';
         $output .= '<a class="select2" pk="' . $row[$type.'_id'] . '">' . implode(', ', $rel_names) . '</a>';
-        
+
         return $output;
       }
     }
@@ -3090,11 +3097,11 @@ class ControllerModuleCompleteSeo extends Controller {
     if (!function_exists('editor_404actions')) {
       function editor_404actions($d, $row, $type) {
         $disabled = '';
-        
+
         if ($row['has_redirect']) {
           $disabled = 'style="visibility:hidden"';
         }
-        
+
         return '<button type="button" '.$disabled.' class="btn btn-success btn-xs" onclick="javascript:$(\'#newAliasModal input\').val(\'\');$(\'#newAliasModal input[name=query]\').val($(this).closest(\'tr\').find(\'td:first\').text());" data-toggle="modal" data-target="#newAliasModal" data-pk="' . $d . '" title="Add redirection to this url"><i class="fa fa-plus"></i></i></button>
         <button type="button" class="btn btn-danger btn-xs deleteAlias" data-pk="' . $d . '"><i class="fa fa-close"></i></i></button>';
       }
@@ -3114,7 +3121,7 @@ class ControllerModuleCompleteSeo extends Controller {
         //return '<i class="deleteAlias fa fa-minus-circle" data-pk="' . $d . '"></i>';
       }
     }
-     
+
     $columns = array();
     // image column
     $dt = 0;
@@ -3174,21 +3181,21 @@ class ControllerModuleCompleteSeo extends Controller {
       }
       $columns[] = array( 'db' => $type.'_id', 'dt' => $dt++, 'table_alias' => 'i');
     }
-    
+
     echo json_encode(
       $this->model_tool_seo_package_editor->simple( $_GET, $type, $lang, $store, $columns )
     );
     die;
   }
-  
+
   public function editor_update() {
     if (!$this->user->hasPermission('modify', 'module/complete_seo')) {
       echo json_encode(array('status' => 'error', 'msg' => $this->language->get('error_permission')));
       die;
     }
-    
+
     $pk = $this->request->post['pk'];
-    
+
     if (isset($this->request->get['store'])) {
       $store_id = (int) $this->request->get['store'];
     } else if (isset($this->request->post['store'])) {
@@ -3196,72 +3203,72 @@ class ControllerModuleCompleteSeo extends Controller {
     } else {
       $store_id = 0;
     }
-    
+
     if (is_string($this->request->post['value'])) {
       $value = html_entity_decode($this->request->post['value'], ENT_QUOTES, 'UTF-8');
     } else {
       $value = $this->request->post['value'];
     }
-    
+
     $col = $this->request->post['col'];
     $type =  isset($this->request->post['type']) ? $this->request->post['type'] : '';
     $lang = isset($this->request->post['lang']) ? $this->request->post['lang'] : '';
-    
+
     if ($type == 'image') {
       $type = 'product';
     }
-    
+
     // return if something is empty
     if (empty($pk) || empty($col)) return;
-    
+
     // allowed values
     if (!in_array($col, array('title', 'name', 'seo_keyword', 'seo_h1', 'meta_title', 'meta_keyword', 'meta_description', 'tag', 'query', 'keyword', 'redirect', 'related', 'image', 'image_alt', 'image_title'))) return;
-    
+
     if ($col == 'image') {
       $this->load->model('tool/seo_package');
-      
+
       $prod = $this->db->query("SELECT image FROM " . DB_PREFIX . "product WHERE product_id = '" . (int) $pk . "'")->row;
-      
+
       $path = pathinfo($prod['image']);
       $new_path = pathinfo($value);
-      
+
       if (empty($prod['image']) || empty($new_path['filename'])) {
         echo json_encode(
           array('status' => 'error', 'pk' => $pk, 'msg' => 'Empty value not allowed')
         );
         die;
       }
-      
+
       $filename = $this->model_tool_seo_package->filter_seo($new_path['filename'], 'image', '');
       $value = $path['dirname'] . '/' . $filename . '.' . $path['extension'];
-      
+
       $x = 1;
-      
+
       while (file_exists(DIR_IMAGE . $value)) {
         $value = $path['dirname'] . '/' . $filename . '-' . $x . '.' . $path['extension'];
         $x++;
       }
-      
+
       if (rename(DIR_IMAGE . $prod['image'], DIR_IMAGE . $value)) {
         $this->db->query("UPDATE " . DB_PREFIX . "product SET image = '". $this->db->escape($value) ."' WHERE product_id = '" . (int) $pk . "'");
       }
-      
+
       $value = pathinfo($value);
       echo json_encode(
         array('status' => 'success', 'pk' => $pk, 'msg' => $value['basename'])
       );
-      
+
       die;
     }
-    
+
     if ($col == 'related') {
        $this->db->query("DELETE FROM " . DB_PREFIX . "product_related WHERE product_id = '" . (int) $pk . "'" );
        $res_ids = $res_names = array();
-       
+
        if (empty($value)) {
           $value = array();
        }
-       
+
        foreach ($value as $rel_id) {
           $rel_id = (int) $rel_id;
           if ((int) $rel_id) {
@@ -3271,15 +3278,15 @@ class ControllerModuleCompleteSeo extends Controller {
             $res_names[] = $prod['name'];
           }
       }
-      
+
       echo json_encode(
         //array('status' => 'success-related', 'val' => implode(',', $res_ids), 'msg' => implode(', ', $res_names), 'pk' => $pk)
         array('status' => 'success', 'pk' => $pk, 'msg' => implode(', ', $res_names))
       );
-      
+
       die;
     }
-    
+
     $primaryKey = $type . '_id';
     if (in_array($type, array('common', 'special'))) {
       $primaryKey = $this->url_alias.'_id';
@@ -3288,7 +3295,7 @@ class ControllerModuleCompleteSeo extends Controller {
     } else if ($type == 'absolute') {
       $primaryKey = 'url_absolute_id';
     }
-    
+
     // update products, categories or informations
     if (in_array($type, array('product', 'category', 'information', 'manufacturer', 'common', 'special', 'redirect', 'absolute'))) {
       if (in_array($type, array('common', 'special'))) {
@@ -3296,7 +3303,7 @@ class ControllerModuleCompleteSeo extends Controller {
         str_replace('route=', '', $value);
         // insert it if necessary
         $route = ($type == 'common' && $col == 'query') ? 'route=' : '';
-        
+
         $this->db->query("UPDATE " . DB_PREFIX . $this->url_alias . " SET " . $col . " = '" . $this->db->escape($route.$value) . "' WHERE " . $primaryKey . " = '" . (int)$pk . "'");
       } else if ($type == 'redirect') {
         $this->db->query("UPDATE " . DB_PREFIX . "url_redirect SET " . $col . " = '" . $this->db->escape($value) . "' WHERE " . $primaryKey . " = '" . (int)$pk . "'");
@@ -3305,11 +3312,11 @@ class ControllerModuleCompleteSeo extends Controller {
         $value = str_replace(array('route=', 'index.php?route='), '', $value);
         $this->db->query("UPDATE " . DB_PREFIX . "url_absolute SET " . $col . " = '" . $this->db->escape($value) . "' WHERE " . $primaryKey . " = '" . (int)$pk . "'");
       }
-      
+
       if ($col == 'seo_keyword') {
         $this->load->model('tool/seo_package');
         $value = $this->model_tool_seo_package->filter_seo($value, $type, $pk, $lang);
-        
+
         // manufacturer has no multilingual keyword
         if (version_compare(VERSION, '3', '>=') || ($this->multistore_mode && $this->ml_mode)) {
           $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE query = '". $primaryKey . "=" . (int)$pk . "' AND store_id = " . (int)$store_id . " AND language_id IN (".(int) $lang.", 0)");
@@ -3327,33 +3334,33 @@ class ControllerModuleCompleteSeo extends Controller {
       } else if (in_array($type, array('product', 'category', 'information', 'manufacturer'))) {
         $seoDesc = ($store_id || $type == 'manufacturer') ? 'seo_' : '';
         $extraWhere = $seoDesc ? " AND store_id = '" . (int)$store_id . "'" : '';
-        
+
         $this->db->query("UPDATE " . DB_PREFIX . $seoDesc . $type . "_description SET " . $col . " = '" . $this->db->escape($value) . "' WHERE " . $primaryKey . " = '" . (int)$pk . "' AND language_id = '" . (int)$lang . "'" . $extraWhere);
       }
-      
+
       echo json_encode(
         array('status' => 'success', 'msg' => $value)
       );
     }
   }
-  
+
   public function editor_add_alias() {
     if (!$this->user->hasPermission('modify', 'module/complete_seo')) return;
-    
+
     $lang = $this->request->get['lang'];
     $type = $this->request->get['type'];
     $query = $_GET['query'];
     $keyword = $_GET['keyword'];
-    
+
     $table = 'url_alias';
-    
+
     if ($type == 'common') {
       $query = 'route=' . str_replace('route=', '', $query);
     } else if ($type == 'absolute') {
       $query = ltrim($query, '/');
       $query = str_replace(array('route=', 'index.php?route='), '', $query);
     }
-    
+
     if ($type == 'redirect' || $type == '404') {
       $this->db->query("INSERT INTO " . DB_PREFIX . "url_redirect SET query = '" . $this->db->escape($query) . "', redirect = '" . $this->db->escape($keyword) . "', language_id = '" . (int) $lang . "'");
     } else if ($type == 'absolute') {
@@ -3365,12 +3372,12 @@ class ControllerModuleCompleteSeo extends Controller {
         $this->db->query("INSERT INTO " . DB_PREFIX . $this->url_alias . " SET query = '" . $this->db->escape($query) . "', keyword = '" . $this->db->escape($keyword) . "'");
       }
     }
-    
+
   }
-  
+
   public function editor_delete_alias() {
     if (!$this->user->hasPermission('modify', 'module/complete_seo')) return;
-    
+
     $type = $this->request->get['type'];
     $alias_id = $this->request->get['pk'];
     if ($type == '404') {
@@ -3383,13 +3390,13 @@ class ControllerModuleCompleteSeo extends Controller {
       $this->db->query("DELETE FROM " . DB_PREFIX . $this->url_alias . " WHERE ".$this->url_alias."_id =  '". (int) $alias_id . "'");
     }
   }
-  
+
   public function editor_delete_aliases() {
     if (!$this->user->hasPermission('modify', 'module/complete_seo')) return;
-    
+
     $lang = $this->request->get['lang'];
     $type = $this->request->get['type'];
-    
+
     if ($type == 'common') {
       $extra_where = "query LIKE 'route=%'";
     } elseif ($type == 'special') {
@@ -3399,7 +3406,7 @@ class ControllerModuleCompleteSeo extends Controller {
                    AND query NOT LIKE 'information_id=%'
                    AND query NOT LIKE 'manufacturer_id=%'";
     }
-    
+
     if ($type == '404') {
       if (!empty($this->request->get['redir_only'])) {
         $this->db->query("DELETE u FROM " . DB_PREFIX . "url_404 u LEFT JOIN " . DB_PREFIX . "url_redirect r ON (u.query = r.query OR REPLACE(u.query, '".HTTP_CATALOG."', '/') = r.query) WHERE r.query IS NOT NULL");
@@ -3421,24 +3428,24 @@ class ControllerModuleCompleteSeo extends Controller {
 
   public function editor_restore_aliases() {
     if (!$this->user->hasPermission('modify', 'module/complete_seo')) return;
-    
+
     $this->load->model('setting/friendlyurls');
     $this->load->model('localisation/language');
-    
+
     $lang = $this->request->get['lang'];
     $lang_code = $this->request->get['lang_code'];
-    
+
     $languages = $this->model_localisation_language->getLanguages();
-    
+
     $langs = array();
     foreach ($languages as $language) {
       $langs[$language['language_id']] = $language['code'];
     }
-    
+
     $this->editor_delete_aliases();
-    
+
     $default_urls = $this->model_setting_friendlyurls->getFriendlyUrls($lang_code);
-    
+
     foreach ($default_urls as $query => $keyword) {
       if ($this->config->get('mlseo_ascii_'.$lang)) {
         include_once(DIR_SYSTEM . 'library/gkd_urlify.php');
@@ -3448,7 +3455,7 @@ class ControllerModuleCompleteSeo extends Controller {
           $keyword = URLify::downcode($keyword, substr($lang_code, 0, 2));
         }
       }
-      
+
       if ($this->ml_mode) {
         $this->db->query("INSERT INTO " . DB_PREFIX . $this->url_alias . " SET query = 'route=" . $query . "', keyword = '" . $keyword . "', language_id = '" . (int) $lang . "'");
       } else {
@@ -3456,18 +3463,18 @@ class ControllerModuleCompleteSeo extends Controller {
       }
     }
   }
-  
+
   public function editor_export_aliases() {
     $type = $this->request->get['type'];
     $lang = $this->request->get['lang'];
     $lang_code = $this->request->get['lang_code'];
-    
+
     header("Content-type: text/plain");
     header("Content-Disposition: attachment; filename=friendly_export.txt");
 
     echo "You translated friendly urls and want to integrate them in official package?" . PHP_EOL . "Please send this file to support@geekodev.com" . PHP_EOL . PHP_EOL;
     echo "Language : " . $lang_code . PHP_EOL . PHP_EOL;
-     
+
     if ($type == 'common') {
       $extra_where = "query LIKE 'route=%'";
     } elseif ($type == 'special') {
@@ -3479,29 +3486,29 @@ class ControllerModuleCompleteSeo extends Controller {
     } else {
       exit();
     }
-    
+
     if ($this->ml_mode) {
       $query = $this->db->query("SELECT * FROM " . DB_PREFIX . $this->url_alias . " WHERE " . $extra_where . " AND language_id = '" . (int) $lang . "'");
     } else {
       $query = $this->db->query("SELECT * FROM " . DB_PREFIX . $this->url_alias . " WHERE " . $extra_where);
     }
-    
+
     foreach($query->rows as $row) {
       echo "'".str_replace('route=', '', $row['query'])."' => '".$row['keyword']."',". PHP_EOL;
     }
-    
+
     exit();
   }
-  
+
   /*complete>*/
-  
+
    public function modal_related() {
     $this->load->language('module/complete_seo');
-    
+
     $id = $this->request->post['id'];
-       
+
     $related = $this->db->query("SELECT pr.related_id, pd.name FROM " . DB_PREFIX . "product_related pr LEFT JOIN " . DB_PREFIX . "product_description pd ON pd.product_id = pr.related_id WHERE pr.product_id=" . (int) $id . " AND pd.language_id=" . $this->config->get('config_language_id'))->rows;
-       
+
     echo '<div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -3510,61 +3517,61 @@ class ControllerModuleCompleteSeo extends Controller {
         </div>
         <div class="modal-body">
           <select class="related-select" multiple="multiple">';
-    
+
     foreach ($related as $rel) {
       echo '<option value="' . $rel['related_id'] . '">' . $rel['name'] . '</option>';
     }
-    
+
     echo '</select>
 <script type="text/javascript">
   $("select.related-select").select2({
-    
+
   });
 </script>
         </div>
       </div>
     </div>';
-    
+
     die;
   }
-  
+
   public function product_search() {
     if (!isset($this->request->get['q'])) {
       echo json_encode(array('results'));
       die;
     }
-    
+
     $q = $this->request->get['q'];
-     
+
     $json = array('results');
-    
-    $products = $this->db->query("SELECT product_id, name FROM " . DB_PREFIX . "product_description WHERE name LIKE '" . $this->db->escape($q) . "%' AND language_id=" . $this->config->get('config_language_id') . " LIMIT 30")->rows; 
-    
+
+    $products = $this->db->query("SELECT product_id, name FROM " . DB_PREFIX . "product_description WHERE name LIKE '" . $this->db->escape($q) . "%' AND language_id=" . $this->config->get('config_language_id') . " LIMIT 30")->rows;
+
     if (!$products) {
       $products = $this->db->query("SELECT product_id, name FROM " . DB_PREFIX . "product_description WHERE name LIKE '%" . $this->db->escape($q) . "%' AND language_id=" . $this->config->get('config_language_id') . " LIMIT 30")->rows;
     }
-    
+
     foreach ($products as $product) {
       $json['results'][] = array(
         'id' => $product['product_id'],
         'text' => htmlspecialchars_decode($product['name']),
       );
     }
-    
+
     echo json_encode($json);
-    
+
     die;
    }
-   
+
    public function modal_info() {
     $this->load->language('module/complete_seo');
-    
+
     $item = $this->request->post['info'];
-    
+
     $extra_class = $this->language->get('info_css_' . $item) != 'info_css_' . $item ? $this->language->get('info_css_' . $item) : 'modal-lg';
     $title = $this->language->get('info_title_' . $item) != 'info_title_' . $item ? $this->language->get('info_title_' . $item) : $this->language->get('info_title_default');
     $message = $this->language->get('info_msg_' . $item) != 'info_msg_' . $item? $this->language->get('info_msg_' . $item) : $this->language->get('info_msg_default');
-    
+
     echo '<div class="modal-dialog ' . $extra_class . '">
       <div class="modal-content">
         <div class="modal-header">
@@ -3574,15 +3581,15 @@ class ControllerModuleCompleteSeo extends Controller {
         <div class="modal-body">' . $message . '</div>
       </div>
     </div>';
-    
+
     die;
   }
-  
+
   public function install($redir = false) {
     if (version_compare(VERSION, '3', '<') && is_dir(DIR_APPLICATION.'controller/extension/module')) {
       //@rename(DIR_APPLICATION.'controller/extension/module', DIR_APPLICATION.'controller/extension/.seo_package');
     }
-    
+
     // rights
     $this->load->model('user/user_group');
 
@@ -3590,14 +3597,14 @@ class ControllerModuleCompleteSeo extends Controller {
       $this->model_user_user_group->addPermission(version_compare(VERSION, '2.0.2', '>=') ? $this->user->getGroupId() : 1, 'access', 'module/' . self::MODULE);
       $this->model_user_user_group->addPermission(version_compare(VERSION, '2.0.2', '>=') ? $this->user->getGroupId() : 1, 'modify', 'module/' . self::MODULE);
     }
-    
+
     // check tables
     $this->db_tables();
-    
+
     $this->load->model('localisation/language');
     $languages = array();
     $results = $this->model_localisation_language->getLanguages();
-    
+
     foreach ($results as $result) {
       $languages[$result['code']] = $result;
     }
@@ -3634,7 +3641,7 @@ class ControllerModuleCompleteSeo extends Controller {
       $friendly_urls['mlseo_urls_'.$language['code']] = $this->model_setting_friendlyurls->getFriendlyUrls($language['code']);
     }
     */
-    
+
     $this->load->model('setting/setting');
     $this->model_setting_setting->editSetting('mlseo', array(
         'mlseo_whitespace' => '-',
@@ -3696,7 +3703,7 @@ class ControllerModuleCompleteSeo extends Controller {
         'mlseo_tcard_data' => array('desc' => 1),
         'mlseo_opengraph_data' => array('desc' => 1),
       ));
-      
+
     if (is_writable(DIR_CATALOG.'../index.php')) {
       $index = file_get_contents(DIR_CATALOG.'../index.php');
       if (strpos($index, 'new multilingual_seo') === false && strpos($index, '$languages = array();') !== false) {
@@ -3704,25 +3711,25 @@ class ControllerModuleCompleteSeo extends Controller {
         file_put_contents(DIR_CATALOG.'../index.php', $index);
       }
     }
-    
+
     if ($redir || !empty($this->request->get['redir'])) {
       if (version_compare(VERSION, '2', '>=')) {
-				$this->response->redirect($this->url->link('module/'.self::MODULE, $this->token, 'SSL'));
-			} else {
-				$this->redirect($this->url->link('module/'.self::MODULE, $this->token, 'SSL'));
-			}
+        $this->response->redirect($this->url->link('module/'.self::MODULE, $this->token, 'SSL'));
+      } else {
+        $this->redirect($this->url->link('module/'.self::MODULE, $this->token, 'SSL'));
+      }
     }
   }
-  
+
   private function log($msg = '', $mode = 'all') {
     if ($this->config->get('mlseo_cron_log') == 'off') return;
     if ($this->config->get('mlseo_cron_log') == 'report' && $mode != 'report') return;
-    
+
     $log = DIR_LOGS.'seo_package_cli.log';
     $txt = $msg . PHP_EOL;
     file_put_contents($log, $txt, FILE_APPEND | LOCK_EX);
   }
-  
+
   public function uninstall() {
   /*
     if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "product_description` LIKE 'seo_keyword'")->row)
@@ -3746,35 +3753,35 @@ class ControllerModuleCompleteSeo extends Controller {
     */
     //$default_lang = $this->db->query("SELECT language_id FROM " . DB_PREFIX . "language WHERE code = '" . $this->config->get('config_language') . "'")->row['language_id'];
     $default_lang = $this->config->get('config_language_id');
-    
+
     if (version_compare(VERSION, '3', '<')) {
       if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . $this->url_alias . "` LIKE 'language_id'")->row) {
         $this->db->query("DELETE FROM `" . DB_PREFIX . $this->url_alias . "` WHERE language_id <> " . $default_lang . " AND language_id <> 0");
         $this->db->query("ALTER TABLE `" . DB_PREFIX . $this->url_alias . "` DROP `language_id`");
       }
     }
-    
+
     if (version_compare(VERSION, '2.2', '<')) {
       $index = file_get_contents(DIR_CATALOG.'../index.php');
       $index = str_replace('$multilingual = new multilingual_seo($registry); $multilingual->detect();', '', $index);
       file_put_contents(DIR_CATALOG.'../index.php', $index);
     }
   }
-  
+
   private function validate() {
     if (!$this->user->hasPermission('modify', 'module/complete_seo')) {
       $this->error['error'] = $this->language->get('error_permission');
     }
-    
+
     if (!$this->error)
       return true;
     return false;
   }
-  
+
   private function db_tables() {
     $this->load->model('localisation/language');
     $languages = $this->model_localisation_language->getLanguages();
-      
+
     // check DB columns
     if (!$this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "product` LIKE 'meta_robots'")->row)
       $this->db->query("ALTER TABLE `" . DB_PREFIX . "product` ADD `meta_robots` VARCHAR(40) NOT NULL");
@@ -3824,25 +3831,25 @@ class ControllerModuleCompleteSeo extends Controller {
       if (!$this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "category_description` LIKE 'meta_title'")->row)
         $this->db->query("ALTER TABLE `" . DB_PREFIX . "category_description` ADD `meta_title` VARCHAR(255) NOT NULL");
     }
-    
+
     if (version_compare(VERSION, '3', '<')) {
       if (count($languages) > 1) {
         if (!$this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . $this->url_alias . "` LIKE 'language_id'")->row)
           $this->db->query("ALTER TABLE `" . DB_PREFIX . $this->url_alias . "` ADD `language_id` INT(11) NOT NULL DEFAULT '0'");
-        
+
         $this->db->query("UPDATE " . DB_PREFIX . $this->url_alias . " SET language_id = ".(int) $this->config->get('config_language_id')." WHERE (query LIKE 'category_id=%' OR query LIKE 'product_id=%' OR query LIKE 'information_id=%' OR query LIKE 'route=%') AND language_id=0");
       }
     }
-    
+
     try {
       if (!$this->db->query("SHOW INDEX FROM " . DB_PREFIX . "product_description WHERE Key_name='related_generator'")->row)
         $this->db->query("CREATE FULLTEXT INDEX related_generator ON " . DB_PREFIX . "product_description (name, description)");
     } catch (Exception $e) {}
-    
+
     if ($this->config->get('mlseo_multistore')) {
        if (!$this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . $this->url_alias . "` LIKE 'store_id'")->row)
         $this->db->query("ALTER TABLE `" . DB_PREFIX . $this->url_alias . "` ADD `store_id` INT(11) NOT NULL DEFAULT '0'");
-      
+
       $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "seo_product_description` (
           `product_id` int(11) NOT NULL,
           `language_id` int(11) NOT NULL DEFAULT 0,
@@ -3859,7 +3866,7 @@ class ControllerModuleCompleteSeo extends Controller {
           `seo_h3` varchar(255) NOT NULL DEFAULT '',
           PRIMARY KEY (`product_id`,`language_id`,`store_id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
-        
+
       $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "seo_category_description` (
           `category_id` int(11) NOT NULL,
           `language_id` int(11) NOT NULL DEFAULT 0,
@@ -3874,7 +3881,7 @@ class ControllerModuleCompleteSeo extends Controller {
           `seo_h3` varchar(255) NOT NULL DEFAULT '',
           PRIMARY KEY (`category_id`,`language_id`,`store_id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
-      
+
       $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "seo_information_description` (
           `information_id` int(11) NOT NULL,
           `language_id` int(11) NOT NULL DEFAULT 0,
@@ -3890,7 +3897,7 @@ class ControllerModuleCompleteSeo extends Controller {
           PRIMARY KEY (`information_id`,`language_id`,`store_id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
       }
-        
+
     $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "seo_manufacturer_description` (
         `manufacturer_id` int(11) NOT NULL,
         `language_id` int(11) NOT NULL DEFAULT 0,
@@ -3905,7 +3912,7 @@ class ControllerModuleCompleteSeo extends Controller {
         `seo_h3` varchar(255) NOT NULL DEFAULT '',
         PRIMARY KEY (`manufacturer_id`,`language_id`,`store_id`)
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
-    
+
     $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "url_absolute` (
         `url_absolute_id` int(11) NOT NULL AUTO_INCREMENT,
         `query` varchar(1000) NOT NULL,
@@ -3915,27 +3922,27 @@ class ControllerModuleCompleteSeo extends Controller {
         KEY `query` (`query`),
         KEY `redirect` (`redirect`)
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
-      
+
     $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "url_redirect` (
         `url_redirect_id` int(11) NOT NULL AUTO_INCREMENT,
         `query` varchar(1000) NOT NULL,
         `redirect` varchar(1000) NOT NULL,
         `language_id` int(3) NOT NULL DEFAULT '0',
-        `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+        `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (`url_redirect_id`),
         KEY `query` (`query`),
         KEY `redirect` (`redirect`)
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
-     
+
     $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "url_404` (
         `url_404_id` int(11) NOT NULL AUTO_INCREMENT,
         `query` varchar(1000) NOT NULL,
         `count` int(11) NOT NULL DEFAULT '0',
-        `date_accessed` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+        `date_accessed` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (`url_404_id`),
         KEY `query` (`query`)
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
-      
+
     foreach (array('product', 'category', 'information') as $type) {
       $varchar = $this->db->query("SELECT CHARACTER_MAXIMUM_LENGTH AS length FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = '" . DB_PREFIX . $type . "_description' AND COLUMN_NAME = 'seo_keyword'")->row;
       if ($varchar['length'] < 255) {
@@ -3943,19 +3950,19 @@ class ControllerModuleCompleteSeo extends Controller {
       }
     }
   }
-  
+
   public function report() {
     set_time_limit(600);
-    
+
     echo '<h3>URL ALIAS report</h3>';
     echo '<table border="1" cellpadding="10" style="border-collapse:collapse;"><tr style="font-weight:bold">';
     echo '<td>query</td>
           <td>keyword</td>
           <td>Issue</td>';
 
-    
+
     $urls = $this->db->query("SELECT query, keyword FROM " . DB_PREFIX . $this->url_alias . " WHERE keyword = '' ")->rows;
-    
+
     foreach($urls as $url) {
        echo '<tr>
           <td>'.$url['query'].'</td>
@@ -3963,9 +3970,9 @@ class ControllerModuleCompleteSeo extends Controller {
           <td><span style="color:red">empty</span></td>
           </tr>';
     }
-    
+
     $urls = $this->db->query("SELECT count(*) AS count, query, keyword FROM " . DB_PREFIX . $this->url_alias . " GROUP BY keyword ")->rows;
-    
+
     foreach($urls as $url) {
       if ($url['keyword'] && $url['count']> 1) {
         $duplicates = $this->db->query("SELECT query, keyword FROM " . DB_PREFIX . $this->url_alias . " WHERE keyword = '".$url['keyword']."' ")->rows;
@@ -3980,48 +3987,48 @@ class ControllerModuleCompleteSeo extends Controller {
     }
     die;
   }
-  
+
   public function upgrade() {
     if (($this->request->server['REQUEST_METHOD'] == 'POST')) {
       if (!$this->user->hasPermission('modify', 'module/complete_seo')) {
         die('Not allowed');
       }
-      
+
       $this->load->model('setting/setting');
-      
+
       $data['info'] = array();
-      
+
       $data['info'][] = 'SEO URLs correctly transferred';
-      
+
       // Remove extension
       if ($this->request->post['module'] == 'broken_link_manager') {
         $rows = $this->db->query("SELECT * FROM " . DB_PREFIX . "error")->rows;
-        
+
         foreach ($rows as $row) {
           $this->db->query("INSERT INTO `" . DB_PREFIX . "url_redirect` SET `query` = '".$this->db->escape(urldecode($row['error']))."', `redirect` = '".$this->db->escape($row['redirect'])."'");
         }
-        
+
         goto end;
       }
-      
+
       if (!empty($this->request->post['ext'])) {
         $this->db->query("UPDATE " . DB_PREFIX . $this->url_alias . " SET keyword = REPLACE(keyword, '".$this->db->escape($this->request->post['ext'])."', '')");
       }
-      
+
       // Copy image title and alt - Paladin
       if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "product_description` LIKE 'title_image'")->row) {
         $this->db->query("UPDATE `" . DB_PREFIX . "product_description` SET `image_title` = `title_image`");
       }
-      
+
       if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "product_description` LIKE 'alt_image'")->row) {
         $this->db->query("UPDATE `" . DB_PREFIX . "product_description` SET `image_alt` = `alt_image`");
       }
-      
+
       // Copy lang id of url alias table - All in one SEO
       if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . $this->url_alias . "` LIKE 'lang'")->row) {
         $this->db->query("UPDATE `" . DB_PREFIX . $this->url_alias . "` SET `language_id` = `lang`");
       }
-      
+
       // Pack pro
       if ($this->request->post['module'] == 'seo_pack_pro') {
         foreach (array('canonicals', 'custom_title_generator', 'extendedseo', 'l', 'meta_description_generator', 'rp_generator', 'seopack', 'seoreport', 'table_edit_ajax', 'tag_generator') as $file) {
@@ -4037,25 +4044,25 @@ class ControllerModuleCompleteSeo extends Controller {
         if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . "information_description` LIKE 'seo_title'")->row) {
           $this->db->query("UPDATE `" . DB_PREFIX . "information_description` SET `meta_title` = `seo_title`");
         }
-        
+
         $this->db->query("DELETE FROM `" . DB_PREFIX . "url_alias` WHERE query LIKE 'manufacturer_id=%' AND auto_gen = 'CPBI_urls'");
         $this->db->query("UPDATE `" . DB_PREFIX . "url_alias` SET language_id = 0 WHERE query LIKE 'manufacturer_id=%'");
         $this->db->query("UPDATE `" . DB_PREFIX . "url_alias` SET query = CONCAT('route=', query) WHERE auto_gen = 'STAN_urls'");
-        
+
       // Mega Kit Plus
       } else if ($this->request->post['module'] == 'mega_kit') {
        if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . $this->url_alias . "` LIKE 'smp_language_id'")->row) {
          $this->db->query("UPDATE `" . DB_PREFIX . $this->url_alias . "` SET language_id = smp_language_id");
-         
+
          if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . $this->url_alias . "` LIKE 'smp_language_id'")->row) {
            $this->db->query("ALTER TABLE `" . DB_PREFIX . $this->url_alias . "` DROP `smp_language_id`");
          }
         }
-        
+
         $store_seo = $this->config->get('smp_meta_stores');
-        
+
         $settings = $this->model_setting_setting->getSetting('mlseo');
-        
+
         foreach ((array) $store_seo as $store) {
           foreach ($store['title'] as $language => $value) {
             $settings['mlseo_store'][$store.$language]['seo_title'] = $value;
@@ -4067,27 +4074,27 @@ class ControllerModuleCompleteSeo extends Controller {
             $settings['mlseo_store'][$store.$language]['keywords'] = $value;
           }
         }
-		
+
         $this->model_setting_setting->editSetting('mlseo', $settings);
-        
+
         $data['info'][] = 'Store SEO correctly transferred';
-        
+
         $this->db->query("INSERT INTO `" . DB_PREFIX . "url_redirect` (query, redirect) SELECT broken_link, new_link FROM `" . DB_PREFIX . "redirects_smp`");
-        
+
         $data['info'][] = 'Redirections correctly transferred';
       }
-      
+
       // Copy keyword values to item tables - Common to all modules - copy first without language id to be sure to have it in case of not defined
       $this->db->query("UPDATE `" . DB_PREFIX . "product_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'product_id=%' AND d.product_id = REPLACE(u.query, 'product_id=', '')");
       $this->db->query("UPDATE `" . DB_PREFIX . "category_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'category_id=%' AND d.category_id = REPLACE(u.query, 'category_id=', '')");
       $this->db->query("UPDATE `" . DB_PREFIX . "information_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'information_id=%' AND d.information_id = REPLACE(u.query, 'information_id=', '')");
-      
+
       if ($this->db->query("SHOW COLUMNS FROM `" . DB_PREFIX . $this->url_alias . "` LIKE 'language_id'")->row) {
         $this->db->query("UPDATE `" . DB_PREFIX . "product_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'product_id=%' AND d.product_id = REPLACE(u.query, 'product_id=', '') AND d.language_id = u.language_id");
         $this->db->query("UPDATE `" . DB_PREFIX . "category_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'category_id=%' AND d.category_id = REPLACE(u.query, 'category_id=', '') AND d.language_id = u.language_id");
         $this->db->query("UPDATE `" . DB_PREFIX . "information_description` d, `" . DB_PREFIX . $this->url_alias . "` u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'information_id=%' AND d.information_id = REPLACE(u.query, 'information_id=', '') AND d.language_id = u.language_id");
       }
-      
+
       /* SQL query for manual input
       UPDATE oc_product_description d, oc_url_alias u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'product_id=%' AND d.product_id = REPLACE(u.query, 'product_id=', '');
       UPDATE oc_product_description d, oc_url_alias u SET d.seo_keyword = u.keyword WHERE u.query LIKE 'product_id=%' AND d.product_id = REPLACE(u.query, 'product_id=', '') AND d.language_id = u.language_id;
@@ -4098,12 +4105,12 @@ class ControllerModuleCompleteSeo extends Controller {
       */
       /* now handled by previous requests in pure sql
       $rows = $this->db->query("SELECT * FROM " . DB_PREFIX . $this->url_alias . " WHERE query LIKE 'information_id=%' OR query LIKE 'product_id=%' OR query LIKE 'category_id=%'")->rows;
-      
+
       foreach($rows as $row) {
         list($field, $id) = explode('=', $row['query']);
-        
+
         $table = str_replace('_id', '', $field);
-        
+
         $this->db->query("UPDATE " . DB_PREFIX . $table . "_description SET seo_keyword = '" . $this->db->escape($row['keyword']) . "' WHERE " .$field ." = '".$id."'");
         //echo "UPDATE " . DB_PREFIX . $table . "_description SET seo_keyword = '" . $this->db->escape($row['keyword']) . "' WHERE " .$field ." = '".$id."'". "<br/>";
       }
@@ -4111,19 +4118,19 @@ class ControllerModuleCompleteSeo extends Controller {
       end:
       $data['upgrade_complete'] = true;
     }
-    
+
     $this->document->setTitle('SEO Package Upgrade Tool');
-    
+
     $data['upgrade'] = true;
-    
+
     $data['action'] = $this->url->link('module/complete_seo/upgrade', $this->token, 'SSL');
     $data['cancel'] = $this->url->link('module/complete_seo', $this->token, 'SSL');
-    
+
     if (version_compare(VERSION, '2', '>=')) {
       $data['header'] = $this->load->controller('common/header');
       $data['column_left'] = $this->load->controller('common/column_left');
       $data['footer'] = $this->load->controller('common/footer');
-      
+
       if (version_compare(VERSION, '3', '>=')) {
         $this->config->set('template_engine', 'template');
         $this->response->setOutput($this->load->view('module/complete_seo', $data));
@@ -4142,7 +4149,7 @@ class ControllerModuleCompleteSeo extends Controller {
       // fix OC 1.5
       $this->response->setOutput(str_replace(array('view/javascript/jquery/jquery-1.6.1.min.js', 'view/javascript/jquery/jquery-1.7.1.min.js', 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'), $asset_path . 'jquery.min.js', $this->render()));
     }
-    
+
   }
 }
 //disable admin_save_and_keep_editing.xml
