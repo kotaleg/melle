@@ -127,6 +127,60 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    }(document));
 </script>
 
+{% if pagetype = 'checkout-success' and success_data %}
+<script type="text/javascript">
+  (function () {
+    function readCookie(name) {
+      if (document.cookie.length > 0) {
+        offset = document.cookie.indexOf(name + "=");
+        if (offset != -1) {
+          offset = offset + name.length + 1;
+          tail = document.cookie.indexOf(";", offset);
+          if (tail == -1) tail = document.cookie.length;
+          return unescape(document.cookie.substring(offset, tail));
+        }
+      }
+      return null;
+    }
+
+    var lh_clid = '5b0820b0e694aa2943a30dab';
+    var order_id = '{{success_data.order_id}}';
+    var cart_sum = '{{success_data.total}}';
+    var order_offers = {{success_data.order_offers}};
+
+    var uid = readCookie('_lhtm_u');
+    var vid = readCookie('_lhtm_r').split('|')[1];
+    var url = encodeURIComponent(window.location.href);
+    var path = "https://track.leadhit.io/stat/lead_form?f_orderid=" + order_id + "&url=" + url + "&action=lh_orderid&uid=" + uid + "&vid=" + vid + "&ref=direct&f_cart_sum=" + cart_sum + "&clid=" + lh_clid;
+
+    var sc = document.createElement("script");
+    sc.type = 'text/javascript';
+    var headID = document.getElementsByTagName("head")[0];
+    sc.src = path;
+    headID.appendChild(sc);
+
+    if (Array.isArray(order_offers) && order_offers.length > 0) {
+      var requestBody = {
+        'order_id': order_id,
+        'cart_sum': cart_sum,
+        'vid': vid,
+        'uid': uid,
+        'clid': lh_clid,
+        'offers': order_offers
+      }
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://track.leadhit.io/stat/lead_order', true);
+      xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+      xhr.onreadystatechange = function () {
+        if (this.readyState != 4) return
+        console.log('order sended')
+      }
+      xhr.send(JSON.stringify(requestBody));
+    }
+  })();
+</script>
+{% endif %}
+
 </head>
 <body>
 

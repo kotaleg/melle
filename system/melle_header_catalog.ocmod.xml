@@ -14,6 +14,8 @@
                 /* IVAN MOD START */
                 $this->load->model('tool/base');
 
+                $data['pagetype'] = $this->model_tool_base->getPageType();
+
                 $data['og'] = array();
                 $data['og']['image'] = $this->model_tool_base->getOgImage();
 
@@ -24,6 +26,39 @@
 
                 // STATES
                 $data['states'] = $this->document->getStates();
+
+                // SUCCESS DATA
+                $data['success_data'] = false;
+
+                if (isset($this->session->data['order_id'])) {
+                    $data['success_data'] = array();
+                    $data['success_data']['order_id'] = $this->session->data['order_id'];
+
+                    $this->load->model('checkout/order');
+
+                    $total = 0;
+                    foreach ($this->model_checkout_order->getOrderTotals($data['success_data']['order_id']) as $t) {
+                        if (strcmp($t['code'], 'total') === 0) {
+                            $total = $t['value'];
+                        }
+                    }
+
+                    $data['success_data']['total'] = number_format($total, 2);
+
+                    $order_offers = array();
+                    foreach ($this->model_checkout_order->getOrderProducts($data['success_data']['order_id']) as $p) {
+                        $order_offers[] = array(
+                            'url' => $this->url->link('product/product', 'product_id=' . (int)$p['product_id']),
+                            'name' => (string)$p['name'],
+                            'price' => (float)$p['price'],
+                            'count' => (int)$p['quantity'],
+                            'currency' => 'RUB',
+                        );
+                    }
+
+                    $data['success_data']['order_offers'] = json_encode($order_offers);
+                }
+
                 /* IVAN MOD END */
             ]]></add>
         </operation>
