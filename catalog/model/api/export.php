@@ -201,7 +201,7 @@ class ModelApiExport extends Model
             "<categories>\n";
         fwrite($f, $this->_str);
 
-        foreach ($this->getTopCategories() as $cat) {
+        foreach ($this->getCategories() as $cat) {
             $group_name = htmlspecialchars($cat['name']);
             $this->_str = "<category id=\"{$cat['category_id']}\">{$group_name}</category>\n";
             $this->setTree($cat['category_id']);
@@ -405,25 +405,33 @@ class ModelApiExport extends Model
         return ($filtered) ?: $categories;
     }
 
-    public function getTopCategories()
+    public function getCategories($parent_id = null, $top = null)
     {
-        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c
-            WHERE c.top = '1'
-            ORDER BY c.category_id");
+        $sql = "SELECT c.*, cd.name FROM " . DB_PREFIX . "category c
+            LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id)
+            WHERE cd.language_id = '".(int)$this->config->get('config_language_id')."'";
 
+        if ($parent_id !== null) {
+            $sql .= " AND c.parent_id = '". (int)$parent_id ."' ";
+        }
+        if ($top !== null) {
+            $sql .= " AND c.top = '". (int)$top ."' ";
+        }
+
+        $sql .= "ORDER BY c.category_id";
+
+        $query = $this->db->query($sql);
         return $query->rows;
     }
 
     private function setTree($parent_id)
     {
-        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c
-            WHERE c.parent_id = '". (int)$parent_id ."'
-            ORDER BY c.category_id");
+        $cats = $this->getCategories($parent_id);
 
-        if ($query->rows) {
-            foreach ($query->rows as $cat) {
+        if ($cats) {
+            foreach ($cats as $cat) {
                 $group_name = htmlspecialchars($cat['name']);
-                $this->_str .= "<category id=\"{$cat['category_id']}\" parentId=\"{$parent_id}\">{$group_name}</category>\n";
+                $this->_str .= "    <category id=\"{$cat['category_id']}\" parentId=\"{$parent_id}\">{$group_name}</category>\n";
                 $this->setTree($cat['category_id']);
             }
         }
