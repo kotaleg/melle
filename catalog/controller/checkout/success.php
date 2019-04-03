@@ -6,6 +6,8 @@ class ControllerCheckoutSuccess extends Controller {
         if (isset($this->session->data['order_id'])) {
 
             /* IVAN MODIFICATION START */
+            $this->session->data['sp_order_id'] = $this->session->data['order_id'];
+
             $this->load->model('checkout/cart');
             $data['final_gtm_data'] = $this->model_checkout_cart->prepareFinalGTMData();
             /* IVAN MODIFICATION END */

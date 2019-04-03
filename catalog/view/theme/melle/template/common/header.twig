@@ -127,7 +127,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    }(document));
 </script>
 
-{% if pagetype == 'checkout-success' and success_data %}
+{% if success_data != false %}
 <script type="text/javascript">
   (function () {
     function readCookie(name) {

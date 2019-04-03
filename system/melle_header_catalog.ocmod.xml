@@ -30,9 +30,10 @@
                 // SUCCESS DATA
                 $data['success_data'] = false;
 
-                if (isset($this->session->data['order_id'])) {
+                if ($data['pagetype'] == 'checkout-success' && isset($this->session->data['sp_order_id'])) {
                     $data['success_data'] = array();
-                    $data['success_data']['order_id'] = $this->session->data['order_id'];
+                    $data['success_data']['order_id'] = $this->session->data['sp_order_id'];
+                    unset($this->session->data['sp_order_id']);
 
                     $this->load->model('checkout/order');
 
@@ -43,7 +44,7 @@
                         }
                     }
 
-                    $data['success_data']['total'] = number_format($total, 2);
+                    $data['success_data']['total'] = number_format($total, 2, '.', '');
 
                     $order_offers = array();
                     foreach ($this->model_checkout_order->getOrderProducts($data['success_data']['order_id']) as $p) {
