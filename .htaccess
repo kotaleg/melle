@@ -6,6 +6,8 @@ Options -Indexes
 # Order deny,allow
 # Deny from all
 # Allow from 134.249.231.103
+RewriteCond %{HTTP_HOST} ^www\.(.*)$
+RewriteRule ^(.*)$ http://%1/$1 [L,R=301]
 
 # Prevent Direct Access to files
 <FilesMatch "(?i)((\.tpl|.twig|\.ini|\.log|(?<!robots)\.txt))">
