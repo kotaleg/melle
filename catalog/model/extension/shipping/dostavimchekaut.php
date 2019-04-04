@@ -5,7 +5,7 @@ header('Content-Type: text/html; charset=utf-8');
 			$this->layer  = $layer;
 			$this->countLayer = $countLayer;
 			$this->height = $countHeight;
-			$this->width  = $countWidth;
+			$this->width  = $countWidth; 
 			$this->lenght = $countLenght;
 		}
    }
