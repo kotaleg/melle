@@ -28,6 +28,8 @@ class ModelToolBase extends Model
                 $class = 'search';
             } elseif ($this->request->get['route'] == 'checkout/cart') {
                 $class = 'cart';
+            } elseif ($this->request->get['route'] == 'checkout/success') {
+                $class = 'checkout-success';
             } elseif ($this->request->get['route'] == 'checkout/checkout') {
                 $class = 'checkout';
             } elseif ($this->request->get['route'] == 'checkout/simplecheckout') {

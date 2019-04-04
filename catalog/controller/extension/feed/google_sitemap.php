@@ -10,7 +10,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
             $output .= '<url>';
             $output .= '  <loc>' . $this->model_tool_base->getBase() . '</loc>';
             $output .= '  <changefreq>daily</changefreq>';
-            $output .= '  <priority>0.9</priority>';
+            $output .= '  <priority>1.0</priority>';
             $output .= '</url>';
 
             $this->load->model('catalog/product');
