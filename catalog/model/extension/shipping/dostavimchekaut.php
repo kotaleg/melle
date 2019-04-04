@@ -914,6 +914,8 @@ for ($i = 0; $i < count($dslist); $i++) {
         $deliveryMethodsFrontDeliveryCostMin3 = '';
         $deliveryMethodsFrontCountDay3 = '';
 		$innerJs = '';
+		$price_dostavim_rusha = false;
+		$price_dostavim_moscow = false;
 		$nogrid = true;
 		$key = $param1["value"];
 		$parametrs = $this->GetListParametrs($key);
@@ -1325,6 +1327,7 @@ for ($i = 0; $i < count($dslist); $i++) {
 					$price_dostavim2 = 0;
 					$price_dostavim3 = 0;
 					$price_dostavim4 = 0;
+					$price_dostavim_rusha = true;
 				}
 			}
 		}
@@ -1336,13 +1339,14 @@ for ($i = 0; $i < count($dslist); $i++) {
 					$price_dostavim2 = 0;
 					$price_dostavim3 = 0;
 					$price_dostavim4 = 0;
+					$price_dostavim_moscow = true;
 				}
 			}
 		}
 		
-		$this->log->write(print_r($moscow_dostavim["value"],true));
-		$this->log->write(print_r($address["city"],true));
-		$this->log->write(print_r($priceProduct,true));
+		//$this->log->write(print_r($moscow_dostavim["value"],true));
+		//$this->log->write(print_r($address["city"],true));
+		//$this->log->write(print_r($priceProduct,true));
 
 		if(isset($deliveryServiceForReplace))
 		{
@@ -1496,7 +1500,11 @@ for ($i = 0; $i < count($dslist); $i++) {
 			     continue;
 		    }
 
-			if(($i!=1)or($i!=2)or($i!=3)or($i!=4)or($i!=5)){	
+			if(($i!=1)or($i!=2)or($i!=3)or($i!=4)or($i!=5)){
+				
+				if (($price_dostavim_rusha == true) or ($price_dostavim_moscow == true)){
+					$delivery['cost'] = 0;
+				}	
 				$quote_data['dostavimchekaut' . $i] = array(
 					'code' => 'dostavimchekaut.dostavimchekaut' . $i,
 					'title' => $delivery['name'],
