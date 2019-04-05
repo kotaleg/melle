@@ -21,7 +21,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
             foreach ($products as $product) {
                 if ($product['image']) {
                     $output .= '<url>';
-                    $output .= '  <loc>' . $this->url->link('product/product', 'product_id=' . $product['product_id']) . '</loc>';
+                    $output .= '  <loc>' . $this->url->link('product/product', 'product_id=' . $product['product_id'], true) . '</loc>';
                     $output .= '  <changefreq>weekly</changefreq>';
                     $output .= '  <lastmod>' . date('Y-m-d\TH:i:sP', strtotime($product['date_modified'])) . '</lastmod>';
                     $output .= '  <priority>0.8</priority>';
@@ -66,7 +66,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
 
             foreach ($informations as $information) {
                 $output .= '<url>';
-                $output .= '  <loc>' . $this->url->link('information/information', 'information_id=' . $information['information_id']) . '</loc>';
+                $output .= '  <loc>' . $this->url->link('information/information', 'information_id=' . $information['information_id'], true) . '</loc>';
                 $output .= '  <changefreq>yearly</changefreq>';
                 $output .= '  <priority>0.6</priority>';
                 $output .= '</url>';
@@ -131,7 +131,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
         $category_info = $this->model_extension_d_blog_module_category->getCategory($category_id);
 
         $output .= '<url>';
-        $output .= '  <loc>' . $this->url->link('extension/d_blog_module/category', 'category_id=' . $category_id) . '</loc>';
+        $output .= '  <loc>' . $this->url->link('extension/d_blog_module/category', 'category_id=' . $category_id, true) . '</loc>';
         $output .= '  <changefreq>yearly</changefreq>';
         $output .= '  <priority>0.6</priority>';
         $output .= '</url>';
@@ -140,7 +140,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
 
         foreach ($posts as $p) {
             $output .= '<url>';
-            $output .= '  <loc>' . $this->url->link('extension/d_blog_module/post', 'post_id=' . $p['post_id']) . '</loc>';
+            $output .= '  <loc>' . $this->url->link('extension/d_blog_module/post', 'post_id=' . $p['post_id'], true) . '</loc>';
             $output .= '  <changefreq>yearly</changefreq>';
             $output .= '  <priority>0.6</priority>';
             $output .= '</url>';

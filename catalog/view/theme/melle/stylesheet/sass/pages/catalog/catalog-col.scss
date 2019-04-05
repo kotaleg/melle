@@ -135,9 +135,10 @@ section[data-layout="col"] {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: vw_(90px);
+      // width: vw_(90px);
       height: vw_(30px);
-      // padding-right: vw_(15px);
+      padding-right: vw_(10px);
+      padding-left: vw_(10px);
       color: #fff;
       background-color: #060709;
       @include tablet {

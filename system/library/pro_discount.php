@@ -40,7 +40,32 @@ class pro_discount
         // SUPER OFFERS END
     }
 
-    public function getSpecialPrice($product_id, $special)
+    public function parseCartCount($products)
+    {
+        if ($this->cart_total > 0) {
+            return;
+        }
+
+        $count = $this->cart_total;
+
+        foreach ($products as $product) {
+            $count += $product['quantity'];
+        }
+
+        $this->setCartCount($count);
+    }
+
+    public function setCartCount($count)
+    {
+        $this->cart_count = $count;
+    }
+
+    public function setCartTotal($total)
+    {
+        $this->cart_count = $total;
+    }
+
+    public function getSpecialPrice($product_id, $special, $text = Null)
     {
         $new_special = $special;
 
@@ -74,6 +99,10 @@ class pro_discount
             if ($discount['start_count'] > 0) {
                 if ($this->cart_count < $discount['start_count']) {
                     $count = false;
+                } else {
+                    if ($this->cart_count % $discount['start_count'] !== 0) {
+                        $count = false;
+                    }
                 }
             }
 
@@ -144,25 +173,32 @@ class pro_discount
 
         if ($product_info['price'] <= 0) { return $new_special; }
 
-        foreach ($discounts as $discount) {
-            if ($discount['type'] !== self::SALE) {
-                continue;
-            }
+        $discount = array_shift($discounts);
 
-            // PERCENT
-            if ($discount['sign'] === self::PERCENT && $discount['value'] > 0) {
-                $product_info['price'] = $product_info['price'] -
-                    (($product_info['price']/100)*$discount['value']);
-            }
+        // PERCENT
+        if ($discount['sign'] === self::PERCENT && $discount['value'] > 0) {
+            $product_info['price'] = $product_info['price'] -
+                (($product_info['price']/100)*$discount['value']);
+        }
 
-            // MONEY
-            if ($discount['sign'] === self::MONEY) {
-                $product_info['price'] = $product_info['price'] - $discount['value'];
-            }
+        // MONEY
+        if ($discount['sign'] === self::MONEY) {
+            $product_info['price'] = $product_info['price'] - $discount['value'];
         }
 
         if ($product_info['price'] > 0) {
             $new_special = $product_info['price'];
+        }
+
+        if ($text !== Null) {
+            if ($discount['sum_and_count']
+            && $discount['start_count'] > 0
+            && $discount['sign'] == self::PERCENT) {
+                return array(
+                    'start_count' => $discount['start_count'],
+                    'value' => $discount['value'],
+                );
+            }
         }
 
         return $new_special;
@@ -171,6 +207,11 @@ class pro_discount
     public function getSpecialText($product_id)
     {
         $text = false;
+
+        $special = $this->getSpecialPrice($product_id, 0, true);
+        if ($special && isset($special['start_count'])) {
+            $text = "* при покупке {$special['start_count']} шт. -{$special['value']}%";
+        }
 
         $total = $this->getTotal($product_id, 10000000, 0);
         if ($total && isset($total['count_like'])) {
