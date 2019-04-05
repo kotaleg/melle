@@ -214,7 +214,7 @@
   }
 
   .header-page__container .top-line .menu-tel a {
-      white-space: nowrap;
+       white-space: nowrap;
     width: 16px;
   }
 
@@ -647,4 +647,7 @@
 /* Large Devices, Wide Screens */
 @media only screen and (min-width : 1200px) {
 
+}
+.topline>li>a{
+    white-space: nowrap;
 }
