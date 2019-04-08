@@ -334,3 +334,15 @@
     }
 }
 /* FILTER END */
+
+/* RUBLE START */
+.ruble-container {
+    position: relative;
+}
+.ruble-zvezdochka {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-size: 20px;
+}
+/* RUBLE END */

@@ -56,7 +56,7 @@
     "vue2-datepicker": "^2.10.0",
     "vuejs-datepicker": "^1.5.4",
     "vuex": "^3.0.1",
-    "webpack-obfuscator": "^0.18.0",
-    "webpack-bundle-analyzer": "^2.11.2"
+    "webpack-bundle-analyzer": "^2.11.2",
+    "webpack-obfuscator": "^0.18.0"
   }
 }

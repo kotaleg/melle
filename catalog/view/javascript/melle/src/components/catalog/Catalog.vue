@@ -24,7 +24,7 @@
                             {{ getPrice(i) }} <span class="ruble-sign">Р</span>
                         </span>
                         <span v-if="isSpecial(i)" class="catalog__item-price-default">
-                            {{ getSpecial(i) }} <span class="ruble-sign">Р</span>
+                            {{ getSpecial(i) }} <span class="ruble-container"><span class="ruble-sign">Р</span><span class="ruble-zvezdochka">*</span></span>
                         </span>
 
                         <span v-if="!isSpecial(i)" class="catalog__item-price-default">
