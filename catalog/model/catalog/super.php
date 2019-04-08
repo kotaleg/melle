@@ -59,6 +59,7 @@ class ModelCatalogSuper extends Model
                 'rating' => $p['rating'],
                 'reviews_count' => $p['reviews'],
                 'special_text' => false,
+                'zvezdochka' => false,
 
                 'quantity' => 1,
                 'default_values' => $this->model_extension_module_super_offers->getDefaultValues($p['product_id'], $p),
@@ -94,6 +95,10 @@ class ModelCatalogSuper extends Model
             // SPECIAL TEXT
             $this->load->model('extension/total/pro_discount');
             $d_['special_text'] = $this->model_extension_total_pro_discount->getSpecialText($p['product_id']);
+
+            if (strstr($d_['special_text'], '*')) {
+                $d_['zvezdochka'] = true;
+            }
 
             $result['products'][] = $d_;
         }
