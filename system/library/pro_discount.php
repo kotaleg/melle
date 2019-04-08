@@ -96,7 +96,7 @@ class pro_discount
             }
 
             // START_COUNT
-            if ($discount['start_count'] > 0) {
+            if ($discount['start_count'] > 0 && $this->cart_count > 0) {
                 if ($this->cart_count < $discount['start_count']) {
                     $count = false;
                 } else {
