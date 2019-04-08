@@ -1175,12 +1175,12 @@ function GetGuidCityAndRegion($partName)
 				'country'   => $order_info['shipping_country']
 			);
 			
-			if((empty($order_info['shipping_address_2']))or(!isset($order_info['shipping_address_2'])))
+			if((!empty($order_info['shipping_address_2']))or(!isset($order_info['shipping_address_2'])))
 			{
-				$data['adressdostavim'] = $order_info['shipping_address_1'];	
+				$data['adressdostavim'] = $order_info['shipping_address_2'];
 			}
 			else
-			$data['adressdostavim'] = $order_info['shipping_address_2'];
+			$data['adressdostavim'] = $order_info['shipping_address_1'];
 		
 			$data['citydostavim'] = $order_info['shipping_city'];			
 			$data['zonedostavim'] = $order_info['shipping_zone'];
@@ -1322,6 +1322,8 @@ function GetGuidCityAndRegion($partName)
 				$data['deliveryNum'] = 4;			   
 			   }
 			}
+			
+			var_dump($data['deliveryService']);
 			//2019 функционал
 			
 			$guidDostavim = $this->GetGuidCityAndRegion($data['citydostavim']);				
