@@ -15,6 +15,15 @@ class ControllerStartupSeoUrl extends Controller {
                 array_pop($parts);
             }
 
+            /* IVAN MOD */
+            if (count($parts) >= 2) {
+                if (strcmp($parts[0], 'product') === 0) {
+                    $melle_product = true;
+                    unset($parts[0]);
+                }
+            }
+            /* IVAN MOD */
+
             foreach ($parts as $part) {
                 $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE keyword = '" . $this->db->escape($part) . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
 
@@ -73,6 +82,24 @@ class ControllerStartupSeoUrl extends Controller {
                     $this->request->get['route'] = 'information/information';
                 }
             }
+
+            /* IVAN MOD */
+            if (isset($this->request->get['route'])
+            && strcmp($this->request->get['route'], 'product/product') === 0) {
+              $rr_params = '';
+              foreach ($this->request->get as $k => $v) {
+                if (in_array($k, array('product_id', 'path'))) {
+                  $rr_params .= "&{$k}={$v}";
+                }
+              }
+              $rr = str_replace('&amp;', '&', $this->url->link($this->request->get['route'], $rr_params));
+              if (strcmp($rr, urldecode($raw_url)) !== 0) {
+                header('HTTP/1.1 301 Moved Permanently');
+                header('Location: ' . $rr);
+                exit;
+              }
+            }
+            /* IVAN MOD */
         }
     }
 

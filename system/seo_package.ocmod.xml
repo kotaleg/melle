@@ -3878,7 +3878,15 @@ $('[onclick^="cart.remove"]').on('click', function(){
       <!--search position="replace" index="0" regex="true"><![CDATA[~\$url \.??= '/' \. \$query->row\['keyword'\];~]]></search-->
       <search position="before" index="0"><![CDATA[$url .= '/' . $query->row['keyword'];]]></search>
       <!--add position="before" index="0"><![CDATA[if ($this->config->get('mlseo_enabled') && !(($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id')) $url .= '/' . $query->row['keyword'] . $this->config->get('mlseo_extension'); else]]></add-->
-      <add position="before" index="0"><![CDATA[        if ($this->config->get('mlseo_enabled') && !($data['route'] == 'product/product' && $key == 'manufacturer_id')) $url .= '/' . $query->row['keyword']; else]]></add>
+      <add position="before" index="0"><![CDATA[
+
+        if ($this->config->get('mlseo_enabled') && !($data['route'] == 'product/product' && $key == 'manufacturer_id'))
+          /* IVAN MOD START */
+          if (strcmp($data['route'], 'product/product') === 0) { $url .= '/product/' . $query->row['keyword']; } else { $url .= '/' . $query->row['keyword']; }
+          /* IVAN MOD END */
+        else
+
+      ]]></add>
     </operation>
 
     <operation error="skip">
