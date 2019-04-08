@@ -92,7 +92,7 @@ class ControllerStartupSeoUrl extends Controller {
                   $rr_params .= "&{$k}={$v}";
                 }
               }
-              $rr = str_replace('&amp;', '&', $this->url->link($this->request->get['route'], $rr_params));
+              $rr = str_replace('&amp;', '&', $this->url->link($this->request->get['route'], $rr_params, true));
               if (strcmp($rr, urldecode($raw_url)) !== 0) {
                 header('HTTP/1.1 301 Moved Permanently');
                 header('Location: ' . $rr);
