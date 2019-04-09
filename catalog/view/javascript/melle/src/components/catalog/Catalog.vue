@@ -10,7 +10,7 @@
                 <img :src="p.image" :alt="p.h1">
              </a>
 
-             <div v-if="p.special_text" class="catalog__item-price" style="top: 0px;">
+             <div v-if="p.special_text" class="super-text-div" style="top: 0px;">
                <span class="supet-text" style="font-size: 0.79vw;">{{ p.special_text }}</span>
              </div> 
 
