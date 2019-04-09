@@ -21,7 +21,7 @@
             <search><![CDATA['special'          => $query->row['special'],]]></search>
             <add position="after"><![CDATA[
                 /* PRO DISCOUNT */
-                'special'          => $this->model_extension_total_pro_discount->getSpecialPrice($product_id, $query->row['special']),
+                'special'          => $this->model_extension_total_pro_discount->getSpecialPrice($product_id, $query->row['special'], Null),
                 /* PRO DISCOUNT */
             ]]></add>
         </operation>

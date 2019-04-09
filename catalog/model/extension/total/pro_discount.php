@@ -17,9 +17,9 @@ class ModelExtensionTotalProDiscount extends Model
         $this->pro_discount = new \pro_discount($registry);
     }
 
-    public function getSpecialPrice($product_id, $special)
+    public function getSpecialPrice($product_id, $special, $use_cart = Null)
     {
-        return $this->pro_discount->getSpecialPrice($product_id, $special);
+        return $this->pro_discount->getSpecialPrice($product_id, $special, $use_cart);
     }
 
     public function getSpecialText($product_id)

@@ -31,6 +31,7 @@ class super_offers
     {
         $this->db = $registry->get('db');
         $this->config = $registry->get('config');
+        $this->session = $registry->get('session');
     }
 
     public function getSupportedOptionTypes()

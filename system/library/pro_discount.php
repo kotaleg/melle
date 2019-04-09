@@ -22,15 +22,6 @@ class pro_discount
         $this->db = $registry->get('db');
         $this->config = $registry->get('config');
         $this->customer = $registry->get('customer');
-        $this->cart = $registry->get('cart');
-
-        $this->cart_total = (isset($extra['cart_total'])) ? $extra['cart_total'] : 0;
-        $this->cart_count = (isset($extra['cart_count'])) ? $extra['cart_count'] : 0;
-
-        if ($this->cart) {
-            $this->cart_total = $this->cart->getTotal();
-            $this->cart_count = $this->cart->countProducts();
-        }
 
         // SUPER OFFERS START
         if ((in_array(__FUNCTION__, array('__construct'))) && !isset($this->super_offers)
@@ -40,32 +31,40 @@ class pro_discount
         // SUPER OFFERS END
     }
 
-    public function parseCartCount($products)
+    public function parseProducts($products_data)
     {
-        if ($this->cart_total > 0) {
-            return;
+        $this->session->data["{$this->codename}_cart"] = array();
+
+        foreach ($products_data as $pd_key => $pd) {
+            if (!isset($pd['product_id'])) { continue; }
+
+            if (isset($this->session->data["{$this->codename}_cart"][$pd['product_id']])) {
+                $this->session->data["{$this->codename}_cart"][$pd['product_id']]['q'] += $pd['quantity'];
+                $this->session->data["{$this->codename}_cart"][$pd['product_id']]['t'] += $pd['total'];
+            } else {
+                $this->session->data["{$this->codename}_cart"][$pd['product_id']]['q'] = $pd['quantity'];
+                $this->session->data["{$this->codename}_cart"][$pd['product_id']]['t'] = $pd['total'];
+            }
         }
+    }
 
-        $count = $this->cart_total;
-
-        foreach ($products as $product) {
-            $count += $product['quantity'];
+    public function getCartProductTotal($product_id)
+    {
+        if (isset($this->session->data["{$this->codename}_cart"][$product_id]['t'])) {
+            return $this->session->data["{$this->codename}_cart"][$product_id]['t'];
         }
-
-        $this->setCartCount($count);
+        return false;
     }
 
-    public function setCartCount($count)
+    public function getCartProductQuantity($product_id)
     {
-        $this->cart_count = $count;
+        if (isset($this->session->data["{$this->codename}_cart"][$product_id]['q'])) {
+            return $this->session->data["{$this->codename}_cart"][$product_id]['q'];
+        }
+        return false;
     }
 
-    public function setCartTotal($total)
-    {
-        $this->cart_count = $total;
-    }
-
-    public function getSpecialPrice($product_id, $special, $text = Null)
+    public function getSpecialPrice($product_id, $special, $use_cart = Null, $text = Null)
     {
         $new_special = $special;
 
@@ -89,21 +88,29 @@ class pro_discount
             $count = true;
 
             // START_SUM
-            if ($discount['start_sum'] > 0) {
-                if ($this->cart_total < $discount['start_sum']) {
+            if ($use_cart !== Null && $discount['start_sum'] > 0) {
+                $ct = $this->getCartProductTotal($product_id);
+
+                if ($ct !== false && $ct < $discount['start_sum']) {
                     $sum = false;
                 }
             }
 
             // START_COUNT
-            if ($discount['start_count'] > 0 && $this->cart_count > 0) {
-                if ($this->cart_count < $discount['start_count']) {
-                    $count = false;
-                } else {
-                    if ($this->cart_count % $discount['start_count'] !== 0) {
+            if ($use_cart !== Null
+            && $discount['start_count'] > 0) {
+                $cq = $this->getCartProductQuantity($product_id);
+
+                if ($cq !== False && $cq > 0) {
+                    if ($cq < $discount['start_count']) {
                         $count = false;
+                    } else {
+                        if ($cq % $discount['start_count'] !== 0) {
+                            $count = false;
+                        }
                     }
                 }
+
             }
 
             if (!$sum || !$count) {
@@ -208,12 +215,12 @@ class pro_discount
     {
         $text = false;
 
-        $special = $this->getSpecialPrice($product_id, 0, true);
+        $special = $this->getSpecialPrice($product_id, 0, Null, true);
         if ($special && isset($special['start_count'])) {
             $text = "* при покупке {$special['start_count']} шт. -{$special['value']}%";
         }
 
-        $total = $this->getTotal($product_id, 10000000, 0);
+        $total = $this->getTotal($product_id, 10000000, 0, Null);
         if ($total && isset($total['count_like'])) {
             $text = "{$total['count']} по цене {$total['count_like']}";
         }
@@ -227,7 +234,7 @@ class pro_discount
 
             if (isset($pd['product_id']) && isset($pd['quantity'])) {
 
-                $special = $this->getSpecialPrice($pd['product_id'], 0);
+                $special = $this->getSpecialPrice($pd['product_id'], 0, true);
                 $total_data = $this->getTotal($pd['product_id'], $pd['quantity'], $pd['price']);
 
                 if ($total_data !== null) {

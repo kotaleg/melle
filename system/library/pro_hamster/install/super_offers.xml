@@ -56,6 +56,7 @@
                 /* PRO DISCOUNT */
                 if ((in_array(__FUNCTION__, array('getProducts'))) && isset($this->pro_discount)
                 && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/pro_discount.json')) {
+                    $this->pro_discount->parseProducts($product_data);
                     $product_data = $this->pro_discount->fixTotal($product_data);
                 }
                 /* PRO DISCOUNT */
