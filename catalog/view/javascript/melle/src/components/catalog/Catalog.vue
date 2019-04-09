@@ -11,8 +11,8 @@
              </a>
 
              <div v-if="p.special_text" class="catalog__item-price" style="top: 0px;">
-               <span class="catalog__item-price-default" style="font-size: 0.79vw;">{{ p.special_text }}</span>
-             </div>
+               <span class="supet-text" style="font-size: 0.79vw;">{{ p.special_text }}</span>
+             </div> 
 
              <div class="catalog__item-ivaninfo">
                 <div class="row">
