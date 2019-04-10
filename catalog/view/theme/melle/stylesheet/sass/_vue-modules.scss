@@ -346,3 +346,13 @@
     font-size: 20px;
 }
 /* RUBLE END */
+
+@include mobile {
+    .super-div{
+        width: 33% !important;
+        height: 8% !important;
+    }
+    .super-text{
+        font-size: 12px !important;
+    }
+}
