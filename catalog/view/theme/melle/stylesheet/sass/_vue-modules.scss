@@ -342,8 +342,46 @@
 .ruble-zvezdochka {
     position: absolute;
     top: -10px;
-    left: 10px;
+    left: 1px;
     font-size: 20px;
+}
+
+.ruble-container-p {
+    position: relative;
+}
+.ruble-zvezdochka-p {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-size: 20px;
+    @include tablet {
+        left: 10px;
+    }
+    @include mobile {
+        left: 10px;
+    }
+}
+.special-text-info {
+    font-size: 19px !important;
+    margin-left: 15px;
+    position: relative;
+    top: 8px;
+    @include tablet {
+        margin-left: unset;
+        top: unset;
+        position: absolute;
+        font-size: 13px !important;
+        bottom: -17px;
+        left: 114px;
+    }
+    @include mobile {
+        margin-left: unset;
+        top: unset;
+        position: absolute;
+        font-size: 13px !important;
+        bottom: -17px;
+        left: 114px;
+    }
 }
 /* RUBLE END */
 

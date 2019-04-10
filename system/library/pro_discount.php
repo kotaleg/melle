@@ -211,13 +211,17 @@ class pro_discount
         return $new_special;
     }
 
-    public function getSpecialText($product_id)
+    public function getSpecialText($product_id, $full = true)
     {
         $text = false;
 
         $special = $this->getSpecialPrice($product_id, 0, Null, true);
         if ($special && isset($special['start_count'])) {
-            $text = "* при покупке {$special['start_count']} шт. -{$special['value']}%";
+            $text = "* при покупке {$special['start_count']} шт.";
+
+            if ($full) {
+                $text .= " -{$special['value']}%";
+            }
         }
 
         $total = $this->getTotal($product_id, 10000000, 0, Null);

@@ -53,7 +53,15 @@
             <div class="prod-card__price">
 
                <span v-if="isSpecial" class="prod-card__price-default prod-card__price-ivanold">{{ getActivePrice }} <span class="ruble-sign">Р</span></span>
-               <span v-if="isSpecial" class="prod-card__price-default">{{ getSpecial }} <span class="ruble-sign">Р</span></span>
+               <span v-if="isSpecial" class="prod-card__price-default">{{ getSpecial }}
+                  <span v-if="zvezdochka" class="ruble-container-p">
+                     <span class="ruble-sign">Р</span><span class="ruble-zvezdochka-p">*</span>
+                  </span>
+                  <span v-else class="ruble-sign">Р</span>
+               </span>
+
+               <span v-if="zvezdochka" class="special-text-info">{{ special_text }}</span>
+
 
                <span v-if="!isSpecial" class="prod-card__price-default">{{ getActivePrice }} <span class="ruble-sign">Р</span></span>
 
@@ -108,6 +116,8 @@ export default {
             'product_id',
             'options',
             'size_list',
+            'zvezdochka',
+            'special_text',
         ]),
 
         quantity: {

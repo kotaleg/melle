@@ -198,6 +198,7 @@ class ControllerExtensionModuleMelle extends Controller
         $this->load->language('product/product');
         $this->load->model('catalog/product');
         $this->load->model('extension/module/super_offers');
+        $this->load->model('extension/total/pro_discount');
 
         $product_info = $this->model_catalog_product->getProduct($product_id);
 
@@ -220,6 +221,13 @@ class ControllerExtensionModuleMelle extends Controller
 
             $state['options'] = $this->model_extension_module_super_offers->getOptions($product_id);
             $state['full_combinations'] = $this->model_extension_module_super_offers->getFullCombinations($product_id);
+
+            // SPECIAL TEXT
+            $state['special_text'] = $this->model_extension_total_pro_discount->getSpecialText($product_id, false);
+            if (strstr($state['special_text'], '*')) {
+                $state['zvezdochka'] = true;
+                $state['special_text'] = trim(str_replace('*', '', $state['special_text']));
+            }
         }
 
         $state['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add', '', true);

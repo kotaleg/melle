@@ -33,6 +33,8 @@ class ModelCatalogSuper extends Model
         $this->load->model('extension/pro_patch/url');
         $this->load->model('extension/module/pro_znachek');
         $this->load->model('extension/module/super_offers');
+        $this->load->model('extension/total/pro_discount');
+
 
         foreach ($products as $p) {
 
@@ -93,12 +95,8 @@ class ModelCatalogSuper extends Model
             $d_['znachek_class'] = $this->model_extension_module_pro_znachek->getZnachekClass($p['znachek']);
 
             // SPECIAL TEXT
-            $this->load->model('extension/total/pro_discount');
-            $d_['special_text'] = $this->model_extension_total_pro_discount->getSpecialText($p['product_id']);
-
-            if (strstr($d_['special_text'], '*')) {
-                $d_['zvezdochka'] = true;
-            }
+            $d_['special_text'] = $this->model_extension_total_pro_discount->getSpecialText($p['product_id'], true);
+            if (strstr($d_['special_text'], '*')) { $d_['zvezdochka'] = true; }
 
             $result['products'][] = $d_;
         }

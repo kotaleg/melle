@@ -22,9 +22,9 @@ class ModelExtensionTotalProDiscount extends Model
         return $this->pro_discount->getSpecialPrice($product_id, $special, $use_cart);
     }
 
-    public function getSpecialText($product_id)
+    public function getSpecialText($product_id, $full = true)
     {
-        return $this->pro_discount->getSpecialText($product_id);
+        return $this->pro_discount->getSpecialText($product_id, $full);
     }
 
     public function getTotal($total)
