@@ -95,7 +95,7 @@ class ControllerExtensionFeedGoogleSitemap extends Controller {
             }
 
             $output .= '<url>';
-            $output .= '  <loc>' . $this->url->link('product/category', 'path=' . $new_path) . '</loc>';
+            $output .= '  <loc>' . $this->url->link('product/category', 'path=' . $new_path, true) . '</loc>';
             $output .= '  <changefreq>daily</changefreq>';
             $output .= '  <priority>0.9</priority>';
             $output .= '</url>';

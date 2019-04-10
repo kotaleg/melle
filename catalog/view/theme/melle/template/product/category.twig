@@ -26,6 +26,9 @@
          </div>
 
          <div class="catalog__content">
+            {% if rcc %}
+            <div id="rendered-catalog-content">{{rcc}}</div>
+            {% endif %}
             <melle-catalog-content></melle-catalog-content>
 
             {% if recently_viewed %}

@@ -104,7 +104,8 @@ class ControllerProductCategory extends Controller {
                 'href' => $this->url->link('product/category', 'path=' . $this->request->get['path'])
             );
 
-            $this->load->controller('extension/module/melle/initCatalog');
+            $catalog_state = $this->load->controller('extension/module/melle/initCatalog');
+            $data['rcc'] = $this->load->controller('extension/module/melle/renderCatalogContent', $catalog_state);
             $this->load->controller('extension/module/melle/initFilter');
 
             $this->load->model('extension/module/pro_recently');

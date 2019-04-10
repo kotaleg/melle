@@ -250,12 +250,58 @@ class ControllerExtensionModuleMelle extends Controller
         $this->load->model('catalog/super');
         $state = array_merge($state, $this->model_catalog_super->getProducts());
 
+        // PRE-RENDER
+        $this->renderCatalogContent($state);
+
         $state['design_col'] = true;
         $state['current_category'] = $this->model_tool_base->getCurrentCategoryName();
         $state['get_link'] = $this->model_extension_pro_patch_url->ajax('product/category/melle_get', '', true);
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
+        return $state;
+    }
+
+    public function renderCatalogContent($state)
+    {
+        $data = array();
+        $data['products'] = array();
+
+        foreach ($state['products'] as $p) {
+            $product = array(
+                'product_id' => $p['product_id'],
+                'href' => $p['href'],
+                'name' => $p['name'],
+                'h1' => $p['h1'],
+                'manufacturer' => $p['manufacturer'],
+                'image' => $p['image'],
+                'zvezdochka' => $p['zvezdochka'],
+                'znachek' => $p['znachek'],
+                'znachek_class' => $p['znachek_class'],
+                'special_text' => $p['special_text'],
+
+                'getPrice' => $p['default_values']['price'],
+                'getSpecial' => $p['default_values']['special'],
+                'isSpecial' => false,
+            );
+
+            if ($product['getSpecial'] !== false
+            && preg_replace('/\s+/', '', $product['getSpecial']) > 0) {
+                $product['isSpecial'] = true;
+            }
+
+            $data['products'][] = $product;
+        }
+
+        $data['product_total'] = $state['product_total'];
+
+        $data['canLoadMore'] = false;
+        if ($data['product_total'] > 0
+        && $data['product_total'] > count($data['products'])) {
+            $data['canLoadMore'] = true;
+        }
+
+        return $this->model_extension_pro_patch_load->view("{$this->route}/catalog_prerender", $data);
     }
 
     public function initFilter()

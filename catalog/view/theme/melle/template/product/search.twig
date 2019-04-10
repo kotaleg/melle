@@ -26,6 +26,9 @@
          <div class="search__content">
             <melle-search-form></melle-search-form>
 
+            {% if rcc %}
+            <div id="rendered-catalog-content">{{rcc}}</div>
+            {% endif %}
             <melle-catalog-content></melle-catalog-content>
          </div>
 

@@ -129,7 +129,8 @@ class ControllerProductSearch extends Controller {
             $data['heading_title'] = $this->language->get('heading_title');
         }
 
-        $this->load->controller('extension/module/melle/initCatalog');
+        $catalog_state = $this->load->controller('extension/module/melle/initCatalog');
+        $data['rcc'] = $this->load->controller('extension/module/melle/renderCatalogContent', $catalog_state);
         $this->load->controller('extension/module/melle/initFilter');
 
         // $data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));

@@ -1,0 +1,57 @@
+<div class="catalog_list_view">
+    {% if product_total > 0 %}
+    <ul class="catalog__list" id="ivan_products_replace">
+        {% for p in products %}
+        <li class="catalog__item {{p.znachek_class}}">
+            <a href="{{p.href}}" class="catalog__item-link">
+                <img src="{{p.image}}" alt="{{p.h1}}">
+            </a>
+
+            {% if p.special_text %}
+            <div class="catalog__item-price super-div" style="top: 0px;">
+                <span class="catalog__item-price-default super-text" style="font-size: 0.79vw;">{{ p.special_text }}</span>
+            </div>
+            {% endif %}
+
+            <div class="catalog__item-ivaninfo">
+                <div class="row">
+                   <div class="col-xs-12">
+                      <h3 class="ivanitemtitle"><a href="{{p.href}}">{{ p.h1 }}</a></h3>
+                   </div>
+                   <div class="col-xs-7">
+                        {% if p.isSpecial %}
+                        <span class="catalog__item-price-old"> {{ p.getPrice }} <span class="ruble-sign">Р</span></span>
+                        {% endif %}
+
+                        {% if p.isSpecial %}
+                        <span class="catalog__item-price-default">
+                            {{ p.getSpecial }}
+                            {% if p.zvezdochka %}
+                            <span class="ruble-container"><span class="ruble-sign">Р</span><span class="ruble-zvezdochka">*</span></span>
+                            {% else %}
+                            <span class="ruble-sign">Р</span>
+                            {% endif %}
+                        </span>
+                        {% endif %}
+
+                        {% if not isSpecial %}
+                        <span class="catalog__item-price-default"> {{ p.getPrice }} <span class="ruble-sign">Р</span></span>
+                        {% endif %}
+                   </div>
+                   <div class="col-xs-5">
+                      <div><a href="{{p.href}}" class="ivanbuybutton">Купить</a></div>
+                   </div>
+                </div>
+            </div>
+
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+{% if canLoadMore %}
+<div style="text-align: center;">
+    <button id="view-more-button" class="btn button"><span>ПОКАЗАТЬ ЕЩЁ</span></button>
+</div>
+{% endif %}
