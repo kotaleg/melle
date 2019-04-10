@@ -16,7 +16,7 @@ define('VERSION', '3.0.2.0');
 // Configuration
 $config_file = 'config.php';
 if (isset($_SERVER['SERVER_ADDR'])
-&& in_array($_SERVER['SERVER_ADDR'], array('127.0.0.1', '::1'))) {
+&& in_array($_SERVER['SERVER_ADDR'], array('::1'))) {
     $config_file = 'config.local.php';
 }
 
