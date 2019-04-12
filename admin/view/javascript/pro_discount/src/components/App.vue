@@ -63,6 +63,13 @@
                                 :labels="getToggleStates"/>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label">{{ text_sort_order }}</label>
+                        <div class="col-sm-9 col-lg-5">
+                            <input type="text" v-model="sort_order" :placeholder="text_sort_order" class="form-control">
+                        </div>
+                    </div>
                 </form>
 
                 <discounts v-if="!is_edit" />
@@ -109,6 +116,7 @@ export default {
 
             'text_edit',
             'text_status',
+            'text_sort_order',
             'text_close',
             'text_cancel',
             'text_warning',
@@ -127,6 +135,10 @@ export default {
         status: {
             get () { return this.getSettingValue('status') },
             set (v) { this.updateSetting({k: 'status', v}) }
+        },
+        sort_order: {
+            get () { return this.getSettingValue('sort_order') },
+            set (v) { this.updateSetting({k: 'sort_order', v}) }
         },
     },
     methods: {

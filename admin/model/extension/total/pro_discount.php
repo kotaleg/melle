@@ -13,6 +13,8 @@ class ModelExtensionTotalProDiscount extends Model
     const MANUFACTURER_TABLE = 'pd_manufacturer';
     const CUSTOMER_TABLE = 'pd_customer';
 
+    const SKIDOSIK_TABLE = 'pd_skidosik';
+
     const SALE = 'sale';
     const SALE_COUNT = 'sale_count';
 
@@ -90,6 +92,14 @@ class ModelExtensionTotalProDiscount extends Model
             `discount_id` int(11) NOT NULL,
             `customer_id` int(11) NOT NULL,
             PRIMARY KEY (`discount_id`,`customer_id`)
+        )
+        COLLATE='utf8_general_ci'
+        ENGINE=MyISAM;");
+
+        $this->db->query("CREATE TABLE IF NOT EXISTS `". DB_PREFIX . self::SKIDOSIK_TABLE ."` (
+            `session_id` varchar(32) NOT NULL,
+            `value` decimal(15,4) NOT NULL,
+            UNIQUE KEY(`session_id`)
         )
         COLLATE='utf8_general_ci'
         ENGINE=MyISAM;");

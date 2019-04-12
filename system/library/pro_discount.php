@@ -8,6 +8,8 @@ class pro_discount
     const MANUFACTURER_TABLE = 'pd_manufacturer';
     const CUSTOMER_TABLE = 'pd_customer';
 
+    const SKIDOSIK_TABLE = 'pd_skidosik';
+
     const SALE = 'sale';
     const SALE_COUNT = 'sale_count';
 
@@ -22,6 +24,7 @@ class pro_discount
         $this->db = $registry->get('db');
         $this->config = $registry->get('config');
         $this->customer = $registry->get('customer');
+        $this->session = $registry->get('session');
 
         // SUPER OFFERS START
         if ((in_array(__FUNCTION__, array('__construct'))) && !isset($this->super_offers)
@@ -44,8 +47,13 @@ class pro_discount
             } else {
                 $this->session->data["{$this->codename}_cart"][$pd['product_id']]['q'] = $pd['quantity'];
                 $this->session->data["{$this->codename}_cart"][$pd['product_id']]['t'] = $pd['total'];
+
+                // U - for "used"
+                $this->session->data["{$this->codename}_cart"][$pd['product_id']]['u'] = 0;
             }
         }
+
+        $this->initSkidosik();
     }
 
     public function getCartProductTotal($product_id)
@@ -59,9 +67,55 @@ class pro_discount
     public function getCartProductQuantity($product_id)
     {
         if (isset($this->session->data["{$this->codename}_cart"][$product_id]['q'])) {
-            return $this->session->data["{$this->codename}_cart"][$product_id]['q'];
+            return (int)$this->session->data["{$this->codename}_cart"][$product_id]['q'];
         }
         return false;
+    }
+
+    public function getCartProductUsed($product_id)
+    {
+        if (isset($this->session->data["{$this->codename}_cart"][$product_id]['u'])) {
+            return (int)$this->session->data["{$this->codename}_cart"][$product_id]['u'];
+        }
+        return false;
+    }
+
+    public function updateCartProductUsed($product_id, $count)
+    {
+        if (isset($this->session->data["{$this->codename}_cart"][$product_id]['u'])) {
+            $this->session->data["{$this->codename}_cart"][$product_id]['u'] += $used;
+        } else {
+            $this->session->data["{$this->codename}_cart"][$product_id]['u'] = $used;
+        }
+    }
+
+    private function initSkidosik()
+    {
+        $this->db->query("DELETE FROM ". DB_PREFIX . self::SKIDOSIK_TABLE ."
+            WHERE `session_id` = '". $this->db->escape($this->session->getId()) ."'");
+    }
+
+    public function updateSkidosik($value)
+    {
+        $this->db->query("INSERT INTO ". DB_PREFIX . self::SKIDOSIK_TABLE ."
+            (`session_id`, `value`)
+            VALUES (
+                '". $this->db->escape($this->session->getId()) ."',
+                '". $this->db->escape($value) ."'
+            )
+            ON DUPLICATE KEY UPDATE
+               `value` = `value` + VALUES(`value`);");
+    }
+
+    public function getSkidosik()
+    {
+        $q = $this->db->query("SELECT `value` FROM ". DB_PREFIX . self::SKIDOSIK_TABLE ."
+            WHERE `session_id` = '". $this->db->escape($this->session->getId()) ."'");
+
+        if ($q->num_rows) {
+            return $q->row['value'];
+        }
+        return 0;
     }
 
     public function getSpecialPrice($product_id, $special, $use_cart = Null, $text = Null)
@@ -105,9 +159,9 @@ class pro_discount
                     if ($cq < $discount['start_count']) {
                         $count = false;
                     } else {
-                        if ($cq % $discount['start_count'] !== 0) {
-                            $count = false;
-                        }
+                        // if ($cq % $discount['start_count'] !== 0) {
+                        //     $count = false;
+                        // }
                     }
                 }
 
@@ -182,6 +236,21 @@ class pro_discount
 
         $discount = array_shift($discounts);
 
+        // DIS
+        $available_count = 0;
+        if ($use_cart !== Null
+        && $discount['start_count'] > 0) {
+            $cq = $this->getCartProductQuantity($product_id);
+            if ($cq !== False && $cq > 0) {
+                if ($cq >= $discount['start_count']) {
+                    $div = $cq % $discount['start_count'];
+                    $used = $this->getCartProductUsed($product_id);
+
+                    $available_count = ($cq - $div) - $used;
+                }
+            }
+        }
+
         // PERCENT
         if ($discount['sign'] === self::PERCENT && $discount['value'] > 0) {
             $product_info['price'] = $product_info['price'] -
@@ -206,6 +275,13 @@ class pro_discount
                     'value' => $discount['value'],
                 );
             }
+        }
+
+        if ($use_cart !== Null) {
+            return array(
+                'available_count' => $available_count,
+                'special' => $new_special,
+            );
         }
 
         return $new_special;
@@ -250,8 +326,25 @@ class pro_discount
                     $products_data[$pd_key]['total'] = $full_price;
                 } else {
                     if ($special) {
-                        $products_data[$pd_key]['price'] = $special;
-                        $products_data[$pd_key]['total'] = $special * $pd['quantity'];
+                        if (isset($special['available_count'])) {
+                            $products_data[$pd_key]['total'] = 0;
+
+                            for ($i=1; $i <= $pd['quantity']; $i++) {
+                                if ($i <= $special['available_count']) {
+                                    $products_data[$pd_key]['total'] += $special['special'];
+
+                                    if ($pd['price'] > 0 && $pd['price'] > $special['special']) {
+                                        $this->updateSkidosik(($pd['price'] - $special['special']));
+                                    }
+
+                                } else {
+                                    $products_data[$pd_key]['total'] += $pd['price'];
+                                }
+                            }
+                        } else {
+                            $products_data[$pd_key]['price'] = $special;
+                            $products_data[$pd_key]['total'] = $special * $pd['quantity'];
+                        }
                     }
                 }
 

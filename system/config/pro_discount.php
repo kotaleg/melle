@@ -2,6 +2,6 @@
 
 $_['pro_discount'] = array(
     'status'            => false,
-    'access_code'       => '',
+    'sort_order'        => 0,
     'debug'             => false,
 );

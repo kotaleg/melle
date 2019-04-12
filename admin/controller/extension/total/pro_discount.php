@@ -103,7 +103,7 @@ class ControllerExtensionTotalProDiscount extends Controller
             'text_edit', 'text_yes', 'text_no', 'text_enabled', 'text_disabled',
             'text_deleted', 'text_undefined', 'text_status', 'text_success', 'text_warning',
             'text_close', 'text_cancel', 'text_setting', 'text_debug', 'text_no', 'text_yes',
-            'text_fee', 'text_access_code', 'text_no_results', 'text_loading',
+            'text_fee', 'text_access_code', 'text_no_results', 'text_loading', 'text_sort_order',
 
             'button_save_and_stay', 'button_save', 'button_cancel', 'button_edit', 'button_delete',
 
