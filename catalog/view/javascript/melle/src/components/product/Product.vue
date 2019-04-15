@@ -8,20 +8,22 @@
                <div :id="[`ivan-js-${o.class}-list`]" :class="[o.class]">
 
                     <label v-for="(ov, ov_key) in o.product_option_value"
-                        :class="['radio-inline', `ivan-${o.class}-radio`, {'krestik': ov.disabled_by_selection}]">
-                        <input type="radio"
-                            @click="radioHandler({o_key: o_key, ov_key: ov_key, status: !ov.selected})"
-                            :name="[`ShopCartItem[${o.class}]`]"
-                            :placeholder="ov.name"
-                            :value="ov.option_value_id"
-                            :class="[{'check': ov.selected, 'disabled': ov.disabled_by_selection}]">
+                        :class="['radio-inline', `ivan-${o.class}-radio`]">
+                        <div :class="[{'krestik': ov.disabled_by_selection}]">
+                            <input type="radio"
+                                @click="radioHandler({o_key: o_key, ov_key: ov_key, status: !ov.selected})"
+                                :name="[`ShopCartItem[${o.class}]`]"
+                                :placeholder="ov.name"
+                                :value="ov.option_value_id"
+                                :class="[{'check': ov.selected, 'disabled': ov.disabled_by_selection}]">
 
-                        <span v-if="!ov.image">{{ ov.name }}</span>
-                        <span v-if="ov.image">
-                            <img :src="ov.image"
-                                :class="[`${o.class}-image`]"
-                                v-tooltip="{content: ov.name}">
-                        </span>
+                            <span v-if="!ov.image">{{ ov.name }}</span>
+                            <span v-if="ov.image">
+                                <img :src="ov.image"
+                                    :class="[`${o.class}-image`]"
+                                    v-tooltip="{content: ov.name}">
+                            </span>
+                        </div>
                     </label>
 
                     <a v-if="size_list && o.class == 'size'"

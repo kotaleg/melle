@@ -347,13 +347,16 @@
       user-select: none;
 
       display: inline-block;
-      display: flex;
+      // display: flex;
       position: relative;
       cursor: pointer;
       font-size: 16px;
       font-weight: bold;
       margin-right: 10px;
       text-align: center;
+
+      // flex-direction: column;
+      // justify-content: center;
 
 
       &:last-child {
@@ -387,12 +390,16 @@
       user-select: none;
 
       display: inline-block;
+      // display: flex;
       position: relative;
       cursor: pointer;
       font-size: 16px;
       font-weight: bold;
       margin-right: 10px;
       text-align: center;
+
+      // flex-direction: column;
+      // justify-content: center;
 
 
       &:last-child {
@@ -429,7 +436,7 @@
 
     #ivan-js-size-list {
       width: 89%;
-      display: flex;
+      // display: flex;
         @include mobile {
             margin-left: 3px;
         }
@@ -437,7 +444,7 @@
 
     #ivan-js-color-list {
       width: 89%;
-      display: flex;
+      // display: flex;
       @include mobile {
           margin-left: 33px;
       }
