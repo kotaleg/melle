@@ -7,7 +7,8 @@
                <span class="ivan-product-selectors">{{ o.name }}:</span>
                <div :id="[`ivan-js-${o.class}-list`]" :class="[o.class]">
 
-                    <label v-for="(ov, ov_key) in o.product_option_value" :class="['radio-inline', `ivan-${o.class}-radio`]">
+                    <label v-for="(ov, ov_key) in o.product_option_value"
+                        :class="['radio-inline', `ivan-${o.class}-radio`, {'krestik': ov.disabled_by_selection}]">
                         <input type="radio"
                             @click="radioHandler({o_key: o_key, ov_key: ov_key, status: !ov.selected})"
                             :name="[`ShopCartItem[${o.class}]`]"
@@ -149,6 +150,29 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+/* KRESTIK */
+.krestik {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
+.krestik::before,
+.krestik::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 4px; /* cross thickness */
+    background-color: red;
+}
+
+.krestik::before {
+    transform: rotate(45deg);
+}
+
+.krestik::after {
+    transform: rotate(-45deg);
+}
 </style>
