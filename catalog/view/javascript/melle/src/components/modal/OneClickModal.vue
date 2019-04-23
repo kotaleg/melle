@@ -82,7 +82,7 @@ export default {
 
             name: '',
             phone: '',
-            agree: false,
+            agree: true,
         }
     },
     computed: {
