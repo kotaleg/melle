@@ -1,6 +1,6 @@
 <?php
 // HTTP
-define('HTTP_SERVER', 'http://melle.online/');
+define('HTTP_SERVER', 'https://melle.online/');
 
 // HTTPS
 define('HTTPS_SERVER', 'https://melle.online/');

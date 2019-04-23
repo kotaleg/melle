@@ -1,7 +1,7 @@
 <?php
 // HTTP
-define('HTTP_SERVER', 'http://melle.online/admin/');
-define('HTTP_CATALOG', 'http://melle.online/');
+define('HTTP_SERVER', 'https://melle.online/admin/');
+define('HTTP_CATALOG', 'https://melle.online/');
 
 // HTTPS
 define('HTTPS_SERVER', 'https://melle.online/admin/');
