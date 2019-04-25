@@ -7,6 +7,13 @@
                 </div>
             </div>
 
+            <div v-if="is_link" class="form-group" >
+                <label class="col-sm-3 col-lg-2 control-label">Ссылка</label>
+                <div class="col-sm-9 col-lg-5">
+                    <input type="text" v-model="link" placeholder="Ссылка сгенерируется после сохраниения" class="form-control" readonly>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-3 col-lg-2 control-label">Тип скидки</label>
                 <div class="col-sm-9 col-lg-5">
@@ -292,6 +299,12 @@ export default {
             get () { return this.getDiscountValue('finish_date') },
             set (v) { this.updateDiscountValue({k: 'finish_date', v}) }
         },
+        link: {
+            get () { return this.getDiscountValue('link') }
+        },
+        is_link: {
+            get () { return this.getDiscountValue('is_link') }
+        }
     },
     methods: {
         ...mapActions('shop', [

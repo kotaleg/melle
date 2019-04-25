@@ -60,10 +60,16 @@ class ControllerStartupSeoUrl extends Controller {
                         $this->request->get['route'] = 'extension/d_blog_module/category';
                     }
 
-                    if ($query->row['query'] && $url[0] != 'information_id' && $url[0] != 'manufacturer_id' && $url[0] != 'category_id' && $url[0] != 'product_id' && $url[0] != 'bm_post_id' && $url[0] != 'bm_category_id') {
+                    if ($query->row['query'] && $url[0] != 'information_id' && $url[0] != 'manufacturer_id' && $url[0] != 'category_id' && $url[0] != 'product_id' && $url[0] != 'bm_post_id' && $url[0] != 'bm_category_id' && $url[0] != 'discount_id') {
                         $this->request->get['route'] = $query->row['query'];
                     }
                     /* BLOG MOD END */
+
+                    /* DISCOUNT START */
+                    if ($url[0] == 'discount_id') {
+                        $this->request->get['discount_id'] = $url[1];
+                    }
+                    /* DISCOUNT END */
                 } else {
                     $this->request->get['route'] = 'error/not_found';
 
@@ -78,6 +84,8 @@ class ControllerStartupSeoUrl extends Controller {
                     $this->request->get['route'] = 'product/category';
                 } elseif (isset($this->request->get['manufacturer_id'])) {
                     $this->request->get['route'] = 'product/manufacturer/info';
+                } elseif (isset($this->request->get['discount_id'])) {
+                    $this->request->get['route'] = 'extension/total/pro_discount/catalog';
                 } elseif (isset($this->request->get['information_id'])) {
                     $this->request->get['route'] = 'information/information';
                 }

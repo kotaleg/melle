@@ -130,6 +130,7 @@ class ModelCatalogSuper extends Model
             'manufacturers' => [],
 
             'category_id' => '',
+            'discount_id' => '',
             'search' => null,
 
             'page' => 1,
@@ -161,6 +162,17 @@ class ModelCatalogSuper extends Model
 
         if (isset($filter_data['filter_category_id'])) {
             $result['category_id'] = $filter_data['filter_category_id'];
+        }
+        if (isset($filter_data['filter_discount_id'])) {
+            $result['discount_id'] = $filter_data['filter_discount_id'];
+
+            if ($result['discount_id'] && !$result['category_id']) {
+                $result['category_id'] = '';
+
+                $this->load->model('extension/total/pro_discount');
+                $result['discount_data'] = $this->model_extension_total_pro_discount->getDiscountData(
+                    $result['discount_id']);
+            }
         }
         if (isset($filter_data['page'])) {
             $result['page'] = (int)$filter_data['page'];
@@ -343,6 +355,7 @@ class ModelCatalogSuper extends Model
         $page = 1;
         $limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
         $category_id = 0;
+        $discount_id = 0;
         $search = null;
         $path = '';
 
@@ -365,6 +378,9 @@ class ModelCatalogSuper extends Model
         if (isset($this->request->get['path'])) {
             $parts = explode('_', (string)$this->request->get['path']);
             $category_id = (int)array_pop($parts);
+        }
+        if (isset($this->request->get['discount_id'])) {
+            $discount_id = (int)$this->request->get['discount_id'];
         }
         if (isset($this->request->get['path']) && !empty($this->request->get['path'])) {
             $path = $this->request->get['path'];
@@ -410,6 +426,9 @@ class ModelCatalogSuper extends Model
         }
         if (isset($filter_data['category_id'])) {
             $category_id = (int)$filter_data['category_id'];
+        }
+        if (isset($filter_data['discount_id'])) {
+            $discount_id = (int)$filter_data['discount_id'];
         }
         if (isset($filter_data['min_den'])) {
             $min_den = (float)$filter_data['min_den'];
@@ -467,8 +486,13 @@ class ModelCatalogSuper extends Model
         }
         /* FROM FILTER END */
 
+        if ($discount_id && !$category_id) {
+            $category_id = '';
+        }
+
         $prepared = array(
             'filter_category_id'  => $category_id,
+            'filter_discount_id'  => $discount_id,
             'filter_sub_category' => true,
             'filter_description'  => true,
             'filter_h1'           => true,
@@ -480,6 +504,12 @@ class ModelCatalogSuper extends Model
             'page'                => $page,
             'limit'               => $limit,
         );
+
+        if ($discount_id && !$category_id) {
+            $this->load->model('extension/total/pro_discount');
+            $prepared['discount_data'] = $this->model_extension_total_pro_discount->getDiscountData(
+                $discount_id);
+        }
 
         if ($search !== null) { $prepared['filter_name'] = (string)$search; }
         if ($path !== null) { $prepared['path'] = (string)$path; }

@@ -163,6 +163,9 @@ class ModelExtensionTotalProDiscount extends Model
 
             'start_date' => '',
             'finish_date' => '',
+
+            'link' => $this->getDiscountLink($discount_id),
+            'is_link' => $this->isLinkForDiscount($discount_id),
         );
 
         if ($discount_id) {
@@ -344,6 +347,11 @@ class ModelExtensionTotalProDiscount extends Model
             $json['saved'] = true;
         }
 
+        if ($data['discount_id']) {
+            $this->removeDiscountLink($data['discount_id']);
+            $this->saveDiscountLink($data['discount_id']);
+        }
+
         return $json;
     }
 
@@ -359,6 +367,7 @@ class ModelExtensionTotalProDiscount extends Model
             WHERE `discount_id` = '" . (int)$discount_id . "'");
         $this->db->query("DELETE FROM `". DB_PREFIX . self::CUSTOMER_TABLE ."`
             WHERE `discount_id` = '" . (int)$discount_id . "'");
+        $this->removeDiscountLink($discount_id);
     }
 
     public function flipDiscountStatus($discount_id)
@@ -544,5 +553,52 @@ class ModelExtensionTotalProDiscount extends Model
         }
 
         return $result;
+    }
+
+    /* SEO LINKS */
+    private function generateDiscountLink($discount_id)
+    {
+        return "discount-{$discount_id}";
+    }
+
+    private function generateDiscountQuery($discount_id)
+    {
+        return "discount_id={$discount_id}";
+    }
+
+    private function getDiscountLink($discount_id)
+    {
+        if ($discount_id) {
+            $base = $this->request->server['HTTPS'] ? HTTPS_CATALOG : HTTP_CATALOG;
+            return $base.$this->generateDiscountLink($discount_id);
+        }
+        return false;
+    }
+
+    private function isLinkForDiscount($discount_id)
+    {
+        $q = $this->db->query("SELECT `seo_url_id`
+            FROM `". DB_PREFIX ."seo_url`
+            WHERE `query` = '". $this->db->escape($this->generateDiscountQuery($discount_id)) ."'
+            AND `language_id` = '". (int)$this->config->get('config_language_id') ."'");
+
+        if ($q->num_rows) { return true; }
+        return false;
+    }
+
+    private function saveDiscountLink($discount_id)
+    {
+        $this->db->query("
+            INSERT INTO `" . DB_PREFIX . "seo_url`
+            SET `query` = '" . $this->db->escape($this->generateDiscountQuery($discount_id)) . "',
+                `keyword` = '" . $this->db->escape($this->generateDiscountLink($discount_id)) . "',
+                `language_id` = '" . (int)$this->config->get('config_language_id') . "',
+                `store_id` = '". $this->config->get('store_id') ."'");
+    }
+
+    private function removeDiscountLink($discount_id)
+    {
+        $q = $this->db->query("DELETE FROM `". DB_PREFIX ."seo_url`
+            WHERE `query` = '". $this->db->escape($this->generateDiscountQuery($discount_id)) ."'");
     }
 }

@@ -88,10 +88,65 @@ class ModelCatalogProduct extends Model {
                 $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id)";
             }
         } else {
-            $sql .= " FROM " . DB_PREFIX . "product p";
+
+            /* DISCOUNT FILTER START */
+            if (!empty($data['filter_discount_id'])) {
+                if (isset($data['discount_data']) && $data['discount_data']) {
+                    // CATEGORIES
+                    if ($data['discount_data']['categories']) {
+                        $dcategories = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['categories']);
+                        if (!empty($dcategories)) {
+                            $sql .= " FROM " . DB_PREFIX . "product_to_category p2c ";
+                            $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id) ";
+                        }
+                    }
+                }
+            } else {
+                $sql .= " FROM " . DB_PREFIX . "product p";
+            }
+            /* DISCOUNT FILTER END */
+
         }
 
         $sql .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'";
+
+        /* DISCOUNT FILTER START */
+        if (empty($data['filter_category_id'])
+        && !empty($data['filter_discount_id'])) {
+            if (isset($data['discount_data']) && $data['discount_data']) {
+                // CUSTOMERS
+                if ($data['discount_data']['customers']) {
+                    $dcustomers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['customers']);
+                    if (!empty($dcustomers)) {
+                        $sql .= " AND '". (int)$this->customer->getId() ."' IN (". $dcustomers .") ";
+                    }
+                }
+
+                // PRODUCTS
+                if ($data['discount_data']['products']) {
+                    $dproducts = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['products']);
+                    if (!empty($dproducts)) {
+                        $sql .= " AND p.product_id IN (". $dproducts .") ";
+                    }
+                }
+
+                // CATEGORIES
+                if ($data['discount_data']['categories']) {
+                    if (isset($dcategories) && !empty($dcategories)) {
+                        $sql .= " AND p2c.category_id IN (". $dcategories .") ";
+                    }
+                }
+
+                // MANUFACTURERS
+                if ($data['discount_data']['manufacturers']) {
+                    $dmanufacturers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['manufacturers']);
+                    if (isset($dmanufacturers) && !empty($dmanufacturers)) {
+                        $sql .= " AND p.manufacturer_id IN (" . $dmanufacturers . ")";
+                    }
+                }
+            }
+        }
+        /* DISCOUNT FILTER END */
 
         if (!empty($data['filter_category_id'])) {
             if (!empty($data['filter_sub_category'])) {
@@ -560,7 +615,24 @@ class ModelCatalogProduct extends Model {
                 $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id)";
             }
         } else {
-            $sql .= " FROM " . DB_PREFIX . "product p";
+
+            /* DISCOUNT FILTER START */
+            if (!empty($data['filter_discount_id'])) {
+                if (isset($data['discount_data']) && $data['discount_data']) {
+                    // CATEGORIES
+                    if ($data['discount_data']['categories']) {
+                        $dcategories = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['categories']);
+                        if (!empty($dcategories)) {
+                            $sql .= " FROM " . DB_PREFIX . "product_to_category p2c ";
+                            $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id) ";
+                        }
+                    }
+                }
+            } else {
+                $sql .= " FROM " . DB_PREFIX . "product p";
+            }
+            /* DISCOUNT FILTER END */
+
         }
 
         if ($extra) {
@@ -570,6 +642,44 @@ class ModelCatalogProduct extends Model {
         }
 
         $sql .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'";
+
+        /* DISCOUNT FILTER START */
+        if (empty($data['filter_category_id'])
+        && !empty($data['filter_discount_id'])) {
+            if (isset($data['discount_data']) && $data['discount_data']) {
+                // CUSTOMERS
+                if ($data['discount_data']['customers']) {
+                    $dcustomers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['customers']);
+                    if (!empty($dcustomers)) {
+                        $sql .= " AND '". (int)$this->customer->getId() ."' IN (". $dcustomers .") ";
+                    }
+                }
+
+                // PRODUCTS
+                if ($data['discount_data']['products']) {
+                    $dproducts = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['products']);
+                    if (!empty($dproducts)) {
+                        $sql .= " AND p.product_id IN (". $dproducts .") ";
+                    }
+                }
+
+                // CATEGORIES
+                if ($data['discount_data']['categories']) {
+                    if (isset($dcategories) && !empty($dcategories)) {
+                        $sql .= " AND p2c.category_id IN (". $dcategories .") ";
+                    }
+                }
+
+                // MANUFACTURERS
+                if ($data['discount_data']['manufacturers']) {
+                    $dmanufacturers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['manufacturers']);
+                    if (isset($dmanufacturers) && !empty($dmanufacturers)) {
+                        $sql .= " AND p.manufacturer_id IN (" . $dmanufacturers . ")";
+                    }
+                }
+            }
+        }
+        /* DISCOUNT FILTER END */
 
         if (!empty($data['filter_category_id'])) {
             if (!empty($data['filter_sub_category'])) {
@@ -795,12 +905,67 @@ class ModelCatalogProduct extends Model {
                 $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id)";
             }
         } else {
-            $sql .= " FROM " . DB_PREFIX . "product p";
+
+            /* DISCOUNT FILTER START */
+            if (!empty($data['filter_discount_id'])) {
+                if (isset($data['discount_data']) && $data['discount_data']) {
+                    // CATEGORIES
+                    if ($data['discount_data']['categories']) {
+                        $dcategories = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['categories']);
+                        if (!empty($dcategories)) {
+                            $sql .= " FROM " . DB_PREFIX . "product_to_category p2c ";
+                            $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id) ";
+                        }
+                    }
+                }
+            } else {
+                $sql .= " FROM " . DB_PREFIX . "product p";
+            }
+            /* DISCOUNT FILTER END */
+
         }
 
         $sql .= " LEFT JOIN " . DB_PREFIX . "manufacturer m ON (m.manufacturer_id = p.manufacturer_id) ";
 
         $sql .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'";
+
+        /* DISCOUNT FILTER START */
+        if (empty($data['filter_category_id'])
+        && !empty($data['filter_discount_id'])) {
+            if (isset($data['discount_data']) && $data['discount_data']) {
+                // CUSTOMERS
+                if ($data['discount_data']['customers']) {
+                    $dcustomers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['customers']);
+                    if (!empty($dcustomers)) {
+                        $sql .= " AND '". (int)$this->customer->getId() ."' IN (". $dcustomers .") ";
+                    }
+                }
+
+                // PRODUCTS
+                if ($data['discount_data']['products']) {
+                    $dproducts = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['products']);
+                    if (!empty($dproducts)) {
+                        $sql .= " AND p.product_id IN (". $dproducts .") ";
+                    }
+                }
+
+                // CATEGORIES
+                if ($data['discount_data']['categories']) {
+                    if (isset($dcategories) && !empty($dcategories)) {
+                        $sql .= " AND p2c.category_id IN (". $dcategories .") ";
+                    }
+                }
+
+                // MANUFACTURERS
+                if ($data['discount_data']['manufacturers']) {
+                    $dmanufacturers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['manufacturers']);
+                    if (isset($dmanufacturers) && !empty($dmanufacturers)) {
+                        $sql .= " AND p.manufacturer_id IN (" . $dmanufacturers . ")";
+                    }
+                }
+            }
+        }
+        /* DISCOUNT FILTER END */
 
         if (!empty($data['filter_category_id'])) {
             if (!empty($data['filter_sub_category'])) {
@@ -957,12 +1122,67 @@ class ModelCatalogProduct extends Model {
                 $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id)";
             }
         } else {
-            $sql .= " FROM " . DB_PREFIX . "product p";
+
+            /* DISCOUNT FILTER START */
+            if (!empty($data['filter_discount_id'])) {
+                if (isset($data['discount_data']) && $data['discount_data']) {
+                    // CATEGORIES
+                    if ($data['discount_data']['categories']) {
+                        $dcategories = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['categories']);
+                        if (!empty($dcategories)) {
+                            $sql .= " FROM " . DB_PREFIX . "product_to_category p2c ";
+                            $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id) ";
+                        }
+                    }
+                }
+            } else {
+                $sql .= " FROM " . DB_PREFIX . "product p";
+            }
+            /* DISCOUNT FILTER END */
+
         }
 
         $sql .= " LEFT JOIN " . DB_PREFIX . "product_attribute pattr ON (pattr.product_id = p.product_id) AND pattr.attribute_id = '". (int)$data['material_id'] ."' ";
 
         $sql .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'";
+
+        /* DISCOUNT FILTER START */
+        if (empty($data['filter_category_id'])
+        && !empty($data['filter_discount_id'])) {
+            if (isset($data['discount_data']) && $data['discount_data']) {
+                // CUSTOMERS
+                if ($data['discount_data']['customers']) {
+                    $dcustomers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['customers']);
+                    if (!empty($dcustomers)) {
+                        $sql .= " AND '". (int)$this->customer->getId() ."' IN (". $dcustomers .") ";
+                    }
+                }
+
+                // PRODUCTS
+                if ($data['discount_data']['products']) {
+                    $dproducts = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['products']);
+                    if (!empty($dproducts)) {
+                        $sql .= " AND p.product_id IN (". $dproducts .") ";
+                    }
+                }
+
+                // CATEGORIES
+                if ($data['discount_data']['categories']) {
+                    if (isset($dcategories) && !empty($dcategories)) {
+                        $sql .= " AND p2c.category_id IN (". $dcategories .") ";
+                    }
+                }
+
+                // MANUFACTURERS
+                if ($data['discount_data']['manufacturers']) {
+                    $dmanufacturers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['manufacturers']);
+                    if (isset($dmanufacturers) && !empty($dmanufacturers)) {
+                        $sql .= " AND p.manufacturer_id IN (" . $dmanufacturers . ")";
+                    }
+                }
+            }
+        }
+        /* DISCOUNT FILTER END */
 
         if (!empty($data['filter_category_id'])) {
             if (!empty($data['filter_sub_category'])) {
@@ -1119,7 +1339,24 @@ class ModelCatalogProduct extends Model {
                 $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id)";
             }
         } else {
-            $sql .= " FROM " . DB_PREFIX . "product p";
+
+            /* DISCOUNT FILTER START */
+            if (!empty($data['filter_discount_id'])) {
+                if (isset($data['discount_data']) && $data['discount_data']) {
+                    // CATEGORIES
+                    if ($data['discount_data']['categories']) {
+                        $dcategories = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['categories']);
+                        if (!empty($dcategories)) {
+                            $sql .= " FROM " . DB_PREFIX . "product_to_category p2c ";
+                            $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id) ";
+                        }
+                    }
+                }
+            } else {
+                $sql .= " FROM " . DB_PREFIX . "product p";
+            }
+            /* DISCOUNT FILTER END */
+
         }
 
         $sql .= " LEFT JOIN " . DB_PREFIX . "product_option_value pov ON (pov.product_id = p.product_id) AND pov.option_id = '". (int)$data['color_id'] ."' ";
@@ -1128,6 +1365,44 @@ class ModelCatalogProduct extends Model {
         $sql .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'";
 
         $sql .= " AND LCASE(ovd.name) LIKE '%(%' ";
+
+        /* DISCOUNT FILTER START */
+        if (empty($data['filter_category_id'])
+        && !empty($data['filter_discount_id'])) {
+            if (isset($data['discount_data']) && $data['discount_data']) {
+                // CUSTOMERS
+                if ($data['discount_data']['customers']) {
+                    $dcustomers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['customers']);
+                    if (!empty($dcustomers)) {
+                        $sql .= " AND '". (int)$this->customer->getId() ."' IN (". $dcustomers .") ";
+                    }
+                }
+
+                // PRODUCTS
+                if ($data['discount_data']['products']) {
+                    $dproducts = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['products']);
+                    if (!empty($dproducts)) {
+                        $sql .= " AND p.product_id IN (". $dproducts .") ";
+                    }
+                }
+
+                // CATEGORIES
+                if ($data['discount_data']['categories']) {
+                    if (isset($dcategories) && !empty($dcategories)) {
+                        $sql .= " AND p2c.category_id IN (". $dcategories .") ";
+                    }
+                }
+
+                // MANUFACTURERS
+                if ($data['discount_data']['manufacturers']) {
+                    $dmanufacturers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['manufacturers']);
+                    if (isset($dmanufacturers) && !empty($dmanufacturers)) {
+                        $sql .= " AND p.manufacturer_id IN (" . $dmanufacturers . ")";
+                    }
+                }
+            }
+        }
+        /* DISCOUNT FILTER END */
 
         if (!empty($data['filter_category_id'])) {
             if (!empty($data['filter_sub_category'])) {
@@ -1281,13 +1556,68 @@ class ModelCatalogProduct extends Model {
                 $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id)";
             }
         } else {
-            $sql .= " FROM " . DB_PREFIX . "product p";
+
+            /* DISCOUNT FILTER START */
+            if (!empty($data['filter_discount_id'])) {
+                if (isset($data['discount_data']) && $data['discount_data']) {
+                    // CATEGORIES
+                    if ($data['discount_data']['categories']) {
+                        $dcategories = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['categories']);
+                        if (!empty($dcategories)) {
+                            $sql .= " FROM " . DB_PREFIX . "product_to_category p2c ";
+                            $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id) ";
+                        }
+                    }
+                }
+            } else {
+                $sql .= " FROM " . DB_PREFIX . "product p";
+            }
+            /* DISCOUNT FILTER END */
+
         }
 
         $sql .= " LEFT JOIN " . DB_PREFIX . "product_option_value pov ON (pov.product_id = p.product_id) AND pov.option_id = '". (int)$data['size_id'] ."' ";
         $sql .= " LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (pov.option_value_id = ovd.option_value_id) AND ovd.option_id = '". (int)$data['size_id'] ."' ";
 
         $sql .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'";
+
+        /* DISCOUNT FILTER START */
+        if (empty($data['filter_category_id'])
+        && !empty($data['filter_discount_id'])) {
+            if (isset($data['discount_data']) && $data['discount_data']) {
+                // CUSTOMERS
+                if ($data['discount_data']['customers']) {
+                    $dcustomers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['customers']);
+                    if (!empty($dcustomers)) {
+                        $sql .= " AND '". (int)$this->customer->getId() ."' IN (". $dcustomers .") ";
+                    }
+                }
+
+                // PRODUCTS
+                if ($data['discount_data']['products']) {
+                    $dproducts = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['products']);
+                    if (!empty($dproducts)) {
+                        $sql .= " AND p.product_id IN (". $dproducts .") ";
+                    }
+                }
+
+                // CATEGORIES
+                if ($data['discount_data']['categories']) {
+                    if (isset($dcategories) && !empty($dcategories)) {
+                        $sql .= " AND p2c.category_id IN (". $dcategories .") ";
+                    }
+                }
+
+                // MANUFACTURERS
+                if ($data['discount_data']['manufacturers']) {
+                    $dmanufacturers = $this->model_extension_pro_patch_db->prepareSqlParents($data['discount_data']['manufacturers']);
+                    if (isset($dmanufacturers) && !empty($dmanufacturers)) {
+                        $sql .= " AND p.manufacturer_id IN (" . $dmanufacturers . ")";
+                    }
+                }
+            }
+        }
+        /* DISCOUNT FILTER END */
 
         if (!empty($data['filter_category_id'])) {
             if (!empty($data['filter_sub_category'])) {
