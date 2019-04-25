@@ -101,6 +101,9 @@ class ModelCatalogProduct extends Model {
                         }
                     }
                 }
+                if (!isset($dcategories) || (isset($dcategories) && empty($dcategories))) {
+                    $sql .= " FROM " . DB_PREFIX . "product p";
+                }
             } else {
                 $sql .= " FROM " . DB_PREFIX . "product p";
             }
@@ -628,6 +631,9 @@ class ModelCatalogProduct extends Model {
                         }
                     }
                 }
+                if (!isset($dcategories) || (isset($dcategories) && empty($dcategories))) {
+                    $sql .= " FROM " . DB_PREFIX . "product p";
+                }
             } else {
                 $sql .= " FROM " . DB_PREFIX . "product p";
             }
@@ -918,6 +924,9 @@ class ModelCatalogProduct extends Model {
                         }
                     }
                 }
+                if (!isset($dcategories) || (isset($dcategories) && empty($dcategories))) {
+                    $sql .= " FROM " . DB_PREFIX . "product p";
+                }
             } else {
                 $sql .= " FROM " . DB_PREFIX . "product p";
             }
@@ -1134,6 +1143,9 @@ class ModelCatalogProduct extends Model {
                             $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id) ";
                         }
                     }
+                }
+                if (!isset($dcategories) || (isset($dcategories) && empty($dcategories))) {
+                    $sql .= " FROM " . DB_PREFIX . "product p";
                 }
             } else {
                 $sql .= " FROM " . DB_PREFIX . "product p";
@@ -1352,6 +1364,9 @@ class ModelCatalogProduct extends Model {
                         }
                     }
                 }
+                if (!isset($dcategories) || (isset($dcategories) && empty($dcategories))) {
+                    $sql .= " FROM " . DB_PREFIX . "product p";
+                }
             } else {
                 $sql .= " FROM " . DB_PREFIX . "product p";
             }
@@ -1568,6 +1583,9 @@ class ModelCatalogProduct extends Model {
                             $sql .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id) ";
                         }
                     }
+                }
+                if (!isset($dcategories) || (isset($dcategories) && empty($dcategories))) {
+                    $sql .= " FROM " . DB_PREFIX . "product p";
                 }
             } else {
                 $sql .= " FROM " . DB_PREFIX . "product p";
