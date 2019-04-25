@@ -94,7 +94,7 @@ class ModelToolSeoPackage extends Model {
     $output =  '';
 
     foreach ($hreflangs as $link) {
-      $output .=  '<link rel="alternate" href="'.$link['href'].'" hreflang="'.$link['hreflang'].'"/>'."\n";
+      $output .=  '<link rel="alternate" href="'.$link['href'].'" />'."\n"; //hreflang="'.$link['hreflang'].'"
     }
 
     $this->document->addSeoMeta($output);
