@@ -441,7 +441,8 @@ class pro_discount
 
         $sql = "SELECT *
             FROM `". DB_PREFIX . self::DISCOUNT_TABLE ."`
-            WHERE `status` = '". true ."'";
+            WHERE `status` = '". true ."'
+            AND `value` > '0'";
 
         if ($type !== null) {
             $sql .= " AND `type` = '". $this->db->escape($type) ."' ";

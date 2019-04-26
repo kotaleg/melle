@@ -558,7 +558,7 @@ class ModelExtensionTotalProDiscount extends Model
     /* SEO LINKS */
     private function generateDiscountLink($discount_id)
     {
-        return "discount-{$discount_id}";
+        return "group-{$discount_id}";
     }
 
     private function generateDiscountQuery($discount_id)
