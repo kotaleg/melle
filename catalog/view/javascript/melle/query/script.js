@@ -61,13 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         $(".slider-nav").slick({
-            slidesToShow: 4,
+            slidesPerRow: 1,
+            slidesToShow: 2,
             slidesToScroll: 1,
             asNavFor: ".slider-for",
             dots: false,
             focusOnSelect: true,
             vertical: true,
             adaptiveHeight: true,
+            centerMode: true,
             responsive: [
                 {
                     breakpoint: 1024,

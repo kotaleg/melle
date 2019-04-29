@@ -72,8 +72,10 @@
       }
     }
     & .slick-active.slick-current {
-      &:after {
-        display: none;
+      li {
+        &:after {
+          display: none;
+        }
       }
     }
     &>button {

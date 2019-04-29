@@ -15,7 +15,9 @@ class ControllerProductProduct extends Controller {
         $this->load->model('catalog/category');
 
         $this->document->addScript('catalog/view/javascript/melle/query/zoom/jquery.zoom.min.js');
-        $this->document->addScript('catalog/view/javascript/melle/query/slick/slick.min.js');
+        $this->document->addScript('catalog/view/javascript/melle/query/slick/slick.js');
+        $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick.css');
+        $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick-theme.css');
 
         if (isset($this->request->get['path'])) {
             $path = '';
