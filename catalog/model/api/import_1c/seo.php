@@ -105,4 +105,58 @@ class ModelApiImport1CSeo extends Model
         $this->model_api_import_1c_progress->parseJson($json);
     }
 
+    public function parseRedirects()
+    {
+        $exchange_path = dirname(DIR_SYSTEM).'/' . 'protected/runtime/exchange/';
+        $csv = $exchange_path . 'redirect.csv';
+
+        if (!is_file($csv)) { return; }
+
+        $this->load->model('api/import_1c/language');
+        $languages = $this->model_api_import_1c_language->getLanguages();
+
+        $remove = array('https://melle.online', 'http://melle.online');
+
+        $handle = new SplFileObject($csv, "r");
+        $handle->setFlags(SplFileObject::READ_CSV | SplFileObject::READ_AHEAD
+            | SplFileObject::SKIP_EMPTY | SplFileObject::DROP_NEW_LINE);
+
+        while (!$handle->eof()) {
+            $ex = explode(",", rtrim($handle->fgets()));
+
+            // 301 REDIRECT
+            if (isset($ex[2]) && (int)$ex[1] === 301) {
+                $from = trim(str_replace($remove, '', $ex[0]));
+                $to = trim(str_replace($remove, '', $ex[2]));
+
+                // to the home page
+                if (!$to) { $to = '/'; }
+
+                foreach ($languages as $l) {
+                    if (!$this->isRedirectExist($l, $from, $to)) {
+                        $this->addRedirect($l, $from, $to);
+                    }
+                }
+            }
+        }
+
+        $handle = null;
+    }
+
+    private function isRedirectExist($language, $from, $to)
+    {
+        $q = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_redirect
+            WHERE `language_id` = '" . (int)$language . "'
+            AND `query` = '" . $this->db->escape($from) . "'
+            AND `redirect` = '" . $this->db->escape($to) . "'");
+        if ($q->num_rows) { return true; }
+    }
+
+    private function addRedirect($language, $from, $to)
+    {
+        $this->db->query("INSERT INTO " . DB_PREFIX . "url_redirect
+            SET `query` = '" . $this->db->escape($from) . "',
+                `redirect` = '" . $this->db->escape($to) . "',
+                `language_id` = '" . (int) $language . "'");
+    }
 }

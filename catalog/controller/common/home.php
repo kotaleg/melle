@@ -29,6 +29,10 @@ class ControllerCommonHome extends Controller {
         // $this->load->model('api/import_1c/option');
         // $this->model_api_import_1c_option->importColorCubs();
 
+        // IMPORT REDIRECTS
+        // $this->load->model('api/import_1c/seo');
+        // $this->model_api_import_1c_seo->parseRedirects();
+
         $this->response->setOutput($this->load->view('common/home', $data));
     }
 }

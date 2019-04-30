@@ -18,6 +18,54 @@ RewriteRule ^(.*)$ http://%1/$1 [L,R=301]
 RewriteEngine On
 # If your opencart installation does not run on the main web folder make sure you folder it does run in ie. / becomes /shop/
 
+# REDIRECTS FROM OLD SITE START
+RewriteCond %{REQUEST_URI} ^/catalog
+RewriteCond %{QUERY_STRING} CatalogFilterForm
+RewriteRule (.*) / [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/search
+RewriteCond %{QUERY_STRING} q=%D0%BD%D0%BE%D1%81%D0%BA%D0%B8
+RewriteRule (.*) /noski [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/search
+RewriteCond %{QUERY_STRING} q=%D0%BA%D0%BE%D0%BB%D0%B3%D0%BE%D1%82%D0%BA%D0%B8
+RewriteRule (.*) /kolgotki [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/search
+RewriteCond %{QUERY_STRING} q
+RewriteRule (.*) / [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_chulki_pod_poyas
+RewriteRule (.*) /chulki/chulki-pod-poyas [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_klassicheskie_plotnye_kolgotki
+RewriteRule (.*) /kolgotki/klassicheskie-plotnye-kolgotki-70-100-den [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_kolgotki_v_setku
+RewriteRule (.*) /kolgotki/kolgotki-v-setku [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_getry_botforty_mitenki
+RewriteRule (.*) /noski/getry-botforty-mitenki [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/requestParams/new/1
+RewriteRule (.*) / [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_besshovnoe_bele
+RewriteRule (.*) /bele [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_klassicheskie_chulki
+RewriteRule (.*) /chulki/klassicheskie-chulki [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_fantaziynye_kolgotki_i_chulki
+RewriteRule (.*) /kolgotki/fantazijnye-kolgotki [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_teplye_zimnie_kolgotki
+RewriteRule (.*) /kolgotki/tyoplye-zimnie-kolgotki [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_golfy_noski_podsledniki
+RewriteRule (.*) /noski [R=301,L]
+# REDIRECTS FROM OLD SITE END
+
 RewriteBase /
 RewriteRule ^sitemap.xml$ index.php?route=extension/feed/google_sitemap [L]
 RewriteRule ^googlebase.xml$ index.php?route=extension/feed/google_base [L]
@@ -25,6 +73,10 @@ RewriteRule ^system/storage/(.*) index.php?route=error/not_found [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
+
+# REMOVE SLASH AT THE END
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
 RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
 
 # Exception: Images
