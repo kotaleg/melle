@@ -75,7 +75,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
 
 # REMOVE SLASH AT THE END START
-RewriteRule ^(.*)/$ /$1 [L,R=301]
+# RewriteRule ^(.*)/$ /$1 [L,R=301]
 # REMOVE SLASH AT THE END END
 
 RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
