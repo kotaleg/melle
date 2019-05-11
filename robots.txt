@@ -14,6 +14,7 @@ Disallow: /*material=
 Disallow: /*color=
 Disallow: /*size=
 Disallow: /*search=
+Disallow: /*?page=
 
 User-agent: Yandex
 Disallow: /*min_den=
@@ -31,6 +32,7 @@ Disallow: /*material=
 Disallow: /*color=
 Disallow: /*size=
 Disallow: /*search=
+Disallow: /*?page=
 Sitemap: https://melle.online/sitemap.xml
 
 User-agent: Googlebot
@@ -49,3 +51,5 @@ Disallow: /*material=
 Disallow: /*color=
 Disallow: /*size=
 Disallow: /*search=
+Disallow: /*?page=
+
