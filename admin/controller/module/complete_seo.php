@@ -1350,6 +1350,7 @@ class ControllerModuleCompleteSeo extends Controller {
       $values[$lang]['count'] = $change_count;
     }
     $data['langs'] = &$values;
+
     return $data;
   }
 

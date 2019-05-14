@@ -35,6 +35,9 @@ RewriteCond %{REQUEST_URI} ^/search
 RewriteCond %{QUERY_STRING} q
 RewriteRule (.*) / [R=301,L]
 
+# RewriteCond %{REQUEST_URI} ^/catalog/
+# RewriteRule (.*) / [R=301,L]
+
 RewriteCond %{REQUEST_URI} ^/catalog/_chulki_pod_poyas
 RewriteRule (.*) /chulki/chulki-pod-poyas [R=301,L]
 
@@ -45,7 +48,7 @@ RewriteCond %{REQUEST_URI} ^/catalog/_kolgotki_v_setku
 RewriteRule (.*) /kolgotki/kolgotki-v-setku [R=301,L]
 
 RewriteCond %{REQUEST_URI} ^/catalog/_getry_botforty_mitenki
-RewriteRule (.*) /noski/getry-botforty-mitenki [R=301,L]
+RewriteRule (.*) /getry-botforty/mitenki [R=301,L]
 
 RewriteCond %{REQUEST_URI} ^/catalog/requestParams/new/1
 RewriteRule (.*) / [R=301,L]
@@ -64,6 +67,9 @@ RewriteRule (.*) /kolgotki/tyoplye-zimnie-kolgotki [R=301,L]
 
 RewriteCond %{REQUEST_URI} ^/catalog/_golfy_noski_podsledniki
 RewriteRule (.*) /noski [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/catalog/_kolgotki_dlya_beremennyh
+RewriteRule (.*) /kolgotki/kolgotki-dlya-beremennyh [R=301,L]
 # REDIRECTS FROM OLD SITE END
 
 RewriteBase /

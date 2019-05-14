@@ -121,6 +121,8 @@ class ModelApiImport1CSeo extends Model
         $handle->setFlags(SplFileObject::READ_CSV | SplFileObject::READ_AHEAD
             | SplFileObject::SKIP_EMPTY | SplFileObject::DROP_NEW_LINE);
 
+        $not_parsed = array();
+
         while (!$handle->eof()) {
             $ex = explode(",", rtrim($handle->fgets()));
 
@@ -132,15 +134,37 @@ class ModelApiImport1CSeo extends Model
                 // to the home page
                 if (!$to) { $to = '/'; }
 
-                foreach ($languages as $l) {
-                    if (!$this->isRedirectExist($l, $from, $to)) {
-                        $this->addRedirect($l, $from, $to);
+                if (!substr_count($from, '/') === 2) {
+                    continue;
+                }
+
+                $last = array_pop(array_filter(
+                    explode('/', $from), 'strlen'));
+
+                if ($q = $this->isQueryExist("/{$last}")) {
+
+                    if (strcmp($from, "/{$last}") !== 0) {
+
+                        foreach ($languages as $l) {
+                            if (!$this->isRedirectExist($l, $from, $q['redirect'])) {
+                                $this->addRedirect($l, $from, $q['redirect']);
+                            }
+                        }
                     }
                 }
             }
         }
 
         $handle = null;
+
+        echo "<pre>"; print_r($not_parsed); echo "</pre>";exit;
+    }
+
+    private function isQueryExist($query)
+    {
+        $q = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_redirect
+            WHERE `query` = '" . $this->db->escape($query) . "'");
+        if ($q->num_rows) { return $q->row; }
     }
 
     private function isRedirectExist($language, $from, $to)
