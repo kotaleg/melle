@@ -27,6 +27,7 @@ yarn run prod-sizelist
 # CLEAR AFTER YARN
 rm -Rf ./.git/
 rm -Rf ./node_modules/
+rm -Rf ./checkurl/
 rm -Rf ./catalog/view/javascript/melle/src/
 rm -Rf ./admin/view/javascript/import_1c/src/
 rm -Rf ./admin/view/javascript/super_offers/src/
