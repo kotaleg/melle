@@ -15,7 +15,7 @@ class ModelExtensionModuleProRelated extends Model
         }, $this->cart->getProducts());
     }
 
-    public function prepareCartProducts()
+    public function prepareCartProducts($max = 4)
     {
         $products = array();
         $results = $this->getCartProducts();
@@ -25,7 +25,18 @@ class ModelExtensionModuleProRelated extends Model
         $this->load->model('extension/module/super_offers');
         $this->load->model('tool/image');
 
+        $related = array();
+
         foreach ($results as $pid) {
+            foreach ($this->model_catalog_product->getProductRelated($pid, true) as $v) {
+                $related[$v] = $v;
+            }
+        }
+
+        shuffle($related);
+        $related = array_slice($related, 0, $max);
+
+        foreach ($related as $pid) {
             $result = $this->model_catalog_product->getProduct($pid);
             if (!$result) { continue; }
 
