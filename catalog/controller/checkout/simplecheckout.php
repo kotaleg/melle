@@ -465,6 +465,12 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
             $this->_templateData['simple_footer'] = $this->simplecheckout->getLinkToFooterTpl();
         }
 
+        /* IVAN MOD */
+        $this->load->model('extension/module/pro_related');
+        $this->_templateData['cart_related_products'] =
+            $this->model_extension_module_pro_related->prepareCartProducts();
+        /* IVAN MOD */
+
         $this->setOutputContent(trim($this->renderPage('checkout/simplecheckout', $this->_templateData, $childrens)));
     }
 

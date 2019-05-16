@@ -60,7 +60,7 @@
 {% endif %}
     {% if not ajax or (ajax and popup) %}
     <script type="text/javascript">
-        {% if popup %} 
+        {% if popup %}
             var simpleScriptsInterval = window.setInterval(function(){
                 if (typeof jQuery !== 'undefined' && jQuery.isReady) {
                     window.clearInterval(simpleScriptsInterval);
@@ -72,7 +72,7 @@
 
                         {% for style in simple_styles %}
                             $("head").append('<link href="' + '{{ style }}' + '" rel="stylesheet"/>');
-                        {% endfor %}                         
+                        {% endfor %}
                     }
                 }
             },0);
@@ -130,7 +130,7 @@
                 });
 
                 simplecheckout_{{ group }}.init();
-                
+
             }
         },0);
     </script>
@@ -163,7 +163,7 @@
                         <div class="alert alert-danger simplecheckout-warning-block" data-error="true">
                             {{ error }}
                         </div>
-                    {% endfor %}                 
+                    {% endfor %}
                 {% endif %}
 
                 {%
@@ -200,19 +200,19 @@
                 {% endfor %}
 
                 {{ simple_template|replace(replace) }}
-                
+
                 <div id="simplecheckout_bottom" style="width:100%;height:1px;clear:both;"></div>
                 <div class="simplecheckout-proceed-payment" id="simplecheckout_proceed_payment" style="display:none;">{{ text_proceed_payment }}</div>
-                
+
                 {% if display_agreement_checkbox %}
                     <div class="alert alert-danger simplecheckout-warning-block" id="agreement_warning" {% if display_error and has_error %}data-error="true"{% else %}style="display:none;"{% endif %}>
                         <div class="agreement_all">
                             {% for agreement_id, warning_agreement in error_warning_agreement %}
                                 <div class="agreement_{{ agreement_id }}">{{ warning_agreement }}</div>
                             {% endfor %}
-                        </div>                    
+                        </div>
                     </div>
-                {% endif %}  
+                {% endif %}
 
                 <div class="simplecheckout-button-block buttons" id="buttons">
                     <div class="simplecheckout-button-right">
@@ -222,7 +222,7 @@
                                     <div class="checkbox"><label><input type="checkbox" name="agreements[]" value="{{ agreement_id }}" {{ agreement_id in agreements ? 'checked="checked"' : '' }} />{{ text_agreement }}</label></div>
                                 {% endfor %}
                             </span>
-                        {% endif %}                
+                        {% endif %}
                         {% if steps_count > 1 %}
                         <a class="button btn-primary button_oc btn" data-onclick="nextStep" id="simplecheckout_button_next"><span>{{ button_next }}</span></a>
                         {% endif %}
@@ -236,29 +236,32 @@
                         <a class="button btn-primary button_oc btn" data-onclick="previousStep" id="simplecheckout_button_prev"><span>{{ button_prev }}</span></a>
                         {% endif %}
                     </div>
-                </div>    
+                </div>
 
                 {% if steps_count > 1 and menu_type == '2' %}
                     </div>
                 {% endif %}
-                
+
                 {% if steps_count > 1 and menu_type == '2' %}
                     <div id="simplecheckout_step_menu" class="simplecheckout-vertical-menu simplecheckout-bottom-menu">
                         {% for i in 1..steps_count %}
                             <div class="checkout-heading simple-step-vertical" style="display:none" data-onclick="gotoStep" data-step="{{ i }}"><h4 class="panel-title">{{ step_names[i-1] }}</h4></div>
                         {% endfor %}
                     </div>
-                {% endif %}           
-            
+                {% endif %}
+
             {% else %}
                 <div class="content">{{ text_error }}</div>
+
+                <style>.basket-form__title{text-align:center;margin-top:50px}.simplecheckout{text-align:center}.simplecheckout-button-block{text-align:center}.simplecheckout-button-empty{text-align:center;display:inline-block}.button_oc{color:#fff!important;text-decoration:none}</style>
+
                 <div style="display:none;" id="simplecheckout_cart_total">{{ cart_total }}</div>
                 {% if display_weight %}
                     <div style="display:none;" id="simplecheckout_cart_weight">{{ weight }}</div>
                 {% endif %}
                 {% if not popup and not as_module %}
                     <div class="simplecheckout-button-block buttons">
-                        <div class="simplecheckout-button-right right"><a href="{{ continue }}" class="button btn-primary button_oc btn"><span>{{ button_continue }}</span></a></div>
+                        <div class="simplecheckout-button-empty"><a href="{{ continue }}" class="button btn-primary button_oc btn"><span>{{ button_continue }}</span></a></div>
                     </div>
                 {% endif %}
             {% endif %}

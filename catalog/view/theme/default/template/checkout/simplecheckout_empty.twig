@@ -3,28 +3,8 @@
 {% endif %}
   <div class="content">{{ text_error }}</div>
   <div class="simplecheckout-button-block buttons">
-    <div class="simplecheckout-button-empty"><a href="{{ continue }}" class="button btn-primary button_oc btn"><span>{{ button_continue }}</span></a></div>
+    <div class="simplecheckout-button-right right"><a href="{{ continue }}" class="button btn-primary button_oc btn"><span>{{ button_continue }}</span></a></div>
   </div>
-<style>
-.basket-form__title {
-    text-align: center;
-    margin-top: 50px;
-}
-.simplecheckout {
-    text-align:center;
-}
-.simplecheckout-button-block {
-    text-align:center;
-}
-.simplecheckout-button-empty {
-    text-align: center;
-    display: inline-block;
-}
-.button_oc {
-    color: #fff;
-    text-decoration: none;
-}
-</style>
 {% if not ajax and not popup and not as_module %}
 {% include simple_footer %}
 {% endif %}
