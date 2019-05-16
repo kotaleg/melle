@@ -326,7 +326,7 @@ class pro_discount
                     $products_data[$pd_key]['total'] = $full_price;
                 } else {
                     if ($special) {
-                        if (isset($special['available_count'])) {
+                        if (isset($special['available_count']) && $special['available_count']) {
                             $products_data[$pd_key]['total'] = 0;
 
                             for ($i=1; $i <= $pd['quantity']; $i++) {
@@ -336,14 +336,13 @@ class pro_discount
                                     if ($pd['price'] > 0 && $pd['price'] > $special['special']) {
                                         $this->updateSkidosik(($pd['price'] - $special['special']));
                                     }
-
                                 } else {
                                     $products_data[$pd_key]['total'] += $pd['price'];
                                 }
                             }
                         } else {
-                            $products_data[$pd_key]['price'] = $special;
-                            $products_data[$pd_key]['total'] = $special * $pd['quantity'];
+                            $products_data[$pd_key]['price'] = $special['special'];
+                            $products_data[$pd_key]['total'] = $special['special'] * $pd['quantity'];
                         }
                     }
                 }
