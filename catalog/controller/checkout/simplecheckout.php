@@ -26,7 +26,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
         $this->language->load('checkout/simplecheckout');
 
         if (empty($args)) {
-            $this->document->setTitle($this->language->get('heading_title'));
+            $this->document->setTitle($this->language->get('text_cart'));
         }
 
         $this->_templateData['breadcrumbs'] = array();
@@ -46,7 +46,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
         }
 
         $this->_templateData['breadcrumbs'][] = array(
-            'text'      => $this->language->get('heading_title'),
+            'text'      => $this->language->get('text_cart'),
             'href'      => $this->url->link('checkout/simplecheckout', '', 'SSL'),
             'separator' => $this->language->get('text_separator')
         );
@@ -166,7 +166,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                     $payment_method = $this->session->data['payment_method'];
 
                     $additonal_path = '';
-                    
+
                     if ($this->simplecheckout->getOpencartVersion() >= 230) {
                         $additonal_path = 'extension/';
                     }
@@ -192,8 +192,8 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
             } else {
                 if ($this->simplecheckout->getSettingValue('agreementCheckboxInit')) {
                     if ($this->simplecheckout->getSettingValue('agreementType') == 2) {
-                        $agreement_id = $this->simplecheckout->getSettingValue('agreementId');  
-                        $agreements = $this->simplecheckout->getSettingValue('agreementIds');  
+                        $agreement_id = $this->simplecheckout->getSettingValue('agreementId');
+                        $agreements = $this->simplecheckout->getSettingValue('agreementIds');
 
                         if ($agreement_id) {
                             $this->_templateData['agreements'] = array($agreement_id);
@@ -207,7 +207,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                     }
                 } else {
                     $this->_templateData['agreements'] = array();
-                }            
+                }
             }
 
 
@@ -276,8 +276,8 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
         $this->_templateData['use_google_api']                   = $this->simplecheckout->getCommonSetting('useGoogleApi');
         $this->_templateData['enable_reloading_of_payment_form'] = $this->simplecheckout->getSettingValue('enableAutoReloaingOfPaymentFrom');
         $this->_templateData['menu_type']                        = $this->simplecheckout->getSettingValue('menuType');
-        $this->_templateData['language_code']                    = isset($this->session->data['language']) && strlen($this->session->data['language']) > 0 && strlen($this->session->data['language']) < 6 ? $this->session->data['language'] : $this->config->get('config_language'); 
-        
+        $this->_templateData['language_code']                    = isset($this->session->data['language']) && strlen($this->session->data['language']) > 0 && strlen($this->session->data['language']) < 6 ? $this->session->data['language'] : $this->config->get('config_language');
+
         $this->_templateData['errors'] = array();
 
         $errors = $this->simplecheckout->getErrors();
@@ -298,8 +298,8 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
 
             $this->_templateData['simple_styles'] = $links['styles'];
             $this->_templateData['simple_scripts'] = $links['scripts'];
-        } 
-        
+        }
+
         $this->_templateData['text_proceed_payment']    = $this->language->get('text_proceed_payment');
         $this->_templateData['text_payment_form_title'] = $this->language->get('text_payment_form_title');
         $this->_templateData['text_need_save_changes']  = $this->language->get('text_need_save_changes');
@@ -317,7 +317,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
         $this->_templateData['button_continue']         = $this->language->get('button_continue');
         $this->_templateData['continue']                = $this->url->link('common/home');
         $this->_templateData['use_storage']             = !$this->customer->isLogged() && !$this->simplecheckout->getSettingValue('useCookies') && $this->simplecheckout->getSettingValue('useStorage');
-        
+
         $this->_templateData['scroll_to_error']            = $this->simplecheckout->getCommonSetting('scrollingChanged') ? $this->simplecheckout->getCommonSetting('scrollToError') : $this->simplecheckout->getSettingValue('scrollToError');
 
         $this->_templateData['notification_default']       = $this->simplecheckout->getCommonSetting('notificationChanged') ? $this->simplecheckout->getCommonSetting('notificationDefault') : true;
@@ -337,7 +337,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
         }
 
         $minicart = $this->simplecheckout->getSettingValue('minicartText', 'cart');
-            
+
         $text_items = '';
         $language_code = $this->simplecheckout->getCurrentLanguageCode();
 
@@ -353,12 +353,12 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
 
         if (strpos($text_items, '{quantity}') !== false || strpos($text_items, '{total}') !== false) {
             $find = array(
-                '{quantity}', 
+                '{quantity}',
                 '{total}'
             );
 
             $replace = array(
-                '{quantity}' => 0, 
+                '{quantity}' => 0,
                 '{total}' => $this->simplecheckout->formatCurrency(0)
             );
 
@@ -380,7 +380,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
 
             $agreement_id = $this->simplecheckout->getSettingValue('agreementId');
             $lang_id = ($this->config->get('config_template') == 'shoppica' || $this->config->get('config_template') == 'shoppica2') ? 'text_agree_shoppica' : 'text_agree';
-            $agreement_text = $this->language->get($lang_id);  
+            $agreement_text = $this->language->get($lang_id);
 
             if ($disable_popup) {
                 $agreement_text = str_replace('href=', 'target="_blank" href=', $agreement_text);
@@ -391,7 +391,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
 
             if ($agreement_id) {
                 $title = $this->simplecheckout->getInformationTitle($agreement_id);
-                
+
                 if ($this->simplecheckout->getSettingValue('agreementType') == 2) {
                     $this->_templateData['text_agreements'][$agreement_id] = sprintf($agreement_text, $this->url->link($this->simplecheckout->getInformationRoute($disable_popup), $this->simplecheckout->getAdditionalParams() . 'information_id=' . $agreement_id, 'SSL'), $title, $title);
                 } else {
@@ -404,7 +404,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
 
                 $this->_templateData['error_warning_agreement'] = $errors;
             } else {
-                $agreements = $this->simplecheckout->getSettingValue('agreementIds');   
+                $agreements = $this->simplecheckout->getSettingValue('agreementIds');
                 if (!empty($agreements) && is_array($agreements)) {
                     if ($this->simplecheckout->getSettingValue('agreementType') == 2) {
                         $errors = array();
@@ -413,7 +413,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                             $title = $this->simplecheckout->getInformationTitle($agreement_id);
 
                             $this->_templateData['text_agreements'][$agreement_id] = sprintf($agreement_text, $this->url->link($this->simplecheckout->getInformationRoute($disable_popup), $this->simplecheckout->getAdditionalParams() . 'information_id=' . $agreement_id, 'SSL'), $title, $title);
-                            
+
                             $errors[$agreement_id] = sprintf($this->language->get('error_agree'), $title);
                         }
 
@@ -433,7 +433,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                             $title = $this->simplecheckout->getInformationTitle($agreement_id);
 
                             $links[] = sprintf($agreement_link, $this->url->link($this->simplecheckout->getInformationRoute($disable_popup), $this->simplecheckout->getAdditionalParams() . 'information_id=' . $agreement_id, 'SSL'), $title, $title);
-                            
+
                             $errors[$agreement_id] = sprintf($this->language->get('error_agree'), $title);
                         }
 
@@ -448,7 +448,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                 $this->config->set('config_seo_url', $seo_url);
             }
         }
-        
+
         $childrens = array();
 
         if (!$this->simplecheckout->isAjaxRequest() && !$this->_templateData['popup'] && !$this->_templateData['as_module']) {
@@ -557,7 +557,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
         if (!empty($from['customer']) && !empty($from['customer']['email'])) {
             $data['email'] = $from['customer']['email'];
         }
-        
+
         if (!empty($from['customer']) && !empty($from['customer']['telephone'])) {
             $data['telephone'] = $from['customer']['telephone'];
         }
@@ -578,7 +578,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
             $this->load->model('tool/simpleapi');
 
             $cart_id = $this->model_tool_simpleapi->updateAbandonedCart($data);
-            
+
             $this->session->data['simple_cart_id'] = $cart_id;
         }
     }
@@ -587,8 +587,8 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
         $error = false;
 
         if ($this->simplecheckout->getSettingValue('displayAgreementCheckbox')) {
-            $agreement_id = $this->simplecheckout->getSettingValue('agreementId');  
-            $agreements = $this->simplecheckout->getSettingValue('agreementIds');  
+            $agreement_id = $this->simplecheckout->getSettingValue('agreementId');
+            $agreements = $this->simplecheckout->getSettingValue('agreementIds');
 
             if ($agreement_id) {
                 $agreements = array($agreement_id);
@@ -608,7 +608,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                 if (!in_array($find, $this->_templateData['agreements'])) {
                     $this->simplecheckout->addError('agreement');
                     $error = true;
-                }            
+                }
             }
         }
 
@@ -661,13 +661,13 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                 if (empty($info['password'])) {
                     $this->load->model('tool/simpleapimain');
 
-                    if ($this->config->get('simple_disable_method_checking')) { 
+                    if ($this->config->get('simple_disable_method_checking')) {
                         $info['password'] = $this->model_tool_simpleapimain->getRandomPassword();
                     } else {
                         if (method_exists($this->model_tool_simpleapimain, 'getRandomPassword') || property_exists($this->model_tool_simpleapimain, 'getRandomPassword') || (method_exists($this->model_tool_simpleapimain, 'isExistForSimple') && $this->model_tool_simpleapimain->isExistForSimple('getRandomPassword'))) {
                             $info['password'] = $this->model_tool_simpleapimain->getRandomPassword();
                         }
-                    }                    
+                    }
                 }
 
                 $this->model_account_customer->addCustomer($info);
@@ -779,7 +779,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                 } else {
                     $this->model_account_customer->editCustomer($this->customer->getId(), $this->session->data['simple']['customer']);
                 }
-                
+
                 $this->simplecheckout->saveCustomFields(array('customer'), 'customer', $this->customer->getId());
 
                 if ($this->simplecheckout->isFieldUsed('customer_group_id', 'customer')) {
@@ -851,7 +851,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                 $customer_info['email'] = $emptyEmail;
             } else {
                 $customer_info['email'] = 'empty'.time().'@localhost.net';
-            }            
+            }
         }
 
         $totals = array();
@@ -881,7 +881,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
                 $sort_order[$key] = $this->config->get($result['code'] . '_sort_order');
             } else {
                 $sort_order[$key] = $this->config->get('total_' . $result['code'] . '_sort_order');
-            }                
+            }
         }
 
         array_multisort($sort_order, SORT_ASC, $results);
@@ -1165,7 +1165,7 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
 
             if ($version < 300) {
                 $this->load->model('affiliate/affiliate');
-                
+
                 $affiliate_info = $this->model_affiliate_affiliate->getAffiliateByCode($this->request->cookie['tracking']);
             } else {
                 $this->load->model('account/customer');
@@ -1263,11 +1263,11 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
         $this->simplecheckout->saveCustomFields(array('customer', 'payment_address', 'payment', 'shipping_address', 'shipping'), 'order', $order_id);
 
         $simple_cart_id = !empty($this->session->data['simple_cart_id']) ? $this->session->data['simple_cart_id'] : 0;
-            
+
         if ($simple_cart_id) {
             $this->load->model('tool/simpleapi');
             $this->model_tool_simpleapi->deleteAbandonedCart($simple_cart_id);
-        }        
+        }
 
         return $order_id;
     }
