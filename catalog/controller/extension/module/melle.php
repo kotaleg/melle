@@ -101,6 +101,10 @@ class ControllerExtensionModuleMelle extends Controller
         // GTM EVENTS
         $this->load->controller('extension/module/melle/initGTM');
 
+        if (strcmp($this->model_tool_base->getPageType(), 'checkout') === 0) {
+            $this->initCheckoutRP();
+        }
+
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
     }
@@ -158,6 +162,19 @@ class ControllerExtensionModuleMelle extends Controller
         $this->load->model('checkout/cart');
         $cart_data = $this->model_checkout_cart->getCart();
         $state = array_merge($state, $cart_data);
+
+        // SET STATE
+        $this->document->addState($state['id'], json_encode($state));
+    }
+
+    public function initCheckoutRP()
+    {
+        // VARIABLE
+        $state['id'] = "{$this->codename}_checkout_rp";
+
+        $this->load->model('extension/module/pro_related');
+        $state['cart_related_products'] =
+            $this->model_extension_module_pro_related->prepareCartProducts();
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));

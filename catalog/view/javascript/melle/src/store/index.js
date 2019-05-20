@@ -22,6 +22,8 @@ import review from './modules/product/review'
 import catalog from './modules/catalog/catalog'
 import filter from './modules/catalog/filter'
 
+// CHECKOUT
+import checkoutrp from './modules/checkout/related'
 
 Vue.use(Vuex)
 
@@ -41,6 +43,7 @@ export default new Vuex.Store({
         review,
         catalog,
         filter,
+        checkoutrp,
     },
     strict: debug,
 })
