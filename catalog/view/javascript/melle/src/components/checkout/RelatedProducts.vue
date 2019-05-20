@@ -1,6 +1,6 @@
 <template>
    <div class="other-prod">
-      <h3 class="other-prod__title">Похожие товары</h3>
+      <h3 class="other-prod__title">С этим товаром покупают</h3>
       <carousel
          :perPage="4"
          :navigationEnabled="true"
@@ -46,11 +46,11 @@ export default {
     created() {
       this.$store.dispatch('checkoutrp/initData')
     },
-    mouunted() {
+    mounted() {
         // REMOVE PRERENDERED CONTENT
-        let prerender = document.getElementById('rendered-checkout-rp')
-        console.log(prerender)
-        if (prerender) { prerender.remove() }
+        let crpprerender = document.getElementById('rendered-checkout-rp')
+        console.log(crpprerender)
+        if (crpprerender) { prerender.remove() }
     }
 }
 </script>
