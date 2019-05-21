@@ -15,7 +15,7 @@ class ModelExtensionModuleProRelated extends Model
         }, $this->cart->getProducts());
     }
 
-    public function prepareCartProducts($max = 4)
+    public function prepareCartProducts($max = 10)
     {
         $products = array();
         $results = $this->getCartProducts();

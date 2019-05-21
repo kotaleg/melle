@@ -1,5 +1,5 @@
 <template>
-   <div class="other-prod">
+   <div class="other-prod checkout-slide">
       <h3 class="other-prod__title">С этим товаром покупают</h3>
       <carousel
          :perPage="4"
