@@ -191,5 +191,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     {{melle_mobile_menu}}
 
     <section class="section section-1" data-anchor="section-1">
+       {% if rhc %}
+       <div id="rendered-header-content">{{rhc}}</div>
+       {% endif %}
        <melle-header></melle-header>
     </section>

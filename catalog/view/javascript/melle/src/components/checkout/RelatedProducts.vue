@@ -48,9 +48,9 @@ export default {
     },
     mounted() {
         // REMOVE PRERENDERED CONTENT
-        let crpprerender = document.getElementById('rendered-checkout-rp')
-        console.log(crpprerender)
-        if (crpprerender) { prerender.remove() }
+        let prerender = document.getElementById('rendered-checkout-rp')
+        // console.log(prerender)
+        if (prerender) { prerender.remove() }
     }
 }
 </script>

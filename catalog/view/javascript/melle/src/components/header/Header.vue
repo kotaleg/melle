@@ -215,6 +215,11 @@ export default {
         $('.melle_clear_cart').on('click', () => {
             this.clearCartRequest()
         })
+
+        // REMOVE PRERENDERED CONTENT
+        let prerender = document.getElementById('rendered-header-content')
+        // console.log(prerender)
+        if (prerender) { prerender.remove() }
     },
 }
 </script>

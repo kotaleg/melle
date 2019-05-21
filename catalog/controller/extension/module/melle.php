@@ -107,6 +107,26 @@ class ControllerExtensionModuleMelle extends Controller
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
+        return $state;
+    }
+
+    public function renderHeaderContent($state)
+    {
+        $data = array();
+
+        $data['base'] = $state['base'];
+        $data['logo'] = $state['logo'];
+
+        $data['phone'] = $state['phone'];
+        $data['phoneLink'] = preg_replace('/\s\s+/', '', "tel:{$data['phone']}");
+
+        $data['delivery_link'] = $state['delivery_link'];
+        $data['is_logged'] = $state['is_logged'];
+        $data['account_link'] = $state['account_link'];
+        $data['logout_link'] = $state['logout_link'];
+        $data['menu'] = $state['menu'];
+
+        return $this->model_extension_pro_patch_load->view("{$this->route}/header_prerender", $data);
     }
 
     public function initGTM()
@@ -252,6 +272,43 @@ class ControllerExtensionModuleMelle extends Controller
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
+        return $state;
+    }
+
+    public function renderProductContent($state)
+    {
+        $data = array();
+
+        $data['product_id'] = $state['product_id'];
+        $data['name'] = $state['name'];
+        $data['manufacturer'] = $state['manufacturer'];
+        $data['current_category'] = $state['current_category'];
+        $data['quantity'] = 1;
+
+        $data['options'] = $state['options'];
+        $data['size_list'] = $state['size_list'];
+
+        $data['is_options_for_product'] = $state['is_options_for_product'];
+
+        $data['zvezdochka'] = $state['zvezdochka'];
+        $data['special_text'] = $state['special_text'];
+
+        $data['getSpecial'] = $state['default_values']['special'];
+
+        $data['isSpecial'] = $data['getSpecial'] > 0 ? true : false;
+        $data['getActivePrice'] = $state['default_values']['price'];
+
+        $data['getRating'] = array();
+        for ($i=0; $i < 5; $i++) {
+            if ($state['default_values']['rating'] > 0
+            && $state['default_values']['rating'] > $i) {
+                $data['getRating'][] = true;
+            } else {
+                $data['getRating'][] = false;
+            }
+        }
+
+        return $this->model_extension_pro_patch_load->view("{$this->route}/product_prerender", $data);
     }
 
     public function initProductReview($product_id)
@@ -266,7 +323,6 @@ class ControllerExtensionModuleMelle extends Controller
         $this->document->addState($state['id'], json_encode($state));
     }
 
-
     public function initCatalog()
     {
         // VARIABLE
@@ -274,9 +330,6 @@ class ControllerExtensionModuleMelle extends Controller
 
         $this->load->model('catalog/super');
         $state = array_merge($state, $this->model_catalog_super->getProducts());
-
-        // PRE-RENDER
-        $this->renderCatalogContent($state);
 
         $state['design_col'] = true;
         $state['current_category'] = $this->model_tool_base->getCurrentCategoryName();
@@ -318,6 +371,7 @@ class ControllerExtensionModuleMelle extends Controller
             $data['products'][] = $product;
         }
 
+        $data['current_category'] = $state['current_category'];
         $data['product_total'] = $state['product_total'];
 
         $data['canLoadMore'] = false;
@@ -344,5 +398,28 @@ class ControllerExtensionModuleMelle extends Controller
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
+        return $state;
+    }
+
+    public function renderFilterContent($state)
+    {
+        $data = array();
+
+        $data['product_total'] = 0;
+        $data['manufacturers'] = $state['filter_data']['manufacturers'];
+        $data['all_sizes'] = $state['filter_data']['all_sizes'];
+        $data['all_colors'] = $state['filter_data']['all_colors'];
+        $data['all_materials'] = $state['filter_data']['all_materials'];
+
+        $data['min_price'] = $state['filter_data']['min_price'];
+        $data['max_price'] = $state['filter_data']['max_price'];
+        $data['min_den'] = $state['filter_data']['min_den'];
+        $data['max_den'] = $state['filter_data']['max_den'];
+
+        $data['hit'] = $state['filter_data']['hit'];
+        $data['neww'] = $state['filter_data']['neww'];
+        $data['act'] = $state['filter_data']['act'];
+
+        return $this->model_extension_pro_patch_load->view("{$this->route}/filter_prerender", $data);
     }
 }

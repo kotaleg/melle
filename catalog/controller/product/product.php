@@ -14,11 +14,6 @@ class ControllerProductProduct extends Controller {
 
         $this->load->model('catalog/category');
 
-        $this->document->addScript('catalog/view/javascript/melle/query/zoom/jquery.zoom.min.js');
-        $this->document->addScript('catalog/view/javascript/melle/query/slick/slick.js');
-        $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick.css');
-        $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick-theme.css');
-
         if (isset($this->request->get['path'])) {
             $path = '';
 
@@ -223,12 +218,11 @@ class ControllerProductProduct extends Controller {
             $this->document->setDescription($product_info['meta_description']);
             $this->document->setKeywords($product_info['meta_keyword']);
             $this->document->addLink($this->url->link('product/product', 'product_id=' . $this->request->get['product_id']), 'canonical');
-            // $this->document->addScript('catalog/view/javascript/jquery/magnific/jquery.magnific-popup.min.js');
-            // $this->document->addStyle('catalog/view/javascript/jquery/magnific/magnific-popup.css');
-            // $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment.min.js');
-            // $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment-with-locales.min.js');
-            // $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
-            // $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+
+            $this->document->addScript('catalog/view/javascript/melle/query/zoom/jquery.zoom.min.js');
+            $this->document->addScript('catalog/view/javascript/melle/query/slick/slick.js');
+            $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick.css');
+            $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick-theme.css');
 
             $data['heading_title'] = $product_info['name'];
 
@@ -242,7 +236,8 @@ class ControllerProductProduct extends Controller {
             $data['znachek'] = $this->model_extension_module_pro_znachek->getZnachek($product_info['znachek'], true);
             $data['h1'] = $product_info['h1'];
 
-            $this->load->controller('extension/module/melle/initProduct', $product_id);
+            $product_state = $this->load->controller('extension/module/melle/initProduct', $product_id);
+            $data['rpc'] = $this->load->controller('extension/module/melle/renderProductContent', $product_state);
 
             $data['text_minimum'] = sprintf($this->language->get('text_minimum'), $product_info['minimum']);
             $data['text_login'] = sprintf($this->language->get('text_login'), $this->url->link('account/login', '', true), $this->url->link('account/register', '', true));

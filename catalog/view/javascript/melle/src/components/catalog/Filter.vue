@@ -240,6 +240,11 @@ export default {
                 }
             });
         }
+
+        // REMOVE PRERENDERED CONTENT
+        let prerender = document.getElementById('rendered-filter-content')
+        // console.log(prerender)
+        if (prerender) { prerender.remove() }
     },
 }
 </script>

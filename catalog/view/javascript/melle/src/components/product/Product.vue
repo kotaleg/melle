@@ -32,7 +32,7 @@
                         class="hidden-sm"
                         :href="size_list">таблица<br>размеров</a>
 
-                </div>
+               </div>
             </div>
          </div>
 
@@ -44,7 +44,7 @@
                 <input id="productCounter" class="item_col keyPressedNum" v-model.number="quantity">
                 <button @click="quantityHandler('+')" class="item_plus" type="button">+</button>
 
-                <span v-show="quantity >= getActiveMaxQuantity" class="catalog__item-count_label js-product-count-block"">
+                <span v-show="quantity >= getActiveMaxQuantity" class="catalog__item-count_label js-product-count-block">
                     доступно:
                     <span class="js-product-count">{{ getActiveMaxQuantity }}</span>
                 </span>
@@ -148,6 +148,11 @@ export default {
     },
     mounted() {
         this.$store.dispatch('product/selectFirstCombination')
+
+        // REMOVE PRERENDERED CONTENT
+        let prerender = document.getElementById('rendered-product-content')
+        // console.log(prerender)
+        if (prerender) { prerender.remove() }
     },
 }
 </script>

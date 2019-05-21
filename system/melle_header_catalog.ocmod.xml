@@ -19,7 +19,9 @@
                 $data['og'] = array();
                 $data['og']['image'] = $this->model_tool_base->getOgImage();
 
-                $this->load->controller('extension/module/melle/initHeader');
+                $header_state = $this->load->controller('extension/module/melle/initHeader');
+                $data['rhc'] = $this->load->controller('extension/module/melle/renderHeaderContent', $header_state);
+
                 $this->load->controller('extension/module/melle/initCart');
 
                 $data['melle_mobile_menu'] = $this->load->controller('extension/module/melle/getMobileMenu');

@@ -53,6 +53,9 @@
                   <h1 class="prod-card__title">{{h1}}</h1>
 
                   <!-- PRODUCT ELEMENT -->
+                  {% if rpc %}
+                  <div id="rendered-product-content">{{rpc}}</div>
+                  {% endif %}
                   <melle-product></melle-product>
 
                   <div class="prod-card__description">{{description}}</div>

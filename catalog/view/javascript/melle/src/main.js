@@ -47,8 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
         el: '#' + Vue.prototype.$codename + '-mount',
     })
 
-    new Vue({
-        store,
-        el: '#' + Vue.prototype.$codename + '-checkout-bottom',
-    })
+    if (document.getElementById(Vue.prototype.$codename + '-checkout-bottom')) {
+        new Vue({
+            store,
+            el: '#' + Vue.prototype.$codename + '-checkout-bottom',
+        })
+    }
 })

@@ -21,6 +21,9 @@
 
          <div class="catalog__sidebar">
             <section class="sidebar">
+               {% if rfc %}
+               <div id="rendered-filter-content">{{rfc}}</div>
+               {% endif %}
                <melle-catalog-filter></melle-catalog-filter>
             </section>
          </div>

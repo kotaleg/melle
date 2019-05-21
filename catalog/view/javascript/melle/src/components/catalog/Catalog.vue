@@ -1,5 +1,7 @@
 <template>
     <div>
+    <h1>{{ current_category }}</h1>
+
     <div class="catalog_list_view">
        <ul v-if="product_total > 0" class="catalog__list" id="ivan_products_replace">
 
@@ -67,6 +69,7 @@ export default {
             'getSpecial',
         ]),
         ...mapState('catalog', [
+            'current_category',
             'products',
             'product_total',
         ]),

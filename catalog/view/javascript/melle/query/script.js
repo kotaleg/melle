@@ -90,8 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
     /* PRODUCT IMAGE END */
 
     /* FANCY START */
-    $('[data-fancybox]').fancybox({
-        // Options will go here
-    });
+    if(jQuery().fancybox) {
+        $('[data-fancybox]').fancybox({
+            // Options will go here
+        });
+    }
     /* FANCY END */
 });
