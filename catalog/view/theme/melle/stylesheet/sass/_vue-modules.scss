@@ -400,6 +400,11 @@
 
 
 /* CHECKOUT SLIDE */
+.VueCarousel-navigation {
+    button {
+        transform: none!important;
+    }
+}
 .checkout-slide {
     margin: 0!important;
 }
