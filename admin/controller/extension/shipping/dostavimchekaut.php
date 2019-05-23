@@ -116,18 +116,11 @@ class ControllerExtensionShippingDostavimchekaut extends Controller {
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
-		//if (isset($this->request->post['dostavimchekaut_status'])) {
-		//	$data['dostavimchekaut_status'] = $this->request->post['dostavimchekaut_status'];
-		//} else {
-		//	$data['dostavimchekaut_status'] = $this->config->get('dostavimchekaut_status');
-		//}
-		
-		
 		if (isset($this->request->post['shipping_dostavimchekaut_status'])) {
 			$data['shipping_dostavimchekaut_status'] = $this->request->post['shipping_dostavimchekaut_status'];
 		} else {
 			$data['shipping_dostavimchekaut_status'] = $this->config->get('shipping_dostavimchekaut_status');
-		}	
+		}
 
 		if (isset($this->request->post['shipping_dostavimchekaut_sort_order'])) {
 			$data['shipping_dostavimchekaut_sort_order'] = $this->request->post['shipping_dostavimchekaut_sort_order'];
@@ -164,20 +157,33 @@ class ControllerExtensionShippingDostavimchekaut extends Controller {
 		//}
 
 //==============================================================================================================
+		$data['shipping_dostavimchekaut_rusha_markup'] = "";
+		if (isset($this->request->post['shipping_dostavimchekaut_rusha_markup'])) {
+			$data['shipping_dostavimchekaut_rusha_markup'] = $this->request->post['shipping_dostavimchekaut_rusha_markup'];
+		} elseif ($this->config->get('shipping_dostavimchekaut_rusha_markup')) {
+			$data['shipping_dostavimchekaut_rusha_markup'] = $this->config->get('shipping_dostavimchekaut_rusha_markup');
+		}
+		$data['shipping_dostavimchekaut_moscow_markup'] = "";
+		if (isset($this->request->post['shipping_dostavimchekaut_moscow_markup'])) {
+			$data['shipping_dostavimchekaut_moscow_markup'] = $this->request->post['shipping_dostavimchekaut_moscow_markup'];
+		} elseif ($this->config->get('shipping_dostavimchekaut_moscow_markup')) {
+			$data['shipping_dostavimchekaut_moscow_markup'] = $this->config->get('shipping_dostavimchekaut_moscow_markup');
+		}
+		$data['shipping_dostavimchekaut_piter_markup'] = "";
+		if (isset($this->request->post['shipping_dostavimchekaut_piter_markup'])) {
+			$data['shipping_dostavimchekaut_piter_markup'] = $this->request->post['shipping_dostavimchekaut_piter_markup'];
+		} elseif ($this->config->get('shipping_dostavimchekaut_piter_markup')) {
+			$data['shipping_dostavimchekaut_piter_markup'] = $this->config->get('shipping_dostavimchekaut_piter_markup');
+		}
+		//16.04.2018
+		
 		$data['shipping_dostavimchekaut_rusha'] = "";
 		if (isset($this->request->post['shipping_dostavimchekaut_rusha'])) {
 			$data['shipping_dostavimchekaut_rusha'] = $this->request->post['shipping_dostavimchekaut_rusha'];
 		} elseif ($this->config->get('shipping_dostavimchekaut_rusha')) {
 			$data['shipping_dostavimchekaut_rusha'] = $this->config->get('shipping_dostavimchekaut_rusha');
 		}
-		
-		$data['shipping_dostavimchekaut_moscow'] = "";
-		if (isset($this->request->post['shipping_dostavimchekaut_moscow'])) {
-			$data['shipping_dostavimchekaut_moscow'] = $this->request->post['shipping_dostavimchekaut_moscow'];
-		} elseif ($this->config->get('shipping_dostavimchekaut_moscow')) {
-			$data['shipping_dostavimchekaut_moscow'] = $this->config->get('shipping_dostavimchekaut_moscow');
-		}	
-		
+				
 		$data['shipping_dostavimchekaut_nalojka'] = "";
 		if (isset($this->request->post['shipping_dostavimchekaut_nalojka'])) {
 			$data['shipping_dostavimchekaut_nalojka'] = $this->request->post['shipping_dostavimchekaut_nalojka'];
@@ -185,7 +191,21 @@ class ControllerExtensionShippingDostavimchekaut extends Controller {
 			$data['shipping_dostavimchekaut_nalojka'] = $this->config->get('shipping_dostavimchekaut_nalojka');
 		}
 		
-		
+		$data['shipping_dostavimchekaut_moscow'] = "";
+		if (isset($this->request->post['shipping_dostavimchekaut_moscow'])) {
+			$data['shipping_dostavimchekaut_moscow'] = $this->request->post['shipping_dostavimchekaut_moscow'];
+		} elseif ($this->config->get('shipping_dostavimchekaut_moscow')) {
+			$data['shipping_dostavimchekaut_moscow'] = $this->config->get('shipping_dostavimchekaut_moscow');
+		}
+		//16.04.2018				
+		$data['shipping_dostavimchekaut_piter'] = "";
+		if (isset($this->request->post['shipping_dostavimchekaut_piter'])) {
+			$data['shipping_dostavimchekaut_piter'] = $this->request->post['shipping_dostavimchekaut_piter'];
+		} elseif ($this->config->get('shipping_dostavimchekaut_piter')) {
+			$data['shipping_dostavimchekaut_piter'] = $this->config->get('shipping_dostavimchekaut_piter');
+		}
+		//16.04.2018		
+
 		$data['shipping_dostavimchekaut_token'] = "";
 		if (isset($this->request->post['shipping_dostavimchekaut_token'])) {
 			$data['shipping_dostavimchekaut_token'] = $this->request->post['shipping_dostavimchekaut_token'];

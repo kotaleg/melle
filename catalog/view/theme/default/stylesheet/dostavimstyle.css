@@ -480,7 +480,7 @@ text-transform: uppercase;
 @keyframes rotate31 {
   100% {transform: rotate(360deg);}
 }
-span.hidepvz{ display:none;}
+/*span.hidepvz{ display:none;}*/
 @media screen and (min-width:480px) and (max-width:800px) {
 .delivery-service-filter {
 		display: none;
@@ -494,4 +494,21 @@ span.hidepvz{ display:none;}
 .simplecheckout-block-content div.radio {
     margin-bottom: 20px;
     margin-top: 20px;
+}
+.hidepvz{ 
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+div.blockpvz > hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.quote label {
+    visibility: visible;
+}
+label[for="dostavimchekaut.dostavimchekaut3"] b {
+    display: none;
+}
+label[for="dostavimchekaut.dostavimchekaut0"] {
+    width: 100%;
 }

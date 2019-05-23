@@ -14,8 +14,8 @@ window.customerVarPhone = false;
 
 
 function main(){
-	
-	//===================================deliveryCity===================================================
+
+//===================================deliveryCity===================================================
 function sityApiDostavim(sityDostavim, regionDostavim){
 	$(sityDostavim).after('<div id="search_advice_wrapper"></div>');
 $(sityDostavim).keyup(function(I){
@@ -149,6 +149,7 @@ $(sityDostavim).keyup(function(I){
 //25.02.2019
     // Сортировка списка ПВЗ по первым буквам фильтра
     jQuery('input.address-filter').keyup(function(e){
+		console.log(1111);
         if (e.keyCode === 40) {            
             if (!jQuery('.pvz-item.selected').length) {
 				
@@ -245,16 +246,36 @@ document.addEventListener("mouseup", function() {
 //для оригинального opencart 
 
 function reloadDostavim(){
-	
-									if (typeof (reloadAll) === "function") {
-										reloadAll()
-									}
-									else
-									{
-										simplecheckout_reload('cart_changed');
-									}
-}
+        $.ajax({                    
+            url: "index.php?route=checkout/dostavimajaxquote",        
+		    type: 'post',
+		    dataType: 'json',
+            data: {
+				name:'dostavimCash',
+				dostadress: $("span#dostadress").text(),
+				dostphone: $("span#dostphone").text(),
+				dosttime: $("span#dosttime").text(),
+				dostmysd: $("span#dostmysd").text(),
+						//16/04/2019
+                dostprice: $('span#dostprice').text(),
+                dostday_max: $('span#dostday_max').text(),
+                dostday_min:  $('span#dostday_min').text()						
+						//
+			},//JSON.stringify(formData),
+            success: function (got)
+            {
+						$("input[value='dostavimchekaut.dostavimchekaut3']").click();		
+						$("input[value='dostavimchekaut.dostavimchekaut3']").trigger('change');				
+            },
+            error : function (msg) {                
+                return console.log(msg);
+            },
+            timeout: 3000
+        });  	
 
+						
+}	
+	
 	//здесь проверяем сколько раз перезагружалась симпла	
 	
 setTimeout(function() { 
@@ -267,7 +288,7 @@ if (typeof (reloadAll) === "function")
 		var nameDostavim = '#customer_firstname';
 		var telDostavim = '#customer_telephone';
 		var emailDostavim = '#customer_email';
-		//var addressDostavim = '#payment_address_address_2';//#shipping_address_address_2';
+		//var addressDostavim = '#payment_address_address_1';//#shipping_address_address_1';
 		window.addressDostavim = '#shipping_address_address_2';//#shipping_address_address_2';
 		window.addressDostavim2 = '#shipping_address_address_1';//#shipping_address_address_2';
 		var labeladress='label[for="shipping_address_address_2"]';
@@ -287,7 +308,6 @@ if (typeof (reloadAll) === "function")
 		window.addressDostavim2 = '#checkout_customer_main_address_1';//#shipping_address_address_2';
 		var CommentDostavim = '#checkout_customer_main_comment';
 		var labeladress='label[for="shipping_address_address_1"]';
-		var labeladress2='label[for="shipping_address_address_2"]';
 		var sityDostavim = '#checkout_customer_main_city';
 		var regionDostavim = '#checkout_customer_main_zone_id';
 		var indexDostavim = '#checkout_customer_main_postcode';
@@ -303,37 +323,21 @@ if (typeof (reloadAll) === "function")
         //if($('input:radio[value="dostavimchekaut.dostavimchekaut2"]').prop("checked")){
 		//         $('span.hidepvz').css('display','none');
         //}	
-		
-		
-		$('input[value="dostavimchekaut.dostavimchekaut3"]').change(function() {
-							$(addressDostavim).val('');
-				$(addressDostavim).attr('value','');
-				$(addressDostavim2).val('');
-				$(addressDostavim2).attr('value','');	
-		});
-		
-		
-        if($('input:radio[value="dostavimchekaut.dostavimchekaut3"]').prop("checked")){	
-	
-
-		
+        if($('input:radio[value="dostavimchekaut.dostavimchekaut3"]').prop("checked")){
 		        $('span.hidepvz').css('display','block');
 				$(addressDostavim).attr('readonly','readonly');
 				$(addressDostavim).css('display','none');
-				$(addressDostavim2).css('display','none');
-				$(labeladress).attr('style','display:none !important');	
-				$(labeladress2).attr('style','display:none !important');				
+				$(labeladress).attr('style','display:none !important');				
 				var $parents = $(addressDostavim).parents('tr');  //21.12.2018 
 				$parents.css('display','none'); //21.12.2018
+
+				
 				
         }	
 		else
 		{
 			//$(addressDostavim).val('');
 			//$(addressDostavim).attr('value','');
-				$(addressDostavim).attr('readonly','readonly');
-				$(addressDostavim).css('display','none');
-				$(labeladress).attr('style','display:none !important');
 			$('span.hidepvz').css('display','none');
 		}
 
@@ -487,14 +491,28 @@ var options2 = [];
   
                       // Обработчик клика по пункту списка ПВЗ
                     jQuery('.pvz-item').click(function(){
-						jQuery(addressDostavim).val(jQuery(this).text()+' ::'+jQuery(this).attr("serviceid")+'::'+jQuery(this).attr("pvzId")+'::3::');
-						jQuery(addressDostavim2).val(jQuery(this).text());
+			
 						
+						jQuery(addressDostavim).val(jQuery(this).text()+' ::'+jQuery(this).attr("serviceid")+'::'+jQuery(this).attr("pvzId")+'::'+jQuery(this).attr("costSD")+'::3::');
+						//jQuery(addressDostavim2).val(jQuery(this).text());						
 						jQuery(addressDostavim).attr('pvzId',jQuery(this).attr('pvzId'));
 						
                         jQuery('.pvz-item.selected').removeClass('selected').attr('tabindex', '-1');
                         jQuery(this).addClass('selected').attr('tabindex', '0').focus();        
                         jQuery('.address-filter').val(jQuery(this).text());
+						
+
+                        jQuery('.address-filter').attr('dostphone',jQuery(this).attr('phone'));
+                        jQuery('.address-filter').attr('dosttime',jQuery(this).attr('timetable'));
+                        jQuery('span#dostphone').text(jQuery(this).attr('phone'));
+                        jQuery('span#dosttime').text(jQuery(this).attr('timetable'));	
+                        jQuery('span#dostadress').text(jQuery(this).text());	
+                        jQuery('span#dostmysd').text(jQuery(this).attr("serviceid"));
+						//16/04/2019
+                        jQuery('span#dostprice').text(jQuery(this).attr("costsd"));
+                        jQuery('span#dostday_max').text(jQuery(this).attr("day_max"));
+                        jQuery('span#dostday_min').text(jQuery(this).attr("day_min"));						
+						//						
                         jQuery('.address-filter').attr('serviceId',jQuery(this).attr('serviceId'));
                         jQuery('.address-filter').attr('pvzId',jQuery(this).attr('pvzId'));
                         jQuery('.address-filter').attr('pvzCode', jQuery(this).attr('pvzCode'));
@@ -508,34 +526,10 @@ var options2 = [];
 						
 						
                         jQuery('.pvz-div').hide();
+						
 						reloadDostavim();
                     });
-				   
-  
-					//клик по кластеру
-					jQuery('body').on("click", '.pvz-cluster-balloon', function(e){
-						e.preventDefault();
-						
-						jQuery(addressDostavim).val(jQuery(this).text()+' ::'+jQuery(this).attr("serviceid")+'::'+jQuery(this).attr("pvzcode")+'::3::');
-						jQuery(addressDostavim2).val(jQuery(this).text());
-						jQuery(addressDostavim).attr('pvzId',jQuery(this).attr('pvzId'));
-						
-						jQuery('.pvz-list-link').html(jQuery(this).html());
-						//jQuery(addressDostavim).val(jQuery(this).html().split('>')[1]);
-						jQuery('.address-filter').attr('pvzId', jQuery(this).children('img').attr("pvzId"));
-						jQuery('.address-filter').attr('serviceid', jQuery(this).children('img').attr("pvzId"));		
-						jQuery('.address-filter').attr('pvzguid', jQuery(this).attr("pvzguid"));
-						jQuery('.address-filter').attr('pvzcode', jQuery(this).attr("pvzcode"));
-						jQuery('.address-filter').attr('serviceid', jQuery(this).attr("serviceid"));
 
-						jQuery('.pvz-div').hide();
-                        jQuery('#exampleModal').css('display','none');	
-                        jQuery('#overlayDostavim').css('display','none');						
-						reloadDostavim();
-					});
-    
-    // Проверка заполнения полей
-	
 //25.02.2019					
                     jQuery('.pvz-item').keyup(function(e){
                         e.preventDefault();               
@@ -560,7 +554,44 @@ var options2 = [];
                         };        
                         jQuery(addressDostavim).val(jQuery(this).text());
                     });
-//25.02.2019	
+//25.02.2019					
+  
+					//клик по кластеру
+					jQuery('body').on("click", '.pvz-cluster-balloon', function(e){
+						e.preventDefault();
+						
+						jQuery(addressDostavim).val(jQuery(this).text()+' ::'+jQuery(this).attr("serviceid")+'::'+jQuery(this).attr("pvzcode")+'::'+jQuery(this).attr("costSD")+'::3::');
+						jQuery(addressDostavim).attr('pvzId',jQuery(this).attr('pvzId'));
+						
+						jQuery('.pvz-list-link').html(jQuery(this).html());
+						//jQuery(addressDostavim).val(jQuery(this).html().split('>')[1]);
+						
+
+                        jQuery('.address-filter').attr('dostphone',jQuery(this).attr('phone'));
+                        jQuery('.address-filter').attr('dosttime',jQuery(this).attr('timetable'));
+                        jQuery('span#dostphone').text(jQuery(this).attr('phone'));
+                        jQuery('span#dosttime').text(jQuery(this).attr('timetable'));	
+                        jQuery('span#dostadress').text(jQuery(this).text());					
+                        jQuery('span#dostmysd').text(jQuery(this).attr("serviceid"));
+						//16/04/2019
+                        jQuery('span#dostprice').text(jQuery(this).attr("costsd"));
+                        jQuery('span#dostday_max').text(jQuery(this).attr("day_max"));
+                        jQuery('span#dostday_min').text(jQuery(this).attr("day_min"));						
+						//
+						
+						jQuery('.address-filter').attr('pvzId', jQuery(this).children('img').attr("pvzId"));
+						jQuery('.address-filter').attr('serviceid', jQuery(this).children('img').attr("pvzId"));		
+						jQuery('.address-filter').attr('pvzguid', jQuery(this).attr("pvzguid"));
+						jQuery('.address-filter').attr('pvzcode', jQuery(this).attr("pvzcode"));
+						jQuery('.address-filter').attr('serviceid', jQuery(this).attr("serviceid"));
+
+						jQuery('.pvz-div').hide();
+                        jQuery('#exampleModal').css('display','none');	
+                        jQuery('#overlayDostavim').css('display','none');						
+						reloadDostavim();
+					});
+    
+    // Проверка заполнения полей
 
 
 	//var checkFormPhone = function(formVal) {

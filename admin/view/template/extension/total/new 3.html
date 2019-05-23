@@ -1,0 +1,185 @@
+{{ header }}
+<style>.container-fluid {
+    padding-left: 4%;}</style>
+{{ column_left }}
+<style>table#discounts td {
+padding: 5px;}</style>
+<div id="content" class="{{ module_id }}">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-{{ module_id }}" data-toggle="tooltip" title="сохранить" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        		<a href="{{ exit }}" data-toggle="tooltip" title="выйти" class="btn btn-default"><i class="fa fa-reply"></i></a>
+    		</div>
+      		<h1>Управление оплатой от Dostav.im</h1>
+      		<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+      		</ul>
+    	</div>
+  	</div>
+	<div class="container-fluid">
+		{% if errors %}
+			{% for errors in error %}
+				<div class="alert alert-danger">
+    				<i class="fa fa-exclamation-circle"></i> {{ error }}
+      				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				</div>
+			{% endfor %}
+		{% elseif success %}
+			<div class="alert alert-success">
+				<i class="fa fa-check-circle"></i> {{ success }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3>Управление оплатой от Dostav.im</h3>
+			</div>
+			<div class="panel-body">
+        		<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-{{ module_id }}" class="form-horizontal">
+       	        
+          	        <div class="html-content">
+          	        	{{ set html_count = 0 }}
+    {% for options, settings in html %}       	
+      						<div class="html-pane{{ (html_count == 0) ? 'active' : '' }}" id="html-{{ html|replace({'%this%': '_', '%that%': '-'}) }}">
+							   		{% for option, options in key %}					
+									{{ set key_id = key|replace({'%this%': '_', '%that%': '-'}) }}
+									{% if option == 'title' %}
+										<h2>{{ _context['entry_' ~ key]|default }}</h2>
+										{% elseif $option == 'notice' %}
+										<span class="notice">{{ _context['entry_' ~ key]|default }}</span>							
+										{% elseif $option == 'hidden' %}
+										<input type="hidden" name="{{ _context[extension ~ '_' ~ key]|default }}" value="{{ _context[extension ~ '_' ~ key]|default }}" />
+									{% else %}
+										<div class="form-group {{ _context[module_id ~ '-' ~ key_id]|default }}">
+											<label class="col-sm-2 control-label" for="input-{{ key_id }}">
+													{{ _context['entry_' ~ key]|default }}
+											</label>
+											<div class="col-sm-10">
+											{% if option == 'html' %}
+													{{ _context[extension ~ '_' ~ key]|default }}
+												{% elseif $option == 'text' %}
+													<span id="input-{{ key_id }}" class="input-text">
+														{{ _context[extension ~ '_' ~ key]|default }}
+													</span>
+													{% elseif $option == 'input' %}
+														<input type="text" name="{{ _context[extension ~ '_' ~ key]|default }}" value="{{ _context[extension ~ '_' ~ key]|default }}" placeholder="{{ _context['entry_' ~ key]|default }}" id="input-{{ key_id }}" class="form-control" />
+													{% elseif $option == 'select' %}
+													<select name="{{ _context[extension ~ '_' ~ key]|default }}" id="input-{{ key_id }}" class="form-control">
+														{% for key in item %}
+															<option value="{{ item[0] }}"
+															{{ (item[0] === {{ _context[extension ~ '_' ~ key]|default }}) ? ' selected=`selected`' : '' }}
+															>{{ item[1] }}
+															</option>
+														{% endfor %}
+													</select>
+													{% elseif $option == 'checkbox' %}
+													<div class="well well-sm" style="height: 100px; overflow: auto;">
+														{% for key in item %}
+															<div class="checkbox">
+																<label>
+																	<input type="checkbox" name="{{ _context[extension ~ '_' ~ key]|default }}[]" value="{{ item[0] }}"
+																	{% if {{ _context[extension ~ '_' ~ key]|default }}.count()>1 and item[0]|_context[extension ~ '_' ~ key]|default ? ' checked="checked"' : '' %}  />
+																	
+																	{{ item[1] }}
+																</label>
+															</div>
+														{% endfor %}
+													</div>
+												{% elseif $option == 'radio' %}
+													<label class="radio-inline">
+														<input type="radio" name="{{ _context[extension ~ '_' ~ key]|default }}" value="1" {{ _context[extension ~ '_' ~ key]|default }}) ? ' checked=`checked`' : '' }}/>вкл
+													</label>
+													<label class="radio-inline">
+														<input type="radio" name="{{ _context[extension ~ '_' ~ key]|default }}" value="0" {{ not _context[extension ~ '_' ~ key]|default }}) ? ' checked=`checked`' : '' }} />выкл
+													</label>
+												{% endif %}
+											</div>
+										</div>
+									{% endif %}
+								{% endfor %}
+							</div>
+							{{ set html_count + html_count }}
+						{% endfor %}
+					</div>								
+					
+            	</form>   		
+          	</div>
+      	</div>
+    </div>
+</div>
+{{ footer }}
+					
+<script type="text/javascript">
+
+$(".items").on("click", ".add-item", function()
+{			
+	html = $(this).closest('.item-row').attr('id');
+	values = html.split("-");
+	key_pauments = values[0];
+
+	itemkey = $.now();
+
+	html = "<tr id='" + key_pauments + "-" + itemkey + "' class='item-row'>";
+	
+	html += "<td>";
+	html += "<select name='{{ extension }}_" + key_pauments + "[" + itemkey + "][payment]' class='form-control'>";
+	html += "<option value=''>-- Выберите способ --</option>";
+			
+	{% for payments in payment %}
+		html += "<option value='{{ payment[0] }}{{ payment[1] }}</option>";
+	{% endfor %}
+			
+	html += "</select>";
+	html += '</td>';
+				
+	html += "<td>";
+	html += "<input type='text' name='{{ extension }}_" + key_pauments + "[" + itemkey + "][minimum]' class='form-control' value='' placeholder='минимальное' />";
+	html += '</td>';
+					
+	html += "<td>";
+	html += "<input type='text' name='{{ extension }}_" + key_pauments + "[" + itemkey + "][maximum]' class='form-control' value='' placeholder='максимальное' />";
+	html += '</td>';
+					
+	html += "<td>";
+	html += "<input type='text' name='{{ extension }}_" + key_pauments + "[" + itemkey + "][value]' class='form-control' value='' placeholder='введите значение' />";
+	html += '</td>';
+              		
+    html += "<td class='item-buttons'>";
+	html += "<a data-toggle='tooltip' title='Добавить' class='btn btn-primary add-item'>Добавить</a>";
+	html += "</td>";
+	
+	html += "</tr>";
+	
+	$(this).removeClass("add-item");
+	$(this).addClass("remove-item");
+	
+	$(this).removeClass("btn-primary");
+	$(this).addClass("btn-danger");
+	
+	$(this).attr("title", "Удалить");
+	$(this).attr("data-original-title", "Удалить");	
+	$(this).text("Удалить");
+
+	$(this).children().removeClass("fa-plus");
+	$(this).children().addClass("fa-minus");
+		
+	$(this).closest(".item-row").after(html);
+});
+
+$(".items").on("click", ".remove-item", function()
+{
+	html = "<a data-toggle='tooltip' title='Добавить' class='btn btn-primary add-item'>Добавить</a>";
+	
+	if ($(this).closest(".item-row").is(':last-child')) {
+		$(this).closest(".item-row").prev().children(".remove-item").after(html);
+	}
+	
+	if (!$(this).closest(".item-row").is(':only-child')) {
+		$(this).closest(".item-row").remove();
+	}
+});
+
+</script>
