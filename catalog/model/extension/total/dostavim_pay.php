@@ -58,31 +58,43 @@ class ModelExtensionTotalDostavimPay extends DostavimPayTotal
 			$items = $this->config->get($this->extension.'_'.$valuetype);
 		
 			foreach ($items as $item) {
-																		
-				if ($item['payment'] == $this->session->data['payment_method']['code']) {
+				
+				
+			
+				
+
+					//var_dump('<pre>');	
 					//var_dump($item['value']);	
 					//var_dump($item['minimum']);	
 					//var_dump($item['maximum']);	
+					//var_dump($subtotal);		
+					//var_dump($this->config->get($this->extension.'_tax_class'));	
+					//var_dump('</pre>');	
+												
+																		
+				if ($item['payment'] == $this->session->data['payment_method']['code']) {
 					if ($item['value'] && (!$item['minimum'] || ($subtotal > $item['minimum'])) && (!$item['maximum'] || ($subtotal < $item['maximum']))) {
-						
 						$basevalue = $item['value'];
 						break 2;
 					}
-					else
-						$basevalue = $item['value'];
+					//else
+					//	$basevalue = $item['value'];
 				}
 			}
 		}
+		
+
 		
 		if (!empty($basevalue)) {
 			if (strpos($basevalue, '%') !== false) {
 				$value = $total * (trim($basevalue, '%'))/100;
 			}
 			else
-				$value = $basevalue;
+				//$value = $basevalue;
 
 				$value = ($valuetype == 'discounts' ? -abs($value) : abs($value));
 		}
+		
 		
 //добавить функционал
 				foreach ($this->config->get($this->extension.'_inactive_'.$valuetype) as $pereschet) {
@@ -138,8 +150,6 @@ if ($this->config->get($this->extension.'_inactive_'.$valuetype)) {
 }
 
 								
-
-								
 			$title = 'Скидка';//$this->language->get('text_payment_'.$valuetype);
 					
 			$add_name = $this->config->get($this->extension.'_add_name');
@@ -152,14 +162,21 @@ if ($this->config->get($this->extension.'_inactive_'.$valuetype)) {
 				if ($info) $title .= " за способ оплаты: ".implode(", ", $info)."";
 			}
 			
-			if ($this->config->get($this->extension.'_tax_class')) {
-				$tax_rates = $this->tax->getRates($value, $this->config->get($this->extension.'_tax_class'));
-	
-				foreach ($tax_rates as $tax_rate) {
-					if (!isset($taxes[$tax_rate['tax_rate_id']])) $taxes[$tax_rate['tax_rate_id']] = $tax_rate['amount'];
-					else $taxes[$tax_rate['tax_rate_id']] += $tax_rate['amount'];
-				}
-			}
+
+						
+			
+			
+			//if ($this->config->get($this->extension.'_tax_class')) {
+            //
+			//	
+			//	
+			//	$tax_rates = $this->tax->getRates($value, $this->config->get($this->extension.'_tax_class'));
+	        //
+			//	foreach ($tax_rates as $tax_rate) {
+			//		if (!isset($taxes[$tax_rate['tax_rate_id']])) $taxes[$tax_rate['tax_rate_id']] = $tax_rate['amount'];
+			//		else $taxes[$tax_rate['tax_rate_id']] += $tax_rate['amount'];
+			//	}
+			//}
 
 			$total += $value;
 					
