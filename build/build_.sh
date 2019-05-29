@@ -34,6 +34,7 @@ rm -Rf ./admin/view/javascript/super_offers/src/
 rm -Rf ./admin/view/javascript/super_offers_admin/src/
 rm -Rf ./admin/view/javascript/pro_discount/src/
 rm -Rf ./admin/view/javascript/size_list/src/
+rm -Rf ./opt/
 
 # REMOVE ALL BUT
 rm -v !("config.php"|"index.php"|".htaccess"|"robots.txt")

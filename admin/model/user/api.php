@@ -40,6 +40,14 @@ class ModelUserApi extends Model {
         return $query->row;
     }
 
+    public function getApiByKey($key)
+    {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "api`
+            WHERE key = '" . $this->db->escape($api_id) . "'");
+
+        return $query->row;
+    }
+
     public function getApis($data = array()) {
         $sql = "SELECT * FROM `" . DB_PREFIX . "api`";
 

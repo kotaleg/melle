@@ -49,6 +49,13 @@ class ControllerCommonHeader extends Controller {
                 } else {
                     $data['image'] = $this->model_tool_image->resize('profile.png', 45, 45);
                 }
+
+                /* OPT MODIFICATION */
+                $this->load->model('tool/opt');
+                $data['is_opt'] = $this->model_tool_opt->isOpt();
+                $data['opt_login_link'] = $this->model_tool_opt->getOptLoginLink();
+                /* OPT MODIFICATION */
+
             } else {
                 $data['firstname'] = '';
                 $data['lastname'] = '';

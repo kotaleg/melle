@@ -8,7 +8,8 @@ define('HTTPS_SERVER', 'https://melle.online/admin/');
 define('HTTPS_CATALOG', 'https://melle.online/');
 
 // HTTP OPT
-define('HTTP_OPT', HTTPS_SERVER.'opt/');
+define('HTTP_OPT', HTTPS_CATALOG.'opt/');
+define('HTTP_OPT_ADMIN', HTTPS_CATALOG.'opt/admin/');
 
 // DIR
 define('DIR_OPT', '/Users/ivan/repos/melle/opt/');
