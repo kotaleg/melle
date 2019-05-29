@@ -68,6 +68,7 @@
 <script src="{{ script }}" type="text/javascript"></script>
 {% endfor %}
 
+{% if not is_local %}
 <!-- BEGIN JIVOSITE CODE {literal} --><script type='text/javascript'>
    (function(){ var widget_id = '0EPBW5Wrw9';var d=document;var w=window;function l(){
    var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
@@ -134,7 +135,6 @@
 </script>
 
 <script type="text/javascript" language="javascript">
-
 var _lh_params = {"popup": false};
 lh_clid="5b0820b0e694aa2943a30dab";
 (function() {
@@ -143,7 +143,7 @@ lh.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'tr
 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lh, s);
 })();/*
 "PLEASE DO NOT MAKE ANY CHANGES IN THIS JS-CODE!"*/
-
 </script>
+{% endif %}
 
 </body></html>

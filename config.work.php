@@ -5,7 +5,11 @@ define('HTTP_SERVER', 'https://melle.online/');
 // HTTPS
 define('HTTPS_SERVER', 'https://melle.online/');
 
+// HTTP OPT
+define('HTTP_OPT', HTTPS_SERVER.'opt/');
+
 // DIR
+define('DIR_OPT', '/Users/ivan/repos/melle/opt/');
 define('DIR_APPLICATION', '/home/web/melle.online/www/catalog/');
 define('DIR_SYSTEM', '/home/web/melle.online/www/system/');
 define('DIR_DATABASE', '/home/web/melle.online/www/system/database/');

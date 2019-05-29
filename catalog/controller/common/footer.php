@@ -61,6 +61,7 @@ class ControllerCommonFooter extends Controller {
 
         $this->load->model('tool/base');
         $data['pagetype'] = $this->model_tool_base->getPageType();
+        $data['is_local'] = $this->model_tool_base->isLocal();
 
         return $this->load->view('common/footer', $data);
     }

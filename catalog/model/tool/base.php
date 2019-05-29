@@ -97,4 +97,9 @@ class ModelToolBase extends Model
     {
         return number_format($price, 0, '.', ' ');
     }
+
+    public function isLocal()
+    {
+        return defined('MELLELOCAL');
+    }
 }
