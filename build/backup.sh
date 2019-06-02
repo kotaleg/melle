@@ -27,7 +27,7 @@ if [ -d "$2" ]; then
         fi
 
         rm -rf .*
-        rm -rf !(image|protected)
+        rm -rf !(image|protected|opt)
     fi
 fi
 
