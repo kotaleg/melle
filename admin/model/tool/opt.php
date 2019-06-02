@@ -14,18 +14,28 @@ class ModelToolOpt extends Model
     public function getOptLoginLink()
     {
         if (defined('HTTP_OPT_ADMIN')) {
-
             $this->load->model('user/api');
 
             $api_info = $this->model_user_api->getApi($this->config->get('config_api_id'));
 
-            // print_r($this->user);exit;
-
             if ($api_info && isset($api_info['key'])) {
                 return HTTP_OPT_ADMIN .
-                    "index.php?route=common/login?ivantoken={$api_info['key']}?user={$this->user->getUserName()}";
+                    "index.php?route=common/login&ivantoken={$api_info['key']}&user={$this->user->getUserName()}";
             }
+        }
+    }
 
+    public function getMainLoginLink()
+    {
+        if (defined('HTTP_MAIN_ADMIN')) {
+            $this->load->model('user/api');
+
+            $api_info = $this->model_user_api->getApi($this->config->get('config_api_id'));
+
+            if ($api_info && isset($api_info['key'])) {
+                return HTTP_MAIN_ADMIN .
+                    "index.php?route=common/login&ivantoken={$api_info['key']}&user={$this->user->getUserName()}";
+            }
         }
     }
 
@@ -43,7 +53,13 @@ class ModelToolOpt extends Model
 
     public function loginAsUser($username)
     {
-        ///
+        $this->load->model('user/user');
+        $u = $this->model_user_user->getUserByUsername($username);
+        if ($u && isset($u['password']) && isset($u['username'])) {
+            return $this->user->login($u['username'], $u['password'], true);
+        }
+
+        return false;
     }
 
     public function isMain()

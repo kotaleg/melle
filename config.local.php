@@ -6,10 +6,10 @@ define('HTTP_SERVER', 'http://melle.test/');
 define('HTTPS_SERVER', 'http://melle.test/');
 
 // HTTP OPT
-define('HTTP_OPT', HTTPS_SERVER.'opt/');
+// define('HTTP_OPT', HTTPS_SERVER.'opt/');
 
 // DIR
-define('DIR_OPT', '/Users/ivan/repos/melle/opt/');
+// define('DIR_OPT', '/Users/ivan/repos/melle/opt/');
 define('DIR_APPLICATION', '/Users/ivan/repos/melle/catalog/');
 define('DIR_SYSTEM', '/Users/ivan/repos/melle/system/');
 define('DIR_DATABASE', '/Users/ivan/repos/melle/system/database/');

