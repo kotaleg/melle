@@ -12,7 +12,7 @@ define('HTTP_OPT', HTTPS_CATALOG.'opt/');
 define('HTTP_OPT_ADMIN', HTTPS_CATALOG.'opt/admin/');
 
 // DIR
-define('DIR_OPT', '/Users/ivan/repos/melle/opt/');
+define('DIR_OPT', '/home/web/test.melle.online/www/opt/');
 define('DIR_APPLICATION', '/home/web/test.melle.online/www/admin/');
 define('DIR_SYSTEM', '/home/web/test.melle.online/www/system/');
 define('DIR_DATABASE', '/home/web/test.melle.online/www/system/database/');
