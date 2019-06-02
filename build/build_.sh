@@ -11,6 +11,7 @@ WEBADDRESS=melle.online
 
 # CONFIG FILES
 rm -f ./config.php ./admin/config.php
+rm -f ./config.local.php ./admin/config.local.php
 mv ./config.work.php ./config.php
 mv ./admin/config.work.php ./admin/config.php
 
@@ -24,7 +25,7 @@ yarn run prod-offers
 yarn run prod-discount
 yarn run prod-sizelist
 
-# CLEAR AFTER YARN
+# CLEAR AFTER
 rm -Rf ./.git/
 rm -Rf ./node_modules/
 rm -Rf ./checkurl/
@@ -35,6 +36,7 @@ rm -Rf ./admin/view/javascript/super_offers_admin/src/
 rm -Rf ./admin/view/javascript/pro_discount/src/
 rm -Rf ./admin/view/javascript/size_list/src/
 rm -Rf ./opt/
+rm -f README.md
 
 # REMOVE ALL BUT
 rm -v !("config.php"|"index.php"|".htaccess"|"robots.txt")

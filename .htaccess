@@ -27,10 +27,10 @@ RewriteRule ^(.+)/$ http://melle.online/$1 [R=301,L]
 #INDEX REDIRECT
 
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
-RewriteRule ^index\.php$ http://melle.online/ [R=301,L] 
+RewriteRule ^index\.php$ http://melle.online/ [R=301,L]
 
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
-RewriteRule ^index\.html$ http://melle.online/ [R=301,L] 
+RewriteRule ^index\.html$ http://melle.online/ [R=301,L]
 
 
 #INDEX REDIRECT
