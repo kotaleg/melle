@@ -15,6 +15,7 @@ Disallow: /*color=
 Disallow: /*size=
 Disallow: /*search=
 Disallow: /*?page=
+Disallow: /*opt
 
 User-agent: Yandex
 Disallow: /*min_den=
