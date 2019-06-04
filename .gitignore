@@ -27,6 +27,9 @@ yarn-error.log*
 install/*
 php.ini*
 
+# robot
+robots.txt
+
 # ---------------------------------------------------------------------------------------------------------
 image/catalog/import_files/*
 admin/view/stylesheet/bootstrap.css

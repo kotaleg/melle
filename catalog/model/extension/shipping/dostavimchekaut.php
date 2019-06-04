@@ -1332,6 +1332,7 @@ for ($i = 0; $i < count($dslist); $i++) {
 		$moscow_dostavim_markup =  $this->model_setting_settingdostavim->getPriceDostavim('shipping_dostavimchekaut_moscow_markup');	 //16.04.2018
 		$piter_dostavim_markup =  $this->model_setting_settingdostavim->getPriceDostavim('shipping_dostavimchekaut_piter_markup');	 //16.04.2018
 
+
 //16.04.2018
 		if (!empty($rusha_dostavim_markup["value"])){
 			if (($city_dostavim!='Москва')and($city_dostavim!='Санкт-Петербург')){
@@ -1340,6 +1341,17 @@ for ($i = 0; $i < count($dslist); $i++) {
 					$price_dostavim4 = $price_dostavim4+$rusha_dostavim_markup["value"];
 						}					
 		}
+		
+		
+				
+				
+			
+		//echo '<pre>';
+		//echo 'отработало';
+		//echo '</pre>';			
+		
+		
+		
 		if (!empty($moscow_dostavim_markup["value"])){
 			if ($city_dostavim=='Москва'){
 					$price_dostavim2 = $price_dostavim2+$moscow_dostavim_markup["value"];

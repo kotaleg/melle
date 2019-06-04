@@ -8,8 +8,14 @@ padding: 5px;}</style>
 	<div class="page-header">
 		<div class="container-fluid">
 			<div class="pull-right">
-				<button type="submit" form="form-{{ module_id }}" data-toggle="tooltip" title="сохранить" class="btn btn-primary"><i class="fa fa-save"></i></button>
-        		<a href="{{ exit }}" data-toggle="tooltip" title="выйти" class="btn btn-default"><i class="fa fa-reply"></i></a>
+				<!--<button type="submit" form="form-{{ module_id }}" data-toggle="tooltip" title="сохранить" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        		<a href="{{ exit }}" data-toggle="tooltip" title="выйти" class="btn btn-default"><i class="fa fa-reply"></i></a>-->
+				
+        <button type="submit" form="form-total" data-toggle="tooltip" title="сохранить" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ exit }}" data-toggle="tooltip" title="выйти" class="btn btn-default"><i class="fa fa-reply"></i></a></div>				
+				
+				
+				
     		</div>
       		<h1>Управление оплатой от Dostav.im</h1>
       		<ul class="breadcrumb">
@@ -79,16 +85,15 @@ padding: 5px;}</style>
 				
 										
 
-<input type="text" name="dostavim_pay_sort_order" value="{{ dostavim_pay_sort_order }}" placeholder="{{ _context['entry_' ~ key]|default }}" id="input-{{ key_id }}" class="form-control" />														
-														
+<input type="text" name="total_dostavim_pay_sort_order" value="{{ total_dostavim_pay_sort_order }}" placeholder="{{ _context['entry_' ~ key]|default }}" id="input-{{ key_id }}" class="form-control" />
+			
 														
 													{% elseif option == 'select' %}
 													
 													{% if key_id  == 'geo_zone' %}
-													<select name="dostavim_pay_geo_zone" id="input-{{ key_id }}" class="form-control">
-													
+													<select name="total_dostavim_pay_geo_zone" id="input-{{ key_id }}" class="form-control">
 														{% for key,item in geo_zone %}
-														{% if item[0] ==  _context[extension ~ '_' ~ key]|default %}
+														{% if item[0] ==  total_dostavim_pay_geo_zone %}
 															<option value="{{ item[0] }}" selected="selected">
 															{{ item[1] }}
 															</option>
@@ -105,7 +110,7 @@ padding: 5px;}</style>
 													{% if key_id  == 'status' %}
 													
 													
-													<select name="dostavim_pay_status" id="input-{{ key_id }}" class="form-control">
+													<select name="total_dostavim_pay_status" id="input-{{ key_id }}" class="form-control">
 									
 
 													
@@ -113,7 +118,7 @@ padding: 5px;}</style>
 													<option value="{{ item[0] }}"
 													
 
-																	{% if  dostavim_pay_status == item[0] %} 
+																	{% if  total_dostavim_pay_status == item[0] %} 
 																		
 																		
 																	
@@ -129,6 +134,7 @@ padding: 5px;}</style>
 													
 													{% elseif option == 'checkbox' %}
 													<div class="well well-sm" style="height: 100px; overflow: auto;">
+													
 									
 														{% for key,item in inactive_discounts %}
 															<div class="checkbox">
@@ -136,18 +142,28 @@ padding: 5px;}</style>
 
 																<input type="checkbox" name="{{extension ~ '_inactive_discounts'}}[]" value="{{ item[0] }}"
 																	
+																{% if myVar in dostavim_pay_inactive_discounts|keys %}
 																
+																
+																style="color:red"
 																
 																{% for qkey,qitem in dostavim_pay_inactive_discounts %}
-																	{% if  qitem == item[0] %} 
+																
+																{{ dostavim_pay_inactive_discounts[item[0]] }}
+																
+																
+																	{% if  qitem == item[1] %} 
 																		
-																		
+																	
 																	
 																	checked="checked"
 
 																	{% endif %}
 																{% endfor %}
+																
 
+																	{% endif %}
+																	
 																	/>
 	
 																	{{ item[1] }}
@@ -156,8 +172,11 @@ padding: 5px;}</style>
 														{% endfor %}
 													</div>
 												{% elseif option == 'radio' %}
+														
+												
 													{% if dostavim_pay_add_name  == 1 %}
 		
+
 													<label class="radio-inline">
 														<input type="radio" name="{{ extension ~ '_' ~ key }}" value="1" checked="checked" />вкл
 													</label>

@@ -165,10 +165,10 @@ tbody#module-row0{display:none}
 				<td class="left"><select name="shipping_dostavimchekaut[{{ module_row }}][geo_zone_id]">
                 <option value="0">{{ text_all_zones }}</option>
 				{% for geo_zone  in geo_zones %}
-				{% if geo_zone['geo_zone_id'] == module['geo_zone_id'] %}				
-                <option value="{{ geo_zone['geo_zone_id'] }}" selected="selected">{{ geo_zone['name'] }}</option>
+				{% if geo_zone['geo_zone_id'] != module['geo_zone_id'] %}	
+                <option value="{{ geo_zone['geo_zone_id'] }}">{{ geo_zone['name'] }}</option>
                 {% else %}
-                <option value="{{ geo_zone['geo_zone_id'] }}" selected="selected">{{ geo_zone['name'] }}</option>
+                <option value="{{ module['geo_zone_id'] }}" selected="selected" >{{ geo_zone['name'] }}</option>
                 {% endif %}
 				{% endfor %}
               </select></td>

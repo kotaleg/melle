@@ -9,6 +9,32 @@ class ControllerExtensionTotalDostavimPay extends Controller
 		'status' => 'select',
 		'sort_order' => 'input');
 	public $error = array();
+
+
+    public function editPutting($code, $data, $store_id = 0) {
+        $this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE store_id = '" . (int)$store_id . "' AND `code` = '" . $this->db->escape($code) . "'");
+
+        foreach ($data as $key => $value) {
+				
+							//var_dump($code);
+							//var_dump('-----------------');
+							//var_dump(substr($key, 0, strlen($code)));			
+			
+			
+            //if (substr($key, 0, strlen($code)) == $code) {
+
+				
+                if (!is_array($value)) {
+                    $this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '" . (int)$store_id . "', `code` = '" . $this->db->escape($code) . "', `key` = '" . $this->db->escape($key) . "', `value` = '" . $this->db->escape($value) . "'");
+                } else {
+                    $this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '" . (int)$store_id . "', `code` = '" . $this->db->escape($code) . "', `key` = '" . $this->db->escape($key) . "', `value` = '" . $this->db->escape(json_encode($value, true)) . "', serialized = '1'");
+                }
+            //}
+        }
+    }
+
+
+
 	
 	public function index()
 	{
@@ -16,7 +42,27 @@ class ControllerExtensionTotalDostavimPay extends Controller
 		//$this->db->query("UPDATE " . DB_PREFIX . "setting SET `key` = '" . "total_".$this->extension."_status" . "'  WHERE `key` = '" . $this->extension."_status" . "'");
 
 	
+		//$this->editPutting($this->extension, $this->request->post);
+		
+		
+		
+	
 		$this->document->setTitle('Управление оплатой от Dostav.im');
+		
+        $this->load->model('setting/setting');
+
+        if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+			
+			
+            $this->editPutting($this->extension, $this->request->post);
+
+            $this->session->data['success'] = 'Успешно';
+
+            $this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=total', true));
+        }
+		
+		
+		
 		
         $data['module_id'] = str_replace('_', '-', $this->extension);		
 		$data['header'] = $this->load->controller('common/header');
@@ -48,18 +94,6 @@ class ControllerExtensionTotalDostavimPay extends Controller
 
 		
 		$data['name_module_dostavim'] = 'Управление оплатой от Dostav.im';
-		
-		//$this->load->model('setting/setting');
-		//
-		//$this->load->model('setting/dostavsetting');
-		//
-		//$status_true = $this->model_setting_dostavsetting->getSettingValue('total_'.$this->extension.'_status');
-		//if($status_true == false)		
-		//$this->model_setting_dostavsetting->renameSetting($this->extension.'_status');
-        //
-		//$sort_order_true = $this->model_setting_dostavsetting->getSettingValue('total_'.$this->extension.'sort_order');
-		//if($sort_order_true == false)				
-		//$this->model_setting_dostavsetting->renameSetting($this->extension.'sort_order');
 
 
 		if ($this->direct) {
@@ -80,27 +114,22 @@ class ControllerExtensionTotalDostavimPay extends Controller
 				$this->request->post['name'] = $this->request->post[$this->extension.'_name']; 
 				$this->request->post['total_status'] = $this->request->post[$this->extension.'_status'];
 
-				$data['total_'.$this->extension.'_status'] = 1;
-				$data['total_'.$this->extension.'sort_order'] = 1;
 				//var_dump($this->request->post[$this->extension.'_name']);			
 
 
 				
-				if (!empty($id)) {
-					$this->model_setting_module->editModule($id, $this->request->post);
-				} else {
-					$this->model_setting_module->addModule($this->extension, $this->request->post);
-					
-					$query = $this->db->query("SELECT MAX(module_id) AS id FROM `".DB_PREFIX."module` WHERE code = '".$this->extension."'"); 
-					$id = $query->row['id'];  
-				}
-			} else {
-				$this->model_setting_setting->editSetting($this->extension, $this->request->post);
+			//	if (!empty($id)) {
+			//		$this->model_setting_module->editModule($id, $this->request->post);
+			//	} else {
+			//		$this->model_setting_module->addModule($this->extension, $this->request->post);
+			//		
+			//		$query = $this->db->query("SELECT MAX(module_id) AS id FROM `".DB_PREFIX."module` WHERE code = '".$this->extension."'"); 
+			//		$id = $query->row['id'];  
+			//	}
+			//} else {
+			//	$this->model_setting_setting->editSetting($this->extension, $this->request->post);
 			}
 						
-			if (empty($this->session->data['success'])) {
-				$this->session->data['success'] = 'Успешно';
-			}
 		}
 		
 		if (isset($this->session->data['success'])) $data['success'] = $this->session->data['success'];
@@ -124,8 +153,10 @@ class ControllerExtensionTotalDostavimPay extends Controller
 				'href' => $this->url->link('extension/total'.'/'.$this->extension, 'user_token='.$data['token'].(!empty($id) ? '&module_id='.$id : ''), true));
 			
 			$data['action'] = $this->url->link('extension/total'.'/'.$this->extension, 'user_token='.$data['token'].(!empty($id) ? '&module_id='.$id : ''), 'SSL');
-			$data['exit'] = $this->url->link('extension/'.'total', 'user_token='.$data['token'], 'SSL');
-		
+			$data['exit'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=total', true);
+
+
+		$data['dostavim_pay_add_name'] = $this->config->get('dostavim_pay_add_name');;			
 
 		$this->load->model('localisation/geo_zone');
 		$geo_zones = $this->model_localisation_geo_zone->getGeoZones();
@@ -280,42 +311,34 @@ class ControllerExtensionTotalDostavimPay extends Controller
 		foreach ($data['settings'] as $html => $options) {
 			
 			foreach ($options as $key => $type) {			
-				$from_post = (isset($this->request->post[$this->extension.'_'.$key]) ? $this->request->post[$this->extension.'_'.$key] : "");
+				$from_post = (isset($this->request->post['total_'.$this->extension.'_'.$key]) ? $this->request->post['total_'.$this->extension.'_'.$key] : "");
 				
 				//print_r($info);	
 				//print_r($info[$this->extension.'_'.$key]);					
 				
-				$from_config = (!empty($info) && isset($info[$this->extension.'_'.$key]) ? $info[$this->extension.'_'.$key] : $this->config->get($this->extension.'_'.$key));				
+				$from_config = (!empty($info) && isset($info['total_'.$this->extension.'_'.$key]) ? $info['total_'.$this->extension.'_'.$key] : $this->config->get('total_'.$this->extension.'_'.$key));				
 				
 				
 				$default = ($type == 'checkbox' ? array() : "");
 			
-				if (!isset($data[$this->extension.'_'.$key])) {
+				if (!isset($data['total_'.$this->extension.'_'.$key])) {
 					
 		//print_r("<pre>");	
 		//print_r($from_post);	
 		//print_r($from_config);	
 		//print_r("</pre>");						
 										
-					if (!empty($from_post)) $data[$this->extension.'_'.$key] = $from_post;
-					elseif (isset($from_config)) $data[$this->extension.'_'.$key] = $from_config;
-					else $data[$this->extension.'_'.$key] = $default;
+					if (!empty($from_post)) $data['total_'.$this->extension.'_'.$key] = $from_post;
+					elseif (isset($from_config)) $data['total_'.$this->extension.'_'.$key] = $from_config;
+					else $data['total_'.$this->extension.'_'.$key] = $default;
 				}
 			}
 		}
 		
+        $this->load->model('localisation/tax_class');
 
-		if (isset($this->request->post['total_dostavim_pay_status'])) {
-			$data['total_dostavim_pay_status'] = $this->request->post['total_dostavim_pay_status'];
-		} else {
-			$data['total_dostavim_pay_status'] = $this->config->get('total_dostavim_pay_status');
-		}
+        $data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();		
 
-		if (isset($this->request->post['total_dostavim_pay_sort_order'])) {
-			$data['total_dostavim_pay_sort_order'] = $this->request->post['total_dostavim_pay_sort_order'];
-		} else {
-			$data['total_dostavim_pay_sort_order'] = $this->config->get('total_dostavim_pay_sort_order');
-		}	
 		
 		//var_dump($data);		
 		
@@ -339,16 +362,16 @@ class ControllerExtensionTotalDostavimPay extends Controller
 
 
 
-				$status_true = $this->model_setting_dostavsetting->getSettingValue('total_'.$this->extension.'_status');
-				
-				var_dump($status_true);
-				
-				if($status_true == 'notfaund')		
-				$this->model_setting_dostavsetting->renameSetting($this->extension.'_status');
-		        
-				$sort_order_true = $this->model_setting_dostavsetting->getSettingValue('total_'.$this->extension.'_sort_order');
-				if($sort_order_true == 'notfaund')						
-				$this->model_setting_dostavsetting->renameSetting($this->extension.'_sort_order');	
+				//$status_true = $this->model_setting_dostavsetting->getSettingValue('total_'.$this->extension.'_status');
+				//
+				//var_dump($status_true);
+				//
+				//if($status_true == 'notfaund')		
+				//$this->model_setting_dostavsetting->renameSetting($this->extension.'_status');
+		        //
+				//$sort_order_true = $this->model_setting_dostavsetting->getSettingValue('total_'.$this->extension.'_sort_order');
+				//if($sort_order_true == 'notfaund')						
+				//$this->model_setting_dostavsetting->renameSetting($this->extension.'_sort_order');	
 //var_dump($data);				
 
 
