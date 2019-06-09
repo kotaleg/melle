@@ -149,6 +149,16 @@ class ControllerProductProduct extends Controller {
         }
 
         if (isset($this->request->get['product_id'])) {
+
+            /* IVAN MOD */
+            if (isset($this->request->get['from_opt'])) {
+                $this->load->model('api/import_1c/product');
+                $pid = $this->model_api_import_1c_product->getProductByImportId(
+                    $this->request->get['product_id']);
+                return $this->response->redirect($this->url->link('product/product', "&product_id={$pid}", true));
+            }
+            /* IVAN MOD */
+
             $product_id = (int)$this->request->get['product_id'];
         } else {
             $product_id = 0;
