@@ -20,6 +20,7 @@ const state = {
     errors: new Errors(),
 
     edit_link: '',
+    customerActivated: false,
 }
 
 // getters

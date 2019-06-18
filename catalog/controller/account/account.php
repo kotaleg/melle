@@ -93,6 +93,47 @@ class ControllerAccountAccount extends Controller {
         $this->response->setOutput($this->load->view('account/account', $data));
     }
 
+    /* IVAN MOD START */
+    public function activateAccount()
+    {
+        if (isset($this->request->get['approveToken'])) {
+            $this->load->model('extension/module/melle');
+            $customer_id = $this->model_extension_module_melle->activateToken($this->request->get['approveToken']);
+
+            if ($customer_id) {
+                $this->load->model('account/customer');
+                $this->model_account_customer->updateCustomerStatus($customer_id, true);
+
+                $this->customer->logout();
+                $this->cart->clear();
+
+                unset($this->session->data['order_id']);
+                unset($this->session->data['payment_address']);
+                unset($this->session->data['payment_method']);
+                unset($this->session->data['payment_methods']);
+                unset($this->session->data['shipping_address']);
+                unset($this->session->data['shipping_method']);
+                unset($this->session->data['shipping_methods']);
+                unset($this->session->data['comment']);
+                unset($this->session->data['coupon']);
+                unset($this->session->data['reward']);
+                unset($this->session->data['voucher']);
+                unset($this->session->data['vouchers']);
+
+                $this->session->data['customerActivated'] = $customer_id;
+
+                $this->load->model('account/customer');
+                $customer_info = $this->model_account_customer->getCustomer($customer_id);
+                if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
+                    $this->response->redirect($this->url->link('account/account', '', true));
+                }
+            }
+        }
+
+        $this->response->redirect($this->url->link('common/home', '', true));
+    }
+    /* IVAN MOD END */
+
     public function country() {
         $json = array();
 

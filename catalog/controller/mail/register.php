@@ -21,8 +21,23 @@ class ControllerMailRegister extends Controller {
 
         if ($customer_group_info) {
             $data['approval'] = $customer_group_info['approval'];
+
+            /* IVAM MODIFICATION */
+            if (isset($args[0]['email'])) {
+                $this->load->model('account/customer');
+                $customer = $this->model_account_customer->getCustomerByEmail($args[0]['email']);
+
+                if ($customer && isset($customer['customer_id'])) {
+                    $this->load->model('extension/module/melle');
+                    $data['link_approval'] =
+                        $this->model_extension_module_melle->getActivationLinkForCustomer($customer['customer_id']);
+                }
+            }
+            /* IVAM MODIFICATION */
+
         } else {
             $data['approval'] = '';
+            $data['link_approval'] = '';
         }
 
         $data['login'] = $this->url->link('account/login', '', true);

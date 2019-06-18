@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined } from 'lodash'
+import { isUndefined, has } from 'lodash'
 
 export default {
     getInlineState(codename = false, cb) {
@@ -12,18 +12,18 @@ export default {
             cb(window['__' + codename + '__'])
         }
     },
-    postSettingData(data, cb) {
+    async makeRequest(data, cb) {
         let url = data.url
         delete data.url
-        Vue.prototype.$http.post(url, data).then(response => {
-            cb(response)
-        })
-    },
-    makeRequest(data, cb) {
-        let url = data.url
-        delete data.url
-        Vue.prototype.$http.post(url, data).then(response => {
-            cb(response)
-        })
+
+        const res = await Vue.prototype.$http.post(url, data)
+        .catch(error => {
+            if (has(error.response, 'data')) {
+                notify.messageHandler(error.response.data)
+            }
+        });
+
+        if (res) { cb(res) }
+        cb(false)
     },
 }

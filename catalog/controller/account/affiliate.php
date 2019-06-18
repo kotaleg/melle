@@ -3,6 +3,11 @@ class ControllerAccountAffiliate extends Controller {
     private $error = array();
 
     public function add() {
+
+        /* IVAN MOD START */
+        return $this->response->redirect($this->url->link('common/home'));
+        /* IVAN MOD END */
+
         if (!$this->customer->isLogged()) {
             $this->session->data['redirect'] = $this->url->link('account/affiliate', '', true);
 
@@ -27,6 +32,11 @@ class ControllerAccountAffiliate extends Controller {
     }
 
     public function edit() {
+
+        /* IVAN MOD START */
+        return $this->response->redirect($this->url->link('common/home'));
+        /* IVAN MOD END */
+
         if (!$this->customer->isLogged()) {
             $this->session->data['redirect'] = $this->url->link('account/affiliate', '', true);
 

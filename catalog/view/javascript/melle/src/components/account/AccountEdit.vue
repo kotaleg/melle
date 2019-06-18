@@ -3,12 +3,14 @@
        <div class="lk-data__info-text">
           <p>Вы можете отредактировать свои личные данные.</p>
        </div>
-       <p class="new-log"></p>
+       <p class="new-log">
+           <div v-if="customerActivated">Пользователь успешно активирован</div>
+       </p>
        <form class="lk-data__form form-vertical" enctype="multipart/form-data" id="yw3" method="post" v-on:submit.prevent="edit()">
         <div class="lk-data__form-group"><label>Представьтесь *</label>
             <div v-show="fieldHasError('name')" class="help-block error" id="CabinetRegisterForm_name_em_">{{ getFieldError('name') }}</div>
             <input v-model.trim="name" placeholder="Укажите ФИО" class="reg__form-input" id="CabinetRegisterForm_name" type="text">
-           </div>
+        </div>
         <div class="lk-data__form-group"><label>Ваш e-mail *</label>
             <div v-show="fieldHasError('email')" class="help-block error" id="CabinetRegisterForm_email_em_">{{ getFieldError('email') }}</div>
             <input v-model.trim="email" placeholder="Example@example.com" class="reg__form-input" id="CabinetRegisterForm_email" type="text">
@@ -40,7 +42,7 @@
                 v-model.trim="birth"
                 type="text" :masked="true"
                 id="CabinetRegisterForm_birth"
-                placeholder="дд.мм.гггг"
+                placeholder="__.__.____"
                 class="reg__form-input" />
         </div>
         <div class="lk-data__form-group lk-data__form-group--discount">
@@ -70,6 +72,9 @@ export default {
             'getFormValue',
             'fieldHasError',
             'getFieldError',
+        ]),
+        ...mapState('account', [
+            'customerActivated',
         ]),
 
         name: {

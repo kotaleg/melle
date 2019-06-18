@@ -44,7 +44,7 @@
                     v-model.trim="birth"
                     type="text" :masked="true"
                     id="CabinetRegisterForm_birth"
-                    placeholder="дд.мм.гггг"
+                    placeholder="__.__.___"
                     class="reg__form-input" />
             </div>
             <div class="reg__form-group">
@@ -150,7 +150,7 @@ export default {
     },
     methods: {
         ...mapActions('header', [
-            'captchaRequest'
+            'captchaRequest',
         ]),
         ...mapActions('register', [
             'updateFormValue',
@@ -159,13 +159,13 @@ export default {
 
         register() {
             if (this.isCaptcha) {
-                this.$refs.register_recaptcha.execute();
+                this.$refs.register_recaptcha.execute()
             } else {
                 this.registerRequest()
             }
         },
         onCaptchaVerified(recaptchaToken) {
-            this.$refs.register_recaptcha.reset();
+            this.$refs.register_recaptcha.reset()
 
             this.captchaRequest(recaptchaToken)
                 .then(captcha_res => {
@@ -175,7 +175,7 @@ export default {
                 })
         },
         onCaptchaExpired() {
-            this.$refs.register_recaptcha.reset();
+            this.$refs.register_recaptcha.reset()
         },
     },
 }

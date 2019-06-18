@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isEmpty, forEach, clone, trim, has } from 'lodash'
+import { isEmpty, isNumber, forEach, clone, trim, has } from 'lodash'
 
 export default {
     initQuery(to, from) {
@@ -71,6 +71,11 @@ export default {
                     m = trim(m, ',')
                     if (m !== '') { query[k] = trim(m) }
                 }
+                if (k === 'page' && isNumber(v)) {
+                    if (v > 1) {
+                        query[k] = v
+                    }
+                }
             }
         })
 
@@ -90,6 +95,7 @@ export default {
             'size',
             'search',
             'manufacturers',
+            'page',
         ]
     },
 }

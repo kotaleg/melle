@@ -219,6 +219,11 @@ class ControllerExtensionModuleMelle extends Controller
                 'discount_card' => $customer_info['discount_card'],
                 'newsletter' => ($customer_info['newsletter']) ? true : false,
             );
+
+            if ($this->session->data['customerActivated'] === $this->customer->getId()) {
+                unset($this->session->data['customerActivated']);
+                $state['customerActivated'] = true;
+            }
         }
 
         $state['edit_link'] = $this->model_extension_pro_patch_url->ajax('account/edit/melle_edit', '', true);

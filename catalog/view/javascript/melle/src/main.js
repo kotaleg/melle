@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import axios from 'axios'
 import Notifications from 'vue-notification'
 import vClickOutside from 'v-click-outside'
 import VueTheMask from 'vue-the-mask'
@@ -11,6 +10,7 @@ import vSelect from 'vue-select'
 import router from './router'
 import filterHelper from './router/filterHelper'
 import store from './store'
+import './plugins'
 
 router.beforeEach((to, from, next) => {
     filterHelper.initQuery(to, from)
@@ -18,7 +18,6 @@ router.beforeEach((to, from, next) => {
 });
 
 Vue.config.productionTip = false
-Vue.prototype.$http = axios
 Vue.prototype.$codename = 'melle'
 
 Vue.use(Notifications)
