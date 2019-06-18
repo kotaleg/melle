@@ -109,8 +109,8 @@
 
     <file path="catalog/model/account/customer.php">
         <operation error="skip">
-            <search><![CDATA[, date_added = NOW()");]]></search>
-            <add position="replace"><![CDATA[, `discount_card` = '" . $this->db->escape(isset($data['discount_card']) ? $data['discount_card'] : '') . "', `birth` = '" . $this->db->escape(isset($data['birth']) ? $data['birth'] : '') . "', date_added = NOW()");]]></add>
+            <search><![CDATA[(int)!$customer_group_info['approval'] . "', date_added = NOW()");]]></search>
+            <add position="replace"><![CDATA[(int)!$customer_group_info['approval'] . "', `discount_card` = '" . $this->db->escape(isset($data['discount_card']) ? $data['discount_card'] : '') . "', `birth` = '" . $this->db->escape(isset($data['birth']) ? $data['birth'] : '') . "', date_added = NOW()");]]></add>
         </operation>
     </file>
 
