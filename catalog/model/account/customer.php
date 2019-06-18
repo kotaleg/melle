@@ -149,4 +149,13 @@ class ModelAccountCustomer extends Model {
 
         return $query->row;
     }
+
+    /* IVAN MOD START */
+    public function updateCustomerStatus($customer_id, $status)
+    {
+        $this->db->query("UPDATE " . DB_PREFIX . "customer
+            SET `status` = '" . (int)$status . "'
+            WHERE `customer_id` = '" . (int)$customer_id . "'");
+    }
+    /* IVAN MOD END */
 }
