@@ -9,14 +9,13 @@ BACKUP_DIR=/home/web/melle.online/backup/$(date +%F)
 WORK_DIR=/home/web/melle.online/www
 WEBADDRESS=melle.online
 
-# CONFIG FILES
+echo "-- PREPARE CONFIG FILES --"
 rm -f ./config.php ./admin/config.php
 rm -f ./config.local.php ./admin/config.local.php
 mv ./config.work.php ./config.php
 mv ./admin/config.work.php ./admin/config.php
 
-# YARN RUN
-# rm -f ./yarn.lock
+echo "-- YARN RUN --"
 yarn install
 yarn run prod
 yarn run prod-import1c
@@ -25,7 +24,7 @@ yarn run prod-offers
 yarn run prod-discount
 yarn run prod-sizelist
 
-# CLEAR AFTER
+echo "-- CLEAR AFTER --"
 rm -Rf ./.git/
 rm -Rf ./node_modules/
 rm -Rf ./checkurl/
@@ -38,17 +37,26 @@ rm -Rf ./admin/view/javascript/size_list/src/
 rm -Rf ./opt/
 rm -f README.md
 
-# REMOVE ALL BUT
+echo "-- REMOVE ALL BUT --"
 rm -v !("config.php"|"index.php"|".htaccess"|"robots.txt")
 
-# BACKUP
 sshpass -V
 export SSHPASS=$K8S_SECRET_SSH
+
+echo "-- BACKUP --"
 sshpass -e ssh -o stricthostkeychecking=no "$SSH_ADDRESS" "bash -s" < ./build/backup.sh $BACKUP_DIR $WORK_DIR
 
-# CLONE TO PROD
+echo "-- COMPRESS FILES --"
 7z a -tzip foo.zip -x\!build -x\!.git
+
+echo "-- CLONE FILES TO SERVER --"
 sshpass -e scp -o stricthostkeychecking=no -r ./foo.zip $SSH_ADDRESS:$WORK_DIR
+
+echo "-- UNPACK FILES --"
 sshpass -e ssh -o stricthostkeychecking=no "$SSH_ADDRESS" "7z -y x $WORK_DIR/foo.zip -o$WORK_DIR/"
+
+echo "-- REMOVE ARCHIVE FROM SERVER --"
 sshpass -e ssh -o stricthostkeychecking=no "$SSH_ADDRESS" "rm -f $WORK_DIR/foo.zip"
+
+echo "-- REFRESH MODIFICATIONS --"
 wget "$WEBADDRESS/admin/index.php?route=common/login&git_token=$K8S_SECRET_TOKEN" -O /dev/null --delete-after -qq
