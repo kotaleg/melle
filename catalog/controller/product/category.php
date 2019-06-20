@@ -65,6 +65,14 @@ class ControllerProductCategory extends Controller {
 
             $parts = explode('_', (string)$this->request->get['path']);
 
+            /* REDIRECT TO THE LAST CATEGORY */
+            if (count($parts) > 1) {
+                $category_id = (int)array_pop($parts);
+                $this->request->get['path'] = $category_id;
+                $this->response->redirect($this->url->link('product/category', "path={$category_id}", true));
+            }
+            /* REDIRECT TO THE LAST CATEGORY */
+
             $category_id = (int)array_pop($parts);
 
             foreach ($parts as $path_id) {
