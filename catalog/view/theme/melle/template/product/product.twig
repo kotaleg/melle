@@ -23,21 +23,25 @@
                <div class="prod-card__photos">
                   <ul class="prod-card__list-photo slider-nav">
                      {% if thumb %}
-                     <li class="prod-card__item-photo"><img src="{{thumb}}"></li>
+                     <li class="prod-card__item-photo">
+                        <img src="{{thumb}}" />
+                     </li>
                      {% endif %}
                      {% for i in images %}
-                     <li class="prod-card__item-photo"><img src="{{i.thumb}}"></li>
+                     <li class="prod-card__item-photo">
+                        <img src="{{i.thumb}}" />
+                     </li>
                      {% endfor %}
                   </ul>
                   <ul class="prod-card__list-big-photo slider-for">
                      {% if thumb %}
                      <li class="prod-card__item-big-photo" data-zoom-image="{{popup}}">
-                        <img src="{{popup}}">
+                        <img src="{{popup}}" />
                      </li>
                      {% endif %}
                      {% for i in images %}
                      <li class="prod-card__item-big-photo">
-                        <img src="{{i.popup}}" data-zoom-image="{{i.popup}}">
+                        <img src="{{i.popup}}" data-zoom-image="{{i.popup}}" />
                      </li>
                      {% endfor %}
                   </ul>
@@ -86,7 +90,7 @@
                <ul class="">
                   {% for p in products %}
                   <li class="other-prod__item {{p.znachek_class}}">
-                     <a href="{{p.href}}" class="other-prod__item-link"><img src="{{p.thumb}}" alt="{{p.h1}}"></a>
+                     <a href="{{p.href}}" class="other-prod__item-link"><img src="{{p.thumb}}" alt="{{p.h1}}" /></a>
                      <div class="other-prod__item-ivaninfo">
                         <div class="row">
                            <div class="col-xs-12">
@@ -110,7 +114,7 @@
                <ul class="">
                   {% for p in recently_viewed %}
                   <li class="other-prod__item {{znachek_class}}">
-                     <a href="{{p.href}}" class="other-prod__item-link"><img src="{{p.thumb}}" alt="{{p.h1}}"></a>
+                     <a href="{{p.href}}" class="other-prod__item-link"><img src="{{p.thumb}}" alt="{{p.h1}}" /></a>
                      <div class="other-prod__item-ivaninfo">
                         <div class="row">
                            <div class="col-xs-12">

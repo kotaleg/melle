@@ -14,7 +14,11 @@ Options -Indexes
 
 # SEO URL Settings
 RewriteEngine On
-# If your opencart installation does not run on the main web folder make sure you folder it does run in ie. / becomes /shop/
+RewriteBase /
+
+#IMAGE RESIZE
+RewriteRule ^resizeImage/([^.]*)\.(png|jpg|jpeg|gif)$ resize.php?file=$1.$2&%{QUERY_STRING} [NC,L]
+#IMAGE RESIZE
 
 RewriteCond %{HTTP_HOST} ^www\.(.*)$
 RewriteRule ^(.*)$ http://%1/$1 [L,R=301]
@@ -56,7 +60,6 @@ RewriteCond %{QUERY_STRING} q
 RewriteRule (.*) / [R=301,L]
 # REDIRECTS FROM OLD SITE END
 
-RewriteBase /
 RewriteRule ^sitemap.xml$ index.php?route=extension/feed/google_sitemap [L]
 RewriteRule ^googlebase.xml$ index.php?route=extension/feed/google_base [L]
 RewriteRule ^system/storage/(.*) index.php?route=error/not_found [L]

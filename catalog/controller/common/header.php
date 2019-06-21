@@ -24,6 +24,9 @@ class ControllerCommonHeader extends Controller {
             $this->document->addLink($server . 'image/' . $this->config->get('config_icon'), 'icon');
         }
 
+        // $this->document->addScript('catalog/view/javascript/jquery/jquery.lazy/jquery.lazy.min.js');
+        // $this->document->addScript('catalog/view/javascript/jquery/jquery.lazy/jquery.lazy.plugins.min.js');
+
         $data['title'] = $this->document->getTitle();
 
         $data['base'] = $server;

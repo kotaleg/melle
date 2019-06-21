@@ -9,7 +9,7 @@
             :class="['catalog__item', p.znachek_class]">
 
              <a @click="gtmProductClick(i)" :href="p.href" class="catalog__item-link">
-                <img :src="p.image" :alt="p.h1">
+                <img :src="p.image" :alt="p.h1" />
              </a>
 
              <div v-if="p.special_text" class="catalog__item-price super-div" style="top: 0px;">

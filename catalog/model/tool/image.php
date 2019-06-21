@@ -1,6 +1,31 @@
 <?php
-class ModelToolImage extends Model {
-    public function resize($filename, $width, $height, $custom = false) {
+class ModelToolImage extends Model
+{
+    public function prepareImageLink($filename, $width, $height, $custom = false)
+    {
+        $this->load->model('tool/base');
+        $base = $this->model_tool_base->getBase();
+
+        $params = "?file={$filename}&w={$width}&h={$height}";
+        if ($custom !== false) { $params .= "c={$custom}"; }
+
+        if ($this->config->get('config_seo_url')) {
+            $params = "{$filename}?w={$width}&h={$height}";
+            if ($custom !== false) { $params .= "&c={$custom}"; }
+
+            return "{$base}resizeImage/{$params}";
+        } else {
+            $params = "?file={$filename}&w={$width}&h={$height}";
+            if ($custom !== false) { $params .= "&c={$custom}"; }
+
+            return "{$base}resize.php{$params}";
+        }
+    }
+
+    public function resize($filename, $width, $height, $custom = false)
+    {
+        return $this->prepareImageLink($filename, $width, $height, $custom);
+
         if (!is_file(DIR_IMAGE . $filename) || substr(str_replace('\\', '/', realpath(DIR_IMAGE . $filename)), 0, strlen(DIR_IMAGE)) != str_replace('\\', '/', DIR_IMAGE)) {
             return;
         }
