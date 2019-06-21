@@ -117,9 +117,14 @@ main {
 }
 
 .main-page {
-  margin-top: 118px;
+  margin-top: 130px;
   margin-bottom: 50px;
+    @include mobile{
+    margin-top: 160px;
+  }
+
 }
+
 
 // .alert-success {
 //   padding: 15px;
