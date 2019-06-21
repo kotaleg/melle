@@ -9,8 +9,8 @@
   "scripts": {
     "dev": "yarn run development",
     "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch": "yarn run development watch",
-    "watch-poll": "yarn run watch watch-poll",
+    "watch": "yarn run development --watch",
+    "watch-poll": "yarn run --watch --watch-poll",
     "prod": "yarn run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch-import1c": "yarn run watch --env.mixfile=webpack.import-1c.mix",

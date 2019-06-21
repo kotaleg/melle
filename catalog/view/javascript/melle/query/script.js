@@ -22,6 +22,20 @@ function getURLVar(key) {
     }
 }
 
+var handleLazyImages = function() {
+    $('.lazy').Lazy({
+        scrollDirection: 'vertical',
+        effect: 'fadeIn',
+        visibleOnly: true,
+        afterLoad: function(element) {
+            element.removeClass('lazy');
+        },
+        onError: function(element) {
+            console.log('Не удалось загрузить изображение ' + element.data('src'));
+        }
+    });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     /* MMENU START */
     $('nav#menu').mmenu({
