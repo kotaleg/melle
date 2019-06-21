@@ -1,9 +1,5 @@
 image: ubuntu:18.04
 
-cache:
-  paths:
-    - node_modules/
-
 before_script:
   - export DEBIAN_FRONTEND=noninteractive
   - apt-get -qq update && apt-get -qq install -y --no-install-recommends apt-utils < /dev/null > /dev/null
