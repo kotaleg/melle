@@ -1,22 +1,25 @@
 import Vue from 'vue'
-import { isUndefined } from 'lodash'
+import { isUndefined, has } from 'lodash'
 
 export default {
-    getInlineState(cb, errorCb) {
-        if (!isUndefined(window['__' + Vue.prototype.$codename + '__'])) {
-            cb(window['__' + Vue.prototype.$codename + '__'])
-        } else {
-            errorCb()
+    getInlineState(cb) {
+        const codename = Vue.prototype.$codename
+        if (!isUndefined(window['__' + codename + '__'])) {
+            cb(window['__' + codename + '__'])
         }
     },
-    postSettingData(data, cb) {
-        Vue.prototype.$http.post(data.url, data).then(response => {
-            cb(response)
-        })
-    },
-    makeRequest(data, cb) {
-        Vue.prototype.$http.post(data.url, data).then(response => {
-            cb(response)
-        })
+    async makeRequest(data, cb) {
+        const url = data.url
+        delete data.url
+
+        const res = await Vue.prototype.$http.post(url, data)
+        .catch(error => {
+            if (has(error.response, 'data')) {
+                notify.messageHandler(error.response.data)
+            }
+        });
+
+        if (res) { cb(res) }
+        cb(false)
     },
 }

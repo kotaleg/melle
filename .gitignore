@@ -37,3 +37,4 @@ catalog/view/theme/*/stylesheet/bootstrap.css
 get_url.js
 get_url_pvz.js
 opt
+*.csv

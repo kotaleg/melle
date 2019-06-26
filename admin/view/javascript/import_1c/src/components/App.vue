@@ -44,8 +44,12 @@
             <panel-default
                 :title="text_edit">
 
+                <template v-slot:right>
+                    <span v-if="is_updating"> Обновляем <i class="fa fa-cog fa-spin fa-fw"></i></span>
+                </template>
+
                 <form class="form-horizontal">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label class="col-sm-3 col-lg-2 control-label">{{ text_status }}</label>
                             <div class="col-sm-9 col-lg-5">
@@ -53,15 +57,22 @@
                                     v-model="status"
                                     :width="100"
                                     :height="25"
-                                    :labels="getToggleStates"/>
+                                    :labels="getToggleStates" />
                             </div>
                         </div>
+                    </div>
+
+                    <div class="col-md-6 text-center">
+                        <a @click="exportLinksInCsvRequest"
+                            class="btn btn-primary btn-block btn-export">
+                            Экспорт ссылок в csv
+                        </a>
                     </div>
                     <div class="col-md-6">
                         <file-upload
                             :url="upload_seo_file"
                             accept=".xml"
-                            btn-label="Выберите SEO файл"
+                            btn-label="Импортировать SEO файл"
                             btn-uploading-label="Обработка.."
                             @change="onFileChange"
                             @success="onFileSuccess"
@@ -70,11 +81,11 @@
                 </form>
 
                 <div v-if="imports">
-                    <hr>
+                    <hr />
 
                     <div v-for="(imp, k) in imports" class="import-box">
                         <div class="col-sm-12 imp-head">
-                            <h3>Прогресс № {{ imp.id }} <i v-if="is_updating" class="fa fa-cog fa-spin fa-fw"></i></h3>
+                            <h3>Прогресс № {{ imp.id }}</h3>
                             <span>Загружено файлов: {{ imp.files_uploaded }}</span>
                             <span>Обработано файлов: {{ imp.files_processed }}</span>
                         </div>
@@ -198,6 +209,7 @@ export default {
             'setLoadingStatus',
             'fetchImports',
             'importSEOData',
+            'exportLinksInCsvRequest',
         ]),
 
         pollData () {
@@ -220,7 +232,7 @@ export default {
         saveAndStay() {
             this.setLoadingStatus(true)
             let data = extend({}, this.setting, { url: this.save })
-            shop.postSettingData(data, res => {
+            shop.makeRequest(data, res => {
                 this.setLoadingStatus(false)
                 notify.messageHandler(res.data)
             })
@@ -228,7 +240,7 @@ export default {
         saveAndGo() {
             this.setLoadingStatus(true)
             let data = extend({}, this.setting, { url: this.save })
-            shop.postSettingData(data, res => {
+            shop.makeRequest(data, res => {
                 this.setLoadingStatus(false)
                 notify.messageHandler(res.data)
 
@@ -273,6 +285,20 @@ export default {
                 display: none !important;
             }
         }
+    }
+}
+
+.btn-export {
+    background-color: #307dbf;
+    font-size: 1.25em;
+    color: #fff;
+    padding: 10px;
+    line-height: 1.4em;
+    border-radius: 0;
+    font-weight: bold;
+
+    &:hover {
+        background-color: #2c70ac;
     }
 }
 </style>

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isEmpty } from 'lodash'
+import { isUndefined, isEmpty, has } from 'lodash'
 
 import shop from '../../api/shop'
 import notify from '../../components/partial/notify'
@@ -74,7 +74,7 @@ const actions = {
             },
             res => {
                 commit('setUpdateStatus', false)
-                if (!isUndefined(res.data.imports)) {
+                if (has(res.data, 'imports')) {
                     commit('updateImports', res.data.imports)
                 }
                 notify.messageHandler(res.data)
@@ -90,6 +90,22 @@ const actions = {
             res => {
                 commit('setLoadingStatus', false)
                 notify.messageHandler(res.data)
+            }
+        )
+    },
+    exportLinksInCsvRequest({ commit }) {
+        commit('setLoadingStatus', true)
+        shop.makeRequest(
+            {
+                url: state.exportLinksInCsv,
+            },
+            res => {
+                commit('setLoadingStatus', false)
+                notify.messageHandler(res.data)
+
+                if (has(res.data, 'filePath')) {
+                    window.location.href = res.data.filePath
+                }
             }
         )
     },

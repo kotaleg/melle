@@ -1,34 +1,39 @@
-import Vue from 'vue'
-import { isArray } from 'lodash'
-import store from '../../store/index'
+import Vue from 'vue';
+import store from './../../store'
+import { isArray, has, forEach } from 'lodash';
 
 export default {
-    messageHandler(data) {
-        if (data.success && isArray(data.success)) {
-            data.success.forEach(function(element) {
+    messageHandler(data, codename = false) {
+        if (codename === false) {
+            codename = Vue.prototype.$codename;
+        } else {
+            codename = `${Vue.prototype.$codename}${codename}`;
+        }
+
+        if (has(data, 'success') && isArray(data.success)) {
+            forEach(data.success, (element) => {
                 Vue.prototype.$notify({
-                    group: Vue.prototype.$codename,
+                    group: codename,
                     type: 'success',
-                    title: store.state.shop.text_success,
                     text: element,
                 })
-            }, this)
-        } else if (data.error && isArray(data.error)) {
-            data.error.forEach(function(element) {
+            })
+        } else if (has(data, 'error') && isArray(data.error)) {
+            forEach(data.error, (element) => {
                 Vue.prototype.$notify({
-                    group: Vue.prototype.$codename,
+                    group: codename,
                     type: 'warn',
-                    title: store.state.shop.text_warning,
                     text: element,
                 })
-            }, this)
-        } else if (data.message && isArray(data.message)) {
-            data.message.forEach(function(element) {
+            })
+        } else if (has(data, 'message') && isArray(data.message)) {
+            forEach(data.message, (element) => {
                 Vue.prototype.$notify({
-                    group: Vue.prototype.$codename,
+                    group: codename,
+                    type: 'info',
                     text: element,
                 })
-            }, this)
+            })
         }
     },
 }

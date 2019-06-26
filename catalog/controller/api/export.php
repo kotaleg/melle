@@ -5,14 +5,16 @@ class ControllerApiExport extends Controller
     private $route = 'api/export';
     private $setting_route = 'extension/module/export';
 
-    private $key = '0JXQsdCw0YLRjCDQvNC0Lkg0YXRg9C5IQ';
-
     function __construct($registry)
     {
         parent::__construct($registry);
 
-        $this->load->model($this->route);
         $this->load->language('api/export');
+
+        $this->load->model($this->route);
+        $this->load->model('extension/pro_patch/setting');
+
+        $this->setting = $this->model_extension_pro_patch_setting->getSetting('import_1c');
 
         $this->extension_model = $this->{'model_'.str_replace("/", "_", $this->route)};
     }
@@ -22,12 +24,12 @@ class ControllerApiExport extends Controller
         $json = array();
 
         if (isset($this->request->get['key'])
-        && strcmp($this->key, $this->request->get['key']) === 0) {
+        && strcmp($this->setting['key'], $this->request->get['key']) === 0) {
             $time_start = microtime(true);
 
             if (isset($this->request->get['type'])) {
                 $type = $this->db->escape($this->request->get['type']);
-                $mode = $this->db->escape($this->request->get['mode']);
+                $mode = 'export';
                 $process = 'action' . ucfirst($type) . ucfirst($mode);
 
                 $filename = isset($this->request->get['filename']) ?

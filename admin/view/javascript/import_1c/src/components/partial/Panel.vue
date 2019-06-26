@@ -7,7 +7,7 @@
                 <i class="fa fa-pencil"/> {{ title }}
             </h3>
 
-            <span class="pull-right">{{ extra }}</span>
+            <span class="pull-right"><slot name="right" /></span>
         </div>
 
         <div class="panel-body">

@@ -23,6 +23,42 @@ class ModelApiExport extends Model
         return dirname(DIR_SYSTEM).'/';
     }
 
+    public function actionCsvlinksExport()
+    {
+        $file = $this->export_path . 'seoLinks.csv';
+        if (is_file($file)) { @unlink($file); }
+        $this->createPath($file);
+
+        $this->load->model('catalog/product');
+        $products = $this->model_catalog_product->getProducts();
+
+        $ex = new \pro_csv\pro_csv('EXPORT');
+        $ex->unstrict();
+        $ex->setDelimiter(",");
+        $ex->setFileMode("a");
+        $ex->setColumnHeaders(array('ID','TITLE','URL'));
+
+        $pcount = 0;
+        $rows = array();
+
+        foreach ($products as $product) {
+
+            $rows[] = array(
+                $product['product_id'],
+                $product['name'],
+                $this->url->link('product/product', "product_id={$product['product_id']}"),
+            );
+
+            $pcount++;
+        }
+
+        $json['filePath'] = str_replace($this->getRootPath(), HTTPS_SERVER, $file);
+        $json['success'] = $ex->export($file, $rows);
+
+        $json['message'][] = "Обработано {$pcount} товаров.";
+        return $json;
+    }
+
     public function actionSeoExport()
     {
         $file = $this->export_path . 'seo.xml';
