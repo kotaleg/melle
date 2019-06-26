@@ -29,6 +29,12 @@ class ModelApiExport extends Model
         if (is_file($file)) { @unlink($file); }
         $this->createPath($file);
 
+        $f = fopen($file, 'w');
+
+        $this->_str = "\xEF\xBB\xBF";
+        fwrite($f, $this->_str);
+        fclose($f);
+
         $this->load->model('catalog/product');
         $products = $this->model_catalog_product->getProducts();
 

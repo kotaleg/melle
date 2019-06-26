@@ -38,7 +38,7 @@ rm -Rf ./opt/
 rm -f README.md
 
 echo "-- REMOVE ALL BUT --"
-rm -v !("config.php"|"index.php"|".htaccess"|"robots.txt"|"resize.php")
+rm -v !("config.php"|"index.php"|"resize.php"|".htaccess"|".user.ini"|".php.ini"|"robots.txt")
 
 sshpass -V
 export SSHPASS=$K8S_SECRET_SSH
