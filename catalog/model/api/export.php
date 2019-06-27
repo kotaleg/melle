@@ -42,7 +42,7 @@ class ModelApiExport extends Model
         $ex->unstrict();
         $ex->setDelimiter(",");
         $ex->setFileMode("a");
-        $ex->setColumnHeaders(array('ID','TITLE','URL'));
+        $ex->setColumnHeaders(array('TITLE','URL'));
 
         $pcount = 0;
         $rows = array();
@@ -50,7 +50,6 @@ class ModelApiExport extends Model
         foreach ($products as $product) {
 
             $rows[] = array(
-                $product['product_id'],
                 $product['name'],
                 $this->url->link('product/product', "product_id={$product['product_id']}"),
             );
