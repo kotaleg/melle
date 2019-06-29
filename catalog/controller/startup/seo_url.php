@@ -150,10 +150,11 @@ class ControllerStartupSeoUrl extends Controller {
             }
         }
 
-
+        /* BLOG START */
         foreach ($data as $k => $v) {
             if ( isset( $data['route'] ) ) {
-                if (($data['route'] == 'extension/d_blog_module/post' && $key == 'post_id') || ($data['route'] == 'extension/d_blog_module/category' && $key == 'category_id')) {
+                if (($data['route'] == 'extension/d_blog_module/post' && $key == 'post_id')
+                || ($data['route'] == 'extension/d_blog_module/category' && $key == 'category_id')) {
                     $q = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url
                         WHERE `query` = 'bm_" . $this->db->escape($key . '=' . (int)$value) . "'
                         AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
@@ -165,6 +166,7 @@ class ControllerStartupSeoUrl extends Controller {
                 }
             }
         }
+        /* BLOG END */
 
         if ($url) {
             unset($data['route']);

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>price_list</name>
+    <code>price_list</code>
+    <description>Прайс листы</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/information/information.php">
+        <operation error="skip">
+            <search><![CDATA[if ($information_info) {]]></search>
+            <add position="before"><![CDATA[
+                // PRICELIST START
+                $this->load->model('extension/module/price_list');
+                if ($this->model_extension_module_price_list->isActive($information_id)) {
+                    $this->load->controller('extension/module/price_list/initPriceList');
+                    $data['priceList'] = true;
+                }
+                // PRICELIST END
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/melle/template/information/information.twig">
+        <operation error="skip">
+            <search><![CDATA[{{ description }}]]></search>
+            <add position="before"><![CDATA[
+                <!-- PRICELIST START -->
+                {% if priceList %}
+                <melle-price-list></melle-price-list>
+                {% endif %}
+                <!-- PRICELIST END -->
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

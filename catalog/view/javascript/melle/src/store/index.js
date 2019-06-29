@@ -24,6 +24,9 @@ import filter from './modules/catalog/filter'
 // CHECKOUT
 import checkoutrp from './modules/checkout/related'
 
+// PRICE LIST
+import priceList from './modules/priceList/priceList'
+
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -43,6 +46,7 @@ export default new Vuex.Store({
         catalog,
         filter,
         checkoutrp,
+        priceList,
     },
     strict: debug,
 })

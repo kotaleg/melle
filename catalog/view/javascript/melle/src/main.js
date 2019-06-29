@@ -37,6 +37,7 @@ Vue.component('melle-catalog-content', require('./components/catalog/CatalogWith
 Vue.component('melle-catalog-sort', require('./components/catalog/Sort.vue'))
 Vue.component('melle-search-form', require('./components/catalog/SearchForm.vue'))
 Vue.component('melle-checkout-rp', require('./components/checkout/RelatedProducts.vue'))
+Vue.component('melle-price-list', require('./components/priceList/PriceList.vue'))
 
 
 document.addEventListener('DOMContentLoaded', () => {

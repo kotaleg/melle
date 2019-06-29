@@ -38,3 +38,4 @@ get_url.js
 get_url_pvz.js
 opt
 *.csv
+*.xls
