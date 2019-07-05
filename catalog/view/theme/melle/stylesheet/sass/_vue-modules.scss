@@ -408,3 +408,35 @@
 .checkout-slide {
     margin: 0!important;
 }
+
+/* PRICE LIST */
+.price-list-link {
+    cursor: pointer;
+}
+.v--modal-overlay {
+    z-index: 1050;
+}
+.price-list-modal-container {
+    padding: 30px!important;
+    font-size: 24px!important;
+    text-align: center;
+
+    p {
+        font-size: inherit!important;
+        line-height: 40px;
+    }
+
+    a {
+        font-size: inherit!important;
+        font-weight: bold!important;
+        text-decoration: underline!important;
+
+        &:hover {
+            text-decoration: none!important;
+        }
+    }
+
+    .price-list-modal-body {
+
+    }
+}

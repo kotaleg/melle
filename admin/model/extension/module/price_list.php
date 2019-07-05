@@ -18,7 +18,7 @@ class ModelExtensionModulePriceList extends Model
         $this->load->model('extension/pro_patch/db');
 
         $this->setting = $this->model_extension_pro_patch_setting->getSetting($this->codename);
-        $this->workFolder = dirname(DIR_SYSTEM).'/'.$this->getWorkFolderName().'/';
+        $this->workFolder = dirname(DIR_SYSTEM).'/'.$this->setting['path'];
     }
 
     public function createTables()
@@ -58,14 +58,14 @@ class ModelExtensionModulePriceList extends Model
 
     public function getWorkFolderName()
     {
-        return 'priceLists';
+        return $this->setting['path'];
     }
 
     public function getPriceFiles()
     {
         $files = array();
 
-        foreach (glob("{$this->workFolder}*{.xls}", GLOB_BRACE) as $file) {
+        foreach (glob("{$this->workFolder}*{.xls,.xlsx}", GLOB_BRACE) as $file) {
             if (is_file($file)) {
                 $name = str_replace($this->workFolder, '', $file);
                 $files[] = $this->preparePriceFile($name);

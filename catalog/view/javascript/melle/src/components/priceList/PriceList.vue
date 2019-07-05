@@ -1,21 +1,26 @@
 <template>
     <div class="price-list-container">
         <p v-for="pl in priceLists">
-            <a :href="pl.downloadLink" class="price-list-link">{{ pl.title }}</a>
+            <a @click="downloadHandler(pl.downloadLink)" class="price-list-link">{{ pl.title }}</a>
         </p>
+
+        <price-list-modal dir="ltr"
+            :width="500"
+            :scrollable="false" />
     </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import PriceListModal from './../modal/PriceListModal.vue'
 
 export default {
+    components: {
+        'price-list-modal': PriceListModal,
+    },
     computed: {
         ...mapState('header', [
-            'phone',
             'is_logged',
-            'account_link',
-            'logout_link',
         ]),
         ...mapState('priceList', [
             'priceLists',
@@ -25,6 +30,14 @@ export default {
         ...mapActions('header', [
             'enableElement',
         ]),
+
+        downloadHandler(downloadLink) {
+            if (this.is_logged) {
+                window.location.href = downloadLink
+            } else {
+                this.$modal.show('price-list-modal', {});
+            }
+        },
     },
     created() {
         this.$store.dispatch('priceList/initData')

@@ -22,12 +22,12 @@ class ModelExtensionModulePriceList extends Controller
 
         $this->setting = $this->model_extension_pro_patch_setting->getSetting($this->codename);
 
-        $this->workFolder = dirname(DIR_SYSTEM).'/'.$this->getWorkFolderName().'/';
+        $this->workFolder = dirname(DIR_SYSTEM).'/'.$this->setting['path'];
     }
 
     public function getWorkFolderName()
     {
-        return 'priceLists';
+        return $this->setting['path'];
     }
 
     public function prepareFilePath($path)
@@ -47,7 +47,21 @@ class ModelExtensionModulePriceList extends Controller
             WHERE `status` = '1'
             ORDER BY `sortOrder` ASC");
 
-        return $q->rows;
+        return array_map(function($v) {
+            if ($this->isPriceListExist($v['filePath'])) {
+                return array(
+                    'title' => $v['title'],
+                    '_id' => $v['_id'].'aasdf',
+                );
+            }
+        }, $q->rows);
+    }
+
+    public function isPriceListExist($path)
+    {
+        if (is_readable($this->prepareFilePath($path))) {
+            return true;
+        }
     }
 
     public function getPriceList($_id)

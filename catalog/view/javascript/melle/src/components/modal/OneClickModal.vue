@@ -55,8 +55,7 @@
 </template>
 
 <script>
-import { isEmpty, isString, trim } from 'lodash'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
     name: 'OneClickModal',
@@ -78,7 +77,7 @@ export default {
     data() {
         return {
             params: {},
-            defaultButtons: [{ title: 'CLOSE' }],
+            defaultButtons: [{ title: 'Закрыть' }],
 
             name: '',
             phone: '',
@@ -130,7 +129,7 @@ export default {
             if (button && typeof button.handler === 'function') {
                 button.handler(i, event)
             } else {
-                this.$modal.hide('dialog')
+                this.$modal.hide('one-click-modal')
             }
         },
 
@@ -148,6 +147,7 @@ export default {
     },
 }
 </script>
+
 <style lang="scss">
 
 </style>
