@@ -1,0 +1,14 @@
+{
+    "codename": "price_list",
+    "version": "1.0.0",
+    "name": "Price Lists",
+    "description": "Price Lists",
+    "author": {
+        "name": "PRO Hamster",
+        "url": "https://prohamster.com/"
+    },
+    "require": {
+        "pro_patch": ">= 1.0.0",
+        "pro_style": ">= 1.0.0"
+    }
+}
