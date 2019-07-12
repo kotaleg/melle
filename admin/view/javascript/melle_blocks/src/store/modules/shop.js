@@ -142,7 +142,11 @@ const actions = {
 
         commit('removeBlock', index)
         commit('updateValue', {k:'widthCount', v: wc})
-    }
+    },
+    updateBlockValue({ commit }, payload) {
+        commit('updateBlockValue',
+            {i: payload.i, k: payload.k, v: payload.v})
+    },
 }
 
 // mutations
@@ -174,6 +178,9 @@ const mutations = {
         console.log(filtered);
 
         Vue.set(state, 'blocks', filtered)
+    },
+    updateBlockValue(state, {i, k, v}) {
+        Vue.set(state.blocks[i], k, v)
     },
 }
 
