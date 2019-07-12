@@ -8,6 +8,11 @@
 class ControllerExtensionModuleFacebookAdsExtensionInstaller
 	extends Controller {
 
+    public function index()
+    {
+      return $this->response->redirect($this->url->link('extension/facebookadsextension', 'user_token=' . $this->session->data['user_token'], true));
+    }
+
 	public function install() {
 
   // creates the facebook_product table
