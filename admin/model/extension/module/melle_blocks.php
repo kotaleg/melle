@@ -9,9 +9,9 @@ class ModelExtensionModuleMelleBlocks extends Model
 
     const BLOCK_TABLE = 'melleb_block';
 
-    const BTYPE_1 = 1;
-    const BTYPE_2 = 2;
-    const BTYPE_3 = 3;
+    const BTYPE_1 = 'type-1';
+    const BTYPE_2 = 'type-2';
+    const BTYPE_3 = 'type-3';
 
     public function __construct($registry)
     {
@@ -31,7 +31,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             `_id` int(11) NOT NULL AUTO_INCREMENT,
 
             `moduleId` int(11) NOT NULL,
-            `type` int(3) NOT NULL,
+            `type` char(16) NOT NULL,
             `link` varchar(255) NOT NULL,
             `image` varchar(255) NOT NULL,
             `text` varchar(255) NOT NULL,
@@ -82,15 +82,6 @@ class ModelExtensionModuleMelleBlocks extends Model
             $item['status'] = $moduleInfo['status'];
         }
 
-
-        // $this->load->model('tool/image');
-
-        // if (isset($image['image']) && is_file(DIR_IMAGE . $image['image'])) {
-        //     $image['thumb'] = $this->model_tool_image->resize($image['image'], 100, 100);
-        // } else {
-        //     $image['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-        // }
-
         return $item;
     }
 
@@ -103,13 +94,48 @@ class ModelExtensionModuleMelleBlocks extends Model
         return 1;
     }
 
+    public function prepareBlocks($moduleId)
+    {
+        $blocks = array();
+
+        $this->load->model('tool/image');
+
+        foreach ($this->getBlocks($moduleId) as $b) {
+            $bt = $this->getBlockType($b['type']);
+            if (!$bt) { continue; }
+
+            foreach ($bt as $k => $v) {
+                if (array_key_exists($k, $b)) {
+                    $bt[$k] = $b[$k];
+                }
+            }
+
+            if (isset($bt['image']) && is_file(DIR_IMAGE . $bt['image'])) {
+                $bt['thumb'] = $this->model_tool_image->resize($bt['image'], 100, 100);
+            } else {
+                $bt['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+            }
+
+            $blocks[] = $bt;
+        }
+
+        return $blocks;
+    }
+
     private function getBlocks($moduleId)
     {
+        $q = $this->db->query("SELECT *
+            FROM `". DB_PREFIX . self::BLOCK_TABLE ."`
+            WHERE `moduleId` = '" . (int)$moduleId . "'
+            ORDER BY `sortOrder` ASC");
 
+        return $q->rows;
     }
 
     public function getBlockTypes()
     {
+        $this->load->model('tool/image');
+
         $types = array();
         $types[] = array(
             'type' => self::BTYPE_1,
@@ -118,9 +144,10 @@ class ModelExtensionModuleMelleBlocks extends Model
 
             'link' => '',
             'image' => '',
+            'thumb' => $this->model_tool_image->resize('no_image.png', 100, 100),
             'text' => '',
             'buttonText' => '',
-            'sortOrder' => '',
+            'sortOrder' => 1,
         );
         $types[] = array(
             'type' => self::BTYPE_2,
@@ -129,9 +156,10 @@ class ModelExtensionModuleMelleBlocks extends Model
 
             'link' => '',
             'image' => '',
+            'thumb' => $this->model_tool_image->resize('no_image.png', 100, 100),
             'text' => '',
             'buttonText' => '',
-            'sortOrder' => '',
+            'sortOrder' => 1,
         );
         $types[] = array(
             'type' => self::BTYPE_3,
@@ -140,49 +168,21 @@ class ModelExtensionModuleMelleBlocks extends Model
 
             'link' => '',
             'image' => '',
+            'thumb' => $this->model_tool_image->resize('no_image.png', 100, 100),
             'text' => '',
-            'sortOrder' => '',
+            'sortOrder' => 1,
         );
 
         return $types;
     }
 
-
-    public function getPriceFile($name)
+    public function getBlockType($type)
     {
-        return $this->preparePriceFile($name);
-    }
-
-    private function preparePriceFile($name)
-    {
-        $file = $this->getPriceListByName($name);
-
-        if ($file) {
-            $file['status'] = (bool)$file['status'];
-            return $file;
-        } else {
-            $this->initPriceList($name);
-            return $this->preparePriceFile($name);
+        foreach ($this->getBlockTypes() as $bt) {
+            if (strcmp($bt['type'], $type) === 0) {
+                return $bt;
+            }
         }
-    }
-
-    private function getPriceListByName($name)
-    {
-        $q = $this->db->query("SELECT *
-            FROM `". DB_PREFIX . $this->db->escape(self::PL_TABLE) . "`
-            WHERE `filePath` = '" . $this->db->escape($name) . "'");
-
-        return $q->row;
-    }
-
-    private function initRow($name)
-    {
-        $this->db->query("INSERT INTO `". DB_PREFIX . $this->db->escape(self::PL_TABLE) ."`
-            SET `filePath` = '". $this->db->escape($name) ."',
-                `title` = '". $this->db->escape($name) ."',
-                `downloadCount` = '". (int)0 ."',
-                `sortOrder` = '". (int)0 ."',
-                `status` = '". (bool)0 ."'");
     }
 
     public function saveItem($data)
@@ -197,29 +197,37 @@ class ModelExtensionModuleMelleBlocks extends Model
             $json['error'][] = 'Слишком маленькая высота';
         }
 
-        if ((float)$data['widthCount'] != 100) {
+        if ((float)$this->countBlocksWidth($data['blocks']) != 100) {
             $json['error'][] = 'Ширина всех блоков должна быть равна 100%';
         }
 
         if (!isset($json['error'])) {
 
-            // echo "<pre>"; print_r($data); echo "</pre>";exit;
+            $moduleId = $data['moduleId'];
+            // unset($data['moduleId']);
 
-            if (empty($data['moduleId'])) {
-                $this->model_extension_pro_patch_module->addModule($this->codename, $data);
+            // remove blocks
+            $this->removeBlocks($moduleId);
+
+            // remove unused blocks
+            $this->removeUnusedBlocks();
+
+            // parse blocks
+            $blocks = $this->parseBlocks($data['blocks'], $data['extra']);
+            unset($data['blocks'], $data['extra']);
+
+            if (empty($moduleId)) {
+                $moduleId = $this->model_extension_pro_patch_module->addModule($this->codename, $data);
                 $json['success'][] = 'Блок сохранен';
             } else {
-
-                $moduleId = $data['moduleId'];
-                unset($data['moduleId']);
-
-                // save blocks
-                unset($data['blocks']);
-
                 $this->model_extension_pro_patch_module->editModule($moduleId, $data);
                 $json['success'][] = 'Данные блока обновлены';
             }
 
+            // save blocks
+            $this->saveBlocks($moduleId, $blocks);
+
+            $json['moduleId'] = $moduleId;
             $json['saved'] = true;
 
         }
@@ -227,10 +235,71 @@ class ModelExtensionModuleMelleBlocks extends Model
         return $json;
     }
 
-    private function updateRowStatus($_id, $status)
+    public function countBlocksWidth($blocks)
     {
-        $this->db->query("UPDATE `". DB_PREFIX . self::ROW_TABLE ."`
-            SET `status` = '". (int)$status ."'
-            WHERE `_id` = '" . (int)$_id . "'");
+        $widthCount = 0;
+        $blockTypes = $this->getBlockTypes();
+
+        foreach ($blocks as $b) {
+            if (isset($b['type'])) {
+                $bt = $this->getBlockType($b['type']);
+                if ($bt && isset($bt['typeWidth'])) {
+                    $widthCount += $bt['typeWidth'];
+                }
+            }
+        }
+
+        return $widthCount;
+    }
+
+    private function removeBlocks($moduleId)
+    {
+        $this->db->query("DELETE FROM `". DB_PREFIX . self::BLOCK_TABLE ."`
+            WHERE `moduleId` = '" . (int)$moduleId . "'");
+    }
+
+    private function removeUnusedBlocks()
+    {
+        $usedIds = array_map(function($v) {
+            return $v['module_id'];
+        }, $this->model_extension_pro_patch_module->getModulesByCode($this->codename));
+
+        if ($usedIds) {
+            $ids = $this->model_extension_pro_patch_db->prepareSqlParents($usedIds);
+
+            $this->db->query("DELETE FROM `". DB_PREFIX . self::BLOCK_TABLE ."`
+                WHERE `moduleId` NOT IN (" . $ids . ")");
+        }
+    }
+
+    private function parseBlocks($blocks, $extra)
+    {
+        foreach ($blocks as $k => $v) {
+            if (array_key_exists("image-{$k}", $extra)) {
+                $blocks[$k]['image'] = $extra["image-{$k}"];
+            }
+        }
+
+        return $blocks;
+    }
+
+    private function saveBlocks($moduleId, $blocks)
+    {
+        foreach ($blocks as $b) {
+            $this->saveBlock($moduleId, $b);
+        }
+    }
+
+    private function saveBlock($moduleId, $block)
+    {
+        $this->db->query("INSERT INTO `". DB_PREFIX . $this->db->escape(self::BLOCK_TABLE) ."`
+            SET `moduleId` = '". (int)$moduleId ."',
+                `type` = '". $this->db->escape($block['type']) ."',
+                `link` = '". $this->db->escape($block['link']) ."',
+                `image` = '". $this->db->escape($block['image']) ."',
+                `text` = '". $this->db->escape($block['text']) ."',
+                `buttonText` = '". $this->db->escape($block['buttonText']) ."',
+                `sortOrder` = '". (int)$block['sortOrder'] ."',
+                `status` = '". (bool)true ."'");
     }
 }

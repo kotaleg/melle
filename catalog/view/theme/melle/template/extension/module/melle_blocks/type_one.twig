@@ -1,0 +1,20 @@
+<a href="{{link}}" id="melle-block-{{blockId}}" class="melle-block melle-block-{{type}} {{class}}">
+
+    {% if text %}
+    <div class="melleb-text">{{text}}</div>
+    {% endif %}
+
+    {% if buttonText %}
+    <button class="btn melleb-button">{{buttonText}}
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='0.407cm' height='0.442cm'><path fill-rule='evenodd'  stroke='rgb(0, 0, 0)' stroke-width='1.69px' stroke-linecap='butt' stroke-linejoin='miter' fill='none' d='M2.445,0.840 L9.851,6.400 L2.445,10.847 '/></svg>" alt="{{buttonText}}">
+    </button>
+    {% endif %}
+
+</a>
+{% if image %}
+<style>
+#melle-block-{{blockId}} {
+    background: url('{{image}}');
+}
+</style>
+{% endif %}

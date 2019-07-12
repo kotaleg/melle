@@ -8,7 +8,8 @@ const CATALOG_JS_PATH = path.join('catalog/view/javascript', CODENAME)
 
 mix.js(path.join(CATALOG_JS_PATH, 'src/main.js'), path.join(CATALOG_JS_PATH, 'dist/'+CODENAME+'.js'))
 // mix.sass(path.join(CATALOG_CSS_PATH, 'main.scss'), CODENAME+'.css');
-.disableNotifications()
+
+mix.disableNotifications()
 
 mix.setPublicPath(path.join(CATALOG_JS_PATH, 'dist/'))
 

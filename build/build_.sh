@@ -23,6 +23,8 @@ yarn run prod-offersadmin
 yarn run prod-offers
 yarn run prod-discount
 yarn run prod-sizelist
+yarn run prod-pricelist
+yarn run prod-melleb
 
 echo "-- CLEAR AFTER --"
 rm -Rf ./.git/
@@ -34,6 +36,8 @@ rm -Rf ./admin/view/javascript/super_offers/src/
 rm -Rf ./admin/view/javascript/super_offers_admin/src/
 rm -Rf ./admin/view/javascript/pro_discount/src/
 rm -Rf ./admin/view/javascript/size_list/src/
+rm -Rf ./admin/view/javascript/price_list/src/
+rm -Rf ./admin/view/javascript/melle_blocks/src/
 rm -Rf ./opt/
 rm -f README.md
 

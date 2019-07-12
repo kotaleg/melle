@@ -440,3 +440,55 @@
 
     }
 }
+
+/* MELLE BLOCKS */
+
+.melle-blocks {
+    .melle-block {
+        height: inherit;
+        display: flex;
+    }
+
+    .melle-block-type-1, .melle-block-type-2 {
+        justify-content: center;
+        background-repeat: no-repeat!important;
+        background-size: contain!important;
+
+        .melleb-button {
+            background: #fff;
+            color: #000;
+            border: 1px #000 solid;
+            text-transform: none;
+            position: absolute;
+            bottom: 30px;
+            padding: 15px 35px;
+            height: 47px;
+
+            img {
+                width: 10.62px;
+                height: 11.62px;
+
+                position: absolute;
+                right: 6px;
+                top: 19px;
+            }
+        }
+
+        .melleb-text {
+            position: absolute;
+            top: 50px;
+        }
+
+        .melleb-image {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
+    .melle-block-type-3 {
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+}
+

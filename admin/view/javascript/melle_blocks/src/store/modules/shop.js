@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isEmpty, has, clone, debounce, forEach } from 'lodash'
+import { isUndefined, isEmpty, has, clone, forEach, remove } from 'lodash'
 
 import shop from '../../api/shop'
 import notify from '../../components/partial/notify'
@@ -73,29 +73,10 @@ const actions = {
     setLoadingStatus({ commit }, status) {
         commit('setLoadingStatus', status)
     },
-    setEditStatus({ commit }, status) {
-        commit('setEditStatus', status)
-    },
     updateValue({ commit, dispatch }, payload) {
         commit('updateValue', payload)
         dispatch('updateProduct')
     },
-    getItems: debounce(({ commit, state }) => {
-        commit('setLoadingStatus', true)
-        shop.makeRequest(
-            {
-                url: state.getItems,
-            },
-            res => {
-                commit('setLoadingStatus', false)
-                if (has(res.data, 'items')) {
-                    commit('updateValue',
-                        {k:'items', v:res.data.items})
-                }
-                notify.messageHandler(res.data)
-            }
-        )
-    }, 10),
     editItem({ commit, state }, _id) {
         commit('setLoadingStatus', true)
         shop.makeRequest(
@@ -114,31 +95,26 @@ const actions = {
             }
         )
     },
-    saveItem({ commit, state, dispatch }, obj) {
-
+    saveItem({ commit, state, dispatch }, extra) {
         let item = clone(state.item)
+        item['blocks'] = state.blocks
 
-        if (has(obj, 'title')) {
-            item['title'] = obj['title']
+        if (!isUndefined(extra)) {
+            item['extra'] = extra
         }
-        if (has(obj, 'sortOrder')) {
-            item['sortOrder'] = obj['sortOrder']
-        }
-
-        item['widthCount'] = state.widthCount
 
         commit('setLoadingStatus', true)
         shop.makeRequest(
             {
                 url: state.saveItem,
                 item,
+                extra
             },
             res => {
                 commit('setLoadingStatus', false)
-                if (has(res.data, 'saved')
-                && res.data.saved === true) {
-                    commit('setEditStatus', true)
-                    dispatch('getItems')
+                if (has(res.data, 'moduleId')) {
+                    commit('updateItemValue',
+                        {k:'moduleId', v: res.data.moduleId})
                 }
                 notify.messageHandler(res.data)
             }
@@ -147,7 +123,7 @@ const actions = {
     addNewBlock({ commit, state, dispatch }, type) {
         forEach(state.blockTypes, (el) => {
             if (el.type === type) {
-                commit('addNewBlock', el)
+                commit('addNewBlock', clone(el))
 
                 let wc = clone(state.widthCount)
                 wc = wc + el.typeWidth
@@ -156,6 +132,17 @@ const actions = {
             }
         })
     },
+    removeBlock({ commit, state }, index) {
+        const currentItem = state.blocks[index]
+
+        let wc = clone(state.widthCount)
+        wc = wc - currentItem.typeWidth
+
+        if (wc < 0) { wc = 0 }
+
+        commit('removeBlock', index)
+        commit('updateValue', {k:'widthCount', v: wc})
+    }
 }
 
 // mutations
@@ -168,9 +155,6 @@ const mutations = {
     setLoadingStatus(state, status) {
         Vue.set(state, 'is_loading', status)
     },
-    setEditStatus(state, status) {
-        Vue.set(state, 'is_edit', status)
-    },
     updateSetting(state, {k, v}) {
         Vue.set(state.setting, k, v)
     },
@@ -182,6 +166,14 @@ const mutations = {
     },
     addNewBlock(state, block) {
         state.blocks.push(block)
+    },
+    removeBlock(state, index) {
+        const filtered = remove(state.blocks, (v, i) => {
+            if (i !== index) { return v }
+        })
+        console.log(filtered);
+
+        Vue.set(state, 'blocks', filtered)
     },
 }
 

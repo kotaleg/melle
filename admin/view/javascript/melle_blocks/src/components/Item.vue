@@ -39,21 +39,21 @@
         </div>
 
         <div class="col-sm-12">
-            <div v-for="b in blocks" class="melleb-block row">
+            <div v-for="(b, i) in blocks" class="melleb-block row">
                 <hr>
                 <div class="col-sm-6">{{ b.typeDescription }}</div>
                 <div class="col-sm-6 text-right">
-                    <button @click="showBlockTypes" type="button" class="btn btn-danger">
+                    <button @click="removeBlock(i)" type="button" class="btn btn-danger">
                         <i class="fa fa-times-circle" aria-hidden="true"></i>
                     </button>
                 </div>
                 <div class="col-sm-12">
-                    <div class="form-group">
-            <label class="col-sm-3 col-lg-2 control-label">Высота</label>
-            <div class="col-sm-9 col-lg-5">
-                <input type="text" v-model="height" placeholder="Высота" class="form-control">
-            </div>
-        </div>
+
+                    <component
+                        v-bind:is="getBlockFields(b.type)"
+                        :index="i"
+                        :block="b" />
+
                 </div>
             </div>
         </div>
@@ -69,6 +69,9 @@
 import { mapState, mapActions, mapGetters } from 'vuex'
 import ProgressBar from 'vue-simple-progress'
 import PickBlockTypeModal from './modal/PickBlockTypeModal.vue'
+import TypeOne from './block/TypeOne.vue'
+import TypeTwo from './block/TypeTwo.vue'
+import TypeThree from './block/TypeThree.vue'
 
 export default {
     components: {
@@ -107,10 +110,20 @@ export default {
     methods: {
         ...mapActions('shop', [
             'updateItemValue',
+            'removeBlock',
         ]),
 
         showBlockTypes() {
             this.$modal.show('pick-block-type-modal', {});
+        },
+        getBlockFields(type) {
+            console.log(type);
+            const blocksFields = {
+                'type-1': TypeOne,
+                'type-2': TypeTwo,
+                'type-3': TypeThree,
+            }
+            return blocksFields[type]
         },
     },
 }
@@ -120,8 +133,4 @@ export default {
 .melleb-pb {
     margin-bottom: 20px;
 }
-// .melleb-block {
-//     margin-bottom: 20px;
-//     border-top: 1px #000 solid;
-// }
 </style>

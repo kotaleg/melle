@@ -1,0 +1,14 @@
+<a href="{{link}}" id="melle-block-{{blockId}}" class="melle-block melle-block-{{type}} {{class}}">
+
+    <div class="col-sm-6 text-right">
+        {% if image %}
+        <img src="{{image}}" alt="{{text}}" class="melleb-image">
+        {% endif %}
+    </div>
+    <div class="col-sm-6 text-left">
+        {% if text %}
+        <div class="melleb-text">{{text}}</div>
+        {% endif %}
+    </div>
+
+</a>

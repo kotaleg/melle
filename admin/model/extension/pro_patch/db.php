@@ -71,4 +71,25 @@ class ModelExtensionProPatchDb extends Model
 
         return $sql;
     }
+
+    public function prepareSqlParents($parent_ids)
+    {
+        $sql_parents = '';
+
+        if (is_array($parent_ids)) {
+            $parents_keys = array_keys($parent_ids);
+            $last_parent_key = end ($parents_keys);
+            foreach ($parent_ids as $k => $parent_id) {
+                $sql_parents .= "'{$parent_id}'";
+                if ($k !== $last_parent_key) {
+                    $sql_parents .= ',';
+                }
+            }
+            unset($parents_keys, $last_parent_key);
+        } else {
+            $sql_parents = (string)$parent_ids;
+        }
+
+        return $sql_parents;
+    }
 }

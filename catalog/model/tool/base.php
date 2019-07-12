@@ -10,6 +10,11 @@ class ModelToolBase extends Model
         }
     }
 
+    public function formatImageLink($image)
+    {
+        return $this->getBase() . 'image/' . $image;
+    }
+
     public function getPageType()
     {
         $pagetype = '';

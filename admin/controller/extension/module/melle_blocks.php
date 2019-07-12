@@ -99,8 +99,6 @@ class ControllerExtensionModuleMelleBlocks extends Controller
         $state['get_cancel'] = $this->model_extension_pro_patch_url->getExtensionAjax('module');
         $state['save'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/save");
 
-        $state['getBlocks'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/getBlocks");
-        $state['getItem'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/getItem");
         $state['saveItem'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/saveItem");
 
         // SETTING
@@ -115,26 +113,12 @@ class ControllerExtensionModuleMelleBlocks extends Controller
         } else { $moduleId = false; }
 
         $state['item'] = $this->extension_model->prepareItem($moduleId);
-        // echo "<pre>"; print_r($state['item']); echo "</pre>";exit;
-
-        $state['widthCount'] = 0;
         $state['blockTypes'] = $this->extension_model->getBlockTypes();
+        $state['blocks'] = $this->extension_model->prepareBlocks($moduleId);
+        $state['widthCount'] =$this->extension_model->countBlocksWidth($state['blocks']);
 
         // SET STATE
         return $state;
-    }
-
-    public function getItem()
-    {
-        $parsed = $this->model_extension_pro_patch_json->parseJson(file_get_contents('php://input'));
-
-        if (isset($parsed['moduleId'])) {
-            $json['item'] = $this->extension_model->prepareItem($parsed['moduleId']);
-        } else {
-            $json['error'][] = $this->language->get('error_corrupted_request');
-        }
-
-        $this->response->setOutput(json_encode($json));
     }
 
     public function saveItem()
@@ -151,13 +135,6 @@ class ControllerExtensionModuleMelleBlocks extends Controller
                 $json['error'][] = $this->language->get('error_corrupted_request');
             }
         }
-
-        $this->response->setOutput(json_encode($json));
-    }
-
-    public function getBlocks()
-    {
-        $json['items'] = $this->extension_model->prepareItems();
 
         $this->response->setOutput(json_encode($json));
     }
