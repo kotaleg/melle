@@ -452,7 +452,7 @@
     .melle-block-type-1, .melle-block-type-2 {
         justify-content: center;
         background-repeat: no-repeat!important;
-        background-size: contain!important;
+        background-size: cover!important;
 
         .melleb-button {
             background: #fff;
@@ -461,7 +461,9 @@
             text-transform: none;
             position: absolute;
             bottom: 30px;
-            padding: 15px 35px;
+            padding: 15px;
+            padding-left: 35px;
+            padding-right: 45px;
             height: 47px;
 
             img {
