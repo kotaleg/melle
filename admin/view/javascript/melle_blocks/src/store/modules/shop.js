@@ -175,8 +175,6 @@ const mutations = {
         const filtered = remove(state.blocks, (v, i) => {
             if (i !== index) { return v }
         })
-        console.log(filtered);
-
         Vue.set(state, 'blocks', filtered)
     },
     updateBlockValue(state, {i, k, v}) {
