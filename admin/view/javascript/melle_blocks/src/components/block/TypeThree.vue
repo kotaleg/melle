@@ -20,7 +20,7 @@
                 <a href="" :id="thumbId" data-toggle="image" class="img-thumbnail">
                     <img :src="thumb" alt="" title="" data-placeholder="Изображение" />
                 </a>
-                <input type="hidden" :name="imageName" :id="inputImageId" :value="image" />
+                <input type="hidden" :name="imageName" :id="inputImageId" :value="image" v-once />
             </div>
         </div>
         <div class="form-group">
