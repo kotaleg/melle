@@ -7,6 +7,9 @@
     color: #000;
     background: #fff
 }
+#swip0{
+        max-height: 85vh !important;
+}
 
 .box-modal_close {
     position: absolute;
