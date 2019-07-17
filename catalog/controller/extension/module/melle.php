@@ -101,6 +101,9 @@ class ControllerExtensionModuleMelle extends Controller
         // GTM EVENTS
         $this->load->controller('extension/module/melle/initGTM');
 
+        // LEADHIT
+        $this->load->controller('extension/module/melle/initLeadhit');
+
         if (strcmp($this->model_tool_base->getPageType(), 'checkout') === 0) {
             $this->initCheckoutRP();
         }
@@ -426,5 +429,22 @@ class ControllerExtensionModuleMelle extends Controller
         $data['act'] = $state['filter_data']['act'];
 
         return $this->model_extension_pro_patch_load->view("{$this->route}/filter_prerender", $data);
+    }
+
+    public function initLeadhit()
+    {
+        // VARIABLE
+        $state['id'] = "{$this->codename}_leadhit";
+
+        $this->load->model('extension/module/leadhit');
+
+        $state = array_merge($state, $this->model_extension_module_leadhit->getSetting());
+
+        $state['type_hits'] = $this->model_extension_module_leadhit->typeHits();
+        $state['type_recommend'] = $this->model_extension_module_leadhit->typeRecommend();
+
+        // SET STATE
+        $this->document->addState($state['id'], json_encode($state));
+        return $state;
     }
 }

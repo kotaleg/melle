@@ -26,4 +26,18 @@ export default {
         if (res) { cb(res) }
         cb(false)
     },
+    async makeGetRequest(data, cb) {
+        let url = data.url
+        delete data.url
+
+        const res = await Vue.prototype.$http.get(url, {params: data})
+        .catch(error => {
+            if (has(error.response, 'data')) {
+                notify.messageHandler(error.response.data)
+            }
+        });
+
+        if (res) { cb(res) }
+        cb(false)
+    },
 }

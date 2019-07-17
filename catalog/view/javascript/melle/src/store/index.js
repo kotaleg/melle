@@ -27,6 +27,9 @@ import checkoutrp from './modules/checkout/related'
 // PRICE LIST
 import priceList from './modules/priceList/priceList'
 
+// LEADHIT
+import leadhit from './modules/leadhit/leadhit'
+
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -47,6 +50,7 @@ export default new Vuex.Store({
         filter,
         checkoutrp,
         priceList,
+        leadhit,
     },
     strict: debug,
 })

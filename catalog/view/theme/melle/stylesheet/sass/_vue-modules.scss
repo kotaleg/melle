@@ -495,3 +495,79 @@
     }
 }
 
+/* RETAILROCKET BLOCKS */
+#retail-rocket-section {
+    height: 492px;
+
+    .rr-block {
+        background-color: #eee;
+        height: inherit;
+
+        & > h3 {
+            font-size: 25.2692307692px;
+            color: rgb(0, 0, 0);
+            line-height: 2.943;
+        }
+
+        .rr-product {
+            height: 390px;
+            text-align: center;
+            background-color: #fff;
+            border: 1px #000 solid;
+            margin: 10px 15px;
+            padding: 25px;
+            padding-top: 0px;
+
+            & > h3 {
+                font-size: 11px;
+                color: rgb(0, 0, 0);
+                line-height: 1.4;
+                text-align: center;
+                height: 40px;
+                overflow: hidden;
+
+                a {
+                    font-size: inherit;
+                }
+            }
+
+            .rr-pimage {
+                height: 200px;
+
+                img {
+                    display: inline-block;
+                    width: inherit;
+                    height: inherit;
+                }
+            }
+
+            .rr-price {
+                font-size: 11.5817307692px;
+                margin-bottom: 24px;
+            }
+
+            .stars {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .star {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .VueCarousel-navigation {
+        .VueCarousel-navigation-button {
+            outline: none;
+        }
+        .VueCarousel-navigation-prev {
+            left: -22px!important;
+        }
+        .VueCarousel-navigation-next {
+            right: -22px!important;
+        }
+    }
+
+}

@@ -38,6 +38,7 @@ Vue.component('melle-catalog-sort', require('./components/catalog/Sort.vue'))
 Vue.component('melle-search-form', require('./components/catalog/SearchForm.vue'))
 Vue.component('melle-checkout-rp', require('./components/checkout/RelatedProducts.vue'))
 Vue.component('melle-price-list', require('./components/priceList/PriceList.vue'))
+Vue.component('melle-leadhit', require('./components/leadhit/Leadhit.vue'))
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,6 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
         new Vue({
             store,
             el: '#' + Vue.prototype.$codename + '-checkout-bottom',
+        })
+    }
+
+    if (document.getElementById(Vue.prototype.$codename + '-home-bottom')) {
+        new Vue({
+            store,
+            el: '#' + Vue.prototype.$codename + '-home-bottom',
         })
     }
 })
