@@ -442,7 +442,6 @@
 }
 
 /* MELLE BLOCKS */
-
 .melle-blocks {
     .melle-block {
         height: inherit;
@@ -620,4 +619,9 @@ header.vue-fixed-header--isFixed {
     }
 }
 
+@include mobile {
+    .catalog__sidebar {
+        display: none;
+    }
+}
 
