@@ -501,11 +501,9 @@
 
 /* RETAILROCKET BLOCKS */
 #retail-rocket-section {
-    height: 492px;
-
     .rr-block {
         background-color: #eee;
-        height: inherit;
+        height: 492px;;
 
         & > h3 {
             font-size: 25.2692307692px;
@@ -519,6 +517,7 @@
             background-color: #fff;
             border: 1px #000 solid;
             margin: 10px 15px;
+            margin-bottom: 20px;
             padding: 25px;
             padding-top: 0px;
 
@@ -591,10 +590,26 @@
 }
 
 /* FIDEX HEADER */
+.section-2 {
+    margin-top: 100px;
+}
 header.vue-fixed-header--isFixed {
     position: fixed;
     left: 0;
     top: 0;
     width: 100vw;
 }
+
+/* FIXED FILTER */
+.sticky-sidebar {
+    position: sticky;
+    top: 110px;
+
+    &:before,
+    &:after {
+        content: '';
+        display: table;
+    }
+}
+
 

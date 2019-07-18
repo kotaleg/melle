@@ -18,7 +18,7 @@ class ModelExtensionModuleMelleBlocks extends Model
         parent::__construct($registry);
     }
 
-    public function prepareBlocks($moduleId)
+    public function prepareBlocks($moduleId, $height)
     {
         $blocks = array();
 
@@ -49,6 +49,8 @@ class ModelExtensionModuleMelleBlocks extends Model
                     }
                 }
             }
+
+            $b['height'] = $height;
 
             $blocks[] = $b;
         }

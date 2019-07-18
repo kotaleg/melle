@@ -32,7 +32,7 @@ class ControllerExtensionModuleMelleBlocks extends Controller
         if (!isset($setting['moduleId'])) { return; }
         $data['moduleId'] = md5($setting['moduleId']);
 
-        $preparedBlocks = $this->extension_model->prepareBlocks($setting['moduleId']);
+        $preparedBlocks = $this->extension_model->prepareBlocks($setting['moduleId'], $setting['height']);
         $data['blocks'] = $this->renderBlocks($preparedBlocks);
 
         $data['height'] = $setting['height'];

@@ -1,96 +1,98 @@
-<div class="search-modal__filter filter">
- <div class="filter__title">Фильтр <span style="font-size: 10px;">(Найдено: {{ product_total }})</span></div>
+<section class="sidebar sticky-sidebar">
+    <div class="search-modal__filter filter">
+     <div class="filter__title">Фильтр <span style="font-size: 10px;">(Найдено: {{ product_total }})</span></div>
 
- <form>
-    <div class="filter__relevant-category">
-       <label>
-          <input name="CatalogFilterForm[hits]" type="checkbox" checked="{{hit}}">
-          <span></span><span>Хиты</span>
-       </label>
-       <label>
-          <input name="CatalogFilterForm[news]" type="checkbox" checked="{{neww}}">
-          <span></span><span>Новинки</span>
-       </label>
-       <label>
-          <input name="CatalogFilterForm[actions]" type="checkbox" checked="{{act}}">
-          <span></span><span>Акции</span>
-       </label>
-    </div>
-
-    <div class="filter__price">
-        <div class="filter__price-title"><span>Цена, руб</span></div>
-        <div class="super-flex">
-            <div class="filter__price-start"><span>от</span>
-                <input name="CatalogFilterForm[price_from]" type="text" value="{{min_price}}">
-            </div>
-            <div class="filter__price-end"><span>до</span>
-                <input name="CatalogFilterForm[price_to]" type="text" value="{{max_price}}">
-            </div>
-        </div>
-    </div>
-
-    <ul class="filter__list">
-        {% for item in manufacturers %}
-        <li class="filter__item">
-            <label>
-                <input
-                    checked="{{item.checked}}"
-                    type="checkbox"
-                    name="CatalogFilterForm[producers][]">
-                <span style="flex-shrink: 0"></span>
-                <span>
-                    <label>{{ item.label }}</label>
-                </span>
-            </label>
-        </li>
-        {% endfor %}
-    </ul>
-
-    <div class="select-section">
-        <div class="select-section-item text-right">
-            <span class="filter__select-name">размер:</span>
-            <select style="display: inline-block;" placeholder="Все">
-                {% for o in all_sizes %}
-                <option value="{{o.value}}">{{o.label}}</option>
-                {% endfor %}
-            </select>
+     <form>
+        <div class="filter__relevant-category">
+           <label>
+              <input name="CatalogFilterForm[hits]" type="checkbox" checked="{{hit}}">
+              <span></span><span>Хиты</span>
+           </label>
+           <label>
+              <input name="CatalogFilterForm[news]" type="checkbox" checked="{{neww}}">
+              <span></span><span>Новинки</span>
+           </label>
+           <label>
+              <input name="CatalogFilterForm[actions]" type="checkbox" checked="{{act}}">
+              <span></span><span>Акции</span>
+           </label>
         </div>
 
-        <div class="select-section-item text-right">
-            <span class="filter__select-name">цвет:</span>
-            <select style="display: inline-block;" placeholder="Все">
-                {% for o in all_colors %}
-                <option value="{{o.value}}">{{o.label}}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="select-section-item text-right">
-            <span class="filter__select-name">материал:</span>
-            <select style="display: inline-block;" placeholder="Все">
-                {% for o in all_materials %}
-                <option value="{{o.value}}">{{o.label}}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-
-    <div class="filter__price">
-        <div class="filter__price-title"><span>Ден:</span></div>
-        <div class="super-flex">
-            <div class="filter__price-start"><span>от</span>
-                <input name="CatalogFilterForm[den_from]" type="text" value="{{min_den}}">
-            </div>
-            <div class="filter__price-end"><span>до</span>
-                <input name="CatalogFilterForm[den_to]" type="text" value="{{max_den}}">
+        <div class="filter__price">
+            <div class="filter__price-title"><span>Цена, руб</span></div>
+            <div class="super-flex">
+                <div class="filter__price-start"><span>от</span>
+                    <input name="CatalogFilterForm[price_from]" type="text" value="{{min_price}}">
+                </div>
+                <div class="filter__price-end"><span>до</span>
+                    <input name="CatalogFilterForm[price_to]" type="text" value="{{max_price}}">
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="filter__buttons">
-        <input type="submit" value="Показать" class="show-shitty-results" />
-        <button type="button" class="clear-shitty-results">Сбросить</button>
-    </div>
+        <ul class="filter__list">
+            {% for item in manufacturers %}
+            <li class="filter__item">
+                <label>
+                    <input
+                        checked="{{item.checked}}"
+                        type="checkbox"
+                        name="CatalogFilterForm[producers][]">
+                    <span style="flex-shrink: 0"></span>
+                    <span>
+                        <label>{{ item.label }}</label>
+                    </span>
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
 
- </form>
-</div>
+        <div class="select-section">
+            <div class="select-section-item text-right">
+                <span class="filter__select-name">размер:</span>
+                <select style="display: inline-block;" placeholder="Все">
+                    {% for o in all_sizes %}
+                    <option value="{{o.value}}">{{o.label}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="select-section-item text-right">
+                <span class="filter__select-name">цвет:</span>
+                <select style="display: inline-block;" placeholder="Все">
+                    {% for o in all_colors %}
+                    <option value="{{o.value}}">{{o.label}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="select-section-item text-right">
+                <span class="filter__select-name">материал:</span>
+                <select style="display: inline-block;" placeholder="Все">
+                    {% for o in all_materials %}
+                    <option value="{{o.value}}">{{o.label}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="filter__price">
+            <div class="filter__price-title"><span>Ден:</span></div>
+            <div class="super-flex">
+                <div class="filter__price-start"><span>от</span>
+                    <input name="CatalogFilterForm[den_from]" type="text" value="{{min_den}}">
+                </div>
+                <div class="filter__price-end"><span>до</span>
+                    <input name="CatalogFilterForm[den_to]" type="text" value="{{max_den}}">
+                </div>
+            </div>
+        </div>
+
+        <div class="filter__buttons">
+            <input type="submit" value="Показать" class="show-shitty-results" />
+            <button type="button" class="clear-shitty-results">Сбросить</button>
+        </div>
+
+     </form>
+    </div>
+</section>
