@@ -1,4 +1,4 @@
-<a href="{{link}}" id="melle-block-{{blockId}}" class="melle-block melle-block-{{type}} {{class}}">
+<a href="{{link}}" id="melle-block-{{blockId}}" class="melle-block melle-block-{{type}} {{class}}" {% if image %}style="background: url('{{image}}');"{% endif %}>
 
     {% if text %}
     <div class="melleb-text">{{text}}</div>
@@ -11,10 +11,3 @@
     {% endif %}
 
 </a>
-{% if image %}
-<style>
-#melle-block-{{blockId}} {
-    background: url('{{image}}');
-}
-</style>
-{% endif %}

@@ -1,13 +1,7 @@
-<div id="melle-blocks-{{moduleId}}" class="melle-blocks row">
+<div id="melle-blocks-{{moduleId}}" class="melle-blocks row" style="height: {{height}}px;">
 
     {% for b in blocks %}
         {{b}}
     {% endfor %}
 
 </div>
-
-<style>
-#melle-blocks-{{moduleId}} .melle-block {
-    height: {{height}}px!important;
-}
-</style>
