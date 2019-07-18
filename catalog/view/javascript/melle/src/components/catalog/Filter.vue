@@ -1,5 +1,5 @@
 <template>
-    <section id="sticky-sidebar" class="sidebar sticky-sidebar">
+    <section :class="{'sidebar sticky-sidebar': isMobile}">
       <div class="search-modal__filter filter">
          <div class="filter__title">Фильтр <span style="font-size: 10px;">(Найдено: {{ product_total }})</span></div>
 
@@ -198,6 +198,10 @@ export default {
             set (v) { this.updateFromSlider({type: 'price', v}) }
         },
 
+        isMobile() {
+            return this.windowWidth > 768
+        },
+
     },
     methods: {
         ...mapActions('filter', [
@@ -211,16 +215,31 @@ export default {
             'openSidebar',
         ]),
     },
+    data() {
+        return {
+            windowWidth: 0,
+        }
+    },
     mounted() {
         // REMOVE PRERENDERED CONTENT
         let prerender = document.getElementById('rendered-filter-content')
         // console.log(prerender)
         if (prerender) { prerender.remove() }
 
-        if (typeof Stickyfill !== undefined) {
-            let filter = document.getElementById('sticky-sidebar')
+        this.windowWidth = window.innerWidth
+        this.$nextTick(() => {
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth
+            })
+        })
+
+        const filter = document.querySelectorAll('.sticky-sidebar')
+        if (this.isMobile) {
             Stickyfill.add(filter)
             console.log('STICKY SIDEBAR ENABLED');
+        } else {
+            Stickyfill.remove(filter)
+            console.log('MAKE YOUR SCREEN WIDER AND REFRESH');
         }
     },
 }
