@@ -7,9 +7,9 @@ class ControllerExtensionModuleSlideshow extends Controller {
         $this->load->model('tool/image');
         $this->load->model('tool/base');
 
-        $this->document->addStyle('catalog/view/javascript/melle/query/swiper/swiper.min.css');
+        // $this->document->addStyle('catalog/view/javascript/melle/query/swiper/swiper.min.css');
         // $this->document->addStyle('catalog/view/javascript/jquery/swiper/css/opencart.css');
-        $this->document->addScript('catalog/view/javascript/melle/query/swiper/swiper.min.js');
+        // $this->document->addScript('catalog/view/javascript/melle/query/swiper/swiper.min.js');
 
         $data['banners'] = array();
 
@@ -26,6 +26,9 @@ class ControllerExtensionModuleSlideshow extends Controller {
         }
 
         $data['module'] = $module++;
+
+        // SET STATE
+        $this->document->addState("melle_slideshow_{$data['module']}", json_encode($data['banners']));
 
         return $this->load->view('extension/module/slideshow', $data);
     }

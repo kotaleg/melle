@@ -30,6 +30,9 @@ import priceList from './modules/priceList/priceList'
 // LEADHIT
 import leadhit from './modules/leadhit/leadhit'
 
+// SLIDESHOW
+import slideshow from './modules/slideshow/slideshow'
+
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -51,6 +54,7 @@ export default new Vuex.Store({
         checkoutrp,
         priceList,
         leadhit,
+        slideshow,
     },
     strict: debug,
 })

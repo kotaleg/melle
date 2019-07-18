@@ -1,4 +1,5 @@
 <template>
+  <fixed-header>
     <header class="header-page">
 
       <notifications
@@ -122,10 +123,12 @@
         <input type="hidden" id="melle_reload_cart" @click="updateCartDataRequest()">
         <input type="hidden" id="melle_clear_cart" @click="clearCartRequest()">
     </header>
+  </fixed-header>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import FixedHeader from 'vue-fixed-header'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.min.css'
 
@@ -140,6 +143,7 @@ import Filter from './Filter.vue'
 
 export default {
     components: {
+        FixedHeader,
         Loading,
         'header-sidebar': Sidebar,
         'h-mail-us': MailUs,

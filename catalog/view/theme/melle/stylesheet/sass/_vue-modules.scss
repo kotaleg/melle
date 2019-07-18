@@ -492,6 +492,10 @@
         justify-content: center;
         align-items: center;
         align-content: center;
+
+        & > div {
+            width: 50%;
+        }
     }
 }
 
@@ -570,3 +574,27 @@
         }
     }
 }
+
+/* SLIDESHOW */
+.ivan-slideshow {
+    .i-slide {
+        img {
+            width: 100%;
+        }
+    }
+
+    .VueCarousel-navigation {
+        .VueCarousel-navigation-button {
+            outline: none;
+        }
+    }
+}
+
+/* FIDEX HEADER */
+header.vue-fixed-header--isFixed {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+}
+
