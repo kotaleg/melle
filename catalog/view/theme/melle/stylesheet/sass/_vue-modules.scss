@@ -510,6 +510,7 @@
             font-size: 25.2692307692px;
             color: rgb(0, 0, 0);
             line-height: 2.943;
+
         }
 
         .rr-product {
@@ -524,12 +525,13 @@
 
             & > h3 {
                
-                font-size: 11px;
+                font-size: 15px;
                 color: rgb(0, 0, 0);
                 line-height: 1.4;
                 text-align: center;
                 height: 40px;
                 overflow: hidden;
+                font-weight: bold;
 
                 a {
                     font-size: inherit;
