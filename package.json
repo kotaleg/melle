@@ -26,7 +26,9 @@
     "watch-pricelist": "yarn run watch --env.mixfile=webpack.pricelist.mix",
     "prod-pricelist": "yarn run production --env.mixfile=webpack.pricelist.mix",
     "watch-melleb": "yarn run watch --env.mixfile=webpack.melleb.mix",
-    "prod-melleb": "yarn run production --env.mixfile=webpack.melleb.mix"
+    "prod-melleb": "yarn run production --env.mixfile=webpack.melleb.mix",
+    "watch-gcat": "yarn run watch --env.mixfile=webpack.gcat.mix",
+    "prod-gcat": "yarn run production --env.mixfile=webpack.gcat.mix"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

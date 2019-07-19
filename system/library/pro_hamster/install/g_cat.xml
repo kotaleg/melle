@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>g_cat</name>
+    <code>g_cat</code>
+    <description>Гугл Категории</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/model/api/export.php">
+        <operation error="skip">
+            <search><![CDATA[$this->_str .= "</item>\n";]]></search>
+            <add position="before"><![CDATA[
+                // G-CAT START
+                if (strcmp(__FUNCTION__, 'actionGoogleExport') === 0) {
+                    $this->load->model('catalog/category');
+                    $categories = $this->model_catalog_product->getCategories($product_data['product_id']);
+                    $category = array_pop($categories);
+
+                    if ($category) {
+                        $this->load->model('extension/feed/g_cat');
+                        $googleCategory = $this->model_extension_feed_g_cat->getCategoryIdFor($category['category_id']);
+
+                        if ($googleCategory) {
+                            $this->_str .= "<g:google_product_category>{$googleCategory}</g:google_product_category>\n";
+                        }
+                    }
+                }
+                // G-CAT END
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

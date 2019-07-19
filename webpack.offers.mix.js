@@ -8,6 +8,8 @@ mix.js(path.join(ADMIN_PATH, 'src/main.js'), path.join(ADMIN_PATH, 'dist/'+CODEN
 
 mix.setPublicPath(path.join(ADMIN_PATH, 'dist/'))
 
+mix.disableNotifications()
+
 mix.options({
     postCss: [require('autoprefixer')]
 })

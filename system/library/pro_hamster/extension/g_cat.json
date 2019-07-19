@@ -1,0 +1,14 @@
+{
+    "codename": "g_cat",
+    "version": "1.0.0",
+    "name": "Google Cats",
+    "description": "Google Cats",
+    "author": {
+        "name": "PRO Hamster",
+        "url": "https://prohamster.com/"
+    },
+    "require": {
+        "pro_patch": ">= 1.0.0",
+        "pro_style": ">= 1.0.0"
+    }
+}
