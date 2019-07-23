@@ -432,6 +432,12 @@
 
 /* MELLE BLOCKS */
 .melle-blocks {
+
+    @include mobile {
+        margin-right: -15px;
+        margin-left: -15px;
+    }
+
     .melle-block {
         height: inherit;
         display: flex;
