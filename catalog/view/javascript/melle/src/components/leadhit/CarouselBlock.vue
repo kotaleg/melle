@@ -1,7 +1,7 @@
 <template>
     <carousel
         :perPage="2"
-        :perPageCustom="[[0, 1], [768, 2], [992, 2], [1024, 2]]"
+        :perPageCustom="[[0, 1], [768, 2], [1199, 3]]"
         :navigationEnabled="true"
         :paginationEnabled="false"
         navigationPrevLabel="<svg height='1cm' width='.7cm' enable-background='new 0 0 25 36' viewBox='0 0 25 36' xmlns='http://www.w3.org/2000/svg'><path d='m18.7 32.2-14.5-14.3 14.5-15.7' fill='none' stroke='#000' stroke-width='4'/></svg>"
