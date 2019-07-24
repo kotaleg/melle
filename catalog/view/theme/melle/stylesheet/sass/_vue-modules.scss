@@ -586,8 +586,14 @@
     .VueCarousel-navigation {
         .VueCarousel-navigation-button {
             outline: none;
+            top: 90%;
         }
     }
+}
+.VueCarousel-navigation .VueCarousel-navigation-button {
+
+        padding: 14px !important;
+    
 }
 
 /* FIDEX HEADER */
