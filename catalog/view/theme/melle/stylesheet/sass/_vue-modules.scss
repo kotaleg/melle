@@ -590,9 +590,37 @@
         }
     }
 }
-.VueCarousel-navigation .VueCarousel-navigation-button {
+/*nav arrows position*/
+ .rr-block .VueCarousel .VueCarousel-navigation .VueCarousel-navigation-button {
 
-        padding: 14px !important;
+        padding: 0px !important;
+        top: 47% !important;
+    
+}
+.rr-block .VueCarousel .VueCarousel-navigation .VueCarousel-navigation-prev{
+    left: -13px;
+     
+    
+}
+
+.rr-block .VueCarousel .VueCarousel-navigation .VueCarousel-navigation-next{
+    right: -13px;
+    
+}
+@include mobile{
+    .rr-block .VueCarousel .VueCarousel-navigation .VueCarousel-navigation-next{
+    right: 0px;
+    
+}
+    .rr-block .VueCarousel .VueCarousel-navigation .VueCarousel-navigation-prev{
+    left: 0px;
+     
+    
+}
+    #retail-rocket-section .rr-block .rr-product {
+        margin: 10px 25px;
+    }
+
     
 }
 
