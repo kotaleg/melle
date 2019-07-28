@@ -652,3 +652,8 @@ header.vue-fixed-header--isFixed {
         display: none;
     }
 }
+@include tablet{
+    .catalog__sidebar{
+        display: none;
+    }
+}
