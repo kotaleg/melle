@@ -86,4 +86,4 @@ export default {
         this.$store.dispatch('slideshow/initData', this.moduleId)
     },
 }
-</script>
+</script> 
