@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_product_admin</name>
+    <code>melle_product_admin</code>
+    <description>Melle Product [Admin]</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="admin/controller/catalog/product.php">
+        <operation error="skip">
+            <search><![CDATA[$data['products'][] = array(]]></search>
+            <add position="before"><![CDATA[
+                /* CLOSEST_INDEX START */
+                $this->load->model('extension/module/closest_index');
+                $closestCortOrder = $this->model_extension_module_closest_index
+                    ->getClosestSortOrder($result['product_id']);
+                /* CLOSEST_INDEX END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA['product_id' => $result['product_id'],]]></search>
+            <add position="before"><![CDATA[
+                /* CLOSEST_INDEX START */
+                'sort_order_main' => $result['sort_order'],
+                'sort_order_closest' => (isset($closestCortOrder)) ? $closestCortOrder : 0,
+                /* CLOSEST_INDEX END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/*/catalog/product.php">
+        <operation error="skip">
+            <search regex="true" limit="1"><![CDATA[($)]]></search>
+            <add position="before"><![CDATA[
+                /* CLOSEST_INDEX START */
+                $_['column_sort_order_main'] = 'Индекс каталог';
+                $_['column_sort_order_closest'] = 'Индекс категория';
+                /* CLOSEST_INDEX END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/catalog/product_list.twig">
+        <operation error="skip">
+            <search><![CDATA[<td class="text-right">{{ column_action }}</td>]]></search>
+            <add position="after"><![CDATA[
+                <!-- CLOSEST_INDEX START -->
+                <td class="text-center">{{ column_sort_order_main }}</td>
+                <td class="text-center">{{ column_sort_order_closest }}</td>
+                <!-- CLOSEST_INDEX END -->
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[<td class="text-right"><a href="{{ product.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>]]></search>
+            <add position="after"><![CDATA[
+                <!-- CLOSEST_INDEX START -->
+                <td class="text-center"><span class="btn btn-xs btn-default sort-order-main">{{ product.sort_order_main }}</span></td>
+                <td class="text-center"><span class="btn btn-xs btn-default sort-order-closest">{{ product.sort_order_closest }}</span></td>
+                <!-- CLOSEST_INDEX END -->
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/extension/admin_product_filter.php">
+        <operation error="skip">
+            <search><![CDATA[$json['success'] = true;]]></search>
+            <add position="before"><![CDATA[
+                /* CLOSEST_INDEX START */
+                if (strcmp(__FUNCTION__, 'editProductData') === 0) {
+                    if (strcmp($action, 'editSortOrderClosest') === 0
+                    && isset($this->request->post['product_id'])
+                    && isset($this->request->post['sort_order_closest'])) {
+
+                        $json['sort_order_closest'] = (int) $this->request->post['sort_order_closest'];
+                        $this->load->model('extension/module/closest_index');
+                        $this->model_extension_module_closest_index
+                            ->setClosestSortOrder($this->request->post['product_id'],
+                                $this->request->post['sort_order_closest']);
+
+                    }
+
+                    if (strcmp($action, 'editSortOrderMain') === 0
+                    && isset($this->request->post['product_id'])
+                    && isset($this->request->post['sort_order_main'])) {
+
+                        $json['sort_order_main'] = (int) $this->request->post['sort_order_main'];
+                        $this->load->model('extension/module/closest_index');
+                        $this->model_extension_module_closest_index
+                            ->setMainSortOrder($this->request->post['product_id'],
+                                $this->request->post['sort_order_main']);
+
+                    }
+                }
+                /* CLOSEST_INDEX END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/catalog/product.php">
+        <operation error="skip">
+            <search><![CDATA[ AS special";]]></search>
+            <add position="after"><![CDATA[
+                /* CLOSEST_INDEX START */
+                if (strcmp(__FUNCTION__, 'getProducts') === 0) {
+                    $this->load->model('extension/module/closest_index');
+                    $sql .= $this->model_extension_module_closest_index->injectSql($data);
+                }
+                /* CLOSEST_INDEX END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[$sql .= " ORDER BY p.sort_order DESC";]]></search>
+            <add position="replace"><![CDATA[
+                /* CLOSEST_INDEX START */
+                if (strcmp(__FUNCTION__, 'getProducts') === 0) {
+                    $sql .= " ORDER BY closestSortOrder DESC, p.sort_order DESC";
+                } else {
+                    $sql .= " ORDER BY p.sort_order DESC";
+                }
+                /* CLOSEST_INDEX END */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

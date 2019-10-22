@@ -344,25 +344,27 @@ class ModelCatalogProduct extends Model {
             'offers.price',
         );
 
+        $sql .= " ORDER BY p.sort_order DESC";
+
         if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
             if ($data['sort'] == 'pd.name' || $data['sort'] == 'p.model') {
-                $sql .= " ORDER BY LCASE(" . $data['sort'] . ")";
+                $sql .= " , LCASE(" . $data['sort'] . ")";
             } elseif ($data['sort'] == 'p.price') {
-                $sql .= " ORDER BY (CASE WHEN special IS NOT NULL THEN special WHEN discount IS NOT NULL THEN discount ELSE p.price END)";
+                $sql .= " , (CASE WHEN special IS NOT NULL THEN special WHEN discount IS NOT NULL THEN discount ELSE p.price END)";
             } elseif ($data['sort'] == 'offers.price') {
-                $sql .= " ORDER BY (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
+                $sql .= " , (SELECT MIN(offers_comb.price) FROM " . DB_PREFIX . "so_option_combination offers_comb
                 WHERE offers_comb.product_id = p.product_id)";
             } else {
-                $sql .= " ORDER BY " . $data['sort'];
+                $sql .= " , " . $data['sort'];
+            }
+
+            if (isset($data['order']) && ($data['order'] == 'DESC')) {
+                $sql .= " DESC, LCASE(pd.name) DESC";
+            } else {
+                $sql .= " ASC, LCASE(pd.name) ASC";
             }
         } else {
-            $sql .= " ORDER BY p.sort_order";
-        }
-
-        if (isset($data['order']) && ($data['order'] == 'DESC')) {
-            $sql .= " DESC, LCASE(pd.name) DESC";
-        } else {
-            $sql .= " ASC, LCASE(pd.name) ASC";
+            $sql .= " , LCASE(pd.name) ASC ";
         }
 
         if (isset($data['start']) || isset($data['limit'])) {
