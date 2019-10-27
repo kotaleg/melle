@@ -64,6 +64,258 @@ class ModelApiExport extends Model
         return $json;
     }
 
+    public function actionShopscriptExport()
+    {
+        $file = $this->export_path . 'shopscript-full.csv';
+        if (is_file($file)) { @unlink($file); }
+        $this->createPath($file);
+
+        $f = fopen($file, 'w');
+
+        $this->_str = "\xEF\xBB\xBF";
+        fwrite($f, $this->_str);
+        fclose($f);
+
+        $this->load->model('catalog/product');
+        $this->load->model('extension/module/super_offers');
+        $this->load->model('extension/module/pro_znachek');
+
+        $this->load->model('tool/base');
+        $base_path = $this->model_tool_base->getBase();
+
+        $ex = new \pro_csv\pro_csv('EXPORT');
+        $ex->unstrict();
+        $ex->setDelimiter(";");
+        $ex->setFileMode("a");
+        $ex->setToCharset("UTF-8");
+        $ex->setColumnHeaders(array(
+            'ProdID',
+            'Наименование',
+            'Цена',
+            'Закупочная цена',
+            'Валюта',
+            'Доступен для заказа',
+            'В наличии',
+            'Код артикула',
+            'Цвет',
+            'Размер',
+            'Наименование артикула',
+            'Коллекция',
+            'Описание',
+            'Вес',
+            'Производитель',
+            'Артикул производителя',
+            'Страна производства',
+            'Страна производителя',
+            'Материал',
+            'Тип упаковки',
+            'Тип и количество батареек',
+            'Длина',
+            'Диаметр',
+            'Объем',
+            'Основное назначение',
+            'Дополнительное назначение',
+            'Вибрация',
+            'Новинка',
+            'SuperSale',
+            'Хит',
+            'StopPromo',
+            'img_status',
+            'Изображения',
+            'Изображения',
+            'Изображения',
+            'Изображения',
+            'Изображения',
+            'Изображения',
+            'Изображения',
+            'Изображения',
+            'Изображения',
+            'Изображения',
+        ));
+
+        $pcount = 0;
+        $ccount = 0;
+        $rows = array();
+
+        $products = $this->model_catalog_product->getProducts();
+
+        foreach ($products as $product) {
+
+            $material = '';
+            $collection = '';
+
+            $attributeGroups = $this->model_catalog_product
+                ->getProductAttributes($product['product_id']);
+
+            foreach ($attributeGroups as $group) {
+                if (strcmp(trim($group['name']), 'Атрибуты') === 0) {
+                    foreach ($group['attribute'] as $attr) {
+                        if (strcmp(trim($attr['name']), 'Материал') === 0) {
+                            $material = $attr['text'];
+                        }
+                        if (strcmp(trim($attr['name']), 'Коллекция') === 0) {
+                            $collection = $attr['text'];
+                        }
+                    }
+                }
+            }
+
+            $_new = 0;
+            $_hit = 0;
+
+            if (isset($product['znachek'])) {
+                $znachekClass = $this->model_extension_module_pro_znachek
+                    ->getZnachekClass($product['znachek']);
+
+                switch (trim($znachekClass)) {
+                    case 'new':
+                        $_new = 1;
+                        break;
+                    case 'hit':
+                        $_hit = 1;
+                        break;
+                }
+            }
+
+            $combinations = $this->model_extension_module_super_offers
+                ->getFullCombinations($product['product_id']);
+            $options = $this->model_extension_module_super_offers
+                ->getOptions($product['product_id']);
+
+            foreach ($combinations as $c) {
+
+                $name = ($product['h1']) ? $product['h1'] : $product['name'];
+
+                $price = $this->tax->calculate(
+                    $c['price'], $product['tax_class_id'], $this->config->get('config_tax'));
+
+                if ((float) $product['special']) {
+                    $price = $this->tax->calculate(
+                        $product['special'], $product['tax_class_id'], $this->config->get('config_tax'));
+                }
+
+                $color = '';
+                $size = '';
+
+                // TODO: improve the code
+                if (isset($c['required'])) {
+                    foreach ($c['required'] as $reqValues) {
+                        if (isset($reqValues['option_a'])
+                        && isset($reqValues['option_value_a'])) {
+
+                            foreach ($options as $o) {
+                                if (!isset($o['class'])
+                                || !isset($o['option_id'])) {
+                                    continue;
+                                }
+
+                                if ($o['option_id'] === $reqValues['option_a']) {
+                                    if (isset($o['product_option_value'])) {
+                                        foreach ($o['product_option_value'] as $pov) {
+                                            if (isset($pov['name'])
+                                            && isset($pov['option_value_id'])
+                                            && $pov['option_value_id'] === $reqValues['option_value_a']) {
+
+                                                switch (trim($o['class'])) {
+                                                    case 'size':
+                                                        $size = $pov['name'];
+                                                        break;
+                                                    case 'color':
+                                                        $color = $pov['name'];
+                                                        break;
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                $rowData = array(
+                    '',
+                    $name,
+                    (float) $price,
+                    '',
+                    'RUB',
+                    ($c['quantity'] > 0) ? 1 : 0,
+                    (int) $c['quantity'],
+                    '',
+                    $color,
+                    $size,
+                    '',
+                    $collection,
+                    $product['description'],
+                    '',
+                    $product['manufacturer'],
+                    '',
+                    '',
+                    '',
+                    $material,
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '0',
+                    $_new,
+                    '',
+                    $_hit,
+                    '',
+                    'normal',
+                );
+
+                $maxImageCount = 10;
+                $usedImageCount = 0;
+
+                if ($product['image']) {
+                    $rowData[] = "{$base_path}image/{$product['image']}";
+                    $usedImageCount++;
+                }
+
+                $productImages = $this->model_catalog_product
+                    ->getProductImages($this->request->get['product_id']);
+
+                foreach ($productImages as $pImg) {
+                    if ($usedImageCount < $maxImageCount
+                    && isset($pImg['image'])) {
+                        $images[] = "{$base_path}image/{$pImg['image']}";
+                        $usedImageCount++;
+                    }
+                }
+
+                if ($usedImageCount < 10) {
+                    for ($i=0; $i < ($maxImageCount - $usedImageCount); $i++) {
+                        $rowData[] = '';
+                    }
+                }
+
+                // REMOVE DELIMETER FROM VALUES
+                foreach ($rowData as $k => $v) {
+                    $rowData[$k] = str_replace(';', '-', $v);
+                }
+
+                $rows[] = $rowData;
+                $ccount++;
+            }
+
+            $pcount++;
+        }
+
+        $json['filePath'] = str_replace($this->getRootPath(), HTTPS_SERVER, $file);
+        $json['success'] = $ex->export($file, $rows);
+
+        $json['message'][] = "Обработано {$pcount} товаров.";
+        $json['message'][] = "Обработано {$ccount} комбинаций опций.";
+
+        return $json;
+    }
+
     public function actionSeoExport()
     {
         $file = $this->export_path . 'seo.xml';
