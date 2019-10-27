@@ -297,6 +297,7 @@ class ModelApiExport extends Model
 
                 // REMOVE DELIMETER FROM VALUES
                 foreach ($rowData as $k => $v) {
+                    $v = trim(preg_replace('/\s+/', ' ', $v));
                     $rowData[$k] = str_replace(';', '-', $v);
                 }
 
