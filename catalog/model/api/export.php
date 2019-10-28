@@ -242,7 +242,7 @@ class ModelApiExport extends Model
                     '',
                     'RUB',
                     ($c['quantity'] > 0) ? 1 : 0,
-                    (int) $c['quantity'],
+                    ($c['quantity'] > 0) ? 1 : 0,
                     '',
                     $color,
                     $size,
