@@ -483,6 +483,130 @@ class ModelApiExport extends Model
         $f = fopen($file, 'w');
 
         $this->_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" .
+            "<!DOCTYPE yml_catalog SYSTEM \"shops.dtd\">\n" .
+            "<yml_catalog date=\"" . date('Y-m-d H:i') . "\">\n" .
+            "<shop>\n" .
+            "<name>" . htmlspecialchars($this->config->get('config_meta_title')) . "</name>\n" .
+            "<company>" . htmlspecialchars($this->config->get('config_meta_title')) . "</company>\n" .
+            "<url>{$base_path}</url>\n" .
+            "<currencies>\n" .
+            "<currency id=\"RUR\" rate=\"1\" plus=\"0\"/>\n" .
+            "</currencies>\n" .
+            "<categories>\n";
+        fwrite($f, $this->_str);
+
+        foreach ($this->getCategories() as $cat) {
+            $group_name = htmlspecialchars($cat['name']);
+            $this->_str = "<category id=\"{$cat['category_id']}\">{$group_name}</category>\n";
+            $this->setTree($cat['category_id']);
+            fwrite($f, $this->_str);
+        }
+
+        $this->_str = "</categories>\n" .
+            "<offers>\n";
+        fwrite($f, $this->_str);
+
+        $pcount = 0;
+        $no_price_count = 0;
+
+        $this->load->model('catalog/product');
+        $this->load->model('api/import_1c/product');
+        $this->load->model('extension/module/super_offers');
+
+        foreach ($this->model_api_import_1c_product->getAllProductsIds() as $pid) {
+            $product_data = $this->model_catalog_product->getProduct($pid);
+            if ($product_data) {
+
+                $dp = $this->model_extension_module_super_offers->getDefaultValues($product_data['product_id'], $product_data);
+
+                // PASS PRODUCTS
+                $pass = false;
+                if (isset($dp['price'])) {
+                    if ($dp['min_quantity'] <= 0) { $pass = true; }
+                    if ($dp['price'] <= 0) { $pass = true; }
+                } else { $pass = true; }
+
+                if ($pass === false) {
+                    $this->_str = '';
+
+                    $price = (int)preg_replace('/\s+/', '', $dp['price']);
+                    $special = (int)preg_replace('/\s+/', '', $dp['special']);
+                    if ($special !== false && $special > 0) {
+                        $price = $special;
+                    }
+
+                    $seo_url = $this->getSeoUrl($product_data['product_id']);
+                    $cc = $this->getCloseCat($product_data['product_id']);
+
+                    if ($product_data['image']) {
+                        $image = $base_path . 'image/' . $product_data['image'];
+                    } else {
+                        $image = $base_path . 'image/placeholder.png';
+                    }
+
+                    $this->_str .= "<offer id=\"{$product_data['product_id']}\">\n" .
+                        "<url>{$seo_url}</url>\n" .
+                        "<price>". $price ."</price>\n" .
+                        "<currencyId>RUR</currencyId>\n" .
+                        "<categoryId>{$cc}</categoryId>\n" .
+                        "<picture>{$image}</picture>\n" .
+                        ((!empty($product_data['h1'])) ? "<name>" . htmlspecialchars($product_data['h1']) . "</name>\n" : "<name>" . htmlspecialchars($product_data['name']) . "</name>\n").
+                        ((!empty($product_data['manufacturer'])) ? "<vendor>" . htmlspecialchars($product_data['manufacturer']) . "</vendor>\n" : "") .
+                        ((!empty('')) ? "<vendorCode>" . htmlspecialchars('') . "</vendorCode>\n" : "") .
+                        ((!empty($product_data['meta_description'])) ? "<description>" . htmlspecialchars(strip_tags($product_data['meta_description'])) . "</description>\n" : "<description>Описание у товара скоро появится</description>\n")
+                        ."<sales_notes>мин.сумма заказа: 1000р, мин.партия: 1шт</sales_notes>\n";
+
+                    /* OPTIONS */
+                    $options = $this->model_extension_module_super_offers->getOptions($product_data['product_id']);
+                    foreach ($options as $o) {
+                        $int = (strcmp($o['class'], 'size')===0) ? true : false;
+                        foreach ($o['product_option_value'] as $ov) {
+                            $this->_str .= "<param name=\"{$o['name']}\"" . (($int) ? " unit=\"INT\"" : "") . ">{$ov['name']}</param>\n";
+                        }
+                    }
+
+                    $this->_str .= "</offer>\n";
+                    fwrite($f, $this->_str);
+                    unset($this->_str);
+
+                    $pcount++;
+                } else {
+                    $no_price_count++;
+                }
+
+            }
+        }
+
+        $this->_str = "</offers>\n" .
+            "</shop>\n" .
+            "</yml_catalog>";
+
+        fwrite($f, $this->_str);
+        fclose($f);
+
+        $json['message'][] = "Обработано {$pcount} товаров.";
+
+        if ($no_price_count) {
+            $json['message'][] = "Товаров без цены {$no_price_count}";
+        }
+
+        return $json;
+    }
+
+    public function actionYandexoffersExport()
+    {
+        $file = $this->export_path . 'yandex-offers.xml';
+        if (is_file($file)) {
+            @unlink($file);
+        }
+        $this->createPath($file);
+
+        $this->load->model('tool/base');
+        $base_path = $this->model_tool_base->getBase();
+
+        $f = fopen($file, 'w');
+
+        $this->_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" .
             "<yml_catalog date=\"" . date('Y-m-d H:i') . "\">\n" .
             "<shop>\n" .
             "<name>" . htmlspecialchars($this->config->get('config_meta_title')) . "</name>\n" .
