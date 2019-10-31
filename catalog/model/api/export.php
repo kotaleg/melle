@@ -194,6 +194,8 @@ class ModelApiExport extends Model
                         $product['special'], $product['tax_class_id'], $this->config->get('config_tax'));
                 }
 
+                $price = preg_replace('/\s+/', '', $price);
+
                 $color = '';
                 $size = '';
 
@@ -236,25 +238,25 @@ class ModelApiExport extends Model
                 }
 
                 $rowData = array(
-                    '',
-                    $name,
+                    (int) $product['product_id'],
+                    (string) $name,
                     (float) $price,
                     '',
                     'RUB',
-                    ($c['quantity'] > 0) ? 1 : 0,
-                    ($c['quantity'] > 0) ? 1 : 0,
+                    (int) ($c['quantity'] > 0) ? 1 : 0,
+                    (int) ($c['quantity'] > 0) ? 1 : 0,
+                    (string) $name,
+                    (string) $color,
+                    (string) $size,
                     '',
-                    $color,
-                    $size,
+                    (string) $collection,
+                    (string) $product['description'],
                     '',
-                    $collection,
-                    $product['description'],
-                    '',
-                    $product['manufacturer'],
+                    (string) $product['manufacturer'],
                     '',
                     '',
                     '',
-                    $material,
+                    (string) $material,
                     '',
                     '',
                     '',
@@ -263,9 +265,9 @@ class ModelApiExport extends Model
                     '',
                     '',
                     '0',
-                    $_new,
+                    (int) $_new,
                     '',
-                    $_hit,
+                    (int) $_hit,
                     '',
                     'normal',
                 );
