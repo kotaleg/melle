@@ -659,6 +659,8 @@ class ModelApiExport extends Model
                         $product['special'], $product['tax_class_id'], $this->config->get('config_tax'));
                 }
 
+                $price = (int) preg_replace('/\s+/', '', $price);
+
                 $this->_str = '';
 
                 $seo_url = $this->getSeoUrl($product['product_id']);
