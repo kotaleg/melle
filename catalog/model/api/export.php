@@ -681,9 +681,8 @@ class ModelApiExport extends Model
                     "  <currencyId>RUR</currencyId>\n" .
                     "  <categoryId>{$cc}</categoryId>\n" .
                     "  <picture>{$image}</picture>\n" .
-                    "  <name>" . htmlspecialchars($name) . "</name>\n" .
                     ((!empty($product['manufacturer'])) ? "  <vendor>" . htmlspecialchars($product['manufacturer']) . "</vendor>\n" : "") .
-                    ((!empty($product['meta_description'])) ? "  <description>" . htmlspecialchars(strip_tags($product['meta_description'])) . "</description>\n" : "<description>Описание у товара скоро появится</description>\n")
+                    ((!empty($product['description'])) ? "  <description>" . htmlspecialchars(strip_tags($product['description'])) . "</description>\n" : "<description>Описание у товара скоро появится</description>\n")
                     ."  <sales_notes>мин.сумма заказа: 1000р, мин.партия: 1шт</sales_notes>\n";
 
                 /* OPTIONS */
@@ -712,6 +711,8 @@ class ModelApiExport extends Model
 
                                                 $this->_str .= "  <param name=\"{$o['name']}\"" . (($isIntOption) ? " unit=\"INT\"" : "") . ">{$pov['name']}</param>\n";
 
+                                                $name .= " {$pov['name']}";
+
                                             }
                                         }
                                     }
@@ -721,6 +722,8 @@ class ModelApiExport extends Model
                         }
                     }
                 }
+
+                $this->_str .= "  <name>" . htmlspecialchars($name) . "</name>\n";
 
                 $this->_str .= "</offer>\n";
                 fwrite($f, $this->_str);
