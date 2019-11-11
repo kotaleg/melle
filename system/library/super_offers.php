@@ -15,6 +15,7 @@ class super_offers
     const SPECIAL = 'special';
     const REWARD = 'reward';
     const WEIGHT = 'weight';
+    const IMAGE = 'image';
 
     // TYPES
     const TYPE_SELECT = 'select';
@@ -52,6 +53,7 @@ class super_offers
             self::SPECIAL       => array('name' => false, 'active' => false, 'code' => self::SPECIAL, 'default' => ''),
             self::REWARD        => array('name' => false, 'active' => false, 'code' => self::REWARD, 'default' => ''),
             self::WEIGHT        => array('name' => false, 'active' => false, 'code' => self::WEIGHT, 'default' => ''),
+            self::IMAGE        => array('name' => false, 'active' => true, 'code' => self::IMAGE, 'default' => ''),
         );
     }
 
@@ -106,8 +108,8 @@ class super_offers
         $sql = "INSERT INTO `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
             (`product_id`, `quantity`, `subtract`, `price`, `price_prefix`,
                 `points`, `points_prefix`, `weight`, `weight_prefix`, `model`,
-                `product_code`, `special_price`, `special_price_start`, `special_price_end`,
-                `import_id`)
+                `product_code`, `special_price`, `special_price_start`,
+                `special_price_end`, `image`, `import_id`)
             VALUES(
                 '" . (int)$data['product_id'] . "',
                 '" . $this->db->escape($data['quantity']) . "',
@@ -123,6 +125,7 @@ class super_offers
                 '" . $this->db->escape($data['special_price']) . "',
                 '" . $this->db->escape($data['special_price_start']) . "',
                 '" . $this->db->escape($data['special_price_end']) . "',
+                '" . $this->db->escape($data['image']) . "',
                 '" . $this->db->escape($data['import_id']) . "' );";
 
         $this->db->query($sql);
@@ -170,6 +173,7 @@ class super_offers
                 'special_price'     => false,
                 'special_price_start' => false,
                 'special_price_end' => false,
+                'image'             => (isset($c['image'])) ? $c['image'] : '',
                 'import_id'         => (isset($c['import_id'])) ? $c['import_id'] : '',
             );
 

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isNaN, isArray, isEmpty,  forEach, clone } from 'lodash'
+import { isNil, isArray, isEmpty,  forEach, clone } from 'lodash'
 
 import shop from '../../api/shop'
 
@@ -12,18 +12,6 @@ const state = {
     token: '',
     version: '',
 
-    button_save_and_stay: '',
-    button_save: '',
-    button_cancel: '',
-
-    text_edit: '',
-    text_preparing: '',
-    text_enabled: '',
-    text_disabled: '',
-    text_success: '',
-
-    cancel: '',
-    save: '',
     is_loading: false,
 
     options: [],
@@ -32,6 +20,7 @@ const state = {
     combinations_data: [],
     active_columns: [],
     default_active_columns: {},
+    product_images: [],
 }
 
 // getters
@@ -49,7 +38,7 @@ const getters = {
         let index = 0
         forEach(state.combinations, (element, i) => {
             let cleared = parseInt(i);
-            if (!isNaN(cleared) && (cleared >= index)) {
+            if (!isNil(cleared) && (cleared >= index)) {
                 index = cleared
             }
         })
@@ -64,7 +53,7 @@ const getters = {
             let pov = false
             if (isArray(element.product_option_value)) {
                 let first_val = Object.keys(element.product_option_value)[0]
-                if (!isUndefined(first_val)) {
+                if (!isNil(first_val)) {
                     pov = first_val
                 }
             }
@@ -90,7 +79,7 @@ const getters = {
         let status = false
         if (isArray(state.combinations) && !isEmpty(state.combinations)) {
             state.combinations.forEach((element, i) => {
-                if (!isUndefined(element)) {
+                if (!isNil(element)) {
                     status = true
                 }
             })
@@ -149,6 +138,7 @@ const mutations = {
         for (let d in data) {
             Vue.set(state, d, data[d])
         }
+        console.log(data);
     },
     setLoadingStatus(state, status) {
         Vue.set(state, 'is_loading', status)

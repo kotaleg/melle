@@ -48,6 +48,8 @@ class ModelExtensionModuleSuperOffers extends Model
             `special_price_start` int(11) NOT NULL,
             `special_price_end` int(11) NOT NULL,
 
+            `image` varchar(255) NOT NULL,
+
             `import_id` varchar(255) NOT NULL,
 
             PRIMARY KEY (`combination_id`)
@@ -289,6 +291,7 @@ class ModelExtensionModuleSuperOffers extends Model
             $s = false;
             $p = '';
             $m = '';
+            $img = '';
 
             if (array_key_exists($combination_key, $combinations_extended)) {
 
@@ -299,6 +302,7 @@ class ModelExtensionModuleSuperOffers extends Model
                 $s = ($combinations_extended[$combination_key]['subtract']) ? true : false;
                 $p = $combinations_extended[$combination_key]['price'];
                 $m = $combinations_extended[$combination_key]['model'];
+                $img = $combinations_extended[$combination_key]['image'];
             }
 
             $combinations_data[$combination_key] = array(
@@ -306,10 +310,79 @@ class ModelExtensionModuleSuperOffers extends Model
                 'subtract'  => $s,
                 'price'     => $p,
                 'model'     => $m,
+                'image'     => $img,
                 'hided_by_filter' => false,
             );
         }
 
         return $combinations_data;
+    }
+
+    public function prepareImagesForProduct($productId)
+    {
+        $images = array();
+
+        $dpi = $this->getDefaultProductImage($productId);
+        if ($dpi && $this->isImageExist($dpi)) {
+            $images[] = array(
+                'imagePath' => $dpi,
+                'hash' => md5($dpi),
+                'imagePreview' => $this->getImagePreview($dpi),
+                'imagePopup' => $this->getImagePopup($dpi),
+            );
+        }
+
+        foreach ($this->getProductImages($productId) as $img) {
+            if (isset($img['image']) && $img['image']
+            && $this->isImageExist($img['image'])) {
+                $images[] = array(
+                    'imagePath' => $img['image'],
+                    'hash' => md5($img['image']),
+                    'imagePreview' => $this->getImagePreview($img['image']),
+                    'imagePopup' => $this->getImagePopup($img['image']),
+                );
+            }
+        }
+
+        return $images;
+    }
+
+    private function isImageExist($imagePath)
+    {
+        if (is_file(DIR_IMAGE . $imagePath)) {
+            return true;
+        }
+        return false;
+    }
+
+    private function getImagePreview($imagePath)
+    {
+        $this->load->model('tool/image');
+        return $this->model_tool_image->resize($imagePath, 30, 30, true);
+    }
+
+    private function getImagePopup($imagePath)
+    {
+        $this->load->model('tool/image');
+        return $this->model_tool_image->resize($imagePath, 150, 150, true);
+    }
+
+    private function getDefaultProductImage($productId)
+    {
+        $q = $this->db->query("SELECT `image` FROM `". DB_PREFIX . "product`
+            WHERE `product_id` = '". (int)$productId ."'");
+
+        if (isset($q->row['image']) && $q->row['image']) {
+            return $q->row['image'];
+        }
+    }
+
+    private function getProductImages($productId)
+    {
+        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . "product_image`
+            WHERE `product_id` = '". (int)$productId ."'
+            ORDER BY `sort_order` ASC");
+
+        return $q->rows;
     }
 }

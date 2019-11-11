@@ -4,6 +4,8 @@
             :group="this.$codename"
             position="bottom right"/>
 
+        <modals-container />
+
         <div class="col-sm-2">
             <ul class="nav nav-pills nav-stacked">
                 <li @click="openOriginalOptions"
@@ -47,6 +49,7 @@
                                 <so_price v-if="ac.code == 'price'" :combid="id" :colid="k" />
                                 <so_quantity v-if="ac.code == 'quantity'" :combid="id" :colid="k" />
                                 <so_subtract v-if="ac.code == 'subtract'" :combid="id" :colid="k" />
+                                <so_image v-if="ac.code == 'image'" :combid="id" :colid="k" />
                             </td>
 
                             <td>
@@ -89,6 +92,7 @@ import Model from './columns/Model.vue'
 import Price from './columns/Price.vue'
 import Quantity from './columns/Quantity.vue'
 import Subtract from './columns/Subtract.vue'
+import Image from './columns/Image.vue'
 
 export default {
     components: {
@@ -97,6 +101,7 @@ export default {
         'so_price': Price,
         'so_quantity': Quantity,
         'so_subtract': Subtract,
+        'so_image': Image,
     },
     computed: {
         ...mapState('shop', [

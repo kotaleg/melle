@@ -68,7 +68,6 @@ class ControllerExtensionModuleSuperOffers extends Controller
             'text_fee', 'text_access_code',
 
             'button_save_and_stay', 'button_save', 'button_cancel', 'button_edit', 'button_delete',
-
         );
         for ($i = 0; $i < sizeof($lng); $i++) { $state[$lng[$i]] = $this->language->get($lng[$i]); }
 
@@ -163,6 +162,7 @@ class ControllerExtensionModuleSuperOffers extends Controller
         $state['combinations'] = $this->extension_model->getCombinations($state);
         $state['combinations_data'] = $this->extension_model->getCombinationsData($state);
         $state['default_active_columns'] = $this->extension_model->getDefaultActiveColumns();
+        $state['product_images'] = $this->extension_model->prepareImagesForProduct($state['product_id']);
 
         $state['full_colspan'] = 1;
         if (is_array($state['active_columns'])) {
