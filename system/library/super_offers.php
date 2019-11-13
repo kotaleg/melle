@@ -69,20 +69,20 @@ class super_offers
 
     public function clearForProduct($product_id)
     {
-        $this->db->query("DELETE FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+        $this->db->query("DELETE FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
             WHERE `product_id` = '". (int)$product_id ."'");
 
-        $this->db->query("DELETE FROM `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
+        $this->db->query("DELETE FROM `". DB_PREFIX . self::OPTION_CONNECTION ."`
             WHERE `product_id` = '". (int)$product_id ."'");
 
-        $this->db->query("DELETE FROM `". DB_PREFIX . $this->db->escape(self::OPTION_SETTING) ."`
+        $this->db->query("DELETE FROM `". DB_PREFIX . self::OPTION_SETTING ."`
             WHERE `product_id` = '". (int)$product_id ."'");
     }
 
     public function isOptionsForProduct($product_id)
     {
         $sql = "SELECT COUNT(`combination_id`)
-            FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+            FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
             WHERE `product_id` = '". (int)$product_id ."'";
         $q = $this->db->query($sql);
 
@@ -92,7 +92,7 @@ class super_offers
 
     public function _addConnection($data)
     {
-        $sql = "INSERT INTO `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
+        $sql = "INSERT INTO `". DB_PREFIX . self::OPTION_CONNECTION ."`
             (`option_a`, `option_value_a`, `product_id`, `combination_id`)
             VALUES(
                 '" . $this->db->escape($data['option_a']) . "',
@@ -105,7 +105,7 @@ class super_offers
 
     public function _addCombination($data)
     {
-        $sql = "INSERT INTO `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+        $sql = "INSERT INTO `". DB_PREFIX . self::OPTION_COMMBINATION ."`
             (`product_id`, `quantity`, `subtract`, `price`, `price_prefix`,
                 `points`, `points_prefix`, `weight`, `weight_prefix`, `model`,
                 `product_code`, `special_price`, `special_price_start`,
@@ -134,7 +134,7 @@ class super_offers
 
     public function _getCombinationsForProduct($product_id)
     {
-        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
             WHERE `product_id` = '". (int)$product_id ."'");
 
         return $q->rows;
@@ -142,7 +142,7 @@ class super_offers
 
     public function _getConnectionsForCombination($product_id, $combination_id)
     {
-        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . $this->db->escape(self::OPTION_CONNECTION) ."`
+        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . self::OPTION_CONNECTION ."`
             WHERE `product_id` = '". (int)$product_id ."'
             AND `combination_id` = '". (int)$combination_id ."'");
 
@@ -203,7 +203,7 @@ class super_offers
     {
         $price = 0;
         $sql = "SELECT MIN(`price`) as min_price
-            FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+            FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
             WHERE `product_id` = '". (int)$product_id ."'
             AND `price` > 0";
 
@@ -228,7 +228,7 @@ class super_offers
         $quantity = 0;
 
         $q = $this->db->query("SELECT MIN(`quantity`) as min_q
-            FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+            FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
             WHERE `product_id` = '". (int)$product_id ."'
             AND `quantity` > 0");
 
@@ -244,7 +244,7 @@ class super_offers
         $quantity = 0;
 
         $q = $this->db->query("SELECT MAX(`quantity`) as max_q
-            FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+            FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
             WHERE `product_id` = '". (int)$product_id ."'
             AND `quantity` > 0");
 
@@ -342,7 +342,7 @@ class super_offers
 
     public function getCombinationForActiveOptions($product_id, $active_options)
     {
-        $comb_q = $this->db->query("SELECT * FROM `". DB_PREFIX . $this->db->escape(self::OPTION_COMMBINATION) ."`
+        $comb_q = $this->db->query("SELECT * FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
             WHERE `product_id` = '". (int)$product_id ."'");
 
         foreach ($comb_q->rows as $combination) {
