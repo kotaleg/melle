@@ -666,10 +666,14 @@ class ModelApiExport extends Model
                 $seo_url = $this->getSeoUrl($product['product_id']);
                 $cc = $this->getCloseCat($product['product_id']);
 
-                if ($product['image']) {
+                if ($product['image'] && is_file(DIR_IMAGE.$product['image'])) {
                     $image = $base_path . 'image/' . $product['image'];
                 } else {
                     $image = $base_path . 'image/placeholder.png';
+                }
+
+                if (isset($c['image']) && is_file(DIR_IMAGE.$c['image'])) {
+                    $image = $base_path . 'image/' . $c['image'];
                 }
 
                 $offerId = "{$product['product_id']}{$c['combination_id']}";

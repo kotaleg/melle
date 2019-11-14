@@ -127,11 +127,11 @@ export default {
         ]),
 
         currentImageHash() {
-          const defaultImages = document.querySelectorAll("li[data-hash='default']")
           const currentImages = document.querySelectorAll("li[data-hash='"+this.getActiveImageHash+"']")
 
           let clickCount = 0
           if (currentImages.length === 0) {
+            const defaultImages = document.querySelectorAll("li[data-hash='default']")
             forEach(defaultImages, (value) => {
               if (clickCount === 0) {
                 value.click()
@@ -145,7 +145,6 @@ export default {
             })
           }
 
-          // console.log("li[data-hash='"+this.getActiveImageHash+"']")
           return this.getActiveImageHash
         },
 

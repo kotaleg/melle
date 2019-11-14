@@ -275,6 +275,11 @@ class ModelExtensionModuleSuperOffers extends Model
         return $connected_options;
     }
 
+    public function _getCombinationsForProduct($product_id)
+    {
+        return $this->super_offers->_getCombinationsForProduct($product_id);
+    }
+
     public function getFullCombinations($product_id)
     {
         $result = array();

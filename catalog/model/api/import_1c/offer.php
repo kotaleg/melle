@@ -99,6 +99,15 @@ class ModelApiImport1COffer extends Model
                 // SAVE COMBINATION
                 $combination = array();
 
+                $combinationImage = '';
+                foreach ($this->model_extension_module_super_offers
+                    ->_getCombinationsForProduct($product_id) as $_combination) {
+                    if (isset($_combination['import_id']) && isset($_combination['image'])
+                    && strcmp($_combination['import_id'], $offer_import_id) === 0) {
+                        $combinationImage = $_combination['image'];
+                    }
+                }
+
                 if ($product_options) {
                     $combination = array(
                         'quantity' => $offer->quantity,
@@ -106,6 +115,7 @@ class ModelApiImport1COffer extends Model
                         'price' => $offer->price->price,
                         'currency' => $offer->price->currency,
                         'product_code' => $offer->name,
+                        'image' => $combinationImage,
                         'import_id' => $offer_import_id,
                     );
 
