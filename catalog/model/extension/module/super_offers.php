@@ -303,6 +303,7 @@ class ModelExtensionModuleSuperOffers extends Model
                 'combination_id' => $c['combination_id'],
                 'price' => $this->model_tool_base->formatMoney($c['price']),
                 'quantity' => $c['quantity'],
+                'image' => trim($c['image']),
                 'imageHash' => md5($c['image']),
                 'required' => $required,
             );
