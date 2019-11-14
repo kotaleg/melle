@@ -87,6 +87,7 @@
             </div>
          </div>
 
+        <input type="hidden" id="active-image-hash" :value="currentImageHash">
 
          <one-click-modal
             dir="ltr"
@@ -97,6 +98,7 @@
 </template>
 
 <script>
+import {forEach} from 'lodash'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 import OneClickModal from './../modal/OneClickModal.vue'
@@ -114,6 +116,7 @@ export default {
             'getFormValue',
             'getStateValue',
             'getActivePrice',
+            'getActiveImageHash',
         ]),
         ...mapState('product', [
             'product_id',
@@ -122,6 +125,29 @@ export default {
             'zvezdochka',
             'special_text',
         ]),
+
+        currentImageHash() {
+          const defaultImages = document.querySelectorAll("li[data-hash='default']")
+          const currentImages = document.querySelectorAll("li[data-hash='"+this.getActiveImageHash+"']")
+
+          let clickCount = 0
+          if (currentImages.length === 0) {
+            forEach(defaultImages, (value) => {
+              if (clickCount === 0) {
+                value.click()
+              }
+            })
+          } else {
+            forEach(currentImages, (value) => {
+              if (clickCount === 0) {
+                value.click()
+              }
+            })
+          }
+
+          // console.log("li[data-hash='"+this.getActiveImageHash+"']")
+          return this.getActiveImageHash
+        },
 
         quantity: {
             get() { return this.getStateValue('quantity') },

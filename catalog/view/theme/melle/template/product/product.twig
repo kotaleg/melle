@@ -23,12 +23,12 @@
                <div class="prod-card__photos">
                   <ul class="prod-card__list-photo slider-nav">
                      {% if thumb %}
-                     <li class="prod-card__item-photo">
+                     <li class="prod-card__item-photo" data-hash="default">
                         <img src="{{thumb}}" />
                      </li>
                      {% endif %}
                      {% for i in images %}
-                     <li class="prod-card__item-photo">
+                     <li class="prod-card__item-photo" data-hash="{{i.imageHash}}">
                         <img src="{{i.thumb}}" />
                      </li>
                      {% endfor %}

@@ -104,6 +104,17 @@ const getters = {
         }
         return p
     },
+    getActiveImageHash: (state, getters) => {
+        let p = false
+        let active_comb = getters.isCombinationActive
+        if (active_comb !== false) {
+            p = state.full_combinations[active_comb].imageHash
+        }
+        if (p === false) {
+            return 'default'
+        }
+        return p
+    },
     getActiveOptions: state => {
         let options = []
         state.options.forEach((option) => {

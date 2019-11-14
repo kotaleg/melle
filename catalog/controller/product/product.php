@@ -293,7 +293,11 @@ class ControllerProductProduct extends Controller {
             foreach ($results as $result) {
                 $data['images'][] = array(
                     'popup' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true),
-                    'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'), true)
+                    'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'), true),
+
+                    /* IVAN MODIFICATION */
+                    'imageHash' => md5($result['image']),
+                    /* IVAN MODIFICATION */
                 );
             }
 
