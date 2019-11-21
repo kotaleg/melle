@@ -690,6 +690,9 @@ class ModelApiExport extends Model
                     ."  <sales_notes>мин.сумма заказа: 1000р, мин.партия: 1шт</sales_notes>\n";
 
                 /* OPTIONS */
+                $color = '';
+                $size = '';
+
                 if (isset($c['required'])) {
                     foreach ($c['required'] as $reqValues) {
                         if (isset($reqValues['option_a'])
@@ -715,8 +718,15 @@ class ModelApiExport extends Model
 
                                                 $this->_str .= "  <param name=\"{$o['name']}\"" . (($isIntOption) ? " unit=\"INT\"" : "") . ">{$pov['name']}</param>\n";
 
-                                                $name .= " {$pov['name']}";
+                                                switch ($o['class']) {
+                                                    case 'color':
+                                                        $color = $pov['name'];
+                                                        break;
 
+                                                    case 'size':
+                                                        $size = $pov['name'];
+                                                        break;
+                                                }
                                             }
                                         }
                                     }
@@ -726,6 +736,8 @@ class ModelApiExport extends Model
                         }
                     }
                 }
+
+                $name = trim(implode(' ', array($name, $color, $size)));
 
                 $this->_str .= "  <name>" . htmlspecialchars($name) . "</name>\n";
 
