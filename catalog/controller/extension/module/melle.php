@@ -51,7 +51,7 @@ class ControllerExtensionModuleMelle extends Controller
         for ($i = 0; $i < sizeof($lng); $i++) { $state[$lng[$i]] = $this->language->get($lng[$i]); }
 
         $state['base'] = $this->model_tool_base->getBase();
-        $state['phone'] = '8 800 100 21 71';
+        $state['phone'] = '8 800 100 21 73';
 
         if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
             $state['logo'] = $state['base'] . 'image/' . $this->config->get('config_logo');
