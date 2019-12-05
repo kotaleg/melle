@@ -3,7 +3,7 @@
         type="text"
         :name="getInputName"
         :value="getInputValue"
-        :placeholder="text_model"
+        :placeholder="text_barcode"
         class="form-control"
         readonly />
 </template>
