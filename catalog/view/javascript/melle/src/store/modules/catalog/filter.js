@@ -86,18 +86,16 @@ const actions = {
         }
     }, 50),
     updateManufacturerStatus({ commit, state, getters }, k) {
-        let s = !getters.isManufacturerSelected(k)
+        // let s = !getters.isManufacturerSelected(k)
 
         let m = []
-        if (isArray(state.filter_data.manufacturers)) {
-            forEach(state.filter_data.manufacturers, (val,key) => {
-                m.push({
-                    checked: (k != key) ? val.checked : !val.checked,
-                    label: val.label,
-                    value: val.value,
-                })
+        forEach(state.filter_data.manufacturers, (val,key) => {
+            m.push({
+                checked: (k != key) ? val.checked : !val.checked,
+                label: val.label,
+                value: val.value,
             })
-        }
+        })
 
         commit('updateFilterValue', {k:'manufacturers', v: m})
         this.dispatch('catalog/loadMoreRequest')
