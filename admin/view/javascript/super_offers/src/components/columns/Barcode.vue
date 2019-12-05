@@ -1,11 +1,11 @@
 <template>
-    <select @change="updateValue"
+    <input @change="updateValue"
+        type="text"
         :name="getInputName"
+        :value="getInputValue"
+        :placeholder="text_model"
         class="form-control"
-        readonly>
-            <option value="1" :selected="getInputValue">{{ text_yes }}</option>
-            <option value="0" :selected="!getInputValue">{{ text_no }}</option>
-    </select>
+        readonly />
 </template>
 
 <script type="text/javascript">
@@ -20,17 +20,16 @@ export default {
     },
     computed: {
         ...mapState('shop', [
-            'text_yes',
-            'text_no',
+            'text_barcode',
         ]),
         ...mapGetters('shop', [
             'getCombinationDataValue',
         ]),
         getInputName() {
-            return 'so_combination['+this.combid+'][subtract]'
+            return 'so_combination['+this.combid+'][barcode]'
         },
         getInputValue() {
-            return this.getCombinationDataValue(this.combid, 'subtract')
+            return this.getCombinationDataValue(this.combid, 'barcode')
         },
     },
     methods: {
@@ -39,12 +38,10 @@ export default {
         ]),
 
         updateValue(e) {
-            let value = e.srcElement.options[e.srcElement.selectedIndex].value;
-
             this.updateCombinationValue({
                 combination_id: this.combid,
-                key: 'subtract',
-                value: (value == 1) ? true : false,
+                key: 'barcode',
+                value: parseInt(e.srcElement.value),
             })
         },
     }

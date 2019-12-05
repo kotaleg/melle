@@ -93,6 +93,7 @@ export default {
         background-color: rgba(0, 0, 0, 0.3);
         border: 1px rgba(0, 0, 0, 0.8) solid;
         cursor: pointer;
+        margin: auto;
     }
 }
 </style>

@@ -741,6 +741,10 @@ class ModelApiExport extends Model
 
                 $this->_str .= "  <name>" . htmlspecialchars($name) . "</name>\n";
 
+                if ($c['barcode']) {
+                    $this->_str .= "  <barcode>" . htmlspecialchars($c['barcode']) . "</barcode>\n";
+                }
+
                 $this->_str .= "</offer>\n";
                 fwrite($f, $this->_str);
                 unset($this->_str);

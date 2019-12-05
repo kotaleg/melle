@@ -100,6 +100,7 @@ class ModelExtensionModuleSuperOffers extends Model
                         'option_value_id'         => $pov['option_value_id'],
                         'name'                    => $pov['name'],
                         'image'                   => $pov_image,
+                        'barcode'                 => $pov['barcode'],
                         'quantity'                => 0,
                         'subtract'                => 0,
                         'price'                   => 0,
@@ -304,6 +305,7 @@ class ModelExtensionModuleSuperOffers extends Model
                 'price' => $this->model_tool_base->formatMoney($c['price']),
                 'quantity' => $c['quantity'],
                 'image' => trim($c['image']),
+                'barcode' => trim($c['barcode']),
                 'imageHash' => md5($c['image']),
                 'required' => $required,
             );

@@ -49,6 +49,7 @@ class ModelExtensionModuleSuperOffers extends Model
             `special_price_end` int(11) NOT NULL,
 
             `image` varchar(255) NOT NULL,
+            `barcode` varchar(64) NOT NULL,
 
             `import_id` varchar(255) NOT NULL,
 
@@ -303,6 +304,7 @@ class ModelExtensionModuleSuperOffers extends Model
                 $p = $combinations_extended[$combination_key]['price'];
                 $m = $combinations_extended[$combination_key]['model'];
                 $img = $combinations_extended[$combination_key]['image'];
+                $barcode = $combinations_extended[$combination_key]['barcode'];
             }
 
             $combinations_data[$combination_key] = array(
@@ -311,6 +313,7 @@ class ModelExtensionModuleSuperOffers extends Model
                 'price'     => $p,
                 'model'     => $m,
                 'image'     => $img,
+                'barcode'   => $barcode,
                 'hided_by_filter' => false,
             );
         }

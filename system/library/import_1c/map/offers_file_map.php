@@ -175,6 +175,9 @@ class offers_file_map
                 if (isset($keyValue['Ид'])) {
                     $offer->id = $keyValue['Ид'];
                 }
+                if (isset($keyValue['Штрихкод'])) {
+                    $offer->barcode = $keyValue['Штрихкод'];
+                }
                 if (isset($keyValue['Артикул'])) {
                     $offer->artikul = $keyValue['Артикул'];
                 }

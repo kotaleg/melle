@@ -32,6 +32,7 @@ $_['text_special']          = 'Спец. цена';
 $_['text_reward']           = 'Reward points';
 $_['text_weight']           = 'Вес';
 $_['text_image']            = 'Изображение';
+$_['text_barcode']          = 'Штрихкод';
 
 $_['text_generate_all_comb']        = 'Сгенерировать все возможные комбинации';
 $_['text_import_default_options']   = 'Импортировать предыдущие опции';

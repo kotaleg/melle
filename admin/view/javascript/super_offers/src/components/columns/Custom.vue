@@ -1,7 +1,8 @@
 <template>
     <select @change="changeSomeShit"
         :name="getSelectName"
-        class="form-control">
+        class="form-control"
+        readonly>
 
         <option v-for="(o, i) in weirdStuff[acOptionId]"
             :value="o.id"

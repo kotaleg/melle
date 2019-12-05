@@ -16,6 +16,7 @@ class super_offers
     const REWARD = 'reward';
     const WEIGHT = 'weight';
     const IMAGE = 'image';
+    const BARCODE = 'barcode';
 
     // TYPES
     const TYPE_SELECT = 'select';
@@ -53,6 +54,7 @@ class super_offers
             self::SPECIAL       => array('name' => false, 'active' => false, 'code' => self::SPECIAL, 'default' => ''),
             self::REWARD        => array('name' => false, 'active' => false, 'code' => self::REWARD, 'default' => ''),
             self::WEIGHT        => array('name' => false, 'active' => false, 'code' => self::WEIGHT, 'default' => ''),
+            self::BARCODE        => array('name' => false, 'active' => true, 'code' => self::BARCODE, 'default' => ''),
             self::IMAGE        => array('name' => false, 'active' => true, 'code' => self::IMAGE, 'default' => ''),
         );
     }
@@ -109,7 +111,7 @@ class super_offers
             (`product_id`, `quantity`, `subtract`, `price`, `price_prefix`,
                 `points`, `points_prefix`, `weight`, `weight_prefix`, `model`,
                 `product_code`, `special_price`, `special_price_start`,
-                `special_price_end`, `image`, `import_id`)
+                `special_price_end`, `image`, `barcode`, `import_id`)
             VALUES(
                 '" . (int)$data['product_id'] . "',
                 '" . $this->db->escape($data['quantity']) . "',
@@ -126,6 +128,7 @@ class super_offers
                 '" . $this->db->escape($data['special_price_start']) . "',
                 '" . $this->db->escape($data['special_price_end']) . "',
                 '" . $this->db->escape($data['image']) . "',
+                '" . $this->db->escape($data['barcode']) . "',
                 '" . $this->db->escape($data['import_id']) . "' );";
 
         $this->db->query($sql);
@@ -174,6 +177,7 @@ class super_offers
                 'special_price_start' => false,
                 'special_price_end' => false,
                 'image'             => (isset($c['image'])) ? $c['image'] : '',
+                'barcode'           => (isset($c['barcode'])) ? $c['barcode'] : '',
                 'import_id'         => (isset($c['import_id'])) ? $c['import_id'] : '',
             );
 

@@ -50,6 +50,7 @@
                                 <so_quantity v-if="ac.code == 'quantity'" :combid="id" :colid="k" />
                                 <so_subtract v-if="ac.code == 'subtract'" :combid="id" :colid="k" />
                                 <so_image v-if="ac.code == 'image'" :combid="id" :colid="k" />
+                                <so_barcode v-if="ac.code == 'barcode'" :combid="id" :colid="k" />
                             </td>
 
                             <td>
@@ -93,6 +94,7 @@ import Price from './columns/Price.vue'
 import Quantity from './columns/Quantity.vue'
 import Subtract from './columns/Subtract.vue'
 import Image from './columns/Image.vue'
+import Barcode from './columns/Barcode.vue'
 
 export default {
     components: {
@@ -102,6 +104,7 @@ export default {
         'so_quantity': Quantity,
         'so_subtract': Subtract,
         'so_image': Image,
+        'so_barcode': Barcode,
     },
     computed: {
         ...mapState('shop', [

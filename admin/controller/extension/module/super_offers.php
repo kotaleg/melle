@@ -130,7 +130,7 @@ class ControllerExtensionModuleSuperOffers extends Controller
             'tab_setting', 'text_product_code', 'text_special_price', 'text_column_toggle',
             'text_quick_filter', 'text_model', 'text_quantity', 'text_price', 'text_special',
             'text_reward', 'text_weight', 'text_filter_placeholder', 'text_no_combinations',
-            'text_no_options', 'text_nothing_to_configure',
+            'text_no_options', 'text_nothing_to_configure', 'text_image', 'text_barcode',
 
             'entry_option',
 
