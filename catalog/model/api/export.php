@@ -676,7 +676,7 @@ class ModelApiExport extends Model
                     $image = $base_path . 'image/' . $c['image'];
                 }
 
-                $offerId = "{$product['product_id']}{$c['combination_id']}";
+                $offerId = hash('crc32b', hash('sha256', $c['import_id']));
                 $available = ($c['quantity'] > 0) ? 'true' : 'false';
 
                 $this->_str .= "<offer id=\"{$offerId}\" available=\"{$available}\">\n" .
