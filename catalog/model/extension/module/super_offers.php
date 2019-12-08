@@ -302,6 +302,7 @@ class ModelExtensionModuleSuperOffers extends Model
 
             $result[] = array(
                 'combination_id' => $c['combination_id'],
+                'import_id' => $c['import_id'],
                 'price' => $this->model_tool_base->formatMoney($c['price']),
                 'quantity' => $c['quantity'],
                 'image' => trim($c['image']),
