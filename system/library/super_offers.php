@@ -7,6 +7,7 @@ class super_offers
     const OPTION_SETTING = 'so_column_setting';
 
     // COLUMNS
+    const IMPORT_ID = 'import_id';
     const MODEL = 'model';
     const PRODUCT_CODE = 'product_code';
     const QUANTITY = 'quantity';
@@ -46,16 +47,17 @@ class super_offers
     public function getDefaultActiveColumns()
     {
         return array(
+            self::IMPORT_ID     => array('name' => false, 'active' => false, 'code' => self::IMPORT_ID, 'default' => ''),
             self::MODEL         => array('name' => false, 'active' => false, 'code' => self::MODEL, 'default' => ''),
             self::PRODUCT_CODE  => array('name' => false, 'active' => false, 'code' => self::PRODUCT_CODE, 'default' => ''),
             self::QUANTITY      => array('name' => false, 'active' => true, 'code' => self::QUANTITY, 'default' => ''),
-            self::SUBTRACT      => array('name' => false, 'active' => true, 'code' => self::SUBTRACT, 'default' => true),
+            self::SUBTRACT      => array('name' => false, 'active' => false, 'code' => self::SUBTRACT, 'default' => true),
             self::PRICE         => array('name' => false, 'active' => true, 'code' => self::PRICE, 'default' => ''),
             self::SPECIAL       => array('name' => false, 'active' => false, 'code' => self::SPECIAL, 'default' => ''),
             self::REWARD        => array('name' => false, 'active' => false, 'code' => self::REWARD, 'default' => ''),
             self::WEIGHT        => array('name' => false, 'active' => false, 'code' => self::WEIGHT, 'default' => ''),
-            self::BARCODE        => array('name' => false, 'active' => true, 'code' => self::BARCODE, 'default' => ''),
-            self::IMAGE        => array('name' => false, 'active' => true, 'code' => self::IMAGE, 'default' => ''),
+            self::BARCODE       => array('name' => false, 'active' => true, 'code' => self::BARCODE, 'default' => ''),
+            self::IMAGE         => array('name' => false, 'active' => true, 'code' => self::IMAGE, 'default' => ''),
         );
     }
 

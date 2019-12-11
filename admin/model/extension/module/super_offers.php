@@ -305,15 +305,19 @@ class ModelExtensionModuleSuperOffers extends Model
                 $m = $combinations_extended[$combination_key]['model'];
                 $img = $combinations_extended[$combination_key]['image'];
                 $barcode = $combinations_extended[$combination_key]['barcode'];
+                $import_id = $combinations_extended[$combination_key]['import_id'];
+                $product_code = $combinations_extended[$combination_key]['product_code'];
             }
 
             $combinations_data[$combination_key] = array(
+                'import_id' => $import_id,
                 'quantity'  => $q,
                 'subtract'  => $s,
                 'price'     => $p,
                 'model'     => $m,
                 'image'     => $img,
                 'barcode'   => $barcode,
+                'product_code' => $product_code,
                 'hided_by_filter' => false,
             );
         }

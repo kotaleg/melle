@@ -25,8 +25,7 @@
                         <tr v-if="isCombinations">
                             <td v-for="(ac, k) in active_columns"
                                 :key="k+'-ac'"
-                                v-if="ac.active && (isUndefined(ac.code) || !isUndefined(ac.code))"
-                                class="text-left">
+                                :class="['text-left', {'disabled-column': !ac.active}]">
                                 <input type="hidden" :name="columnName(k)" :value="columnValue(ac.active)">
                                 {{ac.name}}
                             </td>
@@ -42,15 +41,23 @@
 
                             <input type="hidden" name="combination" :value="id">
 
-                            <td v-for="(ac, k) in active_columns" :key="k+'-acv'"
-                                v-if="ac.active && (isUndefined(ac.code) || !isUndefined(ac.code))">
-                                <so_custom v-if="isUndefined(ac.code)" :combid="id" :colid="k" />
-                                <so_model v-if="ac.code == 'model'" :combid="id" :colid="k" />
-                                <so_price v-if="ac.code == 'price'" :combid="id" :colid="k" />
-                                <so_quantity v-if="ac.code == 'quantity'" :combid="id" :colid="k" />
-                                <so_subtract v-if="ac.code == 'subtract'" :combid="id" :colid="k" />
-                                <so_image v-if="ac.code == 'image'" :combid="id" :colid="k" />
-                                <so_barcode v-if="ac.code == 'barcode'" :combid="id" :colid="k" />
+                            <td
+                                v-for="(ac, k) in active_columns"
+                                :key="k+'-acv'"
+                                :class="[{'disabled-column': !ac.active}]"
+                            >
+                                <div v-if="ac.active">
+                                    <so_custom v-if="isUndefined(ac.code)" :combid="id" :colid="k" />
+                                    <so_model v-if="ac.code == 'model'" :combid="id" :colid="k" />
+                                    <so_price v-if="ac.code == 'price'" :combid="id" :colid="k" />
+                                    <so_quantity v-if="ac.code == 'quantity'" :combid="id" :colid="k" />
+                                    <so_subtract v-if="ac.code == 'subtract'" :combid="id" :colid="k" />
+                                    <so_image v-if="ac.code == 'image'" :combid="id" :colid="k" />
+                                    <so_barcode v-if="ac.code == 'barcode'" :combid="id" :colid="k" />
+                                </div>
+                                <div v-else>
+                                    <so_hidden :name="ac.code" :combid="id" :colid="k" />
+                                </div>
                             </td>
 
                             <td>
@@ -95,6 +102,7 @@ import Quantity from './columns/Quantity.vue'
 import Subtract from './columns/Subtract.vue'
 import Image from './columns/Image.vue'
 import Barcode from './columns/Barcode.vue'
+import Hidden from './columns/Hidden.vue'
 
 export default {
     components: {
@@ -105,6 +113,7 @@ export default {
         'so_subtract': Subtract,
         'so_image': Image,
         'so_barcode': Barcode,
+        'so_hidden': Hidden,
     },
     computed: {
         ...mapState('shop', [
@@ -152,19 +161,22 @@ export default {
 </script>
 
 <style lang="scss">
-    // NOTIFICATION
-    .vue-notification {
-      font-size: 14px;
-    }
+// NOTIFICATION
+.vue-notification {
+  font-size: 14px;
+}
 
-    .mt-30 {
-        margin-top: 30px;
-    }
+.mt-30 {
+    margin-top: 30px;
+}
 
-    .option-handler {
-        cursor: pointer;
-    }
-    .not-option {
-        background: #f9fbff;
-    }
+.option-handler {
+    cursor: pointer;
+}
+.not-option {
+    background: #f9fbff;
+}
+.disabled-column {
+    display: none !important;
+}
 </style>
