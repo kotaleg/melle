@@ -1,3 +1,5 @@
+#!/bin/bash
+
 shopt -s extglob
 
 if [ ! -d "$1" ]; then
@@ -18,7 +20,7 @@ do
 done
 
 if [ -d "$2" ]; then
-    cd "$2"
+    cd "$2" || echo "ERR: CAN'T CD TO \`$2\`" && exit 1
 
     if [ "$(pwd)" = "$2" ]; then
         echo "creating backup archive"
