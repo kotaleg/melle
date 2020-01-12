@@ -25,7 +25,21 @@ yarn-error.log*
 
 # Opencart
 install/*
-php.ini*
+image/cache/*
+!image/cache/index.html
+system/storage/cache/*
+!system/storage/cache/index.html
+system/storage/download/*
+!system/storage/download/index.html
+system/storage/logs/*
+!system/storage/logs/index.html
+system/storage/modification/*
+!system/storage/modification/index.html
+system/storage/session/*
+!system/storage/session/.htaccess
+!system/storage/session/index.html
+system/storage/upload/*
+!system/storage/upload/index.html
 
 # robot
 robots.txt
@@ -39,3 +53,6 @@ get_url_pvz.js
 opt
 *.csv
 *.xls*
+
+system/logs/*
+php.ini*
