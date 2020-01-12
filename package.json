@@ -2,43 +2,17 @@
   "name": "melle",
   "version": "1.0.0",
   "description": "Melle",
-  "main": "index.js",
   "author": "Ivan St. <brokeyourbike@gmail.com>",
-  "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "yarn run development",
     "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "yarn run development --watch",
-    "watch-poll": "yarn run --watch --watch-poll",
-    "prod": "yarn run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch-import1c": "yarn run watch --env.mixfile=webpack.import-1c.mix",
-    "prod-import1c": "yarn run production --env.mixfile=webpack.import-1c.mix",
-    "watch-offersadmin": "yarn run watch --env.mixfile=webpack.offers.mix",
-    "prod-offersadmin": "yarn run production --env.mixfile=webpack.offers.mix",
-    "watch-offers": "yarn run watch --env.mixfile=webpack.offers-real.mix",
-    "prod-offers": "yarn run production --env.mixfile=webpack.offers-real.mix",
-    "watch-discount": "yarn run watch --env.mixfile=webpack.discount.mix",
-    "prod-discount": "yarn run production --env.mixfile=webpack.discount.mix",
-    "watch-sizelist": "yarn run watch --env.mixfile=webpack.sizelist.mix",
-    "prod-sizelist": "yarn run production --env.mixfile=webpack.sizelist.mix",
-    "watch-pricelist": "yarn run watch --env.mixfile=webpack.pricelist.mix",
-    "prod-pricelist": "yarn run production --env.mixfile=webpack.pricelist.mix",
-    "watch-melleb": "yarn run watch --env.mixfile=webpack.melleb.mix",
-    "prod-melleb": "yarn run production --env.mixfile=webpack.melleb.mix",
-    "watch-gcat": "yarn run watch --env.mixfile=webpack.gcat.mix",
-    "prod-gcat": "yarn run production --env.mixfile=webpack.gcat.mix"
+    "prod": "yarn run production"
   },
-  "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
+  "dependencies": {
     "@riophae/vue-treeselect": "^0.0.38",
     "axios": "^0.18.0",
-    "babel-plugin-lodash": "^3.3.4",
-    "cross-env": "^5.2.0",
-    "laravel-mix": "^2.1.11",
     "lodash": "^4.17.10",
     "md5": "^2.2.1",
     "pretty-checkbox-vue": "^1.1.9",
@@ -66,7 +40,28 @@
     "vue-the-mask": "^0.11.1",
     "vue2-datepicker": "^2.10.0",
     "vuejs-datepicker": "^1.5.4",
-    "vuex": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-plugin-date-fns": "^0.2.1",
+    "babel-plugin-lodash": "^3.3.4",
+    "cross-env": "^5.2.0",
+    "es6-promise": "^4.2.4",
+    "glob-all": "^3.1.0",
+    "laravel-mix": "^2.1.11",
+    "prettier": "1.18.2",
+    "purgecss-webpack-plugin": "^1.5.0",
+    "purify-css": "^1.2.5",
+    "purifycss-webpack": "^0.7.0",
     "webpack-bundle-analyzer": "^2.11.2"
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie 11",
+    "not ie_mob 11"
+  ]
 }
