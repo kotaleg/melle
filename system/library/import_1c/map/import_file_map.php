@@ -174,6 +174,9 @@ class import_file_map
                     if ($child['name'] == '{'.self::$namespace.'}Артикул') {
                         $product->artikul = $child['value'];
                     }
+                    if ($child['name'] == '{'.self::$namespace.'}Код') {
+                        $product->sku = $child['value'];
+                    }
                     if ($child['name'] == '{'.self::$namespace.'}Наименование') {
                         $product->name = $child['value'];
                     }

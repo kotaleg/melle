@@ -689,6 +689,10 @@ class ModelApiExport extends Model
                     ((!empty($product['description'])) ? "  <description>" . htmlspecialchars(strip_tags($product['description'])) . "</description>\n" : "<description>Описание у товара скоро появится</description>\n")
                     ."  <sales_notes>мин.сумма заказа: 1000р, мин.партия: 1шт</sales_notes>\n";
 
+                if (isset($product['sku']) && $product['sku']) {
+                    $this->_str .= "  <shop-sku>{$product['sku']}</shop-sku>\n";
+                }
+
                 /* OPTIONS */
                 $color = '';
                 $size = '';

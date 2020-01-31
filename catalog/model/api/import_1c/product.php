@@ -50,7 +50,7 @@ class ModelApiImport1CProduct extends Model
                 $d_ = array(
                     'import_id' => $product->id,
                     'model' => (empty($product->artikul)) ? '--' : $product->artikul,
-                    'sku' => $product->artikul,
+                    'sku' => $product->sku,
                     'upc' => '',
                     'ean' => '',
                     'jan' => '',
