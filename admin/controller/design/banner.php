@@ -171,8 +171,16 @@ class ControllerDesignBanner extends Controller {
 
         $results = $this->model_design_banner->getBanners($filter_data);
 
+        // IVAN MOD START
+        $this->load->model('extension/module/melle_slider');
+        // IVAN MOD END
+
         foreach ($results as $result) {
             $data['banners'][] = array(
+                // IVAN MOD START
+                'sort_order' => $this->model_extension_module_melle_slider->getBannerSortOrder($result['banner_id']),
+                // IVAN MOD END
+
                 'banner_id' => $result['banner_id'],
                 'name'      => $result['name'],
                 'status'    => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
@@ -241,6 +249,10 @@ class ControllerDesignBanner extends Controller {
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
+
+        // IVAN MOD START
+        return $this->response->setOutput($this->load->view('extension/module/melle_slider/banner_list', $data));
+        // IVAN MOD START
 
         $this->response->setOutput($this->load->view('design/banner_list', $data));
     }
@@ -363,6 +375,17 @@ class ControllerDesignBanner extends Controller {
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
+
+        // IVAN MOD START
+        $this->load->model('extension/module/melle_slider');
+        $data['banner_images'] = $this->model_extension_module_melle_slider
+            ->prepareBannerImages($data['languages'], $data['banner_images']);
+        $data['sort_order'] = $this->model_extension_module_melle_slider
+            ->getBannerSortOrder($this->request->get['banner_id']);
+        $data['available_sliders'] = $this->model_extension_module_melle_slider
+            ->getSlideshowModules($this->request->get['banner_id']);
+        return $this->response->setOutput($this->load->view('extension/module/melle_slider/banner_form', $data));
+        // IVAN MOD START
 
         $this->response->setOutput($this->load->view('design/banner_form', $data));
     }

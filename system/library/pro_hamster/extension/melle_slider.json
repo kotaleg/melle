@@ -1,0 +1,14 @@
+{
+    "codename": "melle_slider",
+    "version": "0.0.1",
+    "name": "Melle Slider",
+    "description": "Melle Slider",
+    "author": {
+        "name": "PRO Hamster",
+        "url": "https://prohamster.com/"
+    },
+    "require": {
+        "pro_patch": ">= 1.0.0",
+        "pro_style": ">= 1.0.0"
+    }
+}

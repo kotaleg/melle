@@ -129,6 +129,17 @@ class ControllerExtensionModuleSlideshow extends Controller {
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
 
+        // IVAN MOD START
+        if (isset($this->request->post['selected_banner'])) {
+            $data['selected_banner'] = $this->request->post['selected_banner'];
+        } elseif (!empty($module_info)) {
+            $data['selected_banner'] = $module_info['selected_banner'];
+        } else {
+            $data['selected_banner'] = array();
+        }
+        return $this->response->setOutput($this->load->view('extension/module/melle_slider/slideshow', $data));
+        // IVAN MOD END
+
         $this->response->setOutput($this->load->view('extension/module/slideshow', $data));
     }
 

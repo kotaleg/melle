@@ -13,6 +13,19 @@ class ModelDesignBanner extends Model {
             }
         }
 
+        // IVAN MOD START
+        if (isset($data['sort_order'])) {
+            $this->load->model('extension/module/melle_slider');
+            $this->model_extension_module_melle_slider
+                ->updateSortOrderForBanner($banner_id, $data['sort_order']);
+        }
+        if (isset($data['connected_slider'])) {
+            $this->load->model('extension/module/melle_slider');
+            $this->model_extension_module_melle_slider
+                ->addBannerToSlideshow($banner_id, $data['connected_slider']);
+        }
+        // IVAN MOD END
+
         return $banner_id;
     }
 
@@ -28,6 +41,19 @@ class ModelDesignBanner extends Model {
                 }
             }
         }
+
+        // IVAN MOD START
+        if (isset($data['sort_order'])) {
+            $this->load->model('extension/module/melle_slider');
+            $this->model_extension_module_melle_slider
+                ->updateSortOrderForBanner($banner_id, $data['sort_order']);
+        }
+        if (isset($data['connected_slider'])) {
+            $this->load->model('extension/module/melle_slider');
+            $this->model_extension_module_melle_slider
+                ->addBannerToSlideshow($banner_id, $data['connected_slider']);
+        }
+        // IVAN MOD END
     }
 
     public function deleteBanner($banner_id) {

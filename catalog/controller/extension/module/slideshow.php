@@ -13,17 +13,23 @@ class ControllerExtensionModuleSlideshow extends Controller {
 
         $data['banners'] = array();
 
-        $results = $this->model_design_banner->getBanner($setting['banner_id']);
+        // IVAN MOD START
+        if (isset($setting['selected_banner'])) {
+            foreach ($setting['selected_banner'] as $bannerId) {
+                $results = $this->model_design_banner->getBanner($bannerId);
 
-        foreach ($results as $result) {
-            if (is_file(DIR_IMAGE . $result['image'])) {
-                $data['banners'][$result['sort_order']][mb_strtolower($result['title'])] = array(
-                    'title' => $result['title'],
-                    'link'  => $result['link'],
-                    'image' => $this->model_tool_base->getBase() . 'image/' . $result['image'],
-                );
+                foreach ($results as $result) {
+                    if (is_file(DIR_IMAGE . $result['image'])) {
+                        $data['banners'][$result['sort_order']][mb_strtolower($result['title'])] = array(
+                            'title' => $result['title'],
+                            'link'  => $result['link'],
+                            'image' => $this->model_tool_base->getBase() . 'image/' . $result['image'],
+                        );
+                    }
+                }
             }
         }
+        // IVAN MOD END
 
         $data['module'] = $module++;
 
