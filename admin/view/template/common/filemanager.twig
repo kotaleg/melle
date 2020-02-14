@@ -147,6 +147,19 @@ $('#button-upload').on('click', function() {
                         alert(json['error']);
                     }
 
+                    // IVAN MOD START
+                    if (json['path'] && json['thumb']) {
+                        {% if thumb %}
+                        $('#{{ thumb }}').find('img').attr('src', json['thumb']);
+                        {% endif %}
+
+                        $('#{{ target }}').val(json['path']);
+
+                        $('#modal-image').modal('hide');
+                        return;
+                    }
+                    // IVAN MOD END
+
                     if (json['success']) {
                         alert(json['success']);
 
