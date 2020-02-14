@@ -1,6 +1,6 @@
 <?php
 /*
- *  location: admin/model
+ *  location: catalog/model
  *
  */
 class ModelExtensionProPatchLoad extends Model

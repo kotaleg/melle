@@ -9,8 +9,10 @@ class ModelExtensionProPatchModification extends Model
     {
         $name = (!$extra) ? "{$codename}.xml" : "{$codename}_{$extra}.xml";
 
-        $this->setModification($name, $status);
-        $this->refreshCache();
+        $result = $this->setModification($name, $status);
+        if ($result) {
+            $this->refreshCache();
+        }
     }
 
     public function setModification($xml, $status = true)
@@ -87,6 +89,8 @@ class ModelExtensionProPatchModification extends Model
                     if (!$json) {
                         $this->addModification($modification_data);
                     }
+
+                    return true;
 
                 } catch(Exception $exception) {
                     $this->log->write("[admin] Something go wrong in the pro_patch/modification->setModification");
@@ -531,6 +535,14 @@ class ModelExtensionProPatchModification extends Model
             WHERE `code` = '" . $this->db->escape($code) . "'");
 
         return $query->row;
+    }
+
+    public function searchModificationsLikeCode($code)
+    {
+        $query = $this->db->query("SELECT * FROM `". DB_PREFIX ."modification`
+            WHERE `code` LIKE '" . $this->db->escape($code) . "%'");
+
+        return $query->rows;
     }
 
     public function getModificationByName($name)

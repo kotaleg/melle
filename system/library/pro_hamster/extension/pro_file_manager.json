@@ -1,0 +1,13 @@
+{
+  "codename": "pro_file_manager",
+  "version": "0.2.1",
+  "name": "PRO File Manager",
+  "description": "PRO File Manager",
+  "author": {
+    "name": "PRO Hamster",
+    "url": "https://prohamster.com/"
+  },
+  "require": {
+    "pro_patch": ">= 1.0.0"
+  }
+}

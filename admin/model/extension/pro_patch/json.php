@@ -7,12 +7,10 @@ class ModelExtensionProPatchJson extends Model
 {
     public function parseJson($json)
     {
-        $parsed = json_decode($json, true);
+        $result = json_decode((string)$json, true);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            return array('error' => 'Parse error.');
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $result;
         }
-
-        return $parsed === null ? array() : $parsed;
     }
 }

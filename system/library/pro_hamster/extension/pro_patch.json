@@ -1,0 +1,11 @@
+{
+  "codename": "pro_patch",
+  "version": "0.1.0",
+  "name": "PRO Patch",
+  "description": "PRO Patch",
+  "author": {
+    "name": "PRO Hamster",
+    "url": "https://prohamster.com/"
+  },
+  "require": {}
+}

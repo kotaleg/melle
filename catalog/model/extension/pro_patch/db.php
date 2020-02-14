@@ -1,6 +1,6 @@
 <?php
 /*
- *  location: admin/model
+ *  location: catalog/model
  *
  */
 class ModelExtensionProPatchDb extends Model
@@ -91,5 +91,11 @@ class ModelExtensionProPatchDb extends Model
         }
 
         return $sql_parents;
+    }
+
+    public function now()
+    {
+        $q = $this->db->query("SELECT NOW() as `now`;");
+        return $q->row['now'];
     }
 }

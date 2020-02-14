@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>pro_file_manager</name>
+    <code>pro_file_manager</code>
+    <description>PRO File Manager</description>
+    <version>0.0.1</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="admin/view/template/common/filemanager.twig">
+        <operation error="skip">
+            <search><![CDATA[$('#modal-image').modal('hide')]]></search>
+            <add position="before"><![CDATA[
+                /* PRO_FILE_MANAGER START */
+                var changeEvent = document.createEvent("HTMLEvents");
+                changeEvent.initEvent("change", false, true);
+                var targetElement = document.getElementById('{{ target }}');
+                targetElement.dispatchEvent(changeEvent);
+                /* PRO_FILE_MANAGER END */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/common/header.php">
+        <operation error="skip">
+            <search><![CDATA[$data['description'] = $this->document->getDescription();]]></search>
+            <add position="before"><![CDATA[
+                /* PRO_FILE_MANAGER START */
+                $this->document->addScript('view/javascript/pro_file_manager/fix/filemanager_fix.js');
+                /* PRO_FILE_MANAGER END */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>
