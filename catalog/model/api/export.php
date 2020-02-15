@@ -824,6 +824,40 @@ class ModelApiExport extends Model
         return 0;
     }
 
+    public function getRootCategoryNameForProduct($productId)
+    {
+        $mostCloseId = $this->getCloseCat($productId);
+
+        $mostClose = $this->getParentCategory($mostCloseId);
+        while (isset($mostClose['parent_id']) && $mostClose['parent_id']) {
+            $mostClose = $this->getParentCategory($mostClose['parent_id']);
+        }
+        
+        if (isset($mostClose['category_id'])) {
+            return $this->getCategoryName($mostClose['category_id']);
+        } else {
+            return $this->getCategoryName($mostCloseId);
+        }
+    }
+
+    private function getParentCategory($categoryId)
+    {
+        return $this->db->query("SELECT * FROM `". DB_PREFIX ."category`
+            WHERE `category_id` = '" . (int)$categoryId . "'")->row;
+    }
+
+    private function getCategoryName($categoryId)
+    {
+        $descriptionData = $this->db->query("SELECT * FROM `". DB_PREFIX ."category_description`
+            WHERE `category_id` = '" . (int) $categoryId . "'
+            AND `language_id` = '" . (int) $this->config->get('config_language_id') . "'")->row;
+        
+        if (isset($descriptionData['name'])) {
+            return $descriptionData['name'];
+        }
+        return '---';
+    }
+
     public function getProductCategories($product_id)
     {
         $categories = array();

@@ -60,19 +60,33 @@ class ControllerExtensionPaymentRbs extends Controller
 
         foreach ($this->cart->getProducts() as $product) {
 
+            $itemCode = $product['product_id'];
+            $name = $product['name'];
+
+            try {
+                $this->load->model('catalog/product');
+                $this->load->model('api/export');
+
+                $productExtra = $this->model_catalog_product->getProduct($product['product_id']);
+                $itemCode = isset($productExtra['name']) ? $productExtra['name'] : $itemCode;
+                $name = $this->model_api_export->getRootCategoryNameForProduct($product['product_id']);
+            } catch (\Exception $e) {
+                $this->log->write($e->getMessage());
+            }
+
             $product_taxSum = $this->tax->getTax($product['price'], $product['tax_class_id']);
             $product_amount = ( $product['price'] + $product_taxSum ) * $product['quantity'];
 
             $product_data[] = array(
                 'positionId' => $product['cart_id'],
-                'name' => $product['name'],
+                'name' => $name,
                 'quantity' => array(
                     'value' => $product['quantity'],
                     //todo fix piece
-                    'measure' => "piece"
+                    'measure' => "шт"
                 ),
                 'itemAmount' => $product_amount * 100,
-                'itemCode' => $product['product_id'],
+                'itemCode' => $itemCode,
 
                 'tax' => array(
                     // todo: some question taxType
@@ -95,7 +109,7 @@ class ControllerExtensionPaymentRbs extends Controller
             $delivery['itemAmount'] = $this->session->data['shipping_method']['cost'] * 100;
             $delivery['quantity']['value'] = 1;
             //todo fix piece
-            $delivery['quantity']['measure'] = 'piece';
+            $delivery['quantity']['measure'] = 'шт';
             $delivery['itemCode'] = $this->session->data['shipping_method']['code'];
             $delivery['tax']['taxType'] = $this->config->get('payment_rbs_taxType');
             $delivery['tax']['taxSum'] = 0;
