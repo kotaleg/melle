@@ -824,6 +824,12 @@ class ModelApiExport extends Model
         return 0;
     }
 
+    public function getClosestCategoryNameForProduct($productId)
+    {
+        $mostCloseId = $this->getCloseCat($productId);
+        return $this->getCategoryName($mostCloseId);
+    }
+
     public function getRootCategoryNameForProduct($productId)
     {
         $mostCloseId = $this->getCloseCat($productId);
