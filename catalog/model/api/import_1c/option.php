@@ -76,7 +76,7 @@ class ModelApiImport1COption extends Model
                             $img = $this->getColorByImportID($variant->id);
                             if ($img) { $image = $img; }
 
-                            if (empty($image)) { $find_image++; }
+                            if (!empty($image)) { $find_image++; }
 
                             $option_values[] = array(
                                 'image' => $image,
@@ -89,6 +89,11 @@ class ModelApiImport1COption extends Model
                         foreach ($option_values as $value) {
                             $ov = $this->getOptionValueByImportId($value['import_id']);
                             if ($ov && isset($ov['option_value_id'])) {
+                                
+                                if (empty($value['image']) && isset($ov['image']) && !empty($ov['image'])) {
+                                    $value['image'] = $ov['image'];
+                                }
+
                                 $this->updateOptionValue($option_id, $ov['option_value_id'], $value);
                             } else {
                                 $this->addOptionValues($option_id, array($value));
@@ -137,7 +142,7 @@ class ModelApiImport1COption extends Model
 
     public function getOptionValueByImportId($import_id)
     {
-        $query = $this->db->query("SELECT `option_value_id`, `option_id`
+        $query = $this->db->query("SELECT *
             FROM `". DB_PREFIX ."option_value`
             WHERE `import_id` = '".$this->db->escape($import_id)."'");
         if ($query->row) {
