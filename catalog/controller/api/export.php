@@ -29,7 +29,12 @@ class ControllerApiExport extends Controller
 
             if (isset($this->request->get['type'])) {
                 $type = $this->db->escape($this->request->get['type']);
+
                 $mode = 'export';
+                if (isset($this->request->get['mode'])) {
+                    $mode = $this->db->escape($this->request->get['mode']);
+                }
+
                 $process = 'action' . ucfirst($type) . ucfirst($mode);
 
                 $filename = isset($this->request->get['filename']) ?
