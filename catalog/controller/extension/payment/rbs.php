@@ -70,6 +70,20 @@ class ControllerExtensionPaymentRbs extends Controller
                 $productExtra = $this->model_catalog_product->getProduct($product['product_id']);
                 $itemCode = isset($productExtra['name']) ? $productExtra['name'] : $itemCode;
                 $name = $this->model_api_export->getClosestCategoryNameForProduct($product['product_id']);
+
+                if (isset($productExtra['name']) && $productExtra['name']) {
+                    if (strpos($productExtra['name'], ' ')) {
+                        $nameEx = explode(' ', $productExtra['name']);
+                        $nameEx = array_shift($nameEx);
+                    } else {
+                        $nameEx = $productExtra['name'];
+                    }
+
+                    if ($nameEx) {
+                        $name .= " {$nameEx}";
+                    }
+                }
+
             } catch (\Exception $e) {
                 $this->log->write($e->getMessage());
             }
