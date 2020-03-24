@@ -34,13 +34,7 @@
             {% endif %}
             <melle-catalog-content></melle-catalog-content>
 
-            {% if description %}
-            <details open>
-               <summary>Показать полностью</summary>
-               <br>
-               <article style="column-count: 2;">{{description}}</article>
-            </details>
-            {% endif %}
+           
 
             {% if recently_viewed %}
             <div class="other-prod">
@@ -65,6 +59,15 @@
                </ul>
             </div>
             {% endif %}
+
+             {% if description %}
+            <details open>
+               <summary>Показать полностью</summary>
+               <br>
+               <article style="column-count: 2;">{{description}}</article>
+            </details>
+            {% endif %}
+            
          </div>
 
       </div>
