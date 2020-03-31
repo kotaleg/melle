@@ -35,9 +35,9 @@ class ControllerExtensionTotalProDiscount extends Controller
         $discount_info = $this->extension_model->getDiscountData($discount_id);
 
         if ($discount_info) {
-            $this->document->setTitle($discount_info['name']);
-            $this->document->setDescription($discount_info['name']);
-            $this->document->setKeywords($discount_info['name']);
+            $this->document->setTitle($discount_info['meta_title'] ? $discount_info['meta_title'] : $discount_info['name']);
+            $this->document->setDescription($discount_info['meta_description']);
+            $this->document->setKeywords($discount_info['meta_keywords']);
 
             $data['heading_title'] = $discount_info['name'];
 

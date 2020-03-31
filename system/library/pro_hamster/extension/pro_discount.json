@@ -1,14 +1,14 @@
 {
-    "codename": "pro_discount",
-    "version": "1.0.0",
-    "name": "Discount PRO",
-    "description": "Super Offers",
-    "author": {
-        "name": "PRO Hamster",
-        "url": "https://prohamster.com/"
-    },
-    "require": {
-        "pro_patch": ">= 1.0.0",
-        "pro_style": ">= 1.0.0"
-    }
+  "codename": "pro_discount",
+  "version": "0.2.1",
+  "name": "Discount PRO",
+  "description": "Super Offers",
+  "author": {
+    "name": "PRO Hamster",
+    "url": "https://prohamster.com/"
+  },
+  "require": {
+    "pro_patch": ">= 0.0.1",
+    "pro_style": ">= 0.0.1"
+  }
 }

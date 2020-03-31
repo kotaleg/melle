@@ -64,7 +64,10 @@ class ModelExtensionTotalProDiscount extends Model
             $discount['sort_order'] = (int)$q->row['sort_order'];
             $discount['status'] = (bool)$q->row['status'];
             $discount['name'] = (string)$q->row['name'];
-            $discount['description'] = (string)$q->row['description'];
+
+            $discount['meta_title'] = (string)$q->row['meta_title'];
+            $discount['meta_description'] = (string)$q->row['meta_description'];
+            $discount['meta_keywords'] = (string)$q->row['meta_keywords'];
 
             $discount['start_sum'] = (int)$q->row['start_sum'];
             $discount['start_count'] = (int)$q->row['start_count'];

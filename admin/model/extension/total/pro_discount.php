@@ -54,7 +54,10 @@ class ModelExtensionTotalProDiscount extends Model
 
             `status` tinyint(1),
             `name` varchar(255),
-            `description` TEXT NOT NULL,
+
+            `meta_title` varchar(255) NOT NULL,
+            `meta_description` TEXT NOT NULL,
+            `meta_keywords` TEXT NOT NULL,
 
             `start_date` datetime NOT NULL,
             `finish_date` datetime NOT NULL,
@@ -149,7 +152,10 @@ class ModelExtensionTotalProDiscount extends Model
             'sort_order' => 0,
             'status' => true,
             'name' => '',
-            'description' => '',
+
+            'meta_title' => '',
+            'meta_description' => '',
+            'meta_keywords' => '',
 
             'start_sum' => 0,
             'start_count' => 0,
@@ -188,7 +194,10 @@ class ModelExtensionTotalProDiscount extends Model
                 $discount['sort_order'] = (int)$q->row['sort_order'];
                 $discount['status'] = (bool)$q->row['status'];
                 $discount['name'] = (string)$q->row['name'];
-                $discount['description'] = (string)$q->row['description'];
+
+                $discount['meta_title'] = (string)$q->row['meta_title'];
+                $discount['meta_description'] = (string)$q->row['meta_description'];
+                $discount['meta_keywords'] = (string)$q->row['meta_keywords'];
 
                 $discount['start_sum'] = (int)$q->row['start_sum'];
                 $discount['start_count'] = (int)$q->row['start_count'];
@@ -253,6 +262,10 @@ class ModelExtensionTotalProDiscount extends Model
             $json['error'][] = 'Какое то хреновое имя';
         }
 
+        if ((utf8_strlen($data['meta_title']) < 1) || (utf8_strlen($data['meta_title']) > 32)) {
+            $json['error'][] = 'Мета-тег Title выглядит не очень';
+        }
+
         if (!isset($json['error']) && $data['type'] === self::SALE
         && ($data['sign'] !== self::MONEY && $data['sign'] !== self::PERCENT)) {
             $json['error'][] = 'Неверная единица измерения скидки';
@@ -269,7 +282,8 @@ class ModelExtensionTotalProDiscount extends Model
                 $this->db->query("INSERT INTO `". DB_PREFIX . self::DISCOUNT_TABLE ."`
                     (`type`, `sort_order`, `start_sum`, `start_count`, `sum_and_count`,
                     `registered_only`, `value`, `sign`, `products_count`, `count_like`,
-                    `status`, `name`, `description`, `start_date`, `finish_date`)
+                    `status`, `name`, `meta_title`, `meta_description`, `meta_keywords`, 
+                    `start_date`, `finish_date`)
                     VALUES (
                         '". $this->db->escape($data['type']) ."',
                         '". (int)$data['sort_order'] ."',
@@ -283,7 +297,9 @@ class ModelExtensionTotalProDiscount extends Model
                         '". (int)$data['count_like'] ."',
                         '". (bool)$data['status'] ."',
                         '". $this->db->escape($data['name']) ."',
-                        '". $this->db->escape($data['description']) ."',
+                        '". $this->db->escape($data['meta_title']) ."',
+                        '". $this->db->escape($data['meta_description']) ."',
+                        '". $this->db->escape($data['meta_keywords']) ."',
                         '". $this->db->escape( date("Y-m-d H:i:s", strtotime($data['start_date'])) ) ."',
                         '". $this->db->escape( date("Y-m-d H:i:s", strtotime($data['finish_date'])) ) ."'
                     )");
@@ -305,7 +321,9 @@ class ModelExtensionTotalProDiscount extends Model
                         `count_like` = '". (int)$data['count_like'] ."',
                         `status` = '". (int)$data['status'] ."',
                         `name` = '". $this->db->escape($data['name']) ."',
-                        `description` = '". $this->db->escape($data['description']) ."',
+                        `meta_title` = '". $this->db->escape($data['meta_title']) ."',
+                        `meta_description` = '". $this->db->escape($data['meta_description']) ."',
+                        `meta_keywords` = '". $this->db->escape($data['meta_keywords']) ."',
                         `start_date` = '". $this->db->escape( date("Y-m-d H:i:s", strtotime($data['start_date'])) ) ."',
                         `finish_date` = '". $this->db->escape( date("Y-m-d H:i:s", strtotime($data['finish_date'])) ) ."'
                     WHERE `discount_id` = '" . (int)$data['discount_id'] . "'");

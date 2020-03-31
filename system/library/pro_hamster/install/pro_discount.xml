@@ -3,35 +3,62 @@
     <name>pro_discount</name>
     <code>pro_discount</code>
     <description>Discount PRO</description>
-    <version>1.0.0</version>
+    <version>0.0.1</version>
     <author>PRO Hamster</author>
     <link>http://prohamster.com</link>
 
     <file path="catalog/model/catalog/product.php">
+
         <operation>
             <search><![CDATA[public function getProduct($product_id) {]]></search>
             <add position="after"><![CDATA[
-            /* PRO DISCOUNT */
+            /* PRO DISCOUNT START */
             $this->load->model('extension/total/pro_discount');
-            /* PRO DISCOUNT */
+            /* PRO DISCOUNT END */
             ]]></add>
         </operation>
 
         <operation>
             <search><![CDATA['special'          => $query->row['special'],]]></search>
             <add position="after"><![CDATA[
-                /* PRO DISCOUNT */
+                /* PRO DISCOUNT START */
                 'special'          => $this->model_extension_total_pro_discount->getSpecialPrice($product_id, $query->row['special'], Null),
-                /* PRO DISCOUNT */
+                /* PRO DISCOUNT END */
             ]]></add>
         </operation>
+
     </file>
+
+    <!-- <file path="catalog/controller/startup/seo_url.php">
+
+        <operation>
+            <search><![CDATA[if ($url[0] == 'information_id') {]]></search>
+            <add position="before"><![CDATA[
+                /* PRO DISCOUNT START */
+                if ($url[0] == 'discount_id') {
+                    $this->request->get['discount_id'] = $url[1];
+                }
+                /* PRO DISCOUNT END */
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[} elseif (isset($this->request->get['information_id'])) {]]></search>
+            <add position="before"><![CDATA[
+                /* PRO DISCOUNT START */
+                } elseif (isset($this->request->get['discount_id'])) {
+                    $this->request->get['route'] = 'extension/total/pro_discount/catalog';
+                /* PRO DISCOUNT END */
+            ]]></add>
+        </operation>
+
+    </file> -->
 
     <file path="system/library/cart/cart.php">
         <operation error="skip">
             <search><![CDATA[$this->weight = $registry->get('weight');]]></search>
             <add position="after"><![CDATA[
-                /* PRO DISCOUNT */
+                /* PRO DISCOUNT START */
                 if ((in_array(__FUNCTION__, array('__construct'))) && !isset($this->pro_discount)
                 && file_exists(DIR_SYSTEM.'library/pro_hamster/extension/pro_discount.json')) {
                     $this->pro_discount = new \pro_discount($registry, array(
@@ -43,7 +70,7 @@
                         $this->tax = $registry->get('tax');
                     }
                 }
-                /* PRO DISCOUNT */
+                /* PRO DISCOUNT END */
             ]]></add>
         </operation>
     </file>
