@@ -258,11 +258,11 @@ class ModelExtensionTotalProDiscount extends Model
             $json['error'][] = 'Укажите дату окончания';
         }
 
-        if ((utf8_strlen($data['name']) < 1) || (utf8_strlen($data['name']) > 32)) {
+        if ((utf8_strlen($data['name']) < 1) || (utf8_strlen($data['name']) > 200)) {
             $json['error'][] = 'Какое то хреновое имя';
         }
 
-        if ((utf8_strlen($data['meta_title']) < 1) || (utf8_strlen($data['meta_title']) > 32)) {
+        if ((utf8_strlen($data['meta_title']) < 1) || (utf8_strlen($data['meta_title']) > 200)) {
             $json['error'][] = 'Мета-тег Title выглядит не очень';
         }
 
