@@ -1,28 +1,9 @@
-image: ubuntu:18.04
+image: registry.gitlab.com/pro-hamster/ci-scripts:latest
 
 before_script:
-  - export DEBIAN_FRONTEND=noninteractive
-  - apt-get -qq update && apt-get -qq install -y --no-install-recommends apt-utils < /dev/null > /dev/null
-  - apt-get -qq install curl < /dev/null > /dev/null
-  - apt-get -qq install gnupg < /dev/null > /dev/null
-  - apt-get -qq install gnupg1 < /dev/null > /dev/null
-  - apt-get -qq install gnupg2 < /dev/null > /dev/null
-  - apt-get -qq install zip unzip < /dev/null > /dev/null
-  - apt-get -qq install p7zip-full < /dev/null > /dev/null
-  - apt-get -qq install wget < /dev/null > /dev/null
-  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get -qq update < /dev/null > /dev/null
+  - apt-get -qq install p7zip-full < /dev/null > /dev/null
   - apt-get -qq install -y sshpass < /dev/null > /dev/null
-  # - apt-get -qq install -y nodejs < /dev/null > /dev/null
-  - curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
-  - bash nodesource_setup.sh
-  - apt-get -qq install -y nodejs < /dev/null > /dev/null
-  - nodejs --version
-  - apt-get -qq install -y npm < /dev/null > /dev/null
-  - npm --version
-  - apt-get -qq install -y yarn < /dev/null > /dev/null
-  - yarn --version
 
 deploy_stage:
   stage: deploy
