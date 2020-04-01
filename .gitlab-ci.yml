@@ -14,6 +14,9 @@ before_script:
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get -qq update < /dev/null > /dev/null
   - apt-get -qq install -y sshpass < /dev/null > /dev/null
+  # - apt-get -qq install -y nodejs < /dev/null > /dev/null
+  - curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+  - bash nodesource_setup.sh
   - apt-get -qq install -y nodejs < /dev/null > /dev/null
   - nodejs --version
   - apt-get -qq install -y npm < /dev/null > /dev/null
