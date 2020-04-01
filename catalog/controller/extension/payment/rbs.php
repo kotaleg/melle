@@ -63,6 +63,7 @@ class ControllerExtensionPaymentRbs extends Controller
             $itemCode = $product['product_id'];
             $name = $product['name'];
 
+            /* EXTRA NAME START */
             try {
                 $this->load->model('catalog/product');
                 $this->load->model('api/export');
@@ -87,9 +88,33 @@ class ControllerExtensionPaymentRbs extends Controller
             } catch (\Exception $e) {
                 $this->log->write($e->getMessage());
             }
+            /* EXTRA NAME START */
+
+            /* PRODUCT COUPON START */
+            if (isset($this->session->data['coupon'])) {
+                $this->load->model('extension/total/coupon');
+                $couponInfo = $this->model_extension_total_coupon->getCoupon($this->session->data['coupon']);
+
+                if ($couponInfo) {
+                    if (!$couponInfo['product']) {
+                        $couponStatus = true;
+                    } else {
+                        $couponStatus = in_array($product['product_id'], $couponInfo['product']);
+                    }
+
+                    if ($couponStatus) {
+                        if ($couponInfo['type'] == 'F') {
+                            // TODO
+                        } elseif ($couponInfo['type'] == 'P') {
+                            $product['price'] = $product['price'] - ($product['price'] / 100 * $couponInfo['discount']);
+                        }
+                    }
+                }
+            }
+            /* PRODUCT COUPON END */
 
             $product_taxSum = $this->tax->getTax($product['price'], $product['tax_class_id']);
-            $product_amount = ( $product['price'] + $product_taxSum ) * $product['quantity'];
+            $product_amount = ( $product['price'] + $product_taxSum ) * $product['quantity']; 
 
             $product_data[] = array(
                 'positionId' => $product['cart_id'],
@@ -130,9 +155,6 @@ class ControllerExtensionPaymentRbs extends Controller
             $delivery['itemPrice'] = $this->session->data['shipping_method']['cost'] * 100;
             $orderBundle['cartItems']['items'][] = $delivery;
         }
-
-
-
 
         $response = $this->rbs->register_order($order_number, $amount, $return_url, $orderBundle);
 
