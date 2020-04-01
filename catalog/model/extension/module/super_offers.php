@@ -100,7 +100,7 @@ class ModelExtensionModuleSuperOffers extends Model
                         'option_value_id'         => $pov['option_value_id'],
                         'name'                    => $pov['name'],
                         'image'                   => $pov_image,
-                        'barcode'                 => $pov['barcode'],
+                        'barcode'                 => isset($pov['barcode']) ? $pov['barcode'] : '',
                         'quantity'                => 0,
                         'subtract'                => 0,
                         'price'                   => 0,

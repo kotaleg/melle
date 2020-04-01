@@ -298,7 +298,7 @@ class ControllerExtensionModuleMelle extends Controller
 
         $data['is_options_for_product'] = $state['is_options_for_product'];
 
-        $data['zvezdochka'] = $state['zvezdochka'];
+        $data['zvezdochka'] = isset($state['zvezdochka']) ? $state['zvezdochka'] : false;
         $data['special_text'] = $state['special_text'];
 
         $data['getSpecial'] = $state['default_values']['special'];
