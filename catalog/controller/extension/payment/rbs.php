@@ -90,6 +90,14 @@ class ControllerExtensionPaymentRbs extends Controller
             }
             /* EXTRA NAME START */
 
+            /* RECALCULATE DISCOUNT FROM TOTAL START */
+            if ($product['price'] !== ($product['total'] * $product['quantity'])) {
+                $product['price'] = $product['total'] / $product['quantity'];
+                $product['price'] = round($product['price'], 2);
+                $product['total'] = round($product['price'] * $product['quantity'], 2);
+            }
+            /* RECALCULATE DISCOUNT FROM TOTAL END */
+
             /* PRODUCT COUPON START */
             if (isset($this->session->data['coupon'])) {
                 $this->load->model('extension/total/coupon');
@@ -107,6 +115,8 @@ class ControllerExtensionPaymentRbs extends Controller
                             // TODO
                         } elseif ($couponInfo['type'] == 'P') {
                             $product['price'] = $product['price'] - ($product['price'] / 100 * $couponInfo['discount']);
+                            $product['price'] = round($product['price'], 2);
+                            $product['total'] = round($product['price'] * $product['quantity'], 2);
                         }
                     }
                 }
@@ -136,9 +146,7 @@ class ControllerExtensionPaymentRbs extends Controller
             );
 
             $orderBundle['cartItems']['items'] = $product_data;
-
         }
-
 
         // Delivery calculations:
         if (isset($this->session->data['shipping_method']['cost']) && $this->session->data['shipping_method']['cost'] > 0) {
@@ -156,8 +164,18 @@ class ControllerExtensionPaymentRbs extends Controller
             $orderBundle['cartItems']['items'][] = $delivery;
         }
 
-        $response = $this->rbs->register_order($order_number, $amount, $return_url, $orderBundle);
+        /* RECALCULATE TOTAL BUNDLE ITEMS START */
+        $bundleAmount = 0;
+        foreach ($orderBundle['cartItems']['items'] as $bunbleCartItem) {
+            $bundleAmount += $bunbleCartItem['itemAmount'];
+        }
 
+        if (($bundleAmount - $amount) > 1) {
+            $this->log->write(":: RBS :: `amount` => {$amount}  `bundleAmount` => {$bundleAmount}");
+        }
+        /* RECALCULATE TOTAL BUNDLE ITEMS END */ 
+
+        $response = $this->rbs->register_order($order_number, $bundleAmount, $return_url, $orderBundle);
 
         if (isset($response['errorCode'])) {
             $this->document->setTitle($this->language->get('error_title'));
