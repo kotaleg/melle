@@ -64,7 +64,7 @@
                          </svg>
                       </a>
                    </li>
-                   <li class="menu-pay"><a :href="https://melle.online/opt" class="cursorred">оптовый<br>сайт</a></li>
+                   <li class="menu-pay"><a href="https://melle.online/opt" class="cursorred">оптовый<br>сайт</a></li>
                    <li class="menu-enter">
                       <a v-if="!is_logged" id="panel-buttons__login-link" @click="enableElement('login')" href="javascript:void(0)">Вход</a>
                       <a v-if="!is_logged" id="panel-buttons__reg-link" @click="enableElement('register')" href="javascript:void(0)">Регистрация</a>
