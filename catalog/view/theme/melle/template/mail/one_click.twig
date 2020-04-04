@@ -517,6 +517,24 @@ body, td {
                                         {% endif %}
 
                                         <p><b>Условия приняты:</b> {% if agree %}ДА{% else %}НЕТ{% endif %}</p>
+
+                                        {% if cart_items %}
+                                        <br>
+                                        <h2>Содержимое корзины:</h2>
+                                        {% for ci in cart_items %}
+
+                                        <p><b>Товар:</b> <a href="{{ ci.href }}">{{ ci.name }}</a></p>
+                                        <p><b>Кол-во:</b> {{ ci.quantity }}</p>
+                                        {% if options %}
+                                        <p><b>Опции:</b></p>
+                                        {% for o in options %}
+                                        <p><span>{{o.name}}: </span><span>{{o.value}}</span></p>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <hr>
+
+                                        {% endfor %}
+                                        {% endif %}
                                     </repeater>
                                 </td>
                                 <td class="w30" width="30"></td>

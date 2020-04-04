@@ -683,6 +683,16 @@ class ControllerCheckoutCart extends Controller {
                     }
                 }
 
+                $cartItems = array();
+                foreach ($this->cart->getProducts() as $cartProduct) {
+                    $cartItems[] = array(
+                        'name'      => $cartProduct['name'],
+                        'options'   => $cartProduct['option'],
+                        'quantity'  => $cartProduct['quantity'],
+                        'href'      => $this->url->link('product/product', 'product_id=' . $cartProduct['product_id'])
+                    );
+                }
+
                 $mail = new Mail($this->config->get('config_mail_engine'));
                 $mail->parameter = $this->config->get('config_mail_parameter');
                 $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
@@ -702,6 +712,7 @@ class ControllerCheckoutCart extends Controller {
                     'product' => $this->model_extension_pro_patch_url->ajax('product/product', 'product_id=' . $product_id),
                     'product_name' => (isset($product_info['h1'])) ? $product_info['h1'] : $product_info['name'],
                     'options' => $selected_options,
+                    'cart_items' => $cartItems,
                 )));
                 $mail->send();
 
