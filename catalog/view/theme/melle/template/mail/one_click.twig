@@ -525,9 +525,9 @@ body, td {
 
                                         <p><b>Товар:</b> <a href="{{ ci.href }}">{{ ci.name }}</a></p>
                                         <p><b>Кол-во:</b> {{ ci.quantity }}</p>
-                                        {% if options %}
+                                        {% if ci.options %}
                                         <p><b>Опции:</b></p>
-                                        {% for o in options %}
+                                        {% for o in ci.options %}
                                         <p><span>{{o.name}}: </span><span>{{o.value}}</span></p>
                                         {% endfor %}
                                         {% endif %}
