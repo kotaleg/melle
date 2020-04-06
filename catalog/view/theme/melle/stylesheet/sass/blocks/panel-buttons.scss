@@ -200,6 +200,9 @@
   }
 }
 .itemCartCountD {
+  position: absolute;
+  right: 37%;
+  bottom: 20%;
   font-size: 20px;
   @include mobile {
     display: none;
