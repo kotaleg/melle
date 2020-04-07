@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, isInteger, isEmpty, isArray, isString, isEqual, has, first } from 'lodash'
+import { isUndefined, isInteger, isEmpty, isArray, isString, isEqual, has, first, toString } from 'lodash'
 
 import shop from '../../../api/shop'
 import productApi from '../../../api/productApi'
@@ -218,7 +218,7 @@ const getters = {
             }
             option.product_option_value.forEach((option_value) => {
                 if (option_value.selected === true) {
-                    options[option.product_option_id] = option_value.product_option_value_id
+                    options[toString(option.product_option_id)] = toString(option_value.product_option_value_id)
                 }
             })
         })

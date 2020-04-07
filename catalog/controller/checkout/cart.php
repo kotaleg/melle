@@ -572,7 +572,7 @@ class ControllerCheckoutCart extends Controller {
     public function melle_get_data()
     {
         $this->load->model('checkout/cart');
-        $json = $this->model_checkout_cart->getCart();
+        $json = $this->model_checkout_cart->getCart(); 
 
         $this->response->setOutput(json_encode($json));
     }
@@ -713,6 +713,7 @@ class ControllerCheckoutCart extends Controller {
                     'product_name' => (isset($product_info['h1'])) ? $product_info['h1'] : $product_info['name'],
                     'options' => $selected_options,
                     'cart_items' => $cartItems,
+                    'agree' => (isset($parsed['agree']) && $parsed['agree']) ? true : false,
                 )));
                 $mail->send();
 

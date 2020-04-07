@@ -37,6 +37,7 @@ class ModelCheckoutCart extends Model
                 }
 
                 $option_data = array();
+                $optionsForCompare = array();
 
                 foreach ($product['option'] as $option) {
                     $value = $option['value'];
@@ -45,6 +46,8 @@ class ModelCheckoutCart extends Model
                         'name'  => $option['name'],
                         'value' => (utf8_strlen($value) > 20 ? utf8_substr($value, 0, 20) . '..' : $value)
                     );
+
+                    $optionsForCompare[(string) $option['product_option_id']] = (string) $option['product_option_value_id'];
                 }
 
                 // Display prices
@@ -71,6 +74,7 @@ class ModelCheckoutCart extends Model
                     'model'         => $product['model'],
                     'manufacturer'  => $manufacturer,
                     'option'        => $option_data,
+                    'optionsForCompare' => $optionsForCompare,
                     'quantity'      => (int) $product['quantity'],
                     'max_quantity'  => isset($product['max_quantity']) ? (int) $product['max_quantity'] : 0,
                     'stock'         => $product['stock'] ? true : false,

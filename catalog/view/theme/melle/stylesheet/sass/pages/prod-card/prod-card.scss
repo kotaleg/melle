@@ -185,6 +185,40 @@
 
       .prod-card__form-group--send {
         width: 48%;
+
+        .dynamic-add-button {
+          background-color: #fff;
+          color: #2b2a29;
+          border: 1px #2b2a29 solid;
+          height: 5.13889vw;
+          line-height: 20px;
+          font-size: 0.97222vw;
+          text-align: center;
+
+          &__count {
+            width: 70%;
+            font-weight: bold;
+
+            span {
+              font-size: 0.77222vw;
+            }
+          }
+
+          &__plus {
+            width: 30%;
+            background-color: #2b2a29;
+            color: #fff;
+
+            &:hover {
+              background-color: #000;
+            }
+          }
+
+          @media (max-width: 767px) {
+            height: 74px;
+            font-size: 14px;
+          }
+        }
       }
 
       .one-click-button {

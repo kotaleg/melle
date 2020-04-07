@@ -25,7 +25,7 @@ const getters = {
     getProductsForGTM: state => {
         let products = []
         state.products.forEach((item) => {
-            products.push({
+            products.push({ 
                 'id': item.product_id,
                 'name': item.name,
                 'brand': item.manufacturer,

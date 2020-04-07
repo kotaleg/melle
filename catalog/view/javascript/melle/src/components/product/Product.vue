@@ -1,7 +1,8 @@
 <template>
     <form class="add-to-cart form-vertical" id="yw3" method="post">
 
-         <div v-for="(o, o_key) in options" :class="['prod-card__form-group', `prod-card__form-group--${o.class}`]"
+         <div v-for="(o, o_key) in options"
+            :class="['prod-card__form-group', `prod-card__form-group--${o.class}`]"
             v-if="o.type === 'radio'">
             <div>
                <span class="ivan-product-selectors">{{ o.name }}:</span>
@@ -77,8 +78,15 @@
          </div>
 
          <div id="ivan-price-handler">
-            <div style="margin: 0px" class="prod-card__form-group prod-card__form-group--send ivan-price-button">
+            <div v-if="getProductCountForCurrentSelectedOptions <= 0" style="margin: 0px" class="prod-card__form-group prod-card__form-group--send ivan-price-button">
                <a id="add_trigger_button" @click="addToCart()" href="javascript:void(0);"><span>Добавить <br> В корзину</span></a><br>
+            </div>
+
+            <div v-else style="margin: 0px" class="prod-card__form-group prod-card__form-group--send">
+                <div>
+                    <div @click="enableElement('cart')" class="btn dynamic-add-button dynamic-add-button__count">в корзине {{getProductCountForCurrentSelectedOptions}} шт.<br>перейти</div>
+                    <div @click="addToCart()" class="btn dynamic-add-button dynamic-add-button__plus">+1 шт.</div>
+                </div>
             </div>
 
             <div class="prod-card__form-group--send ivan-price-button one-click-button">
@@ -98,7 +106,7 @@
 </template>
 
 <script>
-import {forEach} from 'lodash'
+import {forEach, isEqual} from 'lodash'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 import OneClickModal from './../modal/OneClickModal.vue'
@@ -117,7 +125,11 @@ export default {
             'getStateValue',
             'getActivePrice',
             'getActiveImageHash',
+            'getOptionsForCart',
         ]),
+        ...mapState('cart', {
+            cartProducts: 'products',
+        }),
         ...mapState('product', [
             'product_id',
             'options',
@@ -125,6 +137,21 @@ export default {
             'zvezdochka',
             'special_text',
         ]),
+
+         getProductCountForCurrentSelectedOptions() {
+            const optionsForCart = this.getOptionsForCart
+
+            for (const i in this.cartProducts) {
+                const cartProduct = this.cartProducts[i]
+                const optionsForCompare = cartProduct.optionsForCompare
+
+                if (isEqual(optionsForCart, optionsForCompare)) {
+                    return cartProduct.quantity
+                }
+            }
+
+            return 0
+        },
 
         currentImageHash() {
           const currentImages = document.querySelectorAll("li[data-hash='"+this.getActiveImageHash+"']")
@@ -159,6 +186,9 @@ export default {
             'updateQuantity',
             'radioHandler',
             'addToCartRequest',
+        ]),
+        ...mapActions('header', [
+            'enableElement',
         ]),
 
         addToCart() {
