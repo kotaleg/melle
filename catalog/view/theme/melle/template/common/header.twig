@@ -55,89 +55,7 @@
 {{ analytic }}
 {% endfor %}
 
-{# отключалка яндекс Советника  #}
- 
-<script type="text/javascript">
- 	(function() {
- 	function sovetnikPluginRemoveMicroschema()
- 	{
- 	var style = document.querySelectorAll("[itemprop]");
- 	for(var key in style) {
- 	if (typeof style[key] == "object")
- 	{
- 	style[key].removeAttribute("itemprop");
- 	}
- 	}
- 	}
- 	 
- 	/*Яндекс.Советник на всех десктопных браузерах на базе Chrome*/
- 	var yandexDesktop = !/Mobile/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
- 	if(yandexDesktop)
- 	{
- 	var timerId = setInterval(sovetnikPluginRemoveMicroschema, 10);
- 	window.onload = function(e){
- 	clearInterval(timerId);
- 	}
- 	}
- 	 
- 	document.addEventListener("DOMNodeInserted", function (event) {
- 	/*Альтернативный поиск от Яндекс*/
- 	var searchYandex = /_sovetnik_/.test(event.target.className) && event.target.innerHTML == "";
- 	if(searchYandex)
- 	{
- 	var style = document.querySelector("." + event.target.className);
- 	style.parentNode.removeChild(style);
- 	console.log("Заблокированы подсказки Альтернативного поиска");
- 	}
- 	/*Яндекс.Советник на Android*/
- 	var yandexAndroid = /выгодная цена/.test(event.target.innerHTML) && /Mobile/.test(navigator.userAgent) && /YaBrowser/.test(navigator.userAgent);
- 	if(yandexAndroid)
- 	{
- 	var preclass = event.target.getAttribute("class");
- 	var arClass = preclass.split(" ");
- 	var style = document.querySelector("." + arClass[0]);
- 	style.parentNode.removeChild(style);
- 	}
- 	/*Яндекс.Советник*/
- 	var yandex = /market.yandex/.test(event.target.innerHTML) || /Яндекс.Маркет/.test(event.target.innerHTML);
- 	if(yandex)
- 	{
- 	var style = document.querySelectorAll("div#" + event.target.id);
- 	for(var key in style) {
- 	if (typeof style[key] == "object")
- 	{
- 	style[key].style.display = "none";
- 	}
- 	}
- 	var style = document.querySelectorAll("div#" + event.target.id + " div");
- 	for(var key in style) {
- 	if (typeof style[key] == "object")
- 	{
- 	style[key].style.display = "none";
- 	}
- 	}
- 	var style = document.querySelectorAll("style");
- 	var patt = new RegExp("#" + event.target.id);
- 	for(var key in style) {
- 	if (typeof style[key] == "object" && (patt.test(style[key].innerText) || /market_context_headcrab/.test(style[key].innerText)))
- 	style[key].parentNode.removeChild(style[key]);
- 	}
- 	console.log("Заблокированы подсказки Яндекс.Советника");
- 	}
- 	/*Помощник supermegabest*/
- 	var style = document.querySelectorAll("div iframe");
- 	for(var key in style) {
- 	if (typeof style[key] == "object" && /offers/.test(style[key].src))
- 	{
- 	style[key].parentNode.removeChild(style[key]);
- 	var body = document.querySelector("body");
- 	body.style.marginTop = 0;
- 	console.log("Заблокированы подсказки Помощника SuperMegaBest");
- 	}
- 	}
- 	}, false);
- 	}())
- 	</script>
+
 
 <!-- Global sitee tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-110511917-1"></script><script>
@@ -262,6 +180,90 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   })();
 </script>
 {% endif %}
+
+{# отключалка яндекс Советника  #}
+ 
+<script type="text/javascript">
+ 	(function() {
+ 	function sovetnikPluginRemoveMicroschema()
+ 	{
+ 	var style = document.querySelectorAll("[itemprop]");
+ 	for(var key in style) {
+ 	if (typeof style[key] == "object")
+ 	{
+ 	style[key].removeAttribute("itemprop");
+ 	}
+ 	}
+ 	}
+ 	 
+ 	/*Яндекс.Советник на всех десктопных браузерах на базе Chrome*/
+ 	var yandexDesktop = !/Mobile/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
+ 	if(yandexDesktop)
+ 	{
+ 	var timerId = setInterval(sovetnikPluginRemoveMicroschema, 10);
+ 	window.onload = function(e){
+ 	clearInterval(timerId);
+ 	}
+ 	}
+ 	 
+ 	document.addEventListener("DOMNodeInserted", function (event) {
+ 	/*Альтернативный поиск от Яндекс*/
+ 	var searchYandex = /_sovetnik_/.test(event.target.className) && event.target.innerHTML == "";
+ 	if(searchYandex)
+ 	{
+ 	var style = document.querySelector("." + event.target.className);
+ 	style.parentNode.removeChild(style);
+ 	console.log("Заблокированы подсказки Альтернативного поиска");
+ 	}
+ 	/*Яндекс.Советник на Android*/
+ 	var yandexAndroid = /выгодная цена/.test(event.target.innerHTML) && /Mobile/.test(navigator.userAgent) && /YaBrowser/.test(navigator.userAgent);
+ 	if(yandexAndroid)
+ 	{
+ 	var preclass = event.target.getAttribute("class");
+ 	var arClass = preclass.split(" ");
+ 	var style = document.querySelector("." + arClass[0]);
+ 	style.parentNode.removeChild(style);
+ 	}
+ 	/*Яндекс.Советник*/
+ 	var yandex = /market.yandex/.test(event.target.innerHTML) || /Яндекс.Маркет/.test(event.target.innerHTML);
+ 	if(yandex)
+ 	{
+ 	var style = document.querySelectorAll("div#" + event.target.id);
+ 	for(var key in style) {
+ 	if (typeof style[key] == "object")
+ 	{
+ 	style[key].style.display = "none";
+ 	}
+ 	}
+ 	var style = document.querySelectorAll("div#" + event.target.id + " div");
+ 	for(var key in style) {
+ 	if (typeof style[key] == "object")
+ 	{
+ 	style[key].style.display = "none";
+ 	}
+ 	}
+ 	var style = document.querySelectorAll("style");
+ 	var patt = new RegExp("#" + event.target.id);
+ 	for(var key in style) {
+ 	if (typeof style[key] == "object" && (patt.test(style[key].innerText) || /market_context_headcrab/.test(style[key].innerText)))
+ 	style[key].parentNode.removeChild(style[key]);
+ 	}
+ 	console.log("Заблокированы подсказки Яндекс.Советника");
+ 	}
+ 	/*Помощник supermegabest*/
+ 	var style = document.querySelectorAll("div iframe");
+ 	for(var key in style) {
+ 	if (typeof style[key] == "object" && /offers/.test(style[key].src))
+ 	{
+ 	style[key].parentNode.removeChild(style[key]);
+ 	var body = document.querySelector("body");
+ 	body.style.marginTop = 0;
+ 	console.log("Заблокированы подсказки Помощника SuperMegaBest");
+ 	}
+ 	}
+ 	}, false);
+ 	}())
+ 	</script>
 
 </head>
 <body>
