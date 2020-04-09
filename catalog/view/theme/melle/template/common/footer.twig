@@ -7,7 +7,7 @@
          <ul class="footer-menu">
             {% for info in informations %}
             {% if info.link != false %}
-            <li><a target="_blank" rel="nofollow" href="{{info.link}}">{{info.title}}</a></li>
+            <li><a target="" rel="nofollow" href="{{info.link}}">{{info.title}}</a></li>
             {% else %}
             <li><a href="{{ info.href }}">{{info.title}}</a></li>
             {% endif %}
