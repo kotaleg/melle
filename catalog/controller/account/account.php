@@ -102,7 +102,7 @@ class ControllerAccountAccount extends Controller {
 
             if ($customer_id) {
                 $this->load->model('account/customer');
-                // $this->model_account_customer->updateCustomerStatus($customer_id, true);
+                $this->model_account_customer->updateCustomerStatus($customer_id, true);
 
                 $this->customer->logout();
                 $this->cart->clear();
@@ -129,7 +129,7 @@ class ControllerAccountAccount extends Controller {
             }
         }
 
-        $this->response->redirect($this->url->link('common/home', '', true));
+        $this->response->redirect($this->url->link('account/login', '', true));
     }
     /* IVAN MOD END */
 
