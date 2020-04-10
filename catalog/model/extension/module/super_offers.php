@@ -116,8 +116,20 @@ class ModelExtensionModuleSuperOffers extends Model
 
             // SORT
             if (!empty($po_value_data)) {
-                usort($po_value_data, function($a,$b) {
-                    return strcmp(strval($a['name']), strval($b['name']));
+                usort($po_value_data, function($a, $b) {
+                    $sizesContainer = array('xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl', 'xxxxl');
+
+                    $a = utf8_strtolower(strval($a['name']));
+                    $b = utf8_strtolower(strval($b['name']));
+
+                    $aKey = array_search($a, $sizesContainer);
+                    $bKey = array_search($b, $sizesContainer);
+
+                    if ($aKey != false && $bKey != false) {
+                        return strcmp($aKey, $bKey);
+                    }
+
+                    return strcmp($a, $b);
                 });
             }
 
