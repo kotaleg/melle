@@ -1,0 +1,59 @@
+<?php
+/*
+ *  location:    admin/language
+ */
+
+$codename = 'Mail Queue PRO';
+
+// HEADING
+$_['heading_title']         = '<a href="ahoj!"></a><span style="color: #ec6ead; background: -webkit-linear-gradient(#3494e6, #ec6ead); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight:bold; font-size:14px;">'.$codename.'</span><span style="font-size:12px; color:#e0e0e0;"><span style="color:#e0e0e0;"> by </span><a href="https://prohamster.com/" style="color:#e0e0e0" target="_blank">PRO Hamster</a></span>';
+$_['heading_title_main']    = "{$codename}";
+
+$_['text_edit']             = "Edit {$codename}";
+$_['text_home']             = 'Home';
+$_['text_module']           = 'Modules';
+$_['text_setting']          = 'Setting';
+$_['text_deleted']          = 'Deleted';
+$_['text_undefined']        = 'Undefined';
+$_['text_dashboard']        = 'Dashboard';
+$_['text_status']           = 'Status';
+$_['text_warning']          = 'Warning!';
+$_['text_success']          = 'Success!';
+$_['text_close']            = 'Close';
+$_['text_apply']            = 'Apply';
+$_['text_cancel']           = 'Cancel';
+$_['text_enabled']          = 'Enabled';
+$_['text_disabled']         = 'Disabled';
+$_['text_debug']            = 'Debug';
+$_['text_mail']             = 'Queue';
+$_['text_log']              = 'Log';
+$_['text_no_results']       = "You don't have emails that have been send with {$codename}";
+$_['text_send_again']       = 'Send again';
+
+// COLUMN
+$_['column_from']           = 'From';
+$_['column_to']             = 'To';
+$_['column_sender']         = 'Sender';
+$_['column_subject']        = 'Subject';
+$_['column_date']           = 'Date';
+$_['column_id']             = 'ID';
+$_['column_queue_id']       = 'Queue ID';
+$_['column_type']           = 'Type';
+$_['column_message']        = 'Message';
+$_['column_status']         = 'Status';
+
+// HELP
+$_['help_status']           = 'Module Status';
+
+// BUTTON
+$_['button_save_and_stay']  = 'Save and Stay';
+
+// ERROR
+$_['error_permission']      = "You don't have permission to modify {$codename} module";
+
+// SUCCESS
+$_['success_setting_saved'] = 'Setting saved succesfully';
+$_['success_queue_status_reset'] = 'Status of the queue was set to `undefined`. The mail would be send again soon.';
+
+// ERROR
+$_['error_missing_data']    = 'Missing data';

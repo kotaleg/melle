@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <name>Invoice PDF</name>
+  <code>OCMP_IP</code>
+  <version>2.x</version>
+  <author>OpencartMarketplace</author>
+  <link>http://opencartmarketplace.com/</link>
+
+    <file path="admin/controller/sale/order.php">
+        <operation error="skip">
+            <search><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice', 'token=' . $this->session->data['token'], true);]]></search>
+            <add position="before"><![CDATA[
+            //$this->language->load('extension/module/invoice_pdf');
+
+            $store_url = $this->request->server['HTTPS'] ? HTTPS_CATALOG : HTTP_CATALOG;
+
+            $data['button_invoice_pdf_print'] = 'INVOICE PDF'; //$this->language->get('button_invoice_pdf_print');
+            $data['button_shipping_pdf_print'] = 'PACKING PDF'; //$this->language->get('button_shipping_pdf_print');
+
+            $data['invoice_pdf'] = $store_url . 'index.php?route=extension/module/invoice_pdf/pdf'. '&token=' . $this->session->data['token'] .'&pdftype=invoice';
+            $data['packing_pdf'] = $store_url . 'index.php?route=extension/module/invoice_pdf/pdf'. '&token=' . $this->session->data['token'] .'&pdftype=packing';
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[$data['shipping'] = $this->url->link('sale/order/shipping', 'token=' . $this->session->data['token'] . '&order_id=' . (int)$this->request->get['order_id'], true);]]></search>
+            <add position="before"><![CDATA[
+            //$this->language->load('extension/module/invoice_pdf');
+
+            $store_url = $this->request->server['HTTPS'] ? HTTPS_CATALOG : HTTP_CATALOG;
+
+            $data['button_invoice_pdf_print'] = 'INVOICE PDF'; //$this->language->get('button_invoice_pdf_print');
+            $data['button_shipping_pdf_print'] = 'PACKING PDF'; //$this->language->get('button_shipping_pdf_print');
+
+            $data['invoice_pdf'] = $store_url . 'index.php?route=extension/module/invoice_pdf/pdf'. '&token=' . $this->session->data['token'] . '&order_id=' . (int)$this->request->get['order_id'] .'&pdftype=invoice';
+            $data['packing_pdf'] = $store_url . 'index.php?route=extension/module/invoice_pdf/pdf'. '&token=' . $this->session->data['token'] . '&order_id=' . (int)$this->request->get['order_id'] . '&pdftype=packing';
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/sale/order_list.tpl">
+        <operation error="skip">
+            <search><![CDATA[<button type="submit" id="button-shipping" form="form-order" formaction="<?php echo $shipping; ?>" formtarget="_blank" data-toggle="tooltip" title="<?php echo $button_shipping_print; ?>" class="btn btn-info"><i class="fa fa-truck"></i></button>]]></search>
+            <add position="before"><![CDATA[
+                <button type="submit"  form="form-order"  formtarget="_blank" id="button-invoice-pdf"formaction="<?php echo $invoice_pdf; ?>" data-toggle="tooltip" title="<?php echo $button_invoice_pdf_print; ?>" class="btn btn-success"><i class="fa fa-file-pdf-o"></i></button>
+                <button type="submit" form="form-order" formtarget="_blank"  id="button-shipping-pdf" formaction="<?php echo $packing_pdf; ?>" data-toggle="tooltip" title="<?php echo $button_shipping_pdf_print; ?>" class="btn btn-success"><i class="fa fa-file-text"></i></button>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/order.php">
+        <operation error="skip">
+            <search><![CDATA[$data['orders'] = array();]]></search>
+            <add position="before"><![CDATA[
+            $this->language->load('module/invoice_pdf');
+                $data['button_invoice_pdf'] = $this->language->get('button_invoice_pdf');
+            ]]></add>
+        </operation>
+        <operation error="skip">
+            <search><![CDATA[if (isset($this->session->data['error'])) {]]></search>
+            <add position="before"><![CDATA[
+            $this->language->load('module/invoice_pdf');
+
+            $data['button_invoice_pdf'] = $this->language->get('button_invoice_pdf');
+
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA['order_id'   => $result['order_id'],]]></search>
+            <add position="after"><![CDATA[
+            'pdf_href'       => $this->url->link('extension/extension/invoice_pdf/pdf', 'order_id=' . $result['order_id'], 'SSL'),
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/view/theme/*/template/account/order_list.tpl">
+        <operation error="skip">
+            <search><![CDATA[<a href="<?php echo $order['view']; ?>" data-toggle="tooltip" title="<?php echo $button_view; ?>" class="btn btn-info"><i class="fa fa-eye"></i></a>]]></search>
+            <add position="replace"><![CDATA[
+            <a href="<?php echo $order['pdf_href']; ?>" traget="_blank" data-toggle="tooltip" title="<?php echo $button_invoice_pdf; ?>" class="btn btn-warning"><i class="fa fa-file-pdf-o"></i></a>
+
+            <a href="<?php echo $order['view']; ?>" data-toggle="tooltip" title="<?php echo $button_view; ?>" class="btn btn-info"><i class="fa fa-eye"></i></a>]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/checkout/order.php">
+        <operation error="skip">
+            <search><![CDATA[$mail->setTo($order_info['email']);]]></search>
+            <add position="after"><![CDATA[
+
+                $config = $this->config->get('invoice_pdf');
+                if (isset($config['notify']) && in_array($order_status_id, (array) $config['notify'])) {
+                    $this->load->model('extension/module/invoice_pdf');
+                    $config['display_mode'] = 'sendmail';
+                    if($this->customer->getId()){
+                        $config['access'] = 'front';
+                    }else{
+                        $config['access'] = 'admin';
+                    }
+                    $attach_pdf = $this->model_extension_module_invoice_pdf->generatePDF($order_id, $config, 'invoice');
+                    $mail->addAttachment($attach_pdf);
+                }
+
+            ]]></add>
+        </operation>
+        <operation error="skip">
+            <search><![CDATA[$mail->setTo($this->config->get('config_email'));]]></search>
+            <add position="after"><![CDATA[
+
+                $config = $this->config->get('invoice_pdf');
+                if ((isset($config['admincopy']) && $config['admincopy']) && in_array($order_status_id, (array) $config['notify'])) {
+                    $this->load->model('extension/module/invoice_pdf');
+                    $config['display_mode'] = 'sendmail';
+                    if($this->customer->getId()){
+                        $config['access'] = 'front';
+                    }else{
+                        $config['access'] = 'admin';
+                    }
+                    $attach_pdf = $this->model_extension_module_invoice_pdf->generatePDF($order_id, $config, 'invoice');
+                    $mail->addAttachment($attach_pdf);
+                }
+
+            ]]></add>
+        </operation>
+    </file>
+</modification>

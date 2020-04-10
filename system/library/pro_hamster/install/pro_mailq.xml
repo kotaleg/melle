@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>pro_mailq</name>
+    <code>pro_mailq</code>
+    <description>PRO Mail Queue</description>
+    <version>0.0.1</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="system/library/mail.php">
+        <operation error="skip">
+            <search><![CDATA[public function send() {]]></search>
+            <add position="before"><![CDATA[
+                // PRO_MAILQ START
+                public function getAllData()
+                {
+                    return array(
+                        'from' => $this->from,
+                        'to' => $this->to,
+                        'sender' => $this->sender,
+                        'replyTo' => $this->reply_to,
+                        'subject' => $this->subject,
+                        'text' => $this->text,
+                        'html' => $this->html,
+                        'attachments' => $this->attachments,
+                    );
+                }
+                // PRO_MAILQ END
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/{controller,model}/{*,extension/*}/*.php">
+        <operation error="skip">
+            <search><![CDATA[$mail->send();]]></search>
+            <add position="replace"><![CDATA[
+                // PRO_MAILQ START
+                $this->load->model('extension/module/pro_mailq');
+                $this->model_extension_module_pro_mailq->addToQueue($mail->getAllData());
+                // PRO_MAILQ END
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>
