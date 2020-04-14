@@ -26,7 +26,7 @@
 
   .header-page__container .top-line li,
   .header-page__bottom-line > li {
-    margin-right: 0px!important;
+    // margin-right: 0px!important;
   }
 
   .header-page__container .top-line,
@@ -191,6 +191,13 @@
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
+
+   .header-page__container .top-line li,
+  .header-page__bottom-line > li {
+    margin-right: 0px!important;
+  }
+
+  
 
   .header-page__logo {
     margin-right: 0;
