@@ -115,6 +115,7 @@ class ModelApiImport1COffer extends Model
                         'price' => $offer->price->price,
                         'currency' => $offer->price->currency,
                         'product_code' => $offer->name,
+                        'name_for_print' => $offer->nameForPrint,
                         'image' => $combinationImage,
                         'barcode' => $offer->barcode,
                         'import_id' => $offer_import_id,

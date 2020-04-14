@@ -180,6 +180,7 @@ class super_offers
                 'special_price_end' => false,
                 'image'             => (isset($c['image'])) ? $c['image'] : '',
                 'barcode'           => (isset($c['barcode'])) ? $c['barcode'] : '',
+                'name_for_print'    => (isset($c['name_for_print'])) ? $c['name_for_print'] : '',
                 'import_id'         => (isset($c['import_id'])) ? $c['import_id'] : '',
             );
 

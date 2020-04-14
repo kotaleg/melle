@@ -184,6 +184,9 @@ class offers_file_map
                 if (isset($keyValue['Наименование'])) {
                     $offer->name = $keyValue['Наименование'];
                 }
+                if (isset($keyValue['НаименованиеДляПечати'])) {
+                    $offer->nameForPrint = $keyValue['НаименованиеДляПечати'];
+                }
                 if (isset($keyValue['Количество'])) {
                     $offer->quantity = $keyValue['Количество'];
                 }
