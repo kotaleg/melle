@@ -212,7 +212,7 @@ class ModelCatalogProduct extends Model {
                 /* ATTRIBUTE END */
 
                 /* NAME FOR PRINT START */
-                $sql .= " OR EXIST (SELECT `combination_id` FROM " . DB_PREFIX . "so_option_combination
+                $sql .= " OR EXISTS (SELECT `combination_id` FROM " . DB_PREFIX . "so_option_combination
                     WHERE `product_id` = p.product_id
                     AND `name_for_print` LIKE '%" . $this->db->escape($data['filter_name']) . "%')";
                 /* NAME FOR PRINT END */
@@ -760,7 +760,7 @@ class ModelCatalogProduct extends Model {
                 /* ATTRIBUTE END */
 
                 /* NAME FOR PRINT START */
-                $sql .= " OR EXIST (SELECT `combination_id` FROM " . DB_PREFIX . "so_option_combination
+                $sql .= " OR EXISTS (SELECT `combination_id` FROM " . DB_PREFIX . "so_option_combination
                     WHERE `product_id` = p.product_id
                     AND `name_for_print` LIKE '%" . $this->db->escape($data['filter_name']) . "%')";
                 /* NAME FOR PRINT END */
