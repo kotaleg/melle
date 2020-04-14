@@ -113,7 +113,7 @@ class super_offers
             (`product_id`, `quantity`, `subtract`, `price`, `price_prefix`,
                 `points`, `points_prefix`, `weight`, `weight_prefix`, `model`,
                 `product_code`, `special_price`, `special_price_start`,
-                `special_price_end`, `image`, `barcode`, `import_id`)
+                `special_price_end`, `image`, `name_for_print`, `barcode`, `import_id`)
             VALUES(
                 '" . (int)$data['product_id'] . "',
                 '" . $this->db->escape($data['quantity']) . "',
@@ -130,6 +130,7 @@ class super_offers
                 '" . $this->db->escape($data['special_price_start']) . "',
                 '" . $this->db->escape($data['special_price_end']) . "',
                 '" . $this->db->escape($data['image']) . "',
+                '" . $this->db->escape($data['name_for_print']) . "',
                 '" . $this->db->escape($data['barcode']) . "',
                 '" . $this->db->escape($data['import_id']) . "' );";
 
