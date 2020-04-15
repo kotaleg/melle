@@ -49,6 +49,7 @@ class ModelExtensionModuleSuperOffers extends Model
             `special_price_end` int(11) NOT NULL,
 
             `image` varchar(255) NOT NULL,
+            `name_for_print` varchar(255) NOT NULL,
             `barcode` varchar(64) NOT NULL,
 
             `import_id` varchar(255) NOT NULL,
