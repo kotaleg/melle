@@ -83,6 +83,10 @@ $_['entry_reward']           = 'Бонусные баллы';
 $_['entry_layout']           = 'Макет';
 $_['entry_recurring']        = 'Профиль периодичности';
 
+/* EXTRA DESCRIPTION START */
+$_['entry_extra_description'] = 'Подробное описание';
+/* EXTRA DESCRIPTION END */
+
 // Help
 $_['help_sku']               = 'SKU или код производителя';
 $_['help_upc']               = 'Универсальный код товара';

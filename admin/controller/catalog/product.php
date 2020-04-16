@@ -593,6 +593,19 @@ class ControllerCatalogProduct extends Controller {
             $data['product_description'] = array();
         }
 
+        /* EXTRA DESCRIPTION START */
+        $this->load->model('extension/module/extra_description');
+
+        if (isset($this->request->post['product_extra_description'])) {
+            $data['product_extra_description'] = $this->request->post['product_extra_description'];
+        } elseif (isset($this->request->get['product_id'])) {
+            $data['product_extra_description'] =
+                $this->model_extension_module_extra_description->getDescriptions($this->request->get['product_id']);
+        } else {
+            $data['product_extra_description'] = array();
+        }
+        /* EXTRA DESCRIPTION END */
+
         if (isset($this->request->post['model'])) {
             $data['model'] = $this->request->post['model'];
         } elseif (!empty($product_info)) {

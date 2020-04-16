@@ -128,6 +128,14 @@ class ModelCatalogProduct extends Model {
             }
         }
 
+        /* EXTRA DESCRIPTION START */
+        $this->load->model('extension/module/extra_description');
+
+        if (isset($data['product_extra_description'])) {
+            $this->model_extension_module_extra_description
+                ->saveDescription($product_id, $data['product_extra_description']);
+        }
+        /* EXTRA DESCRIPTION END */
 
         $this->cache->delete('product');
 
@@ -290,6 +298,15 @@ class ModelCatalogProduct extends Model {
             }
         }
 
+        /* EXTRA DESCRIPTION START */
+        $this->load->model('extension/module/extra_description');
+
+        if (isset($data['product_extra_description'])) {
+            $this->model_extension_module_extra_description
+                ->saveDescription($product_id, $data['product_extra_description']);
+        }
+        /* EXTRA DESCRIPTION END */
+
         $this->cache->delete('product');
     }
 
@@ -345,6 +362,13 @@ class ModelCatalogProduct extends Model {
         $this->db->query("DELETE FROM " . DB_PREFIX . "review WHERE product_id = '" . (int)$product_id . "'");
         $this->db->query("DELETE FROM " . DB_PREFIX . "seo_url WHERE query = 'product_id=" . (int)$product_id . "'");
         $this->db->query("DELETE FROM " . DB_PREFIX . "coupon_product WHERE product_id = '" . (int)$product_id . "'");
+
+        /* EXTRA DESCRIPTION START */
+        $this->load->model('extension/module/extra_description');
+
+        $this->model_extension_module_extra_description
+            ->deleteDescriptionForProduct($product_id);
+        /* EXTRA DESCRIPTION END */
 
         $this->cache->delete('product');
     }
