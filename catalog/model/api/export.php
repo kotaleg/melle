@@ -546,7 +546,9 @@ class ModelApiExport extends Model
                         $image = $base_path . 'image/placeholder.png';
                     }
 
-                    $this->_str .= "<offer id=\"{$product_data['product_id']}\">\n" .
+                    $available = ($dp['min_quantity'] > 0) ? 'true' : 'false';
+
+                    $this->_str .= "<offer id=\"{$product_data['product_id']}\" available=\"{$available}\">\n" .
                         "<url>{$seo_url}</url>\n" .
                         "<price>". $price ."</price>\n" .
                         "<currencyId>RUR</currencyId>\n" .
