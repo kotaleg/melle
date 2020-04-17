@@ -51,7 +51,7 @@ class ModelExtensionModuleExtraDescription extends Model
 
         if ($rows) {
             foreach ($rows as $row) {
-                $result[$row['language_id']] = array(
+                $result[$row['languageId']] = array(
                     'description' => $row['description'],
                     'createDate' => $row['createDate'],
                     'updateDate' => $row['updateDate'],
