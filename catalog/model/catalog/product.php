@@ -216,6 +216,12 @@ class ModelCatalogProduct extends Model {
                     WHERE `product_id` = p.product_id
                     AND `name_for_print` LIKE '%" . $this->db->escape($data['filter_name']) . "%')";
                 /* NAME FOR PRINT END */
+
+                /* MANUFACTURER ALT NAME START */
+                $sql .= " OR EXISTS (SELECT `manufacturerId` FROM `" . DB_PREFIX . "manufacturer_alt_name`
+                    WHERE `manufacturerId` = p.manufacturer_id
+                    AND `altName` LIKE '%" . $this->db->escape($data['filter_name']) . "%')";
+                /* MANUFACTURER ALT NAME END */
             }
 
             if (!empty($data['filter_name']) && !empty($data['filter_tag'])) {
@@ -764,6 +770,12 @@ class ModelCatalogProduct extends Model {
                     WHERE `product_id` = p.product_id
                     AND `name_for_print` LIKE '%" . $this->db->escape($data['filter_name']) . "%')";
                 /* NAME FOR PRINT END */
+
+                /* MANUFACTURER ALT NAME START */
+                $sql .= " OR EXISTS (SELECT `manufacturerId` FROM `" . DB_PREFIX . "manufacturer_alt_name`
+                    WHERE `manufacturerId` = p.manufacturer_id
+                    AND `altName` LIKE '%" . $this->db->escape($data['filter_name']) . "%')";
+                /* MANUFACTURER ALT NAME END */
             }
 
             if (!empty($data['filter_name']) && !empty($data['filter_tag'])) {
