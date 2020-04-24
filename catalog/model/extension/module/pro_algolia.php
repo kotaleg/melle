@@ -32,6 +32,10 @@ class ModelExtensionModulePROAlgolia extends Model
 
     private function addItemToQueue($itemType, $itemId)
     {
+        if ($this->isItemInQueue($itemType, $itemId)) {
+            return;
+        }
+
         $this->db->query("INSERT INTO `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE ."`
             SET `storeItemId` = '". (int) $itemId ."',
                 `storeItemType` = '". $this->db->escape($itemType) ."',
@@ -42,6 +46,15 @@ class ModelExtensionModulePROAlgolia extends Model
                 `updateDate` = NOW()");
 
         return $this->db->getLastId();
+    }
+
+    private function isItemInQueue($itemType, $itemId)
+    {
+        return $this->db->query("SELECT *
+            FROM `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE . "`
+            WHERE `storeItemId` = '". (int) $itemId ."'
+            AND `storeItemType` = '". $this->db->escape($itemType) ."'
+            AND `status` = '" . pro_algolia\constant::UNDEFINED . "'")->row ? true : false;
     }
 
     private function updateQueueStatus($queueId, $status)
@@ -93,7 +106,7 @@ class ModelExtensionModulePROAlgolia extends Model
 
             $saveResult = $this->pro_algolia->saveObjects($preparedData);
             $saveResultBody = $saveResult->getBody();
-            $this->log(json_encode($saveResultBody));
+            $this->log('SAVE OBJECTS'.json_encode($saveResultBody));
 
             foreach ($queueItemsIds as $queueItemId) {
                 $this->updateQueueStatus($queueItemId, pro_algolia\constant::SUCCESS);
@@ -123,6 +136,43 @@ class ModelExtensionModulePROAlgolia extends Model
                 break;
         }
     }
+
+    // TEMP METHOD START
+    // TODO: add type of operation to the query. insert, delete, update
+    public function deleteProductsFromIndex($productIds)
+    {
+        try {
+
+            $preparedData = array();
+
+            foreach ($productIds as $productId) {
+                try {
+                    $itemData = $this->prepareDataForItem(\pro_algolia\constant::PRODUCT, $productId);
+    
+                    if ($itemData && isset($itemData['objectID'])) {
+                        $preparedData[$itemData['objectID']] = $itemData;
+                    }
+                } catch (Exception $e) {
+                    $this->addToQueueLog(pro_algolia\constant::ERROR, (string)$e);
+                }
+            }
+
+            $preparedData = array_map(function($item) {
+                return (string) $item['objectID'];
+            }, $preparedData);
+
+            $this->pro_algolia->initClient();
+            $this->pro_algolia->initIndex();
+
+            $deleteResult = $this->pro_algolia->deleteObjects($preparedData);
+            $deleteResultBody = $deleteResult->getBody();
+            $this->log('DELETE OBJECTS'.json_encode($deleteResultBody));
+
+        } catch (Exception $e) {
+            $this->addToQueueLog(pro_algolia\constant::ERROR, (string)$e);
+        }
+    }
+    // TEMP METHOD END
 
     private function getIndexObject($objectId)
     {
