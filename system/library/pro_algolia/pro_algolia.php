@@ -50,4 +50,13 @@ class pro_algolia
         return $this->index->saveObjects($objects);
     }
 
+    public function deleteObjects($objects)
+    {
+        if (!$this->index) {
+            return null;
+        }
+
+        return $this->index->deleteObjects($objects);
+    }
+
 }
