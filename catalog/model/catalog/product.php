@@ -56,6 +56,7 @@ class ModelCatalogProduct extends Model {
                 'znachek'           => $query->row['znachek'],
                 'sitemap_p'         => $query->row['sitemap_p'],
                 'shitty_discount'   => $query->row['shitty_discount'],
+                'import_id'         => $query->row['import_id'],
             );
         } else {
             return false;
