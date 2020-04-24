@@ -20,7 +20,7 @@ class pro_algolia
     {
         $this->client = SearchClient::create(
             $this->setting['app_id'],
-            $this->setting['admin_api_key'],
+            $this->setting['admin_api_key']
         );
 
         return true;
