@@ -50,12 +50,61 @@
                       </a>
                    </li>
                    <li class="menu-search">
-                      <div class="search-block">
-                         <div class="search-modal__form">
-                            <input name="q" type="search" v-model="search" @keyup.enter="searchAction">
-                            <input type="submit" value="" @click="searchAction" class="cursorred" aria-label="Поиск">
+
+                     <ais-instant-search
+                        :index-name="searchIndex"
+                        :search-client="searchClient"
+                     >
+
+                        <div class="melle-header-autocomplete">
+                           <ais-autocomplete>
+                              <div slot-scope="{ currentRefinement, indices, refine }">
+                                 <div class="search-bar-wrapper">
+                                    <form class="search-bar-form" v-on:submit.prevent="() => {} ">
+                                       <div class="search-input-wrapper">
+                                          <input
+                                             type="text"
+                                             name="search"
+                                             autocapitalize="off"
+                                             autocomplete="off"
+                                             autocorrect="off"
+                                             spellcheck="false"
+                                             maxlength="255"
+                                             placeholder="Поиск"
+                                             :value="currentRefinement"
+                                             @input="refine($event.currentTarget.value)"
+                                          >
+                                       </div>
+                                    </form>
+
+                                    <div v-if="currentRefinement">
+                                       <div class="search-autocomplete-items-wrapper">
+                                          <div class="search-prefix"></div>
+                                          <section class="search-suggestions">
+                                             <div
+                                                v-for="index in indices"
+                                                :key="index.label"
+                                                class="melle-autocomplete-items"
+                                             >
+                                                <a 
+                                                   v-for="hit in index.hits" 
+                                                   :key="hit.objectID"
+                                                   :href="`${product_link_placeholder}${hit.productId}`"
+                                                   class="suggestions-item"
+                                                >
+                                                   <ais-highlight attribute="h1" :hit="hit"/>
+                                                </a>
+                                             </div>
+                                          </section>
+                                       </div>
+                                    </div>
+
+                                 </div>
+                              </div>
+                           </ais-autocomplete>
                         </div>
-                      </div>
+                     </ais-instant-search>
+
                    </li>
                    <li class="menu-mail panel-buttons__mail">
                       <a id="melle_mail_us" class="panel-buttons__mail-link cursorred" @click="enableElement('mail_us')" href="javascript:void(0)">
@@ -131,6 +180,8 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import FixedHeader from 'vue-fixed-header'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.min.css'
+import algoliasearch from 'algoliasearch/lite'
+import { AisInstantSearch, AisAutocomplete } from 'vue-instantsearch'
 
 import Sidebar from './Sidebar.vue'
 import Cart from './Cart.vue'
@@ -165,6 +216,7 @@ export default {
             'logout_link',
             'account_link',
             'delivery_link',
+            'product_link_placeholder',
         ]),
         ...mapState('cart', {
             cartCount: 'count',
@@ -202,6 +254,11 @@ export default {
     data() {
         return {
             search: '',
+            searchIndex: 'dev_MELLE_PRODUCTS',
+            searchClient: algoliasearch(
+               'DVDI5OWT6W',
+               'a801c615cd948a49a5dfd74d854eefef'
+            ),
         }
     },
     created() {

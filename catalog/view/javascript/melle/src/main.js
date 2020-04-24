@@ -6,6 +6,7 @@ import PrettyCheck from 'pretty-checkbox-vue/check'
 import VTooltip from 'v-tooltip'
 import VModal from 'vue-js-modal'
 import vSelect from 'vue-select'
+import InstantSearch from 'vue-instantsearch'
 
 import router from './router'
 import filterHelper from './router/filterHelper'
@@ -25,6 +26,7 @@ Vue.use(vClickOutside)
 Vue.use(VueTheMask)
 Vue.use(VTooltip)
 Vue.use(VModal, { dialog: true })
+Vue.use(InstantSearch)
 Vue.component('p-check', PrettyCheck)
 Vue.component('v-select', vSelect)
 
