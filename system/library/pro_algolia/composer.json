@@ -1,0 +1,13 @@
+{
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "platform": {
+            "php": "5.4.0"
+        }
+    },
+    "require": {
+        "algolia/algoliasearch-client-php": "^2.6"
+    }
+}

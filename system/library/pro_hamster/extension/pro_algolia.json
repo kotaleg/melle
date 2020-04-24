@@ -1,0 +1,16 @@
+{
+  "codename": "pro_algolia",
+  "version": "0.1.0",
+  "name": "PRO Algolia",
+  "description": "PRO Algolia",
+  "author": {
+    "name": "PRO Hamster",
+    "url": "https://prohamster.com/"
+  },
+  "require": {
+    "pro_patch": ">= 0.0.1",
+    "pro_style": ">= 0.0.1",
+    "pro_event_manager": ">= 0.0.1",
+    "pro_file_manager": ">= 0.0.1"
+  }
+}
