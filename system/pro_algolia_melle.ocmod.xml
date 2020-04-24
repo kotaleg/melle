@@ -7,7 +7,7 @@
     <author>PRO Hamster</author>
     <link>http://prohamster.com</link>
 
-    <file path="catalog/controller/account/address.php">
+    <file path="catalog/model/extension/module/pro_algolia.php">
        
         <operation error="skip">
             <search><![CDATA[$this->load->model("{$this->route}/product");]]></search>
@@ -64,7 +64,7 @@
                         return $row['product_id'];
                     }, $disabledProducts);
 
-                    $this->model_extension_module_pro_algolia->deleteProductsFromIndex($disabledProducts);
+                    //$this->model_extension_module_pro_algolia->deleteProductsFromIndex($disabledProducts);
                 }
                 /* IVAN MOD END */
             ]]></add>
