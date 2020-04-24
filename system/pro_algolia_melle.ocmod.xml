@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>pro_algolia_melle</name>
+    <code>pro_algolia_melle</code>
+    <description>PRO Algolia Melle</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/account/address.php">
+       
+        <operation error="skip">
+            <search><![CDATA[$this->load->model("{$this->route}/product");]]></search>
+            <add position="replace"><![CDATA[
+                /* IVAN MOD START */
+                $this->load->model("{$this->route}/product_melle");
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[return $this->model_extension_module_pro_algolia_product->prepareData($itemId);]]></search>
+            <add position="replace"><![CDATA[
+                /* IVAN MOD START */
+                return $this->model_extension_module_pro_algolia_product_melle->prepareData($itemId);
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file path="catalog/model/api/import_1c.php">
+       
+        <operation error="skip">
+            <search><![CDATA[$result = $this->_offersRoutine($parsed);]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                $this->reindexProducts();
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[private function _offersRoutine($parsed)]]></search>
+            <add position="before"><![CDATA[
+                /* IVAN MOD START */
+                private function reindexProducts()
+                {
+                    $this->load->model("extension/module/pro_algolia");
+                    
+                    $enabledProducts = $this->db->query("SELECT `product_id`, `import_id`
+                        FROM `". DB_PREFIX . "product`
+                        WHERE `status` = '". true ."'")->rows;
+
+                    foreach ($enabledProducts as $product) {
+                        $this->model_extension_module_pro_algolia->addProductToQueue($product['product_id']);
+                    }
+
+                    $disabledProducts = $this->db->query("SELECT `product_id`, `import_id`
+                        FROM `". DB_PREFIX . "product`
+                        WHERE `status` = '". false ."'")->rows;
+
+                    $disabledProducts = array_map(function($row) {
+                        return $row['product_id'];
+                    }, $disabledProducts);
+
+                    $this->model_extension_module_pro_algolia->deleteProductsFromIndex($disabledProducts);
+                }
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+</modification>
