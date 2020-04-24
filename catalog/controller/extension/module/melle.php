@@ -98,6 +98,8 @@ class ControllerExtensionModuleMelle extends Controller
         $state['public_offer_link'] = $this->model_extension_pro_patch_url->ajax('information/information', '&information_id=5', true);
         $state['delivery_link'] = $this->model_extension_pro_patch_url->ajax('information/information', '&information_id=8', true);
 
+        $state['product_link_placeholder'] = $this->model_extension_pro_patch_url->ajax('product/product', '&product_id=', true);
+
         // GTM EVENTS
         $this->load->controller('extension/module/melle/initGTM');
 
