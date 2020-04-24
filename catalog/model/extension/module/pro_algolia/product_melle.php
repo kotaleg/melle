@@ -30,6 +30,7 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
             return null;
         }
 
+        $this->load->model('tool/image');
         if (!is_file(DIR_IMAGE.$productData['image'])) {
             $productData['image'] = 'no_image.png';
         }
@@ -50,7 +51,7 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         /* EXTRA DESCRIPTION END */
 
         return array(
-            'objectID' => \pro_algolia\id::generateIdForProduct($productData['import_id']),
+            'objectID' => \pro_algolia\id::generateIdForProduct((int) $productId),
             'productId' => (int) $productId,
             'name' => $productData['name'],
             'h1' => $h1,
