@@ -81,7 +81,7 @@ class ModelCatalogSuper extends Model
             foreach ($attribute_groups as $group) {
                 if (strcmp(trim($group['name']), 'Атрибуты') === 0) {
                     foreach ($group['attribute'] as $attr) {
-                        if (strcmp(trim($attr['name']), 'Матерал') === 0) {
+                        if (strcmp(trim($attr['name']), 'Материал') === 0) {
                             $d_['material'] = $attr['text'];
                         }
                         if (strcmp(trim($attr['name']), 'Ден') === 0) {
