@@ -370,7 +370,23 @@ export default {
   data() {
     return {
       routing: {
-        router: history(),
+        router: history({
+          createURL({ qsModule, location, routeState }) {
+            const { origin, pathname, hash } = location;
+            const indexState = routeState || {};
+            
+            // TODO: implement updating value on product change
+            routeState.route = 'product/search'
+            
+            const queryString = qsModule.stringify(routeState);
+
+            if (!indexState.query) {
+              return `${origin}${pathname}${hash}`;
+            }
+
+            return `${origin}${pathname}?${queryString}${hash}`;
+          },
+        }),
         stateMapping: simple(),
       },
     }
