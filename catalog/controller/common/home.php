@@ -33,6 +33,33 @@ class ControllerCommonHome extends Controller {
         // $this->load->model('api/import_1c/seo');
         // $this->model_api_import_1c_seo->parseRedirects();
 
+        // $this->reindexProducts();
+
         $this->response->setOutput($this->load->view('common/home', $data));
     }
+
+    private function reindexProducts()
+                {
+                    $this->load->model("extension/module/pro_algolia");
+                    
+                    $enabledProducts = $this->db->query("SELECT `product_id`, `import_id`
+                        FROM `". DB_PREFIX . "product`
+                        WHERE `status` = '". true ."'")->rows;
+
+                    foreach ($enabledProducts as $product) {
+                        $this->model_extension_module_pro_algolia->queueSaveProduct($product['product_id']);
+                    }
+
+                    $disabledProducts = $this->db->query("SELECT `product_id`, `import_id`
+                        FROM `". DB_PREFIX . "product`
+                        WHERE `status` = '". false ."'")->rows;
+
+                    $disabledProducts = array_map(function($row) {
+                        return $row['product_id'];
+                    }, $disabledProducts);
+
+                    foreach ($enabledProducts as $product) {
+                        $this->model_extension_module_pro_algolia->queueDeleteProduct($product['product_id']);
+                    }
+                }
 }

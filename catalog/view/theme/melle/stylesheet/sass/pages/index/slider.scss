@@ -27,9 +27,8 @@
       }
       & a {
         text-transform: uppercase;
-        font-family: "CenturyGothic-Bold";
+        font-family: 'CenturyGothic-Bold';
         font-size: 16px;
-
 
         @include link {
           color: #000;

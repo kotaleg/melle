@@ -17,7 +17,7 @@
   text-align: center;
 }
 
-.main-nav>a {
+.main-nav > a {
   display: inline-block;
   margin-bottom: 35px;
   padding: 0 vw_(30px);
@@ -57,7 +57,7 @@
   &__full-item {
     margin-bottom: 35px;
   }
-  &__full-item>a {
+  &__full-item > a {
     display: inline-block;
     padding: 0 vw_(30px);
     text-transform: uppercase;
@@ -151,11 +151,11 @@
   }
 }
 
-.socials__list>.socials__item {
+.socials__list > .socials__item {
   list-style: none;
   height: 25px;
-  &>a {
-    &>span {
+  & > a {
+    & > span {
       display: none;
     }
   }
@@ -166,17 +166,17 @@
     }
   }
   &--fb {
-    &>a {
+    & > a {
       display: inline-block;
-      &>svg {
+      & > svg {
         fill: #918d8a;
       }
     }
   }
   &--in {
-    &>a {
+    & > a {
       display: inline-block;
-      &>svg {
+      & > svg {
         fill: #918d8a;
       }
     }
@@ -229,7 +229,7 @@
   }
 }
 
-.subscribe>form {
+.subscribe > form {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -239,7 +239,7 @@
   @include tablet {
     width: 100%;
   }
-  &>div {
+  & > div {
     width: vw_(245px);
     margin-right: 10px;
     @include mobile {
@@ -263,12 +263,12 @@
   }
 }
 
-.comp-dev>span {
+.comp-dev > span {
   display: block;
   font-size: 12px;
 }
 
-.comp-dev>span>a {
+.comp-dev > span > a {
   display: block;
   @include link {
     color: #8a857f;

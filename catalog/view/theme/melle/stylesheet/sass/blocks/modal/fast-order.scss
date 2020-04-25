@@ -8,7 +8,7 @@
     margin-bottom: 20px;
     color: #2b2a29;
     font-size: 24px;
-    font-family: "CenturyGothicRegular";
+    font-family: 'CenturyGothicRegular';
     @include mobile {
       width: 100%;
     }
@@ -17,7 +17,7 @@
     margin-bottom: 20px;
     color: #807f7d;
     font-size: 14px;
-    font-family: "CenturyGothicRegular";
+    font-family: 'CenturyGothicRegular';
   }
   &__form {
     width: 100%;
@@ -46,18 +46,18 @@
     }
   }
   &__form-group {
-    &>label {
+    & > label {
       width: 155px;
       color: #807f7d;
       font-size: 14px;
-      font-family: "CenturyGothicRegular";
+      font-family: 'CenturyGothicRegular';
       @include mobile {
         margin-bottom: 10px;
       }
       &--checkbox {
         display: flex;
         align-items: flex-start;
-        &>span {
+        & > span {
           font-size: 14px;
           &:first-child {
             order: 2;
@@ -70,7 +70,7 @@
     }
   }
   &__form-group {
-    &>input {
+    & > input {
       width: 75%;
       height: 35px;
       padding: 0 25px;
@@ -85,19 +85,19 @@
         display: none;
         user-select: none;
         .checkbox:checked {
-          .checkbox+span {
+          .checkbox + span {
             .checkbox:after {
               display: inline-block;
               width: 100%;
               height: 100%;
-              content: "";
+              content: '';
               background: url(./../image/checkbox.png);
               background-position: center;
             }
           }
         }
       }
-      &+span {
+      & + span {
         position: relative;
         margin: 0;
         display: flex;
@@ -175,5 +175,5 @@
 
 #messageWindow {
   font-size: 14px;
-  font-family: "CenturyGothicRegular";
+  font-family: 'CenturyGothicRegular';
 }

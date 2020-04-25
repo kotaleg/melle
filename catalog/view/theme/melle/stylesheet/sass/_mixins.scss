@@ -1,11 +1,11 @@
-@function rem ($px) {
+@function rem($px) {
   @return $px / 16px+0rem;
 }
 
 @mixin clearfix() {
   &:before,
   &:after {
-    content: "";
+    content: '';
     display: table;
   }
   &:after {
@@ -31,11 +31,10 @@
 
 @function calcVw($minPixel, $pixel) {
   $addPixel: vw2($pixel - $minPixel);
-  @return #{"calc(#{$minPixel}+#{$addPixel})"};
+  @return #{'calc(#{$minPixel}+#{$addPixel})'};
 }
 
-@mixin fontad($minPixel,
-$pixel) {
+@mixin fontad($minPixel, $pixel) {
   font-size: $pixel;
   font-size: calcVw($minPixel, $pixel);
 }
@@ -54,7 +53,7 @@ $pixel) {
 @mixin list {
   margin: 0px;
   padding: 0px;
-  &>li {
+  & > li {
     list-style: none;
   }
 }

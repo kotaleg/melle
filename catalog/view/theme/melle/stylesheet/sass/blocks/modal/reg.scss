@@ -55,7 +55,7 @@
     &--checkbox {
       display: flex;
       align-items: flex-start;
-      &>span {
+      & > span {
         font-size: 14px;
         &:first-child {
           order: 2;
@@ -81,19 +81,19 @@
       display: none;
       user-select: none;
       &:checked {
-        &+span {
+        & + span {
           &:after {
             display: inline-block;
             width: 100%;
             height: 100%;
-            content: "";
+            content: '';
             background: url(./../image/checkbox.png);
             background-position: center;
           }
         }
       }
     }
-    &+span {
+    & + span {
       position: relative;
       margin: 0;
       display: flex;

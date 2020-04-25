@@ -7,13 +7,13 @@
     }
   }
   &__title {
-//    margin-left: 333px;
+    //    margin-left: 333px;
     font-size: 24px;
     color: #2b2a29;
     margin-bottom: 20px;
   }
   &__text {
-//    margin-left: 260px;
+    //    margin-left: 260px;
     font-size: 12px;
     color: #807f7d;
     margin-bottom: 15px;
@@ -50,7 +50,7 @@
       font-size: 12px;
       color: black;
       background-color: white;
-//      border: 0px;
+      //      border: 0px;
       flex-shrink: 0;
       @include placeholder {
         color: #6d6b6a;
@@ -81,11 +81,11 @@
       .select2 span.select2-selection {
         border: 1px solid black !important;
         background-color: white !important;
-        height: 36px!important;
-        padding-top: 5px!important;
+        height: 36px !important;
+        padding-top: 5px !important;
       }
       .select2 span.select2-selection__arrow {
-        margin-top: 5px!important;
+        margin-top: 5px !important;
       }
     }
     &--full-price {
@@ -95,7 +95,7 @@
       margin-bottom: 20px;
     }
     &--send {
-      &>input {
+      & > input {
         @include btn;
         width: 155px;
       }
@@ -115,7 +115,7 @@
       line-height: 1.3em;
     }
 
-    input[type="checkbox"] {
+    input[type='checkbox'] {
       opacity: 0;
       display: none;
       width: 1px;
@@ -131,7 +131,7 @@
         min-width: 16px;
 
         &:after {
-          content: "";
+          content: '';
           display: inline-block;
           width: 100%;
           height: 100%;
@@ -143,7 +143,7 @@
       }
 
       &:checked + span:after {
-        background: url("./../image/checkbox.png");
+        background: url('./../image/checkbox.png');
       }
     }
   }
@@ -164,7 +164,10 @@ body .basket-form span.select2 .select2-selection__rendered {
 // }
 
 .basket-modal__buttons {
-  a:first-child:link, a:first-child:visited, a:first-child:active, a:first-child:hover {
+  a:first-child:link,
+  a:first-child:visited,
+  a:first-child:active,
+  a:first-child:hover {
     margin-right: 10px;
   }
 }

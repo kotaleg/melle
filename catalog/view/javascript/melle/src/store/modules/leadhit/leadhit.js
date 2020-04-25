@@ -5,90 +5,91 @@ import shop from '../../../api/shop'
 
 // initial state
 const state = {
-    'lead_uid': '',
-    'site_id': '',
-    'base_url': '',
+  lead_uid: '',
+  site_id: '',
+  base_url: '',
 
-    'type_hits': '',
-    'type_recommend': '',
+  type_hits: '',
+  type_recommend: '',
 
-    'hits': [],
-    'recommend': [],
+  hits: [],
+  recommend: [],
 }
 
 // getters
-const getters = {
-
-}
+const getters = {}
 
 // actions
 const actions = {
-    initData({ commit, state }) {
-        shop.getInlineState('_leadhit', data => {
-            commit('setData', data)
-        })
-    },
+  initData({ commit, state }) {
+    shop.getInlineState('_leadhit', (data) => {
+      commit('setData', data)
+    })
+  },
 
-    async getProductsRequest({ commit, state }, service_name) {
-        return new Promise((resolve, reject) => {
-            shop.makeGetRequest(
-                {
-                    url: state.base_url,
-                    lead_uid: state.lead_uid,
-                    clid: state.site_id,
-                    service_name,
-                    offer_url: window.location.href,
-                },
-                res => {
-                    resolve(res)
-                }
-            )
-        })
-    },
-
-    async getHits({ commit, state, dispatch }) {
-        const res = await dispatch('getProductsRequest', state.type_hits)
-        .catch(error => {
-            if (has(error.response, 'data')) {
-                console.log(error.response.data);
-            }
-        });
-
-        if (res && has(res, 'data') && isArray(res.data)) {
-            commit('setValue', {k: 'hits', v: res.data})
+  async getProductsRequest({ commit, state }, service_name) {
+    return new Promise((resolve, reject) => {
+      shop.makeGetRequest(
+        {
+          url: state.base_url,
+          lead_uid: state.lead_uid,
+          clid: state.site_id,
+          service_name,
+          offer_url: window.location.href,
+        },
+        (res) => {
+          resolve(res)
         }
-    },
+      )
+    })
+  },
 
-    async getRecommend({ commit, state, dispatch }) {
-        const res = await dispatch('getProductsRequest', state.type_recommend)
-        .catch(error => {
-            if (has(error.response, 'data')) {
-                console.log(error.response.data);
-            }
-        });
-
-        if (res && has(res, 'data') && isArray(res.data)) {
-            commit('setValue', {k: 'recommend', v: res.data})
+  async getHits({ commit, state, dispatch }) {
+    const res = await dispatch('getProductsRequest', state.type_hits).catch(
+      (error) => {
+        if (has(error.response, 'data')) {
+          console.log(error.response.data)
         }
-    },
+      }
+    )
+
+    if (res && has(res, 'data') && isArray(res.data)) {
+      commit('setValue', { k: 'hits', v: res.data })
+    }
+  },
+
+  async getRecommend({ commit, state, dispatch }) {
+    const res = await dispatch(
+      'getProductsRequest',
+      state.type_recommend
+    ).catch((error) => {
+      if (has(error.response, 'data')) {
+        console.log(error.response.data)
+      }
+    })
+
+    if (res && has(res, 'data') && isArray(res.data)) {
+      commit('setValue', { k: 'recommend', v: res.data })
+    }
+  },
 }
 
 // mutations
 const mutations = {
-    setData (state, data) {
-        for (let d in data) {
-            Vue.set(state, d, data[d])
-        }
-    },
-    setValue(state, {k, v}) {
-        Vue.set(state, k, v)
-    },
+  setData(state, data) {
+    for (let d in data) {
+      Vue.set(state, d, data[d])
+    }
+  },
+  setValue(state, { k, v }) {
+    Vue.set(state, k, v)
+  },
 }
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations,
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations,
 }

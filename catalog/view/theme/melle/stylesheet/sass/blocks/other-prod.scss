@@ -1,9 +1,4 @@
 .other-prod {
-
-
-
-
-
   margin-bottom: -60px;
   ul {
     padding: 0;
@@ -28,8 +23,8 @@
     vertical-align: top;
     @include tablet {
       width: 48%;
-      &:not(:nth-child(2n+2)) {
-        margin-right: 4%!important;
+      &:not(:nth-child(2n + 2)) {
+        margin-right: 4% !important;
       }
     }
     @include mobile {
@@ -84,23 +79,22 @@
   }
   /* IVAN SECTION END */
 
-
-  &__item:not(:nth-child(4n+4)) {
+  &__item:not(:nth-child(4n + 4)) {
     margin-right: 3%;
     @include tablet {
       margin-right: 0;
     }
   }
-  &__item>a>img {
+  &__item > a > img {
     // width: 100%;
     max-height: 100%;
     height: auto;
-      @include mobile {
-        width: 100%;
-        max-height: initial;
-      }
+    @include mobile {
+      width: 100%;
+      max-height: initial;
+    }
   }
-  &__item>a {
+  &__item > a {
     @include mobile {
       height: 100%;
     }
@@ -115,7 +109,7 @@
       justify-content: center;
       width: vw_(60px);
       height: vw_(30px);
-      content: "NEW";
+      content: 'NEW';
       color: #fff;
       background-color: #2b2a29;
       @include tablet {
@@ -143,7 +137,7 @@
       justify-content: center;
       width: vw_(60px);
       height: vw_(30px);
-      content: "HIT";
+      content: 'HIT';
       color: #fff;
       background-color: #2b2a29;
       @include tablet {
@@ -243,8 +237,7 @@
     }
   }
 }
-.oldPrice{
-    text-decoration: line-through;
-    font-size: vw_(12px);
-
+.oldPrice {
+  text-decoration: line-through;
+  font-size: vw_(12px);
 }

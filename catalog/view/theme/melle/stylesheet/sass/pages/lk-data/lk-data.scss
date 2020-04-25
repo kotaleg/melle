@@ -27,7 +27,8 @@
         margin-bottom: 15px;
       }
     }
-    & > input, textarea {
+    & > input,
+    textarea {
       flex-shrink: 0;
       width: 398px;
       height: 36px;
@@ -79,7 +80,7 @@
         input {
           display: none;
           &:checked + span {
-            background-image: url("./../image/checkbox.png");
+            background-image: url('./../image/checkbox.png');
             background-size: cover;
           }
         }

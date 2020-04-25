@@ -1,23 +1,19 @@
-nav:not(.mm-menu)
-{
+nav:not(.mm-menu) {
   display: none;
 }
 
 .header,
 .content,
-.footer
-{
+.footer {
   text-align: center;
 }
 .header,
-.footer
-{
+.footer {
   background: #777;
   font-size: 16px;
   font-weight: bold;
   color: #fff;
   line-height: 40px;
-
 
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -25,20 +21,17 @@ nav:not(.mm-menu)
   height: 40px;
   padding: 0 50px;
 }
-.header.fixed
-{
+.header.fixed {
   position: fixed;
   top: 0;
   left: 0;
 }
-.footer.fixed
-{
+.footer.fixed {
   position: fixed;
   bottom: 0;
   left: 0;
 }
-.header a
-{
+.header a {
   display: block;
   width: 48px;
   height: 18px;
@@ -48,21 +41,18 @@ nav:not(.mm-menu)
   left: 0;
 }
 .header a:before,
-.header a:after
-{
+.header a:after {
   content: '';
   display: block;
   background: #fff;
   height: 2px;
 }
-.header a span
-{
+.header a span {
   background: #fff;
   display: block;
   height: 2px;
   margin: 6px 0;
 }
-.content
-{
+.content {
   padding: 150px 50px 50px 50px;
 }

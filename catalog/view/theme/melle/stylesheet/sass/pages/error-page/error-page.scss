@@ -1,20 +1,17 @@
-.main-page--error{
-    margin-top: 80px !important;
-    height: 700px;
-    background-size: cover;
-     background-image: url(./../image/404.jpg);
-    @include mobile{
-        background-image: url(./../image/404_s.jpg);
-
-
-    }
-    @include tablet{
-        background-image: url(./../image/404_m.jpg);
-    }
+.main-page--error {
+  margin-top: 80px !important;
+  height: 700px;
+  background-size: cover;
+  background-image: url(./../image/404.jpg);
+  @include mobile {
+    background-image: url(./../image/404_s.jpg);
+  }
+  @include tablet {
+    background-image: url(./../image/404_m.jpg);
+  }
 }
 
 .error-page {
-
   display: flex;
   @include mobile {
     position: static;
@@ -30,7 +27,7 @@
     margin-bottom: 40px;
     text-transform: uppercase;
     color: #2b2a29;
-    font-family: "CenturyGothic-Bold";
+    font-family: 'CenturyGothic-Bold';
     font-size: 150px;
     font-weight: 700;
     line-height: 1;

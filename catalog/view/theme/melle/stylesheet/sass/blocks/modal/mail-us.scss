@@ -30,7 +30,7 @@
     margin-left: -1px;
   }
   &__form-input {
-    font-family: "CenturyGothicRegular" !important;
+    font-family: 'CenturyGothicRegular' !important;
     display: block;
     width: 100%;
     border: 0px;
@@ -41,7 +41,7 @@
     color: #6d6b6a;
   }
   &__form-textarea {
-    font-family: "CenturyGothicRegular" !important;
+    font-family: 'CenturyGothicRegular' !important;
     display: block;
     padding: 10px 25px;
     width: 100%;
@@ -84,7 +84,7 @@
       top: -2px;
     }
 
-    input[type="checkbox"] {
+    input[type='checkbox'] {
       opacity: 0;
       display: none;
       width: 1px;
@@ -100,7 +100,7 @@
         min-width: 16px;
 
         &:after {
-          content: "";
+          content: '';
           display: inline-block;
           width: 100%;
           height: 100%;
@@ -112,7 +112,7 @@
       }
 
       &:checked + span:after {
-        background: url("./../image/checkbox.png");
+        background: url('./../image/checkbox.png');
       }
     }
   }

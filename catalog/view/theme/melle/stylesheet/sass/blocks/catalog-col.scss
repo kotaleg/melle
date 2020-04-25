@@ -1,4 +1,4 @@
-section[data-layout="col"] {
+section[data-layout='col'] {
   .catalog {
     &__container {
       display: flex;
@@ -36,14 +36,14 @@ section[data-layout="col"] {
       @include tablet {
         max-width: 48%;
         height: 400px;
-        &:not(:nth-child(2n+2)) {
-          margin-right: 4%!important;
+        &:not(:nth-child(2n + 2)) {
+          margin-right: 4% !important;
         }
-        section[data-layout="col"] .catalog__item {
+        section[data-layout='col'] .catalog__item {
           min-height: calc(39vh - 120px) !important;
         }
       }
-      &:not(:nth-child(3n+3)) {
+      &:not(:nth-child(3n + 3)) {
         margin-right: 4% !important;
         @include tablet {
           margin-right: 0;
@@ -60,7 +60,7 @@ section[data-layout="col"] {
           justify-content: center;
           width: vw_(55px);
           height: vw_(25px);
-          content: "NEW";
+          content: 'NEW';
           color: #fff;
           background-color: #060709;
           @include tablet {
@@ -92,7 +92,7 @@ section[data-layout="col"] {
           justify-content: center;
           width: vw_(55px);
           height: vw_(25px);
-          content: "HIT";
+          content: 'HIT';
           color: #fff;
           background-color: #060709;
           @include tablet {
@@ -322,9 +322,9 @@ section[data-layout="col"] {
         margin-bottom: 5px;
         font-size: 14px;
       }
-      &>a {
+      & > a {
         color: #fff;
-      font-size: 15px;
+        font-size: 15px;
       }
     }
     &__item-article {
@@ -355,7 +355,7 @@ section[data-layout="col"] {
         margin-bottom: 15px;
         font-size: 12px;
       }
-      &>a {
+      & > a {
         text-transform: uppercase;
         @include link {
           color: #fff;
@@ -389,7 +389,7 @@ section[data-layout="col"] {
           width: 130px;
         }
       }
-      &>button {
+      & > button {
         width: vw_(22px);
         height: vw_(30px);
         text-align: center;
@@ -403,7 +403,7 @@ section[data-layout="col"] {
         position: relative;
 
         &.item_minus {
-            font-size: 20px !important;
+          font-size: 20px !important;
           &:before {
             content: '';
             position: absolute;
@@ -458,7 +458,7 @@ section[data-layout="col"] {
           font-weight: bold;
         }
       }
-      &>input {
+      & > input {
         width: vw_(36px);
         text-align: center;
         color: #6d6b6a;
@@ -494,11 +494,11 @@ section[data-layout="col"] {
       &--price {
         display: none;
       }
-      &>div {
+      & > div {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        &>span {
+        & > span {
           color: #fff;
           font-size: vw_(12px);
           @include tablet {
@@ -508,7 +508,7 @@ section[data-layout="col"] {
             font-size: 12px;
           }
         }
-        &>select {
+        & > select {
           width: vw_(130px);
           @include tablet {
             width: 130px;
@@ -516,13 +516,13 @@ section[data-layout="col"] {
           @include mobile {
             width: 130px;
           }
-          &+span {
-            width: vw_(130px)!important;
+          & + span {
+            width: vw_(130px) !important;
             @include tablet {
-              width: 130px!important;
+              width: 130px !important;
             }
             @include mobile {
-              width: 130px!important;
+              width: 130px !important;
             }
           }
         }
@@ -583,7 +583,7 @@ section[data-layout="col"] {
           .select2-selection__rendered {
             height: 100%;
             padding: 0;
-            &>span {
+            & > span {
               display: flex;
               align-items: center;
               height: 100%;
@@ -606,7 +606,7 @@ section[data-layout="col"] {
               width: 20px;
               height: 26px;
             }
-            &>b {
+            & > b {
               margin-top: vw_(-2px);
               margin-left: vw_(-4px);
               border-width: vw_(5px) vw_(4px) 0;
@@ -624,7 +624,7 @@ section[data-layout="col"] {
           }
           &.select2-container--open {
             .select2-selection__arrow {
-              &>b {
+              & > b {
                 border-width: 0 vw_(4px) vw_(5px);
                 @include tablet {
                   border-width: 0 4px 5px;
@@ -647,24 +647,24 @@ section[data-layout="col"] {
         background: transparent;
         &:hover {
           color: #b2b2b2;
-          &>svg {
+          & > svg {
             color: #b2b2b2;
           }
         }
-        &>svg {
-          width: vw_(20px)!important;
-          height: vw_(20px)!important;
+        & > svg {
+          width: vw_(20px) !important;
+          height: vw_(20px) !important;
           fill: #a3a2a2;
           @include tablet {
-            width: 20px!important;
-            height: 20px!important;
+            width: 20px !important;
+            height: 20px !important;
           }
           @include mobile {
-            width: 20px!important;
-            height: 20px!important;
+            width: 20px !important;
+            height: 20px !important;
           }
         }
-        &>span {
+        & > span {
           margin-left: vw_(5px);
           font-weight: 900;
           display: flex;
@@ -691,7 +691,7 @@ section[data-layout="col"] {
     @include mobile {
       padding: 10px 5px;
     }
-    &>span {
+    & > span {
       display: flex;
       align-items: center;
     }
@@ -718,12 +718,12 @@ section[data-layout="col"] {
     }
   }
   .select2-results__options {
-    max-height: vw_(200px)!important;
+    max-height: vw_(200px) !important;
     @include tablet {
-      max-height: 200px!important;
+      max-height: 200px !important;
     }
     @include mobile {
-      max-height: 200px!important;
+      max-height: 200px !important;
     }
   }
   .select2-results__option {
@@ -737,25 +737,27 @@ section[data-layout="col"] {
   }
 }
 
-
-section[data-layout="col"] .catalog__item-article {
+section[data-layout='col'] .catalog__item-article {
   color: #fff;
   font-size: 12px;
   // margin-bottom: 1.40167vw;
-      @include mobile {
-      margin-bottom: 4vw;
-    }
+  @include mobile {
+    margin-bottom: 4vw;
+  }
 }
 
-
-section[data-layout="col"] .catalog__form-group.catalog__form-group--thickness > div {
+section[data-layout='col']
+  .catalog__form-group.catalog__form-group--thickness
+  > div {
   span:last-child {
     width: 9.02778vw;
   }
 }
 
 @media (max-width: 1199px) and (min-width: 768px) {
-  section[data-layout="col"] .catalog__form-group.catalog__form-group--thickness > div {
+  section[data-layout='col']
+    .catalog__form-group.catalog__form-group--thickness
+    > div {
     text-align: left;
     span:last-child {
       width: 130px;
@@ -775,7 +777,6 @@ section[data-layout="col"] .catalog__form-group.catalog__form-group--thickness >
   color: #fff;
 }
 
-
 .catalog-item__more {
   text-align: center;
   margin-top: 30px;
@@ -784,16 +785,19 @@ section[data-layout="col"] .catalog__form-group.catalog__form-group--thickness >
   }
 }
 
-input, button, textarea {
+input,
+button,
+textarea {
   border-radius: 0 !important;
 }
 
 details {
   font-size: 12px !important;
 
-  td,th{
-    font-family:Verdana,Arial,Helvetica,sans-serif;
-    font-size:11px
+  td,
+  th {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
   }
   ul {
     display: block;
@@ -809,7 +813,7 @@ details {
     text-align: -webkit-match-parent;
   }
   hr {
-    cursor: default
+    cursor: default;
   }
   p {
     display: block;
@@ -818,7 +822,8 @@ details {
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
   }
-  strong, b {
+  strong,
+  b {
     font-weight: bold;
   }
 }

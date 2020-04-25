@@ -1,4 +1,4 @@
-section[data-layout="list"] {
+section[data-layout='list'] {
   .catalog {
     &__container {
       display: flex;
@@ -252,7 +252,7 @@ section[data-layout="list"] {
           justify-content: center;
           width: vw_(60px);
           height: vw_(30px);
-          content: "NEW";
+          content: 'NEW';
           color: #fff;
           background-color: #2b2a29;
           font-size: vw_(18px);
@@ -279,7 +279,7 @@ section[data-layout="list"] {
           justify-content: center;
           width: vw_(60px);
           height: vw_(30px);
-          content: "HIT";
+          content: 'HIT';
           color: #fff;
           background-color: #2b2a29;
           font-size: vw_(18px);
@@ -631,7 +631,8 @@ section[data-layout="list"] {
 .catalog__form-group--count > div, //catalog_level_1
 .basket-modal__prod-count, //Basket-modal
 .basket-orders__count, //in Basket
-.prod-card__count { //card of product
+.prod-card__count {
+  //card of product
   position: relative;
   margin-bottom: 30px;
 }

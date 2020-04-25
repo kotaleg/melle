@@ -22,12 +22,12 @@
     }
     @include tablet {
       width: 48%;
-      &:not(:nth-child(2n+2)) {
+      &:not(:nth-child(2n + 2)) {
         margin-right: 4%;
       }
     }
     @include desktophd {
-      &:not(:nth-child(3n+3)) {
+      &:not(:nth-child(3n + 3)) {
         margin-right: 5%;
       }
     }

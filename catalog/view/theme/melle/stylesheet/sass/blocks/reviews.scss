@@ -57,7 +57,7 @@
       width: 50%;
       text-align: right;
     }
-    &>span:first-child {
+    & > span:first-child {
       margin-right: 15px;
     }
   }
@@ -71,7 +71,7 @@
   &__text {
     width: 100%;
     margin-top: 25px;
-    &>p {
+    & > p {
       margin-top: 0;
       font-size: 14px;
       line-height: 24px;
@@ -82,7 +82,7 @@
   }
   &__form-group {
     margin-bottom: 15px;
-    &>input,
+    & > input,
     textarea {
       width: 305px;
       height: 36px;
@@ -95,7 +95,7 @@
         width: 100%;
       }
     }
-    &>textarea {
+    & > textarea {
       height: 75px;
       padding: 15px 25px;
     }
@@ -105,7 +105,7 @@
       justify-content: center;
       margin-top: 20px;
       margin-bottom: 20px;
-      &>span {
+      & > span {
         margin-right: 20px;
         color: #6d6b6a;
         font-size: 12px;
@@ -113,17 +113,17 @@
     }
     &--send {
       margin-top: 25px;
-      &>input {
+      & > input {
         width: 100%;
         @include btn;
-		display: block;
+        display: block;
       }
     }
   }
 }
 
 .reviews .rev-btn {
-	display: block;
-	line-height: 36px;
-	text-align: center;
+  display: block;
+  line-height: 36px;
+  text-align: center;
 }

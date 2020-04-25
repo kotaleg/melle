@@ -1,13 +1,14 @@
-.v-select.unsearchable input[type="search"]::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+.v-select.unsearchable input[type='search']::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
   color: black;
 }
-.filter__buttons{
-    // margin-left: -35px;
+.filter__buttons {
+  // margin-left: -35px;
 }
 .select2-results {
   &__option {
     &--highlighted {
-        background: white;
+      background: white;
       @include tablet {
         font-size: 10px;
       }
@@ -50,7 +51,6 @@
     display: flex;
     align-items: center;
     @include mobile {
-
       flex-direction: column;
     }
   }
@@ -108,9 +108,9 @@
               }
             }
           }
-          &--multiple{
-            &:after{
-              border-width: 5px 4px 0 !important
+          &--multiple {
+            &:after {
+              border-width: 5px 4px 0 !important;
             }
             background-color: white;
             border: 0px solid;
@@ -185,16 +185,16 @@
         height: 30px;
         margin-left: 20px;
       }
-      &+span {
-        width: vw_(155px)!important;
-        height: vw_(30px)!important;
+      & + span {
+        width: vw_(155px) !important;
+        height: vw_(30px) !important;
         @include tablet {
-          width: 155px!important;
-          height: 30px!important;
+          width: 155px !important;
+          height: 30px !important;
         }
         @include mobile {
-          width: 155px!important;
-          height: 30px!important;
+          width: 155px !important;
+          height: 30px !important;
         }
       }
     }
@@ -265,7 +265,7 @@
           width: 20px;
           height: 26px;
         }
-        &>b {
+        & > b {
           margin-top: vw_(-2px);
           margin-left: vw_(-4px);
           border-width: vw_(5px) vw_(4px) 0;
@@ -283,7 +283,7 @@
       }
       &.select2-container--open {
         .select2-selection__arrow {
-          &>b {
+          & > b {
             border-width: 0 vw_(4px) vw_(5px);
             @include tablet {
               border-width: 0 4px 5px;
@@ -326,15 +326,15 @@
     svg {
       transform: rotate(90deg);
       fill: #979491;
-      width: vw_(20px)!important;
-      height: vw_(20px)!important;
+      width: vw_(20px) !important;
+      height: vw_(20px) !important;
       @include tablet {
-        width: 20px!important;
-        height: 20px!important;
+        width: 20px !important;
+        height: 20px !important;
       }
       @include mobile {
-        width: 20px!important;
-        height: 20px!important;
+        width: 20px !important;
+        height: 20px !important;
       }
     }
     label {
@@ -371,7 +371,7 @@
     @include mobile {
       margin-left: 0px;
     }
-    &>span {
+    & > span {
       color: #807f7d;
       font-size: vw_(14px);
       margin-right: vw_(20px);
@@ -395,13 +395,13 @@
           margin-right: 3px;
         }
       }
-      &>input {
+      & > input {
         display: none;
-        &:checked+span {
+        &:checked + span {
           background-color: #dcdcdc;
         }
       }
-      &>span {
+      & > span {
         display: inline-block;
         width: vw_(35px);
         height: vw_(30px);
@@ -429,7 +429,7 @@
       }
     }
   }
-  & ul>li.select2-results__option {
+  & ul > li.select2-results__option {
     padding: vw_(10px) vw_(15px);
     @include tablet {
       padding: 10px 15px;
@@ -439,11 +439,11 @@
     }
   }
 }
-#select2-sort-1b-results{
-    display: none;
-    background-color: white !important;
+#select2-sort-1b-results {
+  display: none;
+  background-color: white !important;
 }
 
-.filter__select-name{
-    text-align: left !important;
+.filter__select-name {
+  text-align: left !important;
 }

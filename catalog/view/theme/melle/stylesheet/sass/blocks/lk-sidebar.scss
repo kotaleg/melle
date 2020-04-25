@@ -5,7 +5,7 @@
     padding: 0;
     list-style: none;
   }
-  &__item>a {
+  &__item > a {
     text-transform: uppercase;
     font-size: 14px;
     font-weight: 400;
@@ -17,11 +17,11 @@
       text-decoration: underline;
     }
   }
-  &__item>a>svg {
+  &__item > a > svg {
     margin-left: 15px;
     fill: #918d8a;
   }
-  &__item.on>a {
+  &__item.on > a {
     font-weight: 700;
     &:hover {
       text-decoration: none;

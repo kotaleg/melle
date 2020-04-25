@@ -17,7 +17,7 @@
       width: 20%;
     }
   }
-  &__left>div {
+  &__left > div {
     &:first-child {
       margin-right: 5%;
     }
@@ -74,12 +74,12 @@
 .main-menu {
   display: flex;
   align-items: center;
-  &>a:active,
+  & > a:active,
   a:link,
   a:visited {
     color: #b7b6b5;
   }
-  &>a:hover {
+  & > a:hover {
     color: #fff;
   }
   &__link {
@@ -95,7 +95,7 @@
       }
     }
   }
-  &__link>span {
+  &__link > span {
     vertical-align: middle;
     font-size: 13px;
     @include mobile {
@@ -105,7 +105,7 @@
       display: none;
     }
   }
-  &__link>svg {
+  &__link > svg {
     margin-right: 15px;
     fill: #9d9d9d;
   }
@@ -141,13 +141,13 @@
       }
     }
   }
-  &__link>span {
+  &__link > span {
     vertical-align: middle;
     position: relative;
     top: 1px;
     font-size: 13px;
   }
-  &__link>svg {
+  &__link > svg {
     margin-right: 15px;
     fill: #9d9d9d;
   }
@@ -157,12 +157,12 @@
   margin: 0 auto;
 }
 
-.main-logo>a {
+.main-logo > a {
   display: block;
   height: 100%;
 }
 
-.main-logo>a>img {
+.main-logo > a > img {
   width: 100%;
   height: auto;
 }

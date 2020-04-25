@@ -18,13 +18,13 @@
     .select2-selection__placeholder {
       color: #6d6b6a;
       text-transform: none;
-      font-size: 12px
+      font-size: 12px;
     }
     .select2-selection__rendered {
       color: #6d6b6a;
       padding: 0px;
       height: 100%;
-      &>span {
+      & > span {
         height: 100%;
         display: flex;
         align-items: center;

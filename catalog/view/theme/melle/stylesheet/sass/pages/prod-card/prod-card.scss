@@ -67,7 +67,7 @@
       height: auto;
       margin-right: 0;
       margin-bottom: 30px;
-      &>.slick-list {
+      & > .slick-list {
         margin-right: -15px;
       }
     }
@@ -78,7 +78,7 @@
         }
       }
     }
-    &>button {
+    & > button {
       position: static;
       display: flex;
       align-items: center;
@@ -97,21 +97,21 @@
         display: none;
       }
       &:hover {
-        &>svg {
+        & > svg {
           fill: #9c9895;
         }
       }
-      &>svg {
-        width: vw_(20px)!important;
-        height: vw_(20px)!important;
+      & > svg {
+        width: vw_(20px) !important;
+        height: vw_(20px) !important;
         fill: #cbc9c7;
         @include tablet {
-          width: 20px!important;
-          height: 20px!important;
+          width: 20px !important;
+          height: 20px !important;
         }
       }
       &.slick-next {
-        &>svg {
+        & > svg {
           transform: rotate(180deg);
         }
       }
@@ -133,7 +133,7 @@
       right: 0;
       bottom: 0;
       left: 0;
-      content: "";
+      content: '';
       background-color: rgba(#fff, 0.5);
     }
     &:hover {
@@ -141,7 +141,7 @@
         display: none;
       }
     }
-    &>img {
+    & > img {
       width: 100%;
       height: auto;
     }
@@ -167,7 +167,7 @@
     }
   }
   &__item-big-photo {
-    &>img {
+    & > img {
       width: 100%;
       height: auto;
     }
@@ -279,7 +279,7 @@
     }
   }
   &__title {
-      font-weight: 600;
+    font-weight: 600;
     margin-bottom: vw_(25px);
     color: #2b2a29;
     font-size: vw_(24px);
@@ -296,7 +296,7 @@
     display: flex;
     width: vw_(75px);
     color: #6d6b6a;
-//    background-color: #e7e7e7;
+    //    background-color: #e7e7e7;
     font-size: vw_(14px);
     @include tablet {
       width: 75px;
@@ -317,7 +317,7 @@
         width: 220px; //счетчик товаров
       }
     }
-    &>button {
+    & > button {
       width: vw_(22px);
       height: vw_(30px);
       text-align: center;
@@ -344,7 +344,7 @@
         font-weight: bold;
       }
     }
-    &>input {
+    & > input {
       width: vw_(36px);
       text-align: center;
       color: #000;
@@ -364,7 +364,6 @@
     }
   }
   &__form-group {
-
     .ivan-product-selectors {
       color: #251807;
       font-size: vw_(18px);
@@ -393,7 +392,6 @@
 
       // flex-direction: column;
       // justify-content: center;
-
 
       &:last-child {
         margin-right: 0px;
@@ -437,7 +435,6 @@
       // flex-direction: column;
       // justify-content: center;
 
-
       &:last-child {
         margin-right: 0px;
       }
@@ -462,10 +459,10 @@
           border: 1px #e3dbd8 solid;
           width: 45px;
           height: 45px;
-            @include mobile {
-                width: 30px;
-                height: 30px;
-            }
+          @include mobile {
+            width: 30px;
+            height: 30px;
+          }
         }
       }
     }
@@ -473,16 +470,16 @@
     #ivan-js-size-list {
       width: 89%;
       // display: flex;
-        @include mobile {
-            margin-left: 3px;
-        }
+      @include mobile {
+        margin-left: 3px;
+      }
     }
 
     #ivan-js-color-list {
       width: 89%;
       // display: flex;
       @include mobile {
-          margin-left: 33px;
+        margin-left: 33px;
       }
     }
 
@@ -501,8 +498,6 @@
       }
     }
 
-
-
     &--count {
       margin-bottom: vw_(5px);
       display: -webkit-box;
@@ -520,7 +515,7 @@
       & > span {
         margin-top: 8px;
         color: #807f7d;
-          font-size: 0.83333vw;
+        font-size: 0.83333vw;
         @include mobile {
           font-size: 12px;
         }
@@ -528,7 +523,7 @@
           font-size: 12px;
         }
       }
-      .js-product-count{
+      .js-product-count {
         color: #000;
       }
       @include tablet {
@@ -568,7 +563,7 @@
         justify-content: space-between;
         // margin-bottom: 20px;
       }
-      &>span {
+      & > span {
         margin-bottom: vw_(15px);
         color: #807f7d;
         font-size: vw_(14px);
@@ -580,7 +575,7 @@
           margin-bottom: 0;
           font-size: 14px;
         }
-        &>a {
+        & > a {
           font-size: vw_(14px);
           @include link {
             color: #807f7d;
@@ -662,7 +657,7 @@
 
           &::after {
             border-bottom: 0.13em solid #2b2a29;
-            content: "";
+            content: '';
             left: 0;
             // margin-top: calc(0.125em / 2 * -1);
             position: absolute;
@@ -707,11 +702,11 @@
         color: #2b2a29;
       }
     }
-    &>div {
+    & > div {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      &>span {
+      & > span {
         color: #807f7d;
         font-size: vw_(12px);
         @include tablet {
@@ -721,7 +716,7 @@
           font-size: 12px;
         }
       }
-      &>select {
+      & > select {
         width: 70%;
         @include tablet {
           width: 190px;
@@ -729,13 +724,13 @@
         @include mobile {
           width: 190px;
         }
-        &+span {
-          width: 70%!important;
+        & + span {
+          width: 70% !important;
           @include tablet {
-            width: 190px!important;
+            width: 190px !important;
           }
           @include mobile {
-            width: 190px!important;
+            width: 190px !important;
           }
         }
       }
@@ -796,7 +791,7 @@
         .select2-selection__rendered {
           height: 100%;
           padding: 0;
-          &>span {
+          & > span {
             display: flex;
             align-items: center;
             height: 100%;
@@ -819,7 +814,7 @@
             width: 20px;
             height: 26px;
           }
-          &>b {
+          & > b {
             margin-top: vw_(-2px);
             margin-left: vw_(-4px);
             border-width: vw_(5px) vw_(4px) 0;
@@ -837,7 +832,7 @@
         }
         &.select2-container--open {
           .select2-selection__arrow {
-            &>b {
+            & > b {
               border-width: 0 vw_(4px) vw_(5px);
               @include tablet {
                 border-width: 0 4px 5px;
@@ -860,24 +855,24 @@
       background: transparent;
       &:hover {
         color: #b2b2b2;
-        &>svg {
+        & > svg {
           color: #b2b2b2;
         }
       }
-      &>svg {
-        width: vw_(20px)!important;
-        height: vw_(20px)!important;
+      & > svg {
+        width: vw_(20px) !important;
+        height: vw_(20px) !important;
         fill: #a3a2a2;
         @include tablet {
-          width: 20px!important;
-          height: 20px!important;
+          width: 20px !important;
+          height: 20px !important;
         }
         @include mobile {
-          width: 20px!important;
-          height: 20px!important;
+          width: 20px !important;
+          height: 20px !important;
         }
       }
-      &>span {
+      & > span {
         margin-left: vw_(5px);
         @include tablet {
           margin-left: 5px;
@@ -918,8 +913,7 @@
       text-align: left;
       font-size: 12px;
     }
-    &>a {
-
+    & > a {
       text-transform: uppercase;
       @include link {
         color: #2b2a29;
@@ -928,7 +922,7 @@
     }
   }
   &__description {
-      margin-bottom: 15px;
+    margin-bottom: 15px;
     color: #2b2a29;
     font-size: vw_(18px);
     @include tablet {
@@ -939,12 +933,12 @@
     }
   }
   .select2-results__options {
-    max-height: vw_(200px)!important;
+    max-height: vw_(200px) !important;
     @include tablet {
-      max-height: 200px!important;
+      max-height: 200px !important;
     }
     @include mobile {
-      max-height: 200px!important;
+      max-height: 200px !important;
     }
   }
   .select2-results__option {
@@ -958,7 +952,7 @@
       padding: 10px 5px;
       font-size: 12px;
     }
-    &>span {
+    & > span {
       display: flex;
       align-items: center;
     }
@@ -983,10 +977,14 @@
   }
 }
 
-section[data-layout="col"] .catalog__form-group > label span.select2 .select2-selection__rendered {
+section[data-layout='col']
+  .catalog__form-group
+  > label
+  span.select2
+  .select2-selection__rendered {
   color: #000;
 }
 
 .grecaptcha-badge {
-    visibility: hidden;
+  visibility: hidden;
 }
