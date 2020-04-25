@@ -32,6 +32,15 @@ class ModelExtensionModulePROAlgolia extends Model
         $this->log->write(strtoupper($this->codename)." :: {$message}");
     }
 
+    public function getCredentials()
+    {
+        return array(
+            'appId' => (string) $this->setting['app_id'],
+            'searchApiKey' => (string) $this->setting['search_api_key'],
+            'indexName' => (string) $this->setting['index_name'],
+        );
+    }
+
     public function queueSaveProduct($productId)
     {
         return $this->addItemToQueue(

@@ -52,6 +52,7 @@
                    <li class="menu-search">
 
                      <ais-instant-search
+                        v-if="searchClient && searchIndex"
                         :index-name="searchIndex"
                         :search-client="searchClient"
                      >
@@ -221,6 +222,7 @@ export default {
             'account_link',
             'delivery_link',
             'product_link_placeholder',
+            'pro_algolia',
         ]),
         ...mapState('cart', {
             cartCount: 'count',
@@ -230,6 +232,23 @@ export default {
             'phoneLink',
             'accountLink',
         ]),
+
+        searchIndex() {
+           if (!this.pro_algolia) {
+              return
+           }
+           return this.pro_algolia.indexName
+        },
+        searchClient() {
+           if (!this.pro_algolia) {
+              return
+           }
+
+           return algoliasearch(
+               this.pro_algolia.appId,
+               this.pro_algolia.searchApiKey
+            )
+        },
     },
     methods: {
         ...mapActions('header', [
@@ -258,11 +277,6 @@ export default {
     data() {
         return {
             search: '',
-            searchIndex: 'dev_MELLE_PRODUCTS',
-            searchClient: algoliasearch(
-               'DVDI5OWT6W',
-               'a801c615cd948a49a5dfd74d854eefef'
-            ),
         }
     },
     created() {

@@ -29,6 +29,20 @@
 
     </file>
 
+    <file path="catalog/controller/extension/module/melle.php">
+       
+        <operation error="skip">
+            <search><![CDATA[$state['id'] = "{$this->codename}_header";]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                $this->load->model('extension/module/pro_algolia');
+                $state['pro_algolia'] = $this->model_extension_module_pro_algolia->getCredentials();
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+    </file>
+
     <file path="catalog/model/api/import_1c.php">
        
         <operation error="skip">
