@@ -6,6 +6,7 @@
        <ul v-if="product_total > 0" class="catalog__list" id="ivan_products_replace">
 
           <li v-for="(p, i) in products"
+            :key="`product-${p.product_id}`"
             :class="['catalog__item', p.znachek_class]">
 
              <a @click="gtmProductClick(i)" :href="p.href" class="catalog__item-link">
