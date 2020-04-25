@@ -110,12 +110,12 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
 
             'image' => $image,
 
-            'price' => $price,
-            'special' => $special,
+            'price' => $this->getPrice($price),
+            'special' => $this->getPrice($special),
             'specialText' => $specialText,
 
             'material' => $material,
-            'dev' => $den,
+            'den' => (int) $den,
         );
     }
 
@@ -138,5 +138,19 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         }
 
         return $productAltNames;
+    }
+
+    private function getPrice($price)
+    {
+        if (is_string($price)) {
+            $price = preg_replace('/\s+/', '', (string) $price);
+            return (double) $price;
+        }
+
+        if (is_numeric($price)) {
+            return (double) $price;
+        }
+
+        return false;
     }
 }
