@@ -95,6 +95,7 @@
                                                    <ais-highlight attribute="h1" :hit="hit"/>
                                                 </a>
                                              </div>
+                                             <ais-powered-by />
                                           </section>
                                        </div>
                                     </div>
@@ -136,14 +137,17 @@
                    </li>
                 </ul>
                 <ul class="header-page__bottom-line">
-                   <li v-for="(m, i) in menu"
-                        @mouseover="menuHandler({i, status:true})"
-                        @mouseleave="menuHandler({i, status:false})"
-                        :class="[{'active': m.active}]">
+                   <li 
+                     v-for="(m, i) in menu"
+                     :key="`menu-item-${i}`"
+                     @mouseover="menuHandler({i, status:true})"
+                     @mouseleave="menuHandler({i, status:false})"
+                     :class="[{'active': m.active}]"
+                   >
 
                       <a :href="m.url">{{ m.title }}</a>
                       <ul v-if="m.children.length > 0">
-                         <li v-for="c in m.children">
+                         <li v-for="(c,childIndex) in m.children" :key="`menu-item-${i}-child-${childIndex}`">
                             <a :href="c.url">{{ c.title }}</a>
                          </li>
                       </ul>
