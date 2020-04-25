@@ -350,6 +350,19 @@ class ControllerExtensionModuleMelle extends Controller
         return $state;
     }
 
+    public function initSearch()
+    {
+        // VARIABLE
+        $state['id'] = "{$this->codename}_search";
+
+        $state['searchQuery'] = '';
+        $state['productLinkPlaceholder'] = $this->model_extension_pro_patch_url->ajax('product/product', '&product_id=', true);
+
+        // SET STATE
+        $this->document->addState($state['id'], json_encode($state));
+        return $state;
+    }
+
     public function renderCatalogContent($state)
     {
         $data = array();
