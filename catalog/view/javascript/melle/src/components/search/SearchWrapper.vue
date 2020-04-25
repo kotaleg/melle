@@ -240,6 +240,11 @@
               >
                 <img :src="item.image" :alt="item.h1" />
               </a>
+
+              <div v-if="item.specialText" class="catalog__item-price super-div" style="top: 0px;">
+                <span class="catalog__item-price-default super-text" style="font-size: 0.79vw;">{{ item.specialText }}</span>
+              </div>
+
               <div class="catalog__item-ivaninfo">
                 <div class="row">
                   <div class="col-xs-12">
@@ -250,9 +255,15 @@
                     </h3>
                   </div>
                   <div class="col-xs-7">
-                    <span class="catalog__item-price-default">
-                      399 <span class="ruble-sign">Р</span></span
-                    >
+                    <span v-if="isSpecial(item.special)" class="catalog__item-price-old"> {{ item.price }} <span class="ruble-sign">Р</span></span>
+
+                    <span v-if="isSpecial(item.special)" class="catalog__item-price-default">
+                      {{item.special}}
+                      <span v-if="isZvezdochka(item.specialText)" class="ruble-container"><span class="ruble-sign">Р</span><span class="ruble-zvezdochka">*</span></span>
+                      <span v-else class="ruble-sign">Р</span>
+                    </span>
+
+                    <span v-else class="catalog__item-price-default"> {{ item.price }} <span class="ruble-sign">Р</span></span>
                   </div>
                   <div class="col-xs-5">
                     <div>
@@ -269,7 +280,9 @@
           </ul>
         </ais-hits>
 
-        <ais-pagination :padding="5" />
+        <div class="text-center">
+          <ais-pagination :padding="5" />
+        </div>
       </div>
     </div>
   </ais-instant-search>
@@ -277,6 +290,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import { isNumber, isString } from 'lodash'
 import algoliasearch from 'algoliasearch/lite'
 import { history } from 'instantsearch.js/es/lib/routers'
 import { simple } from 'instantsearch.js/es/lib/stateMappings'
@@ -339,6 +353,18 @@ export default {
     },
     formatProductHref(productId) {
       return `${this.productLinkPlaceholder}${productId}`
+    },
+    isSpecial(specialValue) {
+      if (isNumber(specialValue) && specialValue > 0) {
+        return true
+      }
+      return false
+    },
+    isZvezdochka(specialText) {
+      if (isString(specialText) && specialText.includes('*')) {
+        return true
+      }
+      return false
     },
   },
   data() {
