@@ -75,6 +75,25 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
             ->getSpecialText($productData['product_id'], true);
         /* SPECIAL TEXT START */
 
+        $material = '';
+        $den = 0;
+
+        $attributeGroups = $this->model_catalog_product
+            ->getProductAttributes($productData['product_id']);
+
+        foreach ($attributeGroups as $group) {
+            if (strcmp(trim(utf8_strtolower($group['name'])), utf8_strtolower('Атрибуты')) === 0) {
+                foreach ($group['attribute'] as $attr) {
+                    if (strcmp(trim(utf8_strtolower($attr['name'])), utf8_strtolower('Материал')) === 0) {
+                        $material = $attr['text'];
+                    }
+                    if (strcmp(trim(utf8_strtolower($attr['name'])), utf8_strtolower('Ден')) === 0) {
+                        $den = $attr['text'];
+                    }
+                }
+            }
+        }
+
         return array(
             'objectID' => \pro_algolia\id::generateIdForProduct((int) $productId),
             'productId' => (int) $productId,
@@ -94,6 +113,9 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
             'price' => $price,
             'special' => $special,
             'specialText' => $specialText,
+
+            'material' => $material,
+            'dev' => $den,
         );
     }
 
