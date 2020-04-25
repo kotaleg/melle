@@ -16,7 +16,8 @@ mix.setPublicPath(path.join(CATALOG_JS_PATH, 'dist/'))
 mix.extract(['vue', 'vuex', 'axios', 'vue-router',
     'vue-recaptcha', 'v-tooltip', 'v-click-outside',
     'vue-notification', 'vue-js-modal', 'vue-select',
-    'vue-carousel', 'vue-slider-component', 'vue-rate-it'
+    'vue-carousel', 'vue-slider-component', 'vue-rate-it',
+    'algoliasearch', 'vue-instantsearch',
 ])
 
 // mix.options({

@@ -36,7 +36,7 @@
     "vue-router": "^3.0.2",
     "vue-select": "^2.5.1",
     "vue-simple-progress": "^1.1.0",
-    "vue-slider-component": "^2.8.6",
+    "vue-slider-component": "^3.1.2",
     "vue-sticky": "^3.3.4",
     "vue-sticky-directive": "^0.0.9",
     "vue-the-mask": "^0.11.1",
