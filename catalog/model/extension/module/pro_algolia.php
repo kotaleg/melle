@@ -35,8 +35,8 @@ class ModelExtensionModulePROAlgolia extends Model
     public function queueSaveProduct($productId)
     {
         return $this->addItemToQueue(
-            \pro_algolia\constant::PRODUCT, 
-            $productId, 
+            \pro_algolia\constant::PRODUCT,
+            $productId,
             \pro_algolia\constant::SAVE
         );
     }
@@ -44,8 +44,8 @@ class ModelExtensionModulePROAlgolia extends Model
     public function queueDeleteProduct($productId)
     {
         return $this->addItemToQueue(
-            \pro_algolia\constant::PRODUCT, 
-            $productId, 
+            \pro_algolia\constant::PRODUCT,
+            $productId,
             \pro_algolia\constant::DELETE
         );
     }
@@ -104,12 +104,11 @@ class ModelExtensionModulePROAlgolia extends Model
             foreach ($this->operationTypes as $operationType) {
 
                 $preparedData = array();
-                $queueItemsIds = array();
 
                 foreach ($this->getNext($operationType, $this->setting['batch_size']) as $next) {
                     try {
                         $itemData = $this->prepareDataForItem($next['storeItemType'], $next['storeItemId']);
-    
+
                         if ($itemData && isset($itemData['objectID'])) {
 
                             $itemDataHash = $this->hashItemData($itemData);
@@ -118,12 +117,13 @@ class ModelExtensionModulePROAlgolia extends Model
                                 $preparedData[$itemData['objectID']] = $itemData;
                             }
 
-                            $queueItemsIds[] = $next['_id'];
+                            // TODO: update queue status depend on the api call status
+                            $this->updateQueueStatus($next['_id'], pro_algolia\constant::SUCCESS);
                         } else {
                             $this->updateQueueStatus($next['_id'], pro_algolia\constant::ERROR);
                             $this->addToQueueLog(pro_algolia\constant::ERROR, 'Data for item is empty', $next['_id']);
                         }
-    
+
                         $workResult['processed']++;
                     } catch (Exception $e) {
                         $this->updateQueueStatus($next['_id'], pro_algolia\constant::ERROR);
@@ -152,11 +152,6 @@ class ModelExtensionModulePROAlgolia extends Model
 
                 if ($this->setting['debug']) {
                     $this->log("`{$operationType}` OPERATION RESULT".json_encode($resultBody));
-                }
-
-                // TODO: update queue status depend on the api call status
-                foreach ($queueItemsIds as $queueItemId) {
-                    $this->updateQueueStatus($queueItemId, pro_algolia\constant::SUCCESS);
                 }
 
                 if ($resultBody && is_array($resultBody)) {
@@ -191,7 +186,7 @@ class ModelExtensionModulePROAlgolia extends Model
                         }
                     }
                 }
-                
+
             }
 
         } catch (Exception $e) {
@@ -250,7 +245,7 @@ class ModelExtensionModulePROAlgolia extends Model
                 `status` = '" . $this->db->escape($status) . "',
                 `createDate` = NOW(),
                 `updateDate` = NOW()");
-        
+
         return $this->db->getLastId();
     }
 
