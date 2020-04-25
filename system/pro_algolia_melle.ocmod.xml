@@ -78,7 +78,7 @@
                         return $row['product_id'];
                     }, $disabledProducts);
 
-                    foreach ($enabledProducts as $product) {
+                    foreach ($disabledProducts as $product) {
                         $this->model_extension_module_pro_algolia->queueDeleteProduct($product['product_id']);
                     }
                 }
