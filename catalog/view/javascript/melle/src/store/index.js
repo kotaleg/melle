@@ -20,6 +20,7 @@ import review from './modules/product/review'
 // CATALOG
 import catalog from './modules/catalog/catalog'
 import filter from './modules/catalog/filter'
+import search from './modules/catalog/search'
 
 // CHECKOUT
 import checkoutrp from './modules/checkout/related'
@@ -55,6 +56,7 @@ export default new Vuex.Store({
         priceList,
         leadhit,
         slideshow,
+        search,
     },
     strict: debug,
 })
