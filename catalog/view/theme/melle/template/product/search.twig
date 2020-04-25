@@ -15,22 +15,27 @@
    </section>
 
    <section data-layout="col" class="search catalog">
-      <div class="search__container container">
+
+      <melle-search-wrapper></melle-search-wrapper>
+
+      {# <div class="search__container container">
+
+         <melle-search-wrapper></melle-search-wrapper>
 
          <div class="search__sidebar">
-            <melle-catalog-filter></melle-catalog-filter>
+            <melle-search-filter></melle-search-filter>
          </div>
 
-         <div class="search__content">
+         <div class="search__content"> 
             <melle-search-form></melle-search-form>
 
             {% if rcc %}
             <div id="rendered-catalog-content">{{rcc}}</div>
             {% endif %}
-            <melle-catalog-content></melle-catalog-content>
+            <melle-search-content></melle-search-content>
          </div>
 
-      </div>
+      </div> #}
    </section>
 </main>
 {{ footer }}
