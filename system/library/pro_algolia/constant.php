@@ -13,8 +13,13 @@ class constant
     /* TABLES END */
 
     /* STORE ITEM TYPE START */
-    const PRODUCT = 'PRODUCT';
+    const PRODUCT = 'product';
     /* STORE ITEM TYPE END */
+
+    /* OPERATIONS START */
+    const DELETE = 'delete';
+    const SAVE = 'save';
+    /* OPERATIONS END */
 
     /* STATUS HELPERS START */
     const ERROR = 'error';

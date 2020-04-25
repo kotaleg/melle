@@ -53,7 +53,7 @@
                         WHERE `status` = '". true ."'")->rows;
 
                     foreach ($enabledProducts as $product) {
-                        $this->model_extension_module_pro_algolia->addProductToQueue($product['product_id']);
+                        $this->model_extension_module_pro_algolia->queueSaveProduct($product['product_id']);
                     }
 
                     $disabledProducts = $this->db->query("SELECT `product_id`, `import_id`
@@ -64,7 +64,9 @@
                         return $row['product_id'];
                     }, $disabledProducts);
 
-                    //$this->model_extension_module_pro_algolia->deleteProductsFromIndex($disabledProducts);
+                    foreach ($enabledProducts as $product) {
+                        $this->model_extension_module_pro_algolia->queueDeleteProduct($product['product_id']);
+                    }
                 }
                 /* IVAN MOD END */
             ]]></add>

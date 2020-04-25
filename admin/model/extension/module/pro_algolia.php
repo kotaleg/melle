@@ -38,8 +38,8 @@ class ModelExtensionModulePROAlgolia extends Model
             `_id` int(11) NOT NULL AUTO_INCREMENT,
 
             `objectId` varchar(255) NOT NULL,
-            `storeItemId` int(11) NOT NULL,
-            `storeItemType` char(16) NOT NULL,
+            `objectDataHash` varchar(255) NOT NULL,
+            `status` char(16) NOT NULL,
 
             `createDate` datetime NOT NULL,
             `updateDate` datetime NOT NULL,
@@ -55,6 +55,7 @@ class ModelExtensionModulePROAlgolia extends Model
             `storeItemId` int(11) NOT NULL,
             `storeItemType` char(16) NOT NULL,
 
+            `operation` char(16) NOT NULL,
             `status` char(16) NOT NULL,
 
             `createDate` datetime NOT NULL,
@@ -92,4 +93,50 @@ class ModelExtensionModulePROAlgolia extends Model
         return HTTPS_CATALOG . "index.php?route={$this->route}";
     }
 
+    public function queueSaveProduct($productId)
+    {
+        return $this->addItemToQueue(
+            \pro_algolia\constant::PRODUCT, 
+            $productId, 
+            \pro_algolia\constant::SAVE
+        );
+    }
+
+    public function queueDeleteProduct($productId)
+    {
+        return $this->addItemToQueue(
+            \pro_algolia\constant::PRODUCT, 
+            $productId, 
+            \pro_algolia\constant::DELETE
+        );
+    }
+
+    private function addItemToQueue($itemType, $itemId, $operationType)
+    {
+        if ($this->isItemInQueue($itemType, $itemId, $operationType)) {
+            return;
+        }
+
+        $this->db->query("INSERT INTO `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE ."`
+            SET `storeItemId` = '". (int) $itemId ."',
+                `storeItemType` = '". $this->db->escape($itemType) ."',
+
+                `operation` = '". $this->db->escape($operationType) ."',
+                `status` = '". pro_algolia\constant::UNDEFINED ."',
+
+                `createDate` = NOW(),
+                `updateDate` = NOW()");
+
+        return $this->db->getLastId();
+    }
+
+    private function isItemInQueue($itemType, $itemId, $operationType)
+    {
+        return $this->db->query("SELECT *
+            FROM `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE . "`
+            WHERE `storeItemId` = '". (int) $itemId ."'
+            AND `storeItemType` = '". $this->db->escape($itemType) ."'
+            AND `operation` = '" . $this->db->escape($operationType) . "'
+            AND `status` = '" . pro_algolia\constant::UNDEFINED . "'")->row;
+    }
 }
