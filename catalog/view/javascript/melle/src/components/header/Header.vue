@@ -61,7 +61,7 @@
                            <ais-autocomplete>
                               <div slot-scope="{ currentRefinement, indices, refine }">
                                  <div class="search-bar-wrapper">
-                                    <form class="search-bar-form" v-on:submit.prevent="() => {} ">
+                                    <form class="search-bar-form" v-on:submit.prevent="searchAction(currentRefinement)">
                                        <div class="search-input-wrapper">
                                           <input
                                              type="text"
@@ -186,7 +186,12 @@ import FixedHeader from 'vue-fixed-header'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.min.css'
 import algoliasearch from 'algoliasearch/lite'
-import { AisInstantSearch, AisAutocomplete } from 'vue-instantsearch'
+import { 
+  AisInstantSearch, 
+  AisAutocomplete, 
+  AisHighlight, 
+  AisPoweredBy
+} from 'vue-instantsearch'
 
 import Sidebar from './Sidebar.vue'
 import Cart from './Cart.vue'
@@ -199,6 +204,10 @@ import Filter from './Filter.vue'
 
 export default {
     components: {
+        AisInstantSearch, 
+        AisAutocomplete, 
+        AisHighlight, 
+        AisPoweredBy,
         FixedHeader,
         Loading,
         'header-sidebar': Sidebar,
@@ -260,9 +269,9 @@ export default {
             'clearCartRequest',
         ]),
 
-        searchAction() {
+        searchAction(searchQuery) {
             let url = this.base + 'index.php?route=product/search'
-            url += '&search=' + encodeURIComponent(this.search);
+            url += '&query=' + encodeURIComponent(searchQuery);
             location = url;
         },
 
