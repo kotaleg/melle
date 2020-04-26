@@ -120,7 +120,13 @@ class ModelExtensionModulePROAlgolia extends Model
                         $itemData = $this->prepareDataForItem($next['storeItemType'], $next['storeItemId']);
 
                         if ($itemObjectID) {
-                            // TODO: check for the data to be not empty on SAVE
+
+                            if (!is_array($itemData)) {
+                                $itemData = array();
+                                $this->addToQueueLog(pro_algolia\constant::UNDEFINED, '`itemData` is empty', $next['_id']);
+                            }
+                            $itemData['objectID'] = $itemObjectID;
+
                             $itemDataHash = $this->hashItemData($itemData);
 
                             if (!$this->getIndexObject($itemObjectID, $itemDataHash, $operationType)) {
