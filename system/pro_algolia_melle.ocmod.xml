@@ -27,6 +27,15 @@
             ]]></add>
         </operation>
 
+        <operation error="skip">
+            <search><![CDATA[return $this->model_extension_module_pro_algolia_product->getId($itemId);]]></search>
+            <add position="replace"><![CDATA[
+                /* IVAN MOD START */
+                return $this->model_extension_module_pro_algolia_product_melle->getId($itemId);
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
     </file>
 
     <file path="catalog/controller/extension/module/melle.php">
