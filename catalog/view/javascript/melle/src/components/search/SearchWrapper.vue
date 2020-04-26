@@ -206,72 +206,61 @@
         </div>
       </div>
 
-      <!-- <ais-sort-by
-          :items="[
-            { value: 'instant_search', label: 'Наименованию' },
-            { value: 'instant_search_price_asc', label: 'Цене (сначала дешевые)' },
-            { value: 'instant_search_price_desc', label: 'Цене (сначала дорогие)' },
-          ]"
-        >
-          <ul slot-scope="{ items, currentRefinement, refine }">
-            <li v-for="item in items" :key="item.value" :value="item.value">
-              <a
-                href="#"
-                :style="{ fontWeight: item.value === currentRefinement ? 'bold' : '' }"
-                @click.prevent="refine(item.value)"
-              >
-                {{ item.label }}
-              </a>
-            </li>
-          </ul>
-        </ais-sort-by> -->
-
       <div class="catalog_list_view search-hits-wrapper">
-        <ais-hits :escapeHTML="false">
+        <ais-hits :escapeHTML="false" :transform-items="transformItems">
           <ul slot-scope="{ items }" class="catalog__list">
             <li
               v-for="item in items"
               :key="item.objectID"
               class="catalog__item"
             >
-              <a
-                :href="formatProductHref(item.productId)"
-                class="catalog__item-link"
-              >
+              <a :href="item.href" class="catalog__item-link">
                 <img :src="item.image" :alt="item.h1" />
               </a>
 
-              <div v-if="item.specialText" class="catalog__item-price super-div" style="top: 0px;">
-                <span class="catalog__item-price-default super-text" style="font-size: 0.79vw;">{{ item.specialText }}</span>
+              <div
+                v-if="item.specialText"
+                class="catalog__item-price super-div"
+                style="top: 0px;"
+              >
+                <span
+                  class="catalog__item-price-default super-text"
+                  style="font-size: 0.79vw;"
+                  >{{ item.specialText }}</span
+                >
               </div>
 
               <div class="catalog__item-ivaninfo">
                 <div class="row">
                   <div class="col-xs-12">
                     <h3 class="ivanitemtitle">
-                      <a :href="formatProductHref(item.productId)">{{
-                        item.h1
-                      }}</a>
+                      <a :href="item.href">{{ item.h1 }}</a>
                     </h3>
                   </div>
                   <div class="col-xs-7">
-                    <span v-if="isSpecial(item.special)" class="catalog__item-price-old"> {{ item.price }} <span class="ruble-sign">Р</span></span>
+                    <span v-if="item.isSpecial" class="catalog__item-price-old">
+                      {{ item.price }} <span class="ruble-sign">Р</span></span
+                    >
 
-                    <span v-if="isSpecial(item.special)" class="catalog__item-price-default">
-                      {{item.special}}
-                      <span v-if="isZvezdochka(item.specialText)" class="ruble-container"><span class="ruble-sign">Р</span><span class="ruble-zvezdochka">*</span></span>
+                    <span
+                      v-if="item.isSpecial"
+                      class="catalog__item-price-default"
+                    >
+                      {{ item.special }}
+                      <span v-if="item.isZvezdochka" class="ruble-container"
+                        ><span class="ruble-sign">Р</span
+                        ><span class="ruble-zvezdochka">*</span></span
+                      >
                       <span v-else class="ruble-sign">Р</span>
                     </span>
 
-                    <span v-else class="catalog__item-price-default"> {{ item.price }} <span class="ruble-sign">Р</span></span>
+                    <span v-else class="catalog__item-price-default">
+                      {{ item.price }} <span class="ruble-sign">Р</span></span
+                    >
                   </div>
                   <div class="col-xs-5">
                     <div>
-                      <a
-                        :href="formatProductHref(item.productId)"
-                        class="ivanbuybutton"
-                        >Купить</a
-                      >
+                      <a :href="item.href" class="ivanbuybutton">Купить</a>
                     </div>
                   </div>
                 </div>
@@ -366,25 +355,29 @@ export default {
       }
       return false
     },
+    transformItems(items) {
+      return items.map((item) => ({
+        ...item,
+        href: this.formatProductHref(item.productId),
+        isSpecial: this.isSpecial(item.special),
+        isZvezdochka: this.isZvezdochka(item.specialText),
+      }))
+    },
   },
   data() {
     return {
       routing: {
         router: history({
           createURL({ qsModule, location, routeState }) {
-            const { origin, pathname, hash } = location;
-            const indexState = routeState || {};
-            
-            // TODO: implement updating value on product change
+            const { origin, pathname, hash } = location
+            const indexState = routeState || {}
+
+            // TODO: implement updating value on page change
             routeState.route = 'product/search'
-            
-            const queryString = qsModule.stringify(routeState);
 
-            if (!indexState.query) {
-              return `${origin}${pathname}${hash}`;
-            }
+            const queryString = qsModule.stringify(routeState)
 
-            return `${origin}${pathname}?${queryString}${hash}`;
+            return `${origin}${pathname}?${queryString}${hash}`
           },
         }),
         stateMapping: simple(),
