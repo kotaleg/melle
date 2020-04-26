@@ -161,6 +161,10 @@ class ModelExtensionModulePROAlgolia extends Model
                         break;
 
                     case \pro_algolia\constant::DELETE:
+                        $preparedData = array_map(function($item) {
+                            return $item['objectID'];
+                        }, $preparedData);
+
                         $result = $this->pro_algolia->deleteObjects($preparedData);
                         $resultBody = $result->getBody();
                         break;
