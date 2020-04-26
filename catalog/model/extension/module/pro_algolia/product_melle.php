@@ -53,7 +53,9 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         $manufacturer = utf8_strtolower($productData['manufacturer']);
 
         $manufacturerAltNames = array_map(function($row) {
-            return utf8_strtolower($row['altName']);
+            if (utf8_strlen($row['altName']) > 0) {
+                return utf8_strtolower($row['altName']);
+            }
         }, $this->getManufacturerAltNamesById($productData['manufacturer_id']));
 
         $productAltNames = $this->generateProductAltNames(
@@ -75,24 +77,28 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
             ->getSpecialText($productData['product_id'], true);
         /* SPECIAL TEXT START */
 
-        $material = '';
-        $den = 0;
+        /* NAME FOR PRINT START */
+        $this->load->model('extension/module/super_offers');
+        $productPrintNames = array();
+        $productCombinationNames = array();
 
-        $attributeGroups = $this->model_catalog_product
-            ->getProductAttributes($productData['product_id']);
+        $combinationsForProduct = $this->model_extension_module_super_offers
+            ->_getCombinationsForProduct($productData['product_id']);
 
-        foreach ($attributeGroups as $group) {
-            if (strcmp(trim(utf8_strtolower($group['name'])), utf8_strtolower('Атрибуты')) === 0) {
-                foreach ($group['attribute'] as $attr) {
-                    if (strcmp(trim(utf8_strtolower($attr['name'])), utf8_strtolower('Материал')) === 0) {
-                        $material = $attr['text'];
-                    }
-                    if (strcmp(trim(utf8_strtolower($attr['name'])), utf8_strtolower('Ден')) === 0) {
-                        $den = $attr['text'];
-                    }
-                }
+        foreach ($combinationsForProduct as $combinationForProduct) {
+            if (isset($combinationForProduct['product_code'])
+            && utf8_strlen($combinationForProduct['product_code']) > 0) {
+                $productCombinationNames[] = $combinationForProduct['product_code'];
+            }
+            if (isset($combinationForProduct['name_for_print'])
+            && utf8_strlen($combinationForProduct['name_for_print']) > 0) {
+                $productPrintNames[] = $combinationForProduct['name_for_print'];
             }
         }
+        /* NAME FOR PRINT END */
+
+        $material = $this->getAttributeValue($productData['product_id'], 'материал');
+        $den = $this->getAttributeValue($productData['product_id'], 'ден');
 
         return array(
             'objectID' => \pro_algolia\id::generateIdForProduct((int) $productId),
@@ -100,10 +106,13 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
             
             'name' => $productData['name'],
             'h1' => $h1,
+            'productAltNames' => $productAltNames,
+            'productCombinationNames' => $productCombinationNames,
+            'productPrintNames' => $productPrintNames,
+
             'description' => html_entity_decode($productData['description'], ENT_QUOTES, 'UTF-8'),
             'smallDescription' => html_entity_decode($smallDescription, ENT_QUOTES, 'UTF-8'),
             'extraDescription' => html_entity_decode($extraDescription, ENT_QUOTES, 'UTF-8'),
-            'productAltNames' => $productAltNames,
 
             'manufacturer' => $manufacturer,
             'manufacturerAltNames' => $manufacturerAltNames,
@@ -138,6 +147,25 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         }
 
         return $productAltNames;
+    }
+
+    private function getAttributeValue($productId, $attributeName)
+    {
+        $this->load->model('catalog/product');
+        $attributeGroups = $this->model_catalog_product
+            ->getProductAttributes($productId);
+
+        foreach ($attributeGroups as $group) {
+            if (strcmp(trim(utf8_strtolower($group['name'])), utf8_strtolower('Атрибуты')) === 0) {
+                foreach ($group['attribute'] as $attr) {
+                    if (strcmp(trim(utf8_strtolower($attr['name'])), utf8_strtolower($attributeName)) === 0) {
+                        return $attr['text'];
+                    }
+                }
+            }
+        }
+
+        return '';
     }
 
     private function getPrice($price)
