@@ -355,6 +355,7 @@ class ControllerExtensionModuleMelle extends Controller
         // VARIABLE
         $state['id'] = "{$this->codename}_search";
 
+        $state['pageRoute'] = 'product/search';
         $state['searchQuery'] = '';
         $state['productLinkPlaceholder'] = $this->model_extension_pro_patch_url->ajax('product/product', '&product_id=', true);
 
