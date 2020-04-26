@@ -21,10 +21,14 @@ class ModelExtensionModulePROAlgoliaProduct extends Model
         return $this->localCodename;
     }
 
+    public function getId($productId)
+    {
+        return \pro_algolia\id::generateIdForProduct((int) $productId);
+    }
+
     public function prepareData($productId)
     {
         return array(
-            'objectID' => \pro_algolia\id::generateIdForProduct($productId),
             'productId' => (int) $productId,
         );
     }

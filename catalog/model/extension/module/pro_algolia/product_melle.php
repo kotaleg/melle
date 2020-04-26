@@ -22,6 +22,11 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         return $this->localCodename;
     }
 
+    public function getId($productId)
+    {
+        return \pro_algolia\id::generateIdForProduct((int) $productId);
+    }
+
     public function prepareData($productId)
     {
         $productData = $this->model_catalog_product->getProduct($productId);
@@ -35,9 +40,9 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
             $productData['image'] = 'no_image.png';
         }
         $image = $this->model_tool_image->resize(
-            $productData['image'], 
-            $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), 
-            $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), 
+            $productData['image'],
+            $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'),
+            $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'),
             true
         );
 
@@ -101,9 +106,8 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         $den = $this->getAttributeValue($productData['product_id'], 'ден');
 
         return array(
-            'objectID' => \pro_algolia\id::generateIdForProduct((int) $productId),
             'productId' => (int) $productId,
-            
+
             'name' => $productData['name'],
             'h1' => $h1,
             'productAltNames' => $productAltNames,

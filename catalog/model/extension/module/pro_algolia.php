@@ -116,21 +116,22 @@ class ModelExtensionModulePROAlgolia extends Model
 
                 foreach ($this->getNext($operationType, $this->setting['batch_size']) as $next) {
                     try {
+                        $itemObjectID = $this->getIDForItem($next['storeItemType'], $next['storeItemId']);
                         $itemData = $this->prepareDataForItem($next['storeItemType'], $next['storeItemId']);
 
-                        if ($itemData && isset($itemData['objectID'])) {
-
+                        if ($itemObjectID) {
+                            // TODO: check for the data to be not empty on SAVE
                             $itemDataHash = $this->hashItemData($itemData);
 
-                            if (!$this->getIndexObject($itemData['objectID'], $itemDataHash, $operationType)) {
-                                $preparedData[$itemData['objectID']] = $itemData;
+                            if (!$this->getIndexObject($itemObjectID, $itemDataHash, $operationType)) {
+                                $preparedData[$itemObjectID] = $itemData;
                             }
 
                             // TODO: update queue status depend on the api call status
                             $this->updateQueueStatus($next['_id'], pro_algolia\constant::SUCCESS);
                         } else {
                             $this->updateQueueStatus($next['_id'], pro_algolia\constant::ERROR);
-                            $this->addToQueueLog(pro_algolia\constant::ERROR, 'Data for item is empty', $next['_id']);
+                            $this->addToQueueLog(pro_algolia\constant::ERROR, '`objectID` is empty', $next['_id']);
                         }
 
                         $workResult['processed']++;
@@ -212,6 +213,16 @@ class ModelExtensionModulePROAlgolia extends Model
             WHERE `status` = '" . pro_algolia\constant::UNDEFINED . "'
             AND `operation` = '". $this->db->escape($operationType) ."'
             LIMIT ". (int)$limit)->rows;
+    }
+
+    private function getIDForItem($itemType, $itemId)
+    {
+        switch ($itemType) {
+            case \pro_algolia\constant::PRODUCT:
+                $this->load->model("{$this->route}/product");
+                return $this->model_extension_module_pro_algolia_product->getId($itemId);
+                break;
+        }
     }
 
     private function prepareDataForItem($itemType, $itemId)
