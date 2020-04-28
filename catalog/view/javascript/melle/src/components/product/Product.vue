@@ -2,6 +2,7 @@
   <form class="add-to-cart form-vertical" id="yw3" method="post">
     <div
       v-for="(o, o_key) in options"
+      :key="`option-${o_key}`"
       :class="['prod-card__form-group', `prod-card__form-group--${o.class}`]"
       v-if="o.type === 'radio'"
     >
@@ -10,6 +11,7 @@
         <div :id="[`ivan-js-${o.class}-list`]" :class="[o.class]">
           <label
             v-for="(ov, ov_key) in o.product_option_value"
+            :key="`option-value-${ov_key}`"
             :class="['radio-inline', `ivan-${o.class}-radio`]"
           >
             <div :class="[{ krestik: ov.disabled_by_selection }]">
