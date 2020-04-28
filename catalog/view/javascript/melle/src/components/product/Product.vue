@@ -150,7 +150,7 @@
       >
         <div>
           <div
-            @click="enableElement('cart')"
+            @click="goToCheckout()"
             class="btn dynamic-add-button dynamic-add-button__count"
           >
             в корзине
@@ -208,6 +208,7 @@ export default {
       'getOptionsForCart',
     ]),
     ...mapState('cart', {
+      'checkoutLink': 'checkout_link',
       cartProducts: 'products',
     }),
     ...mapState('product', [
@@ -282,6 +283,9 @@ export default {
     },
     buyOneClick() {
       this.$modal.show('one-click-modal', {})
+    },
+    goToCheckout() {
+      window.location = this.checkoutLink
     },
   },
   created() {
