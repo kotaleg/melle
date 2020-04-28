@@ -113,7 +113,8 @@
         <div class="prod-card__form-group prod-card__form-group--rating">
           <div class="star-rating star-rating--span">
             <span
-              v-for="r in getRating"
+              v-for="(r, rKey) in getRating"
+              :key="`rating-${rKey}`"
               :class="[
                 'fa',
                 'fa-lg',
