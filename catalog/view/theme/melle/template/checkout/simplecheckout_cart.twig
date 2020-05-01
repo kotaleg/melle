@@ -12,6 +12,65 @@
 <div class="basket-orders">
    <div class="basket-orders__container ">
       <div class="basket-orders__table-wrap">
+         <table class="basket-orders__table-mobile">
+            <tbody>
+               {% for product in products %}
+                  <tr>
+                     <td class="basket-orders__image-column">
+                        {% if product['thumb'] %}
+                        <a href="{{ product['href'] }}">
+                           <div class="basket-orders__photo"><img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}" class="img-responsive"></div>
+                        </a>
+                        {% endif %}
+                     </td>
+                     <td class="basket-orders__name-column quantity">
+                        <div class="basket-orders__title">
+                           <a href="{{ product['href'] }}">
+                              <h3>{{ product['name'] }}</h3>
+                           </a>
+                        </div>
+                        {% if product['manufacturer'] %}
+                        <div class="basket-orders__article"><span>производитель: </span><span>{{product['manufacturer']}}</span></div>
+                        {% endif %}
+
+                        {% if not product['stock'] and (config_stock_warning or not config_stock_checkout) %}
+                        <div class="basket-orders__article">
+                           <span class="product-warning">***</span>
+                        </div>
+                        {% endif %}
+
+                        <div class="basket-orders__size">
+                           <div class="options">
+                              {% for option in product['option'] %}
+                              <p>{{ option['name'] }}: {{ option['value'] }}</p>
+                              {% endfor %}
+                              {% if product['recurring'] is not empty %}
+                              <span>{{ text_payment_profile }}: {{ product['profile_name'] }}</span>
+                              {% endif %}
+                              {% if product['reward'] %}
+                              <span>{{ product['reward'] }}</span>
+                              {% endif %}
+                           </div>
+                        </div>
+
+                        <div class="basket-orders__count">
+                           <button class="item_minus" role="button" data-onclick="decreaseProductQuantity" data-toggle="tooltip"><span>-</span></button>
+                           <input type="text" class="item_col keyPressedNum" data-onchange="changeProductQuantity" {{ quantity_step_as_minimum ? 'onfocus="$(this).blur()" data-minimum="' ~ product['minimum'] ~ '"' : '' }} name="quantity[{{ product['cart_id'] is not empty ? product['cart_id'] : product['key'] }}]" value="{{ product['quantity'] }}">
+                           <button class="item_plus" role="button" data-onclick="increaseProductQuantity" data-toggle="tooltip"><span>+</span></button>
+                        </div>
+                     </td>
+                     <td class="basket-orders__total-column">
+                        <div class="basket-orders__price">
+                           <span class="basket-orders__price-default">
+                              {{ product['total'] }} <span class="ruble-sign">Р</span>
+                           </span>
+                        </div>
+                     </td>
+                  </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+
          <table class="basket-orders__table">
             <thead>
                <tr>
@@ -107,8 +166,38 @@
             </tbody>
          </table>
       </div>
-      <div class="basket-orders__footer">
 
+      <div class="basket-orders__footer-mobile">
+         {% if modules['coupon'] is defined %}
+         <div class="basket-orders__discount">
+            <div class="form-vertical" id="PromoForm" style="display: flex;">
+               <input class="basket-orders__discount-input" placeholder="Введите промокод" id="PromoForm_promo" type="text" name="coupon" value="{{ coupon }}" style="margin-right: 10px;">
+               <input value="Применить" class="basket-orders__discount-send" data-onclick="reloadAll" style="text-align: center;">
+            </div>
+         </div>
+         {% endif %}
+
+         <div class="basket-orders__totals-mobile">
+            {% for total in totals %}
+               <div id="total_{{ total['code'] }}" class="total-item {% if loop.last %}total-item_last{% endif %}">
+                  <div>{{ total['title'] }}:</div>
+                  <div>{{ total['text'] }} <span class="ruble-sign">Р</span></div>
+                  <span class="dotted-item"></span>
+               </div>
+            {% endfor %}
+         </div>
+
+         <div class="basket-orders__result-total">
+            {% for total in totals %}
+               {% if total['code'] == 'total' %}
+                  <span>К оплате:</span>
+                  <span class="total-price">{{ total['text'] }} <span class="ruble-sign">Р</span></span>
+               {% endif %}
+            {% endfor %}
+         </div>
+      </div>
+
+      <div class="basket-orders__footer">
          {% if modules['coupon'] is defined %}
          <div class="basket-orders__discount">
             <div class="form-vertical" id="PromoForm" style="display: flex;">
@@ -129,7 +218,6 @@
                {% endfor %}
             </div>
          </div>
-
       </div>
 
       <div class="basket-orders__buttons" data-ng-show="cart.products">

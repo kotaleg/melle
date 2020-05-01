@@ -29,13 +29,121 @@
     width: 100%;
     border-collapse: collapse;
     @include mobile {
-      width: 700px;
+      display: none;
     }
     &-wrap {
       @include mobile {
         overflow: auto;
       }
     }
+    &-mobile {
+      display: none;
+      margin-bottom: 20px;
+
+      @include mobile {
+        display: block;
+        tbody {
+          tr {
+            td {
+              
+            }
+          }
+        }
+
+        .basket-orders {
+          &__image-column {
+            vertical-align: top;
+            padding: 10px 0;
+          }
+          &__name-column {
+            vertical-align: top;
+            padding: 10px;
+            position: relative;
+          }
+          &__total-column {
+            vertical-align: middle;
+            min-width: 75px;
+            padding: 10px 0;
+          }
+
+          &__photo {
+            border: 1px #2b2a29 solid;
+            width: 80px;
+            height: 130px;
+          }
+
+          &__title {
+            h3 {
+              font-weight: 600;
+              font-size: 14px;
+            }
+          }
+          
+          &__price {
+            border: 1px #2b2a29 solid;
+            padding: 5px 2px;
+            text-align: right;
+            &-default {
+              
+            }
+          }
+
+          &__size {
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 5px;
+            p {
+              margin-bottom: 5px;
+            }
+          }
+
+          &__count {
+            position: absolute;
+            bottom: 10px;
+            display: inline-flex;
+
+            text-align: left;
+            border: 1px solid #2b2a29;
+            width: 85px;
+            margin: auto;
+            color: #6d6b6a;
+            background-color: white;
+            font-size: 12px;
+
+            .catalog__item-count_label {
+              color: #807f7d;
+              .ng-binding {
+                color: #2b2a29;
+              }
+            }
+            & > button {
+              display: block!important;
+              width: 19px;
+              height: 30px;
+              text-align: center;
+              color: #6d6b6a;
+              border: 0;
+              background-color: transparent;
+              font-size: 18px;
+              font-weight: bold;
+              padding: 0;
+              &:hover {
+                cursor: pointer;
+              }
+            }
+            & > input {
+              width: 46px;
+              text-align: center;
+              color: black;
+              border: 0;
+              background-color: transparent;
+              font-size: 20px;
+            }
+          }
+        }
+      }
+    }
+
     thead {
       th {
         height: 50px;
@@ -213,6 +321,7 @@
       }
     }
   }
+
   &__footer {
     border: 1px solid black;
     display: flex;
@@ -222,10 +331,80 @@
     padding: 30px 40px;
     background: white;
     @include mobile {
-      flex-direction: column;
-      padding: 30px 10px;
+      display: none;
+    }
+
+    &-mobile {
+      display: none;
+      @include mobile {
+        display: block;
+      }
     }
   }
+  &__totals {
+    &-mobile {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-wrap: nowrap;
+      font-size: 16px;
+      margin-bottom: 10px;
+
+      .total-item {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: baseline;
+        width: 100%;
+        position: relative;
+
+        & > div {
+          z-index: 100;
+          background: #fff;
+          padding: 4px;
+        }
+
+        .dotted-item {
+          content: '';
+          position: absolute;
+          border-bottom: 2px #000 solid;
+          border-style: dotted;
+          bottom: 8px;
+          height: 3px;
+          width: inherit;
+          z-index: 50;
+        }
+
+        &_last {
+          color: red;
+          .dotted-item {
+            border-color: red;
+          }
+        }
+      }
+
+      #total_shipping {
+        text-align: inherit;
+        span {
+          width: 100%;
+          display: inline;
+        }
+      }
+    }
+  }
+  &__result-total {
+    text-align: right;
+    margin-bottom: 10px;
+    font-size: 25px;
+    font-weight: 600;
+    .total-price {
+      color: red;
+    }
+  }
+
   &__discount {
     position: relative;
     @include mobile {
