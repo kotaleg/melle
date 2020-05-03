@@ -64,6 +64,7 @@
             vertical-align: middle;
             min-width: 75px;
             padding: 10px 0;
+            position: relative;
           }
 
           &__photo {
@@ -139,6 +140,12 @@
               background-color: transparent;
               font-size: 20px;
             }
+          }
+
+          &__del {
+            position: absolute;
+            right: 0;
+            top: 10px;
           }
         }
       }
