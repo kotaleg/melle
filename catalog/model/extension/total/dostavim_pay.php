@@ -159,7 +159,7 @@ if ($this->config->get($this->extension.'_inactive_'.$valuetype)) {
 						
 				if ($add_name) $info[] = $this->session->data['payment_method']['title'];
 				
-				if ($info) $title .= " за способ оплаты: ".implode(", ", $info)."";
+				if ($info) $title .= " на доставку: ".implode(", ", $info)."";
 			}
 			
 
