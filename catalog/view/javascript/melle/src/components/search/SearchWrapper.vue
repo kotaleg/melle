@@ -203,6 +203,7 @@
               </span>
             </ais-stats>
           </div>
+          <ais-powered-by />
         </div>
       </div>
 
@@ -294,6 +295,7 @@ import {
   AisStats,
   AisRangeInput,
   AisPagination,
+  AisPoweredBy,
 } from 'vue-instantsearch'
 
 export default {
@@ -308,6 +310,7 @@ export default {
     AisStats,
     AisRangeInput,
     AisPagination,
+    AisPoweredBy,
   },
   computed: {
     ...mapState('search', ['searchQuery', 'productLinkPlaceholder']),

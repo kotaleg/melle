@@ -658,6 +658,7 @@ header.vue-fixed-header--isFixed {
   margin-bottom: 10px;
   .ais-SearchBox {
     height: 40px;
+    margin-bottom: 5px;
     .ais-SearchBox-form {
       height: inherit;
       input {
@@ -672,7 +673,7 @@ header.vue-fixed-header--isFixed {
         -webkit-appearance: none;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         background: transparent;
-        width: calc(80% - 0.5px);
+        width: calc(100% - 0.5px);
         border-radius: 3px;
         border: 1px solid #000;
         box-sizing: border-box;
@@ -685,8 +686,19 @@ header.vue-fixed-header--isFixed {
       button {
         height: 100%;
       }
+
+      .ais-SearchBox-submit {
+        display: none;
+      }
+      .ais-SearchBox-reset {
+        display: none;
+      }
     }
   }
+
+  // .ais-PoweredBy {
+  //   text-align: right;
+  // }
 }
 
 /* Pagination */
