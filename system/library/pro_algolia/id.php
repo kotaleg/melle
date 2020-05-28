@@ -7,7 +7,7 @@ class id
 {
     public static function generateId($data)
     {
-        return hash('sha256', $data);
+        return hash('md5', $data);
     }
 
     public static function generateIdForProduct($productId)
