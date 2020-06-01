@@ -58,4 +58,13 @@ class pro_algolia
 
         return $this->index->deleteObjects($objects);
     }
+
+    public function getObjects($objectsIds, $options = array())
+    {
+        if (!$this->index) {
+            return null;
+        }
+
+        return $this->index->deleteObjects($objectsIds, $options);
+    }
 }

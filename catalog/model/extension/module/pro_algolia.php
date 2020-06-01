@@ -167,6 +167,22 @@ class ModelExtensionModulePROAlgolia extends Model
                             return $item['objectID'];
                         }, $preparedData);
 
+                        // check if objects exist in the index START
+                        $checkResult = $this->pro_algolia->getObjects($preparedData);
+                        $checkResultBody = $checkResult->getBody();
+                        $checkResultIds = $this->getObjectIdsFromResposeBody($checkResultBody);
+
+                        foreach ($checkResultIds as $checkObjectID) {
+                            if (isset($preparedData[$checkObjectID])) {
+                                unset($preparedData[$checkObjectID]);
+                            }
+                        }
+                        // check if objects exist in the index END
+
+                        if (!$preparedData) {
+                            continue;
+                        }
+
                         $result = $this->pro_algolia->deleteObjects($preparedData);
                         $resultBody = $result->getBody();
                         break;
@@ -176,36 +192,33 @@ class ModelExtensionModulePROAlgolia extends Model
                     $this->log("`{$operationType}` OPERATION RESULT".json_encode($resultBody));
                 }
 
-                if ($resultBody && is_array($resultBody)) {
-                    foreach ($resultBody as $resultBatch) {
-                        if (isset($resultBatch['objectIDs']) && is_array($resultBatch['objectIDs'])) {
-                            foreach ($resultBatch['objectIDs'] as $resultObjectID) {
+                if (isset($resultBody)) {
+                    $resultIds = $this->getObjectIdsFromResposeBody($resultBody);
+                    foreach ($resultIds as $resultObjectID) {
 
-                                if (isset($preparedData[$resultObjectID])) {
-                                    $resultObjectHash = $this->hashItemData($preparedData[$resultObjectID]);
-                                } else {
-                                    continue;
-                                }
-
-                                if ($this->getIndexObject($resultObjectID)) {
-                                    $this->updateIndexObjectDataHash(
-                                        $resultObjectID,
-                                        $resultObjectHash
-                                    );
-                                    $this->updateIndexObjectStatus(
-                                        $resultObjectID,
-                                        $operationType
-                                    );
-                                } else {
-                                    $this->setIndexObject(
-                                        $resultObjectID,
-                                        $resultObjectHash,
-                                        $operationType
-                                    );
-                                }
-
-                            }
+                        if (isset($preparedData[$resultObjectID])) {
+                            $resultObjectHash = $this->hashItemData($preparedData[$resultObjectID]);
+                        } else {
+                            continue;
                         }
+
+                        if ($this->getIndexObject($resultObjectID)) {
+                            $this->updateIndexObjectDataHash(
+                                $resultObjectID,
+                                $resultObjectHash
+                            );
+                            $this->updateIndexObjectStatus(
+                                $resultObjectID,
+                                $operationType
+                            );
+                        } else {
+                            $this->setIndexObject(
+                                $resultObjectID,
+                                $resultObjectHash,
+                                $operationType
+                            );
+                        }
+
                     }
                 }
 
@@ -216,6 +229,21 @@ class ModelExtensionModulePROAlgolia extends Model
         }
 
         return $workResult;
+    }
+
+    private function getObjectIdsFromResposeBody($resultBody)
+    {
+        $objectIDs = array();
+        if ($resultBody && is_array($resultBody)) {
+            foreach ($resultBody as $resultBatch) {
+                if (isset($resultBatch['objectIDs']) && is_array($resultBatch['objectIDs'])) {
+                    foreach ($resultBatch['objectIDs'] as $resultObjectID) {
+                        $objectIDs[] = $resultObjectID;
+                    }
+                }
+            }
+        }
+        return $objectIDs;
     }
 
     private function getNext($operationType, $limit)
