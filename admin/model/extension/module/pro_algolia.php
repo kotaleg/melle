@@ -39,7 +39,7 @@ class ModelExtensionModulePROAlgolia extends Model
 
             `objectId` varchar(255) NOT NULL,
             `objectDataHash` varchar(255) NOT NULL,
-            `status` char(16) NOT NULL,
+            `status` varchar(16) NOT NULL,
 
             `createDate` datetime NOT NULL,
             `updateDate` datetime NOT NULL,
@@ -53,10 +53,10 @@ class ModelExtensionModulePROAlgolia extends Model
             `_id` int(11) NOT NULL AUTO_INCREMENT,
 
             `storeItemId` int(11) NOT NULL,
-            `storeItemType` char(16) NOT NULL,
+            `storeItemType` varchar(16) NOT NULL,
 
-            `operation` char(16) NOT NULL,
-            `status` char(16) NOT NULL,
+            `operation` varchar(16) NOT NULL,
+            `status` varchar(16) NOT NULL,
 
             `createDate` datetime NOT NULL,
             `updateDate` datetime NOT NULL,
@@ -78,7 +78,7 @@ class ModelExtensionModulePROAlgolia extends Model
 
     public function dropTables()
     {
-        // $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . \pro_algolia\constant::INDEX_OBJECT_TABLE ."`");
+        $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . \pro_algolia\constant::INDEX_OBJECT_TABLE ."`");
         $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . \pro_algolia\constant::QUEUE_TABLE ."`");
         $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . \pro_algolia\constant::QUEUE_LOG_TABLE ."`");
     }

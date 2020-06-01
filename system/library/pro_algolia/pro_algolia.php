@@ -58,5 +58,4 @@ class pro_algolia
 
         return $this->index->deleteObjects($objects);
     }
-
 }

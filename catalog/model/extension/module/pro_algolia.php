@@ -114,7 +114,9 @@ class ModelExtensionModulePROAlgolia extends Model
 
                 $preparedData = array();
 
-                foreach ($this->getNext($operationType, $this->setting['batch_size']) as $next) {
+                $nextItems = $this->getNext($operationType, $this->setting['batch_size']);
+
+                foreach ($nextItems as $next) {
                     try {
                         $itemObjectID = $this->getIDForItem($next['storeItemType'], $next['storeItemId']);
                         $itemData = $this->prepareDataForItem($next['storeItemType'], $next['storeItemId']);
@@ -283,7 +285,7 @@ class ModelExtensionModulePROAlgolia extends Model
     {
         return $this->db->query("DELETE
             FROM `". DB_PREFIX . pro_algolia\constant::INDEX_OBJECT_TABLE . "`
-            WHERE `objectId` = '" . (int) $objectId . "'");
+            WHERE `objectId` = '" . $this->db->escape($objectId) . "'");
     }
 
     private function updateIndexObjectDataHash($objectId, $objectDataHash)
@@ -292,7 +294,7 @@ class ModelExtensionModulePROAlgolia extends Model
             `". DB_PREFIX . pro_algolia\constant::INDEX_OBJECT_TABLE . "`
             SET `objectDataHash` = '" . $this->db->escape($objectDataHash) . "',
                 `updateDate` = NOW()
-            WHERE `objectId` = '" . (int) $objectId . "'");
+            WHERE `objectId` = '" . $this->db->escape($objectId) . "'");
     }
 
     private function updateIndexObjectStatus($objectId, $status)
@@ -301,6 +303,6 @@ class ModelExtensionModulePROAlgolia extends Model
             `". DB_PREFIX . pro_algolia\constant::INDEX_OBJECT_TABLE . "`
             SET `status` = '" . $this->db->escape($status) . "',
                 `updateDate` = NOW()
-            WHERE `objectId` = '" . (int) $objectId . "'");
+            WHERE `objectId` = '" . $this->db->escape($objectId) . "'");
     }
 }

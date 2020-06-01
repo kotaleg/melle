@@ -15,6 +15,7 @@ class id
         if (!$productId) {
             return null;
         }
+
         return self::generateId(constant::PRODUCT.'-'.$productId);
     }
 }
