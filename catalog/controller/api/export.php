@@ -43,7 +43,7 @@ class ControllerApiExport extends Controller
                 // SAVE PROGRESS AND LOG ACTION
                 $this->load->model('api/import_1c/progress');
                 $this->model_api_import_1c_progress->_init(
-                    $this->request->get['api_token'], array(
+                    $this->request->get['key'], array(
                         'type'  => $type,
                         'mode'  => $mode,
                         'filename'  => $filename,
