@@ -70,21 +70,12 @@
                 private function reindexProducts()
                 {
                     $this->load->model("extension/module/pro_algolia");
-                    
+
                     $enabledProducts = $this->db->query("SELECT `product_id`, `import_id`
-                        FROM `". DB_PREFIX . "product`
-                        WHERE `status` = '". true ."'")->rows;
+                        FROM `". DB_PREFIX . "product`")->rows;
 
                     foreach ($enabledProducts as $product) {
                         $this->model_extension_module_pro_algolia->queueSaveProduct($product['product_id']);
-                    }
-
-                    $disabledProducts = $this->db->query("SELECT `product_id`, `import_id`
-                        FROM `". DB_PREFIX . "product`
-                        WHERE `status` = '". false ."'")->rows;
-
-                    foreach ($disabledProducts as $product) {
-                        $this->model_extension_module_pro_algolia->queueDeleteProduct($product['product_id']);
                     }
                 }
                 /* IVAN MOD END */
