@@ -115,6 +115,7 @@ class ModelExtensionModulePROAlgolia extends Model
                 $preparedData = array();
 
                 $nextItems = $this->getNext($operationType, $this->setting['batch_size']);
+                $computedHashes = array();
 
                 foreach ($nextItems as $next) {
                     try {
@@ -125,11 +126,18 @@ class ModelExtensionModulePROAlgolia extends Model
 
                             if (!is_array($itemData)) {
                                 $itemData = array();
-                                $this->addToQueueLog(pro_algolia\constant::UNDEFINED, '`itemData` is empty', $next['_id']);
+
+                                if ($operationType === \pro_algolia\constant::SAVE) {
+                                    $this->addToQueueLog(pro_algolia\constant::UNDEFINED, '`itemData` is empty', $next['_id']);
+                                    // TODO: add item to remove queue
+                                }
                             }
                             $itemData['objectID'] = $itemObjectID;
 
                             $itemDataHash = $this->hashItemData($itemData);
+                            $computedHashes[$itemObjectID] = $itemDataHash;
+
+                            // $indexObjectLocal = $this->getIndexObject($itemObjectID);
 
                             if (!$this->getIndexObject($itemObjectID, $itemDataHash, $operationType)) {
                                 $preparedData[$itemObjectID] = $itemData;
@@ -174,7 +182,34 @@ class ModelExtensionModulePROAlgolia extends Model
 
                         foreach ($checkResultIds as $checkObjectID) {
                             if (isset($preparedData[$checkObjectID])) {
+
                                 unset($preparedData[$checkObjectID]);
+
+                                if (isset($computedHashes[$checkObjectID])) {
+                                    $checkObjectHash = $computedHashes[$checkObjectID];
+                                } else {
+                                    if ($this->setting['debug']) {
+                                        $this->log("`HASH DO NOT FOUND FOR `{$checkObjectID}`");
+                                    }
+                                    continue;
+                                }
+
+                                if ($this->getIndexObject($checkObjectID)) {
+                                    $this->updateIndexObjectDataHash(
+                                        $checkObjectID,
+                                        $checkObjectHash
+                                    );
+                                    $this->updateIndexObjectStatus(
+                                        $checkObjectID,
+                                        $operationType
+                                    );
+                                } else {
+                                    $this->setIndexObject(
+                                        $checkObjectID,
+                                        $checkObjectHash,
+                                        $operationType
+                                    );
+                                }
                             }
                         }
                         // check if objects exist in the index END
@@ -189,16 +224,20 @@ class ModelExtensionModulePROAlgolia extends Model
                 }
 
                 if ($this->setting['debug']) {
-                    $this->log("`{$operationType}` OPERATION RESULT".json_encode($resultBody));
+                    $operationResultJson = isset($resultBody) ? json_encode($resultBody) : null;
+                    $this->log("`{$operationType}` OPERATION RESULT {$operationResultJson}");
                 }
 
                 if (isset($resultBody)) {
                     $resultIds = $this->getObjectIdsFromResposeBody($resultBody);
                     foreach ($resultIds as $resultObjectID) {
 
-                        if (isset($preparedData[$resultObjectID])) {
-                            $resultObjectHash = $this->hashItemData($preparedData[$resultObjectID]);
+                        if (isset($computedHashes[$resultObjectID])) {
+                            $resultObjectHash = $computedHashes[$resultObjectID];
                         } else {
+                            if ($this->setting['debug']) {
+                                $this->log("`HASH DO NOT FOUND FOR `{$resultObjectID}`");
+                            }
                             continue;
                         }
 
