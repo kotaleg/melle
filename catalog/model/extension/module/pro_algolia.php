@@ -91,7 +91,8 @@ class ModelExtensionModulePROAlgolia extends Model
     private function updateQueueStatus($queueId, $status)
     {
         $this->db->query("UPDATE `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE ."`
-            SET `status` = '". $this->db->escape($status) ."'
+            SET `status` = '". $this->db->escape($status) ."',
+                `updateDate` = NOW()
             WHERE `_id` = '". (int) $queueId ."'");
     }
 
