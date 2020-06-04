@@ -109,6 +109,8 @@ class ModelExtensionModulePROAlgolia extends Model
     {
         $workResult['processed'] = 0;
 
+        $objectMaxSize = 10000;
+
         try {
 
             foreach ($this->operationTypes as $operationType) {
@@ -134,6 +136,18 @@ class ModelExtensionModulePROAlgolia extends Model
                                 }
                             }
                             $itemData['objectID'] = $itemObjectID;
+
+                            $itemDataBytesCount = $this->countBytesInItemData($itemData);
+                            if ($objectMaxSize && $itemDataBytesCount > $objectMaxSize) {
+                                $this->updateQueueStatus($next['_id'], pro_algolia\constant::ERROR);
+                                $this->addToQueueLog(
+                                    pro_algolia\constant::ERROR, 
+                                    "size {$itemDataBytesCount} is more then {$objectMaxSize}",
+                                    $next['_id']
+                                );
+                                // TODO: should we remove it from algolia index?
+                                continue;
+                            }
 
                             $itemDataHash = $this->hashItemData($itemData);
                             $computedHashes[$itemObjectID] = $itemDataHash;
@@ -318,6 +332,12 @@ class ModelExtensionModulePROAlgolia extends Model
     private function hashItemData($data)
     {
         return hash('sha256', json_encode($data));
+    }
+
+    private function countBytesInItemData($data)
+    {   
+        $json = json_encode($data);
+        return ini_get('mbstring.func_overload') ? mb_strlen($json , '8bit') : strlen($json);
     }
 
     private function getIndexObject($objectId, $objectDataHash = null, $status = null)
