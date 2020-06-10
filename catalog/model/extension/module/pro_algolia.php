@@ -38,6 +38,15 @@ class ModelExtensionModulePROAlgolia extends Model
         }
     }
 
+    public function getCredentials()
+    {
+        return array(
+            'appId' => (string) $this->setting['app_id'],
+            'searchApiKey' => (string) $this->setting['search_api_key'],
+            'indexName' => (string) $this->setting['index_name'],
+        );
+    }
+
     public function queueSaveProduct($productId)
     {
         return $this->addItemToQueue(
@@ -183,6 +192,7 @@ class ModelExtensionModulePROAlgolia extends Model
                         continue;
                     }
 
+                    pro_algolia\sort::sortRecurvice($itemData);
                     $preparedData[$itemObjectID] = $itemData;
 
                 } else {
@@ -210,7 +220,10 @@ class ModelExtensionModulePROAlgolia extends Model
 
             // check if objects exist in the index START
             try {
-                $getObjectsResult = $this->pro_algolia->getObjects($preparedItemObjectsIds);
+                $getObjectsResult = $this->pro_algolia->getObjects($preparedItemObjectsIds, [
+                    // we want all attributes to make the compare
+                    'attributesToRetrieve' => '*'
+                ]);
             } catch (\Exception $e) {
                 $this->log($e);
             }
@@ -237,6 +250,12 @@ class ModelExtensionModulePROAlgolia extends Model
                     }
 
                     $preparedItemData = $preparedData[$queueItem['objectID']];
+
+                    // re-sort values for better comparison
+                    pro_algolia\sort::sortRecurvice($preparedItemData);
+                    if ($resultValue && is_array($resultValue)) {
+                        pro_algolia\sort::sortRecurvice($resultValue);
+                    }
 
                     // hash both the store value and value from algolia to compare them
                     $itemDataHash = \pro_algolia\hash::hashItemData($preparedItemData);
