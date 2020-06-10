@@ -216,7 +216,7 @@ class ModelExtensionModuleSizeList extends Model
 
         $glue = 'WHERE';
 
-        if ($image_id !== null) {
+        if ($product_id !== null) {
             $sql .= " LEFT JOIN `". DB_PREFIX . self::PRODUCT_TABLE ."` dd ";
             $sql .= " ON(dd.image_id = m.image_id) ";
             $sql .= " WHERE dd.product_id = '" . (int)$product_id . "' ";
