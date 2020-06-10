@@ -377,14 +377,14 @@ $('[onclick^="cart.remove"]').on('click', function(){
 
   </file><file path="catalog/controller/product/category.php">
 
-    <operation error="skip" v="2.x" i="canonical">
+    <!-- <operation error="skip" v="2.x" i="canonical">
       <search position="before"><![CDATA[if ($page == 1) {]]></search>
       <add position="before"><![CDATA[
       if ($page > 1 AND $this->config->get('mlseo_pagination_canonical')) {
          $this->load->model('tool/path_manager'); $this->document->addLink($this->url->link('product/category', 'path=' . ($this->config->get('mlseo_fpp_cat_canonical') ? $this->model_tool_path_manager->getFullCategoryPath($category_info['category_id']) : $category_info['category_id']) . '&page='. $page, true), 'canonical');
       }
       ]]></add>
-    </operation>
+    </operation> -->
 
   </file><file path="catalog/controller/product/category.php">
 
@@ -2916,14 +2916,14 @@ $('[onclick^="cart.remove"]').on('click', function(){
 
   </file><file path="catalog/controller/product/manufacturer.php">
 
-    <operation error="skip" v="2.x" i="canonical">
+    <!-- <operation error="skip" v="2.x" i="canonical">
       <search position="before"><![CDATA[if ($page == 1) {]]></search>
       <add position="before"><![CDATA[
       if ($page > 1 AND $this->config->get('mlseo_pagination_canonical')) {
          $this->document->addLink($this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id']), 'canonical');
       }
       ]]></add>
-    </operation>
+    </operation> -->
 
   </file><file path="catalog/controller/product/manufacturer.php">
 
