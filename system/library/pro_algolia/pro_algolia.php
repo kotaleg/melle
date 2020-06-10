@@ -32,7 +32,7 @@ class pro_algolia
             return null;
         }
 
-        if (isset($this->setting['index_name']) 
+        if (isset($this->setting['index_name'])
         && $this->setting['index_name']) {
             $this->index = $this->client->initIndex($this->setting['index_name']);
             return true;
@@ -65,6 +65,21 @@ class pro_algolia
             return null;
         }
 
-        return $this->index->deleteObjects($objectsIds, $options);
+        return $this->index->getObjects($objectsIds, $options);
+    }
+
+    public static function getObjectIdsFromResposeBody($resultBody)
+    {
+        $objectIDs = array();
+        if ($resultBody && is_array($resultBody)) {
+            foreach ($resultBody as $resultBatch) {
+                if (isset($resultBatch['objectIDs']) && is_array($resultBatch['objectIDs'])) {
+                    foreach ($resultBatch['objectIDs'] as $resultObjectID) {
+                        $objectIDs[] = $resultObjectID;
+                    }
+                }
+            }
+        }
+        return $objectIDs;
     }
 }

@@ -25,20 +25,17 @@ class ModelExtensionModulePROAlgolia extends Model
             \pro_algolia\constant::SAVE,
             \pro_algolia\constant::DELETE,
         );
+
+        $this->storeItemTypes = array(
+            \pro_algolia\constant::PRODUCT,
+        );
     }
 
     private function log($message)
     {
-        $this->log->write(strtoupper($this->codename)." :: {$message}");
-    }
-
-    public function getCredentials()
-    {
-        return array(
-            'appId' => (string) $this->setting['app_id'],
-            'searchApiKey' => (string) $this->setting['search_api_key'],
-            'indexName' => (string) $this->setting['index_name'],
-        );
+        if (isset($this->setting['debug']) && $this->setting['debug']) {
+            $this->log->write(strtoupper($this->codename)." :: {$message}");
+        }
     }
 
     public function queueSaveProduct($productId)
@@ -82,7 +79,7 @@ class ModelExtensionModulePROAlgolia extends Model
     {
         return $this->db->query("SELECT *
             FROM `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE . "`
-            WHERE `storeItemId` = '". (int) $itemId ."'
+            WHERE `storeItemId` = '". $this->db->escape($itemId) ."'
             AND `storeItemType` = '". $this->db->escape($itemType) ."'
             AND `operation` = '" . $this->db->escape($operationType) . "'
             AND `status` = '" . pro_algolia\constant::UNDEFINED . "'")->row;
@@ -109,204 +106,281 @@ class ModelExtensionModulePROAlgolia extends Model
     {
         $workResult['processed'] = 0;
 
-        $objectMaxSize = 10000;
+        $objectMaxSize = (int) $this->setting['object_max_size'];
 
-        try {
+        $this->pro_algolia->initClient();
+        $this->pro_algolia->initIndex();
 
+        foreach ($this->storeItemTypes as $storeItemType) {
+            $nextItems = $this->getNext((int) $this->setting['batch_size'], null, $storeItemType);
+
+            $preparedData = array();
+            $computedHashes = array();
+
+            // prepare array of operations which would be processed
+            $operationsToProcess = array();
             foreach ($this->operationTypes as $operationType) {
+                $operationsToProcess[$operationType] = array();
+            }
 
-                $preparedData = array();
+            foreach ($nextItems as $nextItemKey => $next) {
+                $itemObjectID = $this->getIDForItem($next['storeItemType'], $next['storeItemId']);
+                $itemData = $this->prepareDataForItem($next['storeItemType'], $next['storeItemId']);
 
-                $nextItems = $this->getNext($operationType, $this->setting['batch_size']);
-                $computedHashes = array();
+                if ($itemObjectID) {
+                    // add objectID for better connection
+                    // betwen preparedData and queueItem
+                    $nextItems[$nextItemKey]['objectID'] = $itemObjectID;
 
-                foreach ($nextItems as $next) {
-                    try {
-                        $itemObjectID = $this->getIDForItem($next['storeItemType'], $next['storeItemId']);
-                        $itemData = $this->prepareDataForItem($next['storeItemType'], $next['storeItemId']);
+                    // if it's not an array
+                    // then we probably failed at the prepareDataForItem step
+                    if (!is_array($itemData)) {
+                        $itemData = array();
+                        if ($next['operation'] === \pro_algolia\constant::SAVE) {
+                            $this->addToQueueLog(
+                                pro_algolia\constant::UNDEFINED,
+                                '`itemData` is empty',
+                                $next['_id']
+                            );
 
-                        if ($itemObjectID) {
+                            $newQueueItemId = $this->addItemToQueue(
+                                $next['storeItemType'],
+                                $next['storeItemId'],
+                                \pro_algolia\constant::DELETE
+                            );
 
-                            if (!is_array($itemData)) {
-                                $itemData = array();
-
-                                if ($operationType === \pro_algolia\constant::SAVE) {
-                                    $this->addToQueueLog(pro_algolia\constant::UNDEFINED, '`itemData` is empty', $next['_id']);
-                                    // TODO: add item to remove queue
-                                }
-                            }
-                            $itemData['objectID'] = $itemObjectID;
-
-                            $itemDataBytesCount = $this->countBytesInItemData($itemData);
-                            if ($objectMaxSize && $itemDataBytesCount > $objectMaxSize) {
-                                $this->updateQueueStatus($next['_id'], pro_algolia\constant::ERROR);
+                            if ($newQueueItemId) {
                                 $this->addToQueueLog(
-                                    pro_algolia\constant::ERROR, 
-                                    "size {$itemDataBytesCount} is more then {$objectMaxSize}",
+                                    pro_algolia\constant::UNDEFINED,
+                                    "moved to -> {$newQueueItemId}",
                                     $next['_id']
                                 );
-                                // TODO: should we remove it from algolia index?
-                                continue;
                             }
 
-                            $itemDataHash = $this->hashItemData($itemData);
-                            $computedHashes[$itemObjectID] = $itemDataHash;
+                            $this->updateQueueStatus($next['_id'], pro_algolia\constant::MOVED);
 
-                            // $indexObjectLocal = $this->getIndexObject($itemObjectID);
-
-                            if (!$this->getIndexObject($itemObjectID, $itemDataHash, $operationType)) {
-                                $preparedData[$itemObjectID] = $itemData;
-                            }
-
-                            // TODO: update queue status depend on the api call status
-                            $this->updateQueueStatus($next['_id'], pro_algolia\constant::SUCCESS);
-                        } else {
-                            $this->updateQueueStatus($next['_id'], pro_algolia\constant::ERROR);
-                            $this->addToQueueLog(pro_algolia\constant::ERROR, '`objectID` is empty', $next['_id']);
+                            // item should not be processed right now
+                            unset($nextItems[$nextItemKey]);
+                            continue;
                         }
+                    }
 
-                        $workResult['processed']++;
-                    } catch (Exception $e) {
+                    // all objects require objectID
+                    $itemData['objectID'] = $itemObjectID;
+
+                    // algolia has a restriction on the object size
+                    // by default no more then 10KB
+                    $itemDataBytesCount = $this->countBytesInItemData($itemData);
+                    if ($objectMaxSize && $itemDataBytesCount > $objectMaxSize) {
                         $this->updateQueueStatus($next['_id'], pro_algolia\constant::ERROR);
-                        $this->addToQueueLog(pro_algolia\constant::ERROR, (string)$e, $next['_id']);
+                        $this->addToQueueLog(
+                            pro_algolia\constant::ERROR,
+                            "size {$itemDataBytesCount} is more then {$objectMaxSize}",
+                            $next['_id']
+                        );
+                        // TODO: should we remove it from algolia index?
+                        unset($nextItems[$nextItemKey]);
+                        continue;
+                    }
+
+                    $preparedData[$itemObjectID] = $itemData;
+
+                } else {
+                    $this->updateQueueStatus($next['_id'], pro_algolia\constant::ERROR);
+                    $this->addToQueueLog(pro_algolia\constant::ERROR, '`objectID` is empty', $next['_id']);
+                    // item doesn't have an objectId so we can't do anything
+                    unset($nextItems[$nextItemKey]);
+                }
+            }
+
+            // recreate the array indexes
+            // we require them because getObjects method
+            // return results in the exact order they were asked for
+            $nextItems = array_slice($nextItems, 0);
+
+            // for getObjects method we need only objectIds
+            $preparedItemObjectsIds = array_map(function($item) {
+                return $item['objectID'];
+            }, $nextItems);
+
+            // don't do anything if we don't have the items
+            if (!$preparedItemObjectsIds) {
+                continue;
+            }
+
+            // check if objects exist in the index START
+            try {
+                $getObjectsResult = $this->pro_algolia->getObjects($preparedItemObjectsIds);
+            } catch (\Exception $e) {
+                $this->log($e);
+            }
+
+            if (isset($getObjectsResult['results']) && is_array($getObjectsResult['results'])) {
+                // results returned in order they were requested
+
+                foreach ($getObjectsResult['results'] as $resultKey => $resultValue) {
+                    if (!isset($nextItems[$resultKey])) {
+                        // TODO: log error
+                        continue;
+                    }
+
+                    $queueItem = $nextItems[$resultKey];
+
+                    if (!isset($preparedData[$queueItem['objectID']])) {
+                        $this->updateQueueStatus($queueItem['_id'], pro_algolia\constant::ERROR);
+                        $this->addToQueueLog(
+                            pro_algolia\constant::UNDEFINED,
+                            "no prepared data for this item",
+                            $queueItem['_id']
+                        );
+                        continue;
+                    }
+
+                    $preparedItemData = $preparedData[$queueItem['objectID']];
+
+                    // hash both the store value and value from algolia to compare them
+                    $itemDataHash = \pro_algolia\hash::hashItemData($preparedItemData);
+                    $resultValueHash = \pro_algolia\hash::hashItemData($resultValue);
+
+                    switch ($queueItem['operation']) {
+                        case \pro_algolia\constant::SAVE:
+                            if ($resultValue && is_array($resultValue)) {
+                                if ($itemDataHash !== $resultValueHash) {
+                                    $operationsToProcess[$queueItem['operation']][] = $preparedItemData;
+
+                                    $diff = \pro_algolia\compare::compareArrays($resultValue, $preparedItemData);
+                                    $this->addToQueueLog(
+                                        pro_algolia\constant::DIFF,
+                                        @json_encode($diff),
+                                        $queueItem['_id']
+                                    );
+                                } else {
+                                    $this->updateQueueStatus($queueItem['_id'], pro_algolia\constant::SUCCESS);
+                                    $this->addToQueueLog(
+                                        pro_algolia\constant::UNDEFINED,
+                                        "item have not changed",
+                                        $queueItem['_id']
+                                    );
+                                }
+                            } else {
+                                $operationsToProcess[$queueItem['operation']][] = $preparedItemData;
+                            }
+                            break;
+                        case \pro_algolia\constant::DELETE:
+                            if ($resultValue && is_array($resultValue)) {
+                                $operationsToProcess[$queueItem['operation']][] = $preparedItemData;
+                            } else {
+                                $this->updateQueueStatus($queueItem['_id'], pro_algolia\constant::SUCCESS);
+                                $this->addToQueueLog(
+                                    pro_algolia\constant::UNDEFINED,
+                                    "already removed",
+                                    $queueItem['_id']
+                                );
+                            }
+                            break;
+                        default:
+                            $this->updateQueueStatus($queueItem['_id'], pro_algolia\constant::ERROR);
+                            $this->addToQueueLog(
+                                pro_algolia\constant::UNDEFINED,
+                                "operation not found",
+                                $queueItem['_id']
+                            );
+                            break;
                     }
                 }
 
-                if (!$preparedData) {
+            } else {
+                // set status for all of them to ERROR
+                foreach ($nextItems as $queueItem) {
+                    $this->updateQueueStatus($queueItem['_id'], pro_algolia\constant::ERROR);
+                }
+                continue;
+            }
+
+            foreach ($operationsToProcess as $operationType => $operationData) {
+                if (!$operationData) {
                     continue;
                 }
 
-                $this->pro_algolia->initClient();
-                $this->pro_algolia->initIndex();
+                try {
+                    switch ($operationType) {
+                        case \pro_algolia\constant::SAVE:
+                            $result = $this->pro_algolia->saveObjects($operationData);
+                            $resultBody = $result->getBody();
+                            break;
+                        case \pro_algolia\constant::DELETE:
+                            $deleteOperationData = array_map(function($item) {
+                                return $item['objectID'];
+                            }, $operationData);
 
-                switch ($operationType) {
-                    case \pro_algolia\constant::SAVE:
-                        $result = $this->pro_algolia->saveObjects($preparedData);
-                        $resultBody = $result->getBody();
-                        break;
-
-                    case \pro_algolia\constant::DELETE:
-                        $preparedData = array_map(function($item) {
-                            return $item['objectID'];
-                        }, $preparedData);
-
-                        // check if objects exist in the index START
-                        $checkResult = $this->pro_algolia->getObjects($preparedData);
-                        $checkResultBody = $checkResult->getBody();
-                        $checkResultIds = $this->getObjectIdsFromResposeBody($checkResultBody);
-
-                        foreach ($checkResultIds as $checkObjectID) {
-                            if (isset($preparedData[$checkObjectID])) {
-
-                                unset($preparedData[$checkObjectID]);
-
-                                if (isset($computedHashes[$checkObjectID])) {
-                                    $checkObjectHash = $computedHashes[$checkObjectID];
-                                } else {
-                                    if ($this->setting['debug']) {
-                                        $this->log("`HASH DO NOT FOUND FOR `{$checkObjectID}`");
-                                    }
-                                    continue;
-                                }
-
-                                if ($this->getIndexObject($checkObjectID)) {
-                                    $this->updateIndexObjectDataHash(
-                                        $checkObjectID,
-                                        $checkObjectHash
-                                    );
-                                    $this->updateIndexObjectStatus(
-                                        $checkObjectID,
-                                        $operationType
-                                    );
-                                } else {
-                                    $this->setIndexObject(
-                                        $checkObjectID,
-                                        $checkObjectHash,
-                                        $operationType
-                                    );
-                                }
-                            }
-                        }
-                        // check if objects exist in the index END
-
-                        if (!$preparedData) {
-                            continue;
-                        }
-
-                        $result = $this->pro_algolia->deleteObjects($preparedData);
-                        $resultBody = $result->getBody();
-                        break;
+                            $result = $this->pro_algolia->deleteObjects($deleteOperationData);
+                            $resultBody = $result->getBody();
+                            break;
+                    }
+                } catch (\Exception $e) {
+                    $this->log($e);
                 }
 
-                if ($this->setting['debug']) {
-                    $operationResultJson = isset($resultBody) ? json_encode($resultBody) : null;
-                    $this->log("`{$operationType}` OPERATION RESULT {$operationResultJson}");
-                }
+                $operationResultJson = isset($resultBody) ? json_encode($resultBody) : null;
+                $this->log("`{$operationType}` OPERATION RESULT {$operationResultJson}");
 
                 if (isset($resultBody)) {
-                    $resultIds = $this->getObjectIdsFromResposeBody($resultBody);
+                    $resultIds = \pro_algolia\pro_algolia::getObjectIdsFromResposeBody($resultBody);
                     foreach ($resultIds as $resultObjectID) {
-
-                        if (isset($computedHashes[$resultObjectID])) {
-                            $resultObjectHash = $computedHashes[$resultObjectID];
-                        } else {
-                            if ($this->setting['debug']) {
-                                $this->log("`HASH DO NOT FOUND FOR `{$resultObjectID}`");
+                        // find queueItem by resulting objectID
+                        // update status to success
+                        $queueItem = $this->findItemByObjectIdInQueue($nextItems, $resultObjectID);
+                        if ($queueItem) {
+                            $this->updateQueueStatus($queueItem['_id'], pro_algolia\constant::SUCCESS);
+                        }
+                    }
+                } else {
+                    // search for the objectId in the queueItems
+                    // set status for all of them to ERROR
+                    foreach ($operationData as $operationDataItem) {
+                        if (isset($operationDataItem['objectID'])) {
+                            $queueItem = $this->findItemByObjectIdInQueue($nextItems, $operationDataItem['objectID']);
+                            if ($queueItem) {
+                                $this->updateQueueStatus($queueItem['_id'], pro_algolia\constant::ERROR);
                             }
-                            continue;
                         }
-
-                        if ($this->getIndexObject($resultObjectID)) {
-                            $this->updateIndexObjectDataHash(
-                                $resultObjectID,
-                                $resultObjectHash
-                            );
-                            $this->updateIndexObjectStatus(
-                                $resultObjectID,
-                                $operationType
-                            );
-                        } else {
-                            $this->setIndexObject(
-                                $resultObjectID,
-                                $resultObjectHash,
-                                $operationType
-                            );
-                        }
-
                     }
                 }
-
             }
-
-        } catch (Exception $e) {
-            $this->addToQueueLog(pro_algolia\constant::ERROR, (string)$e);
         }
 
         return $workResult;
     }
 
-    private function getObjectIdsFromResposeBody($resultBody)
+    private function findItemByObjectIdInQueue(array $queueItems, $itemObjectID)
     {
-        $objectIDs = array();
-        if ($resultBody && is_array($resultBody)) {
-            foreach ($resultBody as $resultBatch) {
-                if (isset($resultBatch['objectIDs']) && is_array($resultBatch['objectIDs'])) {
-                    foreach ($resultBatch['objectIDs'] as $resultObjectID) {
-                        $objectIDs[] = $resultObjectID;
-                    }
-                }
+        foreach ($queueItems as $key => $value) {
+            if (isset($value['objectID'])
+            && strcmp($value['objectID'], $itemObjectID) === 0) {
+                return $value;
             }
         }
-        return $objectIDs;
+
+        return false;
     }
 
-    private function getNext($operationType, $limit)
+    private function getNext(int $limit, string $operationType = null, string $storeItemType = null)
     {
-        return $this->db->query("SELECT *
-            FROM `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE . "`
-            WHERE `status` = '" . pro_algolia\constant::UNDEFINED . "'
-            AND `operation` = '". $this->db->escape($operationType) ."'
-            LIMIT ". (int)$limit)->rows;
+        $sql = "SELECT *
+        FROM `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE . "`
+        WHERE `status` = '" . pro_algolia\constant::UNDEFINED . "'";
+
+        if ($operationType !== null) {
+            $sql .= " AND `operation` = '". $this->db->escape($operationType) ."' ";
+        }
+
+        if ($storeItemType !== null) {
+            $sql .= " AND `storeItemType` = '". $this->db->escape($storeItemType) ."' ";
+        }
+
+        $sql .= " LIMIT ". (int)$limit;
+
+        return $this->db->query($sql)->rows;
     }
 
     private function getIDForItem($itemType, $itemId)
@@ -329,68 +403,9 @@ class ModelExtensionModulePROAlgolia extends Model
         }
     }
 
-    private function hashItemData($data)
-    {
-        return hash('sha256', json_encode($data));
-    }
-
     private function countBytesInItemData($data)
-    {   
+    {
         $json = json_encode($data);
         return ini_get('mbstring.func_overload') ? mb_strlen($json , '8bit') : strlen($json);
-    }
-
-    private function getIndexObject($objectId, $objectDataHash = null, $status = null)
-    {
-        $sql = "SELECT *
-            FROM `". DB_PREFIX . pro_algolia\constant::INDEX_OBJECT_TABLE . "`
-            WHERE `objectId` = '" . $this->db->escape($objectId) . "'";
-
-        if ($objectDataHash !== null) {
-            $sql .= " AND `objectDataHash` = '" . $this->db->escape($objectDataHash) . "' ";
-        }
-
-        if ($status !== null) {
-            $sql .= " AND `status` = '" . $this->db->escape($status) . "' ";
-        }
-
-        return $this->db->query($sql)->row;
-    }
-
-    private function setIndexObject($objectId, $objectDataHash, $status)
-    {
-        $this->db->query("INSERT INTO `". DB_PREFIX . pro_algolia\constant::INDEX_OBJECT_TABLE ."`
-            SET `objectId` = '" . $this->db->escape($objectId) . "',
-                `objectDataHash` = '" . $this->db->escape($objectDataHash) . "',
-                `status` = '" . $this->db->escape($status) . "',
-                `createDate` = NOW(),
-                `updateDate` = NOW()");
-
-        return $this->db->getLastId();
-    }
-
-    private function deleteIndexObject($objectId)
-    {
-        return $this->db->query("DELETE
-            FROM `". DB_PREFIX . pro_algolia\constant::INDEX_OBJECT_TABLE . "`
-            WHERE `objectId` = '" . $this->db->escape($objectId) . "'");
-    }
-
-    private function updateIndexObjectDataHash($objectId, $objectDataHash)
-    {
-        return $this->db->query("UPDATE
-            `". DB_PREFIX . pro_algolia\constant::INDEX_OBJECT_TABLE . "`
-            SET `objectDataHash` = '" . $this->db->escape($objectDataHash) . "',
-                `updateDate` = NOW()
-            WHERE `objectId` = '" . $this->db->escape($objectId) . "'");
-    }
-
-    private function updateIndexObjectStatus($objectId, $status)
-    {
-        return $this->db->query("UPDATE
-            `". DB_PREFIX . pro_algolia\constant::INDEX_OBJECT_TABLE . "`
-            SET `status` = '" . $this->db->escape($status) . "',
-                `updateDate` = NOW()
-            WHERE `objectId` = '" . $this->db->escape($objectId) . "'");
     }
 }

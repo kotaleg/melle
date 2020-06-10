@@ -9,6 +9,7 @@ $_['pro_algolia'] = array(
     'search_api_key' => '',
 
     'index_name' => '',
+    'object_max_size' => 10000, // bytes
 
     'batch_size' => 100,
 );

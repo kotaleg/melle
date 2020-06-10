@@ -26,4 +26,10 @@ class constant
     const SUCCESS = 'success';
     const UNDEFINED = 'undefined';
     /* STATUS HELPERS END */
+
+    // queue status
+    const MOVED = 'moved';
+
+    // log status
+    const DIFF = 'diff';
 }

@@ -96,8 +96,8 @@ class ModelExtensionModulePROAlgolia extends Model
     public function queueSaveProduct($productId)
     {
         return $this->addItemToQueue(
-            \pro_algolia\constant::PRODUCT, 
-            $productId, 
+            \pro_algolia\constant::PRODUCT,
+            $productId,
             \pro_algolia\constant::SAVE
         );
     }
@@ -105,8 +105,8 @@ class ModelExtensionModulePROAlgolia extends Model
     public function queueDeleteProduct($productId)
     {
         return $this->addItemToQueue(
-            \pro_algolia\constant::PRODUCT, 
-            $productId, 
+            \pro_algolia\constant::PRODUCT,
+            $productId,
             \pro_algolia\constant::DELETE
         );
     }
