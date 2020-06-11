@@ -267,6 +267,9 @@ class ModelExtensionModulePROAlgolia extends Model
                                 if ($itemDataHash !== $resultValueHash) {
                                     $operationsToProcess[$queueItem['operation']][] = $preparedItemData;
 
+                                    $this->log('before -> '.json_encode($resultValue));
+                                    $this->log('after  -> '.json_encode($preparedItemData));
+
                                     $diff = \pro_algolia\compare::compareArrays($resultValue, $preparedItemData);
                                     $this->addToQueueLog(
                                         pro_algolia\constant::DIFF,
