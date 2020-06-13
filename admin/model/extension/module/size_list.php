@@ -68,7 +68,6 @@ class ModelExtensionModuleSizeList extends Model
 
         if (is_array($data)) {
             foreach ($data as $item) {
-
                 $result[] = array(
                     'id'    => $item['id'],
                     'label' => $item['name'],
@@ -188,7 +187,10 @@ class ModelExtensionModuleSizeList extends Model
             $this->db->query("INSERT INTO `". DB_PREFIX . self::PRODUCT_TABLE ."`
                 SET `image_id` = '" . (int)$image_id . "',
                     `product_id` = '" . (int)$product_id . "'");
+            return true;
         }
+
+        return false;
     }
 
     public function getImageForProduct($product_id)
@@ -201,7 +203,7 @@ class ModelExtensionModuleSizeList extends Model
                 WHERE `product_id` = '" . (int)$product_id . "'
                 LIMIT 1");
 
-            if ($q->row) {
+            if (isset($q->row['image_id'])) {
                 $image = $q->row['image_id'];
             }
         }
@@ -217,9 +219,9 @@ class ModelExtensionModuleSizeList extends Model
         $glue = 'WHERE';
 
         if ($product_id !== null) {
-            $sql .= " LEFT JOIN `". DB_PREFIX . self::PRODUCT_TABLE ."` dd ";
-            $sql .= " ON(dd.image_id = m.image_id) ";
-            $sql .= " WHERE dd.product_id = '" . (int)$product_id . "' ";
+            $sql .= " LEFT JOIN `". DB_PREFIX . self::PRODUCT_TABLE ."` p ";
+            $sql .= " ON(i.image_id = p.image_id) ";
+            $sql .= " WHERE p.product_id = '" . (int) $product_id . "' ";
             $glue = 'AND';
         }
 

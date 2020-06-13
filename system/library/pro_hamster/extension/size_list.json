@@ -1,14 +1,14 @@
 {
-    "codename": "size_list",
-    "version": "0.0.1",
-    "name": "Size List",
-    "description": "Size List",
-    "author": {
-        "name": "PRO Hamster",
-        "url": "https://prohamster.com/"
-    },
-    "require": {
-        "pro_patch": ">= 1.0.0",
-        "pro_style": ">= 1.0.0"
-    }
+  "codename": "size_list",
+  "version": "0.1.1",
+  "name": "Size List",
+  "description": "Size List",
+  "author": {
+    "name": "PRO Hamster",
+    "url": "https://prohamster.com/"
+  },
+  "require": {
+    "pro_patch": ">= 0.0.1",
+    "pro_style": ">= 0.0.1"
+  }
 }
