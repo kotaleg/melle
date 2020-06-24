@@ -656,10 +656,6 @@ class ModelApiExport extends Model
                 $price = $this->tax->calculate(
                     $c['price'], $product['tax_class_id'], $this->config->get('config_tax'));
 
-                if ((float) $product['special']) {
-                    $price = $this->tax->calculate(
-                        $product['special'], $product['tax_class_id'], $this->config->get('config_tax'));
-                }
 
                 $price = (int) preg_replace('/\s+/', '', $price);
 
