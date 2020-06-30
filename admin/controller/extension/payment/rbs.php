@@ -17,11 +17,6 @@ class ControllerExtensionPaymentRbs extends Controller
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
             $this->model_setting_setting->editSetting('payment_rbs', $this->request->post);
             $this->session->data['success'] = $this->language->get('text_success');
-            // echo "<pre>";
-            // echo $this->config->get('payment_rbs_merchantPassword');
-            // echo "<pre>";
-            // print_r($this->request->post);
-            // die;
             $this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', 'SSL'));
         }
 
@@ -89,10 +84,6 @@ class ControllerExtensionPaymentRbs extends Controller
         $data['stage_two'] = $this->language->get('stage_two');
         $data['payment_rbs_stage'] = $this->config->get('payment_rbs_stage');
 
-
-
-
-
         // Статус по завершении платежа
         $data['entry_order_status'] = $this->language->get('entry_order_status');
 
@@ -106,6 +97,9 @@ class ControllerExtensionPaymentRbs extends Controller
 
         $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
+
+        $data['entry_sortOrder'] = $this->language->get('entry_sortOrder');
+        $data['payment_rbs_sort_order'] = $this->config->get('payment_rbs_sort_order');
 
         // Логирование
         $data['entry_logging'] = $this->language->get('logging');
@@ -122,7 +116,7 @@ class ControllerExtensionPaymentRbs extends Controller
                     'alphabetic' => 'По умолчанию'
                 )
             ), // Валюта по умолчанию в платежном шлюзе
-            $this->getCurrencies()  // Список валют
+            $this->getCurrencyList()  // Список валют
         );
         $data['payment_rbs_currency'] = $this->config->get('payment_rbs_currency');
 
@@ -142,6 +136,26 @@ class ControllerExtensionPaymentRbs extends Controller
         $data['entry_taxType'] = $this->language->get('entry_taxType');
         $data['taxType_list'] = $this->getTaxTypeList();
         $data['payment_rbs_taxType'] = $this->config->get('payment_rbs_taxType');
+
+
+        //FFD version
+        $data['entry_ffdVersionFormat'] = $this->language->get('entry_ffdVersionFormat');
+        $data['ffd_versionList'] = $this->getFFDVersionlist();
+        $data['payment_rbs_ffdVersion'] = $this->config->get('payment_rbs_ffdVersion');
+
+        //FFD method
+        $data['entry_paymentMethod'] = $this->language->get('entry_paymentMethod');
+        $data['ffd_paymentMethodTypeList'] = $this->getPaymentMethodTypeList();
+        $data['payment_rbs_paymentMethodType'] = $this->config->get('payment_rbs_paymentMethodType');
+
+        //FFD delivery method
+        $data['entry_paymentMethodDelivery'] = $this->language->get('entry_paymentMethodDelivery');
+        $data['payment_rbs_paymentMethodTypeDelivery'] = $this->config->get('payment_rbs_paymentMethodTypeDelivery');
+
+        //FFD object
+        $data['entry_paymentObject'] = $this->language->get('entry_paymentObject');
+        $data['ffd_paymentObjectTypeList'] = $this->getPaymentObjectTypeList();
+        $data['payment_rbs_paymentObjectType'] = $this->config->get('payment_rbs_paymentObjectType');
 
         // Хедер, футер, левое меню для отрисовки страницы настроек модуля
         $data['header'] = $this->load->controller('common/header');
@@ -169,7 +183,7 @@ class ControllerExtensionPaymentRbs extends Controller
      * Список валют в ISO 4217
      * @return array
      */
-    private function getCurrencies()
+    private function getCurrencyList()
     {
         return [
             [
@@ -183,6 +197,10 @@ class ControllerExtensionPaymentRbs extends Controller
             [
                 'numeric' => 840,
                 'alphabetic' => 'USD'
+            ],
+            [
+                'numeric' => 933,
+                'alphabetic' => 'BYN'
             ],
             [
                 'numeric' => 978,
@@ -223,6 +241,15 @@ class ControllerExtensionPaymentRbs extends Controller
                 'numeric' => 5,
                 'alphabetic' => 'НДС чека по расчетной ставке 10/118'
             ],
+
+            [
+                'numeric' => 6,
+                'alphabetic' => 'НДС чека по расчетной ставке 20%'
+            ],
+            [
+                'numeric' => 7,
+                'alphabetic' => 'НДС чека по расчетной ставке 20/120'
+            ],
         ];
     }
 
@@ -260,4 +287,128 @@ class ControllerExtensionPaymentRbs extends Controller
             ],
         ];
     }
+
+    /**
+     * Формат фискальных документов
+     * @return array
+     */
+    private function getFFDVersionlist()
+    {
+        return [
+            [
+                'value' => 'v10',
+                'title' => '1.00'
+            ],
+            [
+                'value' => 'v105',
+                'title' => '1.05'
+            ],
+//            [
+//                'value' => 'v11,
+//                'title' => '1.1'
+//            ],
+        ];
+    }
+
+    /**
+     * Список типов платежей
+     * @return array
+     */
+    private function getPaymentMethodTypeList()
+    {
+        return [
+            [
+                'numeric' => 1,
+                'alphabetic' => 'Полная предварительная оплата до момента передачи предмета расчёта'
+            ],
+            [
+                'numeric' => 2,
+                'alphabetic' => 'Частичная предварительная оплата до момента передачи предмета расчёта'
+            ],
+            [
+                'numeric' => 3,
+                'alphabetic' => 'Аванс'
+            ],
+            [
+                'numeric' => 4,
+                'alphabetic' => 'Полная оплата в момент передачи предмета расчёта'
+            ],
+            [
+                'numeric' => 5,
+                'alphabetic' => 'Частичная оплата предмета расчёта в момент его передачи с последующей оплатой в кредит'
+            ],
+            [
+                'numeric' => 6,
+                'alphabetic' => 'Передача предмета расчёта без его оплаты в момент его передачи с последующей оплатой в кредит'
+            ],
+            [
+                'numeric' => 7,
+                'alphabetic' => 'Оплата предмета расчёта после его передачи с оплатой в кредит'
+            ],
+
+        ];
+    }
+
+    /**
+     * Список типов оплачиваемой позиции
+     * @return array
+     */
+    private function getPaymentObjectTypeList()
+    {
+        return [
+            [
+                'numeric' => 1,
+                'alphabetic' => 'Товар'
+            ],
+            [
+                'numeric' => 2,
+                'alphabetic' => 'Подакцизный товар'
+            ],
+            [
+                'numeric' => 3,
+                'alphabetic' => 'Работа'
+            ],
+            [
+                'numeric' => 4,
+                'alphabetic' => 'Услуга'
+            ],
+            [
+                'numeric' => 5,
+                'alphabetic' => 'Ставка азартной игры'
+            ],
+//            [
+//                'numeric' => 6,
+//                'alphabetic' => 'Выигрыш азартной игры'
+//            ],
+            [
+                'numeric' => 7,
+                'alphabetic' => 'Лотерейный билет'
+            ],
+//            [
+//                'numeric' => 8,
+//                'alphabetic' => 'Выигрыш лотереи'
+//            ],
+            [
+                'numeric' => 9,
+                'alphabetic' => 'Предоставление РИД'
+            ],
+            [
+                'numeric' => 10,
+                'alphabetic' => 'Платёж'
+            ],
+//            [
+//                'numeric' => 11,
+//                'alphabetic' => 'Агентское вознаграждение'
+//            ],
+            [
+                'numeric' => 12,
+                'alphabetic' => 'Составной предмет расчёта'
+            ],
+            [
+                'numeric' => 13,
+                'alphabetic' => 'Иной предмет расчёта'
+            ],
+        ];
+    }
+
 }

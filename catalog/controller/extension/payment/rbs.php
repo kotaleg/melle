@@ -22,7 +22,7 @@ class ControllerExtensionPaymentRbs extends Controller
     public function index()
     {
         $data['action'] = $this->url->link('extension/payment/rbs/payment');
-        $data['button_confirm'] = $this->language->get('button_confirm');
+        $data['rbs_button_confirm'] = $this->language->get('rbs_button_confirm');
         return $this->get_template('extension/payment/rbs', $data);
     }
 
@@ -50,105 +50,83 @@ class ControllerExtensionPaymentRbs extends Controller
 
         $this->load->model('checkout/order');
         $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
-        $order_number = $this->session->data['order_id'];
-        $amount = $order_info['total'] * 100;
+        $order_number = (int)$order_info['order_id'];
+        $amount = round($order_info['total'], 2) * 100;
+
         $return_url = $this->url->link('extension/payment/rbs/callback');
 
 
         // here we will collect data for orderBundle
         $orderBundle = [];
 
+        $orderBundle['customerDetails'] = array(
+            'email' => $order_info['email'],
+            'phone' => preg_match('/[7]\d{9}/', $order_info['telephone']) ? $order_info['telephone'] : ''
+        );
+
+        // ITEMS
         foreach ($this->cart->getProducts() as $product) {
 
-            $itemCode = $product['product_id'];
-            $name = $product['name'];
-
-            /* EXTRA NAME START */
-            try {
-                $this->load->model('catalog/product');
-                $this->load->model('api/export');
-
-                $productExtra = $this->model_catalog_product->getProduct($product['product_id']);
-                $itemCode = isset($productExtra['name']) ? $productExtra['name'] : $itemCode;
-                $name = $this->model_api_export->getClosestCategoryNameForProduct($product['product_id']);
-
-                if (isset($productExtra['name']) && $productExtra['name']) {
-                    if (strpos($productExtra['name'], ' ')) {
-                        $nameEx = explode(' ', $productExtra['name']);
-                        $nameEx = array_shift($nameEx);
-                    } else {
-                        $nameEx = $productExtra['name'];
-                    }
-
-                    if ($nameEx) {
-                        $name .= " {$nameEx}";
-                    }
-                }
-
-            } catch (\Exception $e) {
-                $this->log->write($e->getMessage());
-            }
-            /* EXTRA NAME START */
-
-            /* RECALCULATE DISCOUNT FROM TOTAL START */
-            if ($product['price'] !== ($product['total'] * $product['quantity'])) {
-                $product['price'] = $product['total'] / $product['quantity'];
-                $product['price'] = round($product['price'], 2);
-                $product['total'] = round($product['price'] * $product['quantity'], 2);
-            }
-            /* RECALCULATE DISCOUNT FROM TOTAL END */
-
-            /* PRODUCT COUPON START */
-            if (isset($this->session->data['coupon'])) {
-                $this->load->model('extension/total/coupon');
-                $couponInfo = $this->model_extension_total_coupon->getCoupon($this->session->data['coupon']);
-
-                if ($couponInfo) {
-                    if (!$couponInfo['product']) {
-                        $couponStatus = true;
-                    } else {
-                        $couponStatus = in_array($product['product_id'], $couponInfo['product']);
-                    }
-
-                    if ($couponStatus) {
-                        if ($couponInfo['type'] == 'F') {
-                            // TODO
-                        } elseif ($couponInfo['type'] == 'P') {
-                            $product['price'] = $product['price'] - ($product['price'] / 100 * $couponInfo['discount']);
-                            $product['price'] = round($product['price'], 2);
-                            $product['total'] = round($product['price'] * $product['quantity'], 2);
-                        }
-                    }
-                }
-            }
-            /* PRODUCT COUPON END */
-
             $product_taxSum = $this->tax->getTax($product['price'], $product['tax_class_id']);
-            $product_amount = ( $product['price'] + $product_taxSum ) * $product['quantity']; 
+            $product_amount = ($product['price'] + $product_taxSum) * $product['quantity'];
 
-            $product_data[] = array(
+            // DEFINE TAX_TYPE
+            $item_rate = $product_taxSum / $product['price'] * 100;
+            switch ($item_rate) {
+                case 20:
+                    $tax_type = 6;
+                    break;
+                case 18:
+                    $tax_type = 3;
+                    break;
+                case 10:
+                    $tax_type = 2;
+                    break;
+                case 0:
+                    $tax_type = 1;
+                    break;
+                default:
+                    $tax_type = $this->config->get('rbs_taxType');
+            }
+
+            $product_data = array(
                 'positionId' => $product['cart_id'],
-                'name' => $name,
+                'name' => $product['name'],
                 'quantity' => array(
                     'value' => $product['quantity'],
-                    //todo fix piece
-                    'measure' => "шт"
+                    'measure' => $this->rbs->getDefaultMeasurement(),
                 ),
                 'itemAmount' => $product_amount * 100,
-                'itemCode' => $itemCode,
-
+                'itemCode' => $product['product_id'] . "_" . $product['cart_id'], //fix by PLUG-1740, PLUG-2620
                 'tax' => array(
                     // todo: some question taxType
-                    'taxType' => $this->config->get('payment_rbs_taxType'),
+                    'taxType' => $tax_type,
                     'taxSum' => $product_taxSum * 100
                 ),
                 'itemPrice' => ($product['price'] + $product_taxSum) * 100,
             );
 
-            $orderBundle['cartItems']['items'] = $product_data;
+            // FFD 1.05 added
+            if ($this->rbs->getFFDVersion() == 'v105') {
+
+                $attributes = array();
+                $attributes[] = array(
+                    "name" => "paymentMethod",
+                    "value" => $this->rbs->getPaymentMethodType()
+                );
+                $attributes[] = array(
+                    "name" => "paymentObject",
+                    "value" => $this->rbs->getPaymentObjectType()
+                );
+
+                $product_data['itemAttributes']['attributes'] = $attributes;
+            }
+
+            $orderBundle['cartItems']['items'][] = $product_data;
+
         }
 
-        // Delivery calculations:
+        // DELIVERY
         if (isset($this->session->data['shipping_method']['cost']) && $this->session->data['shipping_method']['cost'] > 0) {
 
             $delivery['positionId'] = 'delivery';
@@ -161,21 +139,38 @@ class ControllerExtensionPaymentRbs extends Controller
             $delivery['tax']['taxType'] = $this->config->get('payment_rbs_taxType');
             $delivery['tax']['taxSum'] = 0;
             $delivery['itemPrice'] = $this->session->data['shipping_method']['cost'] * 100;
+
+            // FFD 1.05 added
+            if ($this->rbs->getFFDVersion() == 'v105') {
+
+                $attributes = array();
+                $attributes[] = array(
+                    "name" => "paymentMethod",
+                    "value" => $this->rbs->getPaymentMethodType(true)
+                );
+                $attributes[] = array(
+                    "name" => "paymentObject",
+                    "value" => 4
+                );
+
+                $delivery['itemAttributes']['attributes'] = $attributes;
+            }
+
             $orderBundle['cartItems']['items'][] = $delivery;
         }
 
-        /* RECALCULATE TOTAL BUNDLE ITEMS START */
-        $bundleAmount = 0;
-        foreach ($orderBundle['cartItems']['items'] as $bunbleCartItem) {
-            $bundleAmount += $bunbleCartItem['itemAmount'];
+        // DISCOUNT CALCULATE
+        $discount = $this->rbs->discountHelper->discoverDiscount($amount,$orderBundle['cartItems']['items']);
+        if($discount > 0) { 
+            $this->rbs->discountHelper->setOrderDiscount($discount);
+            $recalculatedPositions = $this->rbs->discountHelper->normalizeItems($orderBundle['cartItems']['items']);
+            $recalculatedAmount = $this->rbs->discountHelper->getResultAmount();
+            $orderBundle['cartItems']['items'] = $recalculatedPositions;
         }
 
-        if (($bundleAmount - $amount) > 1) {
-            $this->log->write(":: RBS :: `amount` => {$amount}  `bundleAmount` => {$bundleAmount}");
-        }
-        /* RECALCULATE TOTAL BUNDLE ITEMS END */ 
+        $currency_code = $this->rbs->currency_code2num[$order_info['currency_code']];
 
-        $response = $this->rbs->register_order($order_number, $bundleAmount, $return_url, $orderBundle);
+        $response = $this->rbs->register_order($order_number, $amount, $return_url, $currency_code, $orderBundle);
 
         if (isset($response['errorCode'])) {
             $this->document->setTitle($this->language->get('error_title'));
@@ -215,7 +210,14 @@ class ControllerExtensionPaymentRbs extends Controller
         $this->rbs->taxSystem = $this->config->get('payment_rbs_taxSystem');
         $this->rbs->taxType = $this->config->get('payment_rbs_taxSystem');
         $this->rbs->ofd_status = $this->config->get('payment_rbs_ofd_status');
-        $this->rbs->language = $this->language->get('code');
+
+        $this->rbs->ffd_version = $this->config->get('payment_rbs_ffdVersion');
+        $this->rbs->paymentMethodType = $this->config->get('payment_rbs_paymentMethodType');
+        $this->rbs->paymentObjectType = $this->config->get('payment_rbs_paymentObjectType');
+        $this->rbs->paymentMethodTypeDelivery = $this->config->get('payment_rbs_paymentMethodTypeDelivery');
+
+        $c_locale = substr($this->language->get('code'), 0, 2);
+        $this->rbs->language = ($c_locale == "ru" || $c_locale == "en") ? $c_locale : "ru";
     }
 
     /**

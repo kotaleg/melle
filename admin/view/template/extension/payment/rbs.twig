@@ -108,6 +108,16 @@
                     </div>
 
 
+                    <!-- Пароль продавца -->
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="">
+                            {{ entry_sortOrder }}
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" name="payment_rbs_sort_order" value="{{ payment_rbs_sort_order }}" class="form-control" />
+                        </div>
+                    </div>
+
                     <!-- Логирование: Включено/Выключено -->
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
@@ -177,6 +187,73 @@
                                 <option value="{{ taxType.numeric }}" {{ taxType.numeric  == payment_rbs_taxType ? 'selected="selected"' : '' }}>
                                 {{ taxType.numeric  == 0 ? taxType.alphabetic : taxType.alphabetic }}
                                 </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!--
+                     Формат версии фискальных документов
+                     Формат версии требуется указать в личном кабинете банка и в кабинете сервиса фискализации.
+                     -->
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            {{ entry_ffdVersionFormat }}
+                        </label>
+                        <div class="col-sm-9">
+                            <select name="payment_rbs_ffdVersion" class="form-control">
+                                {% for ffd_version in ffd_versionList %}
+                                    <option value="{{ ffd_version.value }}" {{ ffd_version.value  == payment_rbs_ffdVersion ? 'selected="selected"' : '' }}>
+                                        {{ ffd_version.value  == 0 ? ffd_version.title : ffd_version.title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- method -->
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            {{ entry_paymentMethod }}
+                        </label>
+                        <div class="col-sm-9">
+                            <select name="payment_rbs_paymentMethodType" class="form-control">
+                                {% for ffd_paymentMethodType in ffd_paymentMethodTypeList %}
+                                    <option value="{{ ffd_paymentMethodType.numeric }}" {{ ffd_paymentMethodType.numeric  == payment_rbs_paymentMethodType ? 'selected="selected"' : '' }}>
+                                        {{ ffd_paymentMethodType.value  == 0 ? ffd_paymentMethodType.alphabetic : ffd_paymentMethodType.alphabetic }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- method D-->
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            {{ entry_paymentMethodDelivery }}
+                        </label>
+                        <div class="col-sm-9">
+                            <select name="payment_rbs_paymentMethodTypeDelivery" class="form-control">
+                                {% for ffd_paymentMethodType in ffd_paymentMethodTypeList %}
+                                    <option value="{{ ffd_paymentMethodType.numeric }}" {{ ffd_paymentMethodType.numeric  == payment_rbs_paymentMethodTypeDelivery ? 'selected="selected"' : '' }}>
+                                        {{ ffd_paymentMethodType.value  == 0 ? ffd_paymentMethodType.alphabetic : ffd_paymentMethodType.alphabetic }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- object -->
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            {{ entry_paymentObject }}
+                        </label>
+                        <div class="col-sm-9">
+                            <select name="payment_rbs_paymentObjectType" class="form-control">
+                                {% for ffd_paymentObjectType in ffd_paymentObjectTypeList %}
+                                    <option value="{{ ffd_paymentObjectType.numeric }}" {{ ffd_paymentObjectType.numeric  == payment_rbs_paymentObjectType ? 'selected="selected"' : '' }}>
+                                        {{ ffd_paymentObjectType.value  == 0 ? ffd_paymentObjectType.alphabetic : ffd_paymentObjectType.alphabetic }}
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>

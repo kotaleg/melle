@@ -7,7 +7,7 @@ class ModelExtensionPaymentRbs extends Model {
             'code'     => 'rbs',
             'title'    => $this->language->get('rbs_text_title'),
             'terms'      => '',
-            'sort_order' => $this->config->get('custom_sort_order')
+            'sort_order' => $this->config->get('payment_rbs_sort_order')
         );
 
         return $method_data;
