@@ -87,6 +87,11 @@ class ModelApiImport1CProduct extends Model
 
                 // IMAGE
                 if ($product->pictures) {
+                    // get images from product_image for current product
+                    $currentProductImages = $this->getProductImages(
+                        $this->getProductByImportId($product->id)
+                    );
+
                     foreach ($product->pictures as $k => $pic) {
                         $picture_ = $this->imageHandler($exchange_path, $pic);
 
@@ -94,10 +99,24 @@ class ModelApiImport1CProduct extends Model
                             if ($k == 0) {
                                 $d_['image'] = $picture_['path'];
                             } else {
+                                $sort_order = (int) $k;
+
+                                // check if we already have the image with this path in product_image
+                                // use sort_order
+                                foreach ($currentProductImages as $currentProductImage) {
+                                    if (isset($currentProductImage['image'])
+                                    && isset($currentProductImage['sort_order'])
+                                    && strcmp($currentProductImage['image'], $picture_['path']) === 0) {
+                                        $sort_order = (int) $currentProductImage['sort_order'];
+                                    }
+                                }
+
                                 $d_['product_image'][] = array(
                                     'image' => $picture_['path'],
-                                    'sort_order' => $k,
+                                    'sort_order' => $sort_order,
                                 );
+
+                                unset($sort_order);
                             }
                         }
 
@@ -750,6 +769,15 @@ class ModelApiImport1CProduct extends Model
         }
     }
 
+    public function getProductImages($product_id)
+    {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "product_image`
+            WHERE product_id = '" . (int)$product_id . "'
+            ORDER BY sort_order ASC");
+
+        return $query->rows;
+    }
+
     public function getAllProductsIds()
     {
         $products = array();
@@ -763,20 +791,6 @@ class ModelApiImport1CProduct extends Model
         }
 
         return $products;
-    }
-
-    public function clearCategoriesWithoutDescription()
-    {
-        $query = $this->db->query("SELECT c.category_id, cd.name FROM " . DB_PREFIX . "category c
-            LEFT JOIN " . DB_PREFIX . "category_description cd
-            ON (c.category_id = cd.category_id)
-            ORDER BY c.sort_order, LCASE(cd.name)");
-
-        foreach ($query->rows as $cat) {
-            if (empty($cat['name'])) {
-                $this->deleteCategory($cat['category_id']);
-            }
-        }
     }
 
     public function updateProductDescriptionColumn($product_id, $column, $value)
