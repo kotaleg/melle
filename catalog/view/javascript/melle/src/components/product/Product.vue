@@ -12,7 +12,7 @@
           <label
             v-for="(ov, ov_key) in o.product_option_value"
             :key="`option-value-${ov_key}`"
-            :class="['radio-inline', `ivan-${o.class}-radio`]"
+            :class="['radio-inline', `ivan-${o.class}-radio`, { check: ov.selected, disabled: ov.disabled_by_selection }]"
           >
             <div :class="[{ krestik: ov.disabled_by_selection }]">
               <input
@@ -27,9 +27,7 @@
                 :name="[`ShopCartItem[${o.class}]`]"
                 :placeholder="ov.name"
                 :value="ov.option_value_id"
-                :class="[
-                  { check: ov.selected, disabled: ov.disabled_by_selection },
-                ]"
+                :class="[{ check: ov.selected, disabled: ov.disabled_by_selection }]"
               />
 
               <span v-if="!ov.image">{{ ov.name }}</span>

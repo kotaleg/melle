@@ -386,38 +386,27 @@
       user-select: none;
 
       display: inline-block;
-      // display: flex;
       position: relative;
       cursor: pointer;
       font-size: 16px;
       font-weight: bold;
-      margin-right: 10px;
       text-align: center;
-
-      // flex-direction: column;
-      // justify-content: center;
-
-      &:last-child {
-        margin-right: 0px;
-      }
+      padding: 11px 17px;
+      border: 1px #e3dbd8 solid;
+      margin: 5px;
 
       & input {
         position: absolute;
         opacity: 0;
-
-        &.check ~ span {
-          border: 2px #22e8f5 solid;
-          // border-radius: 4px;
-        }
-
-        &.disabled ~ span {
-          opacity: 0.3;
-        }
+        display: none;
       }
 
-      & span {
-        border: 1px #e3dbd8 solid;
-        padding: 11px 17px;
+      &.check {
+        border: 2px #22e8f5 solid;
+      }
+
+      &.disabled {
+        opacity: 0.3;
       }
     }
 
@@ -428,16 +417,12 @@
       user-select: none;
 
       display: inline-block;
-      // display: flex;
       position: relative;
       cursor: pointer;
       font-size: 16px;
       font-weight: bold;
       margin-right: 10px;
       text-align: center;
-
-      // flex-direction: column;
-      // justify-content: center;
 
       &:last-child {
         margin-right: 0px;
@@ -457,8 +442,6 @@
       }
 
       & span {
-        // border: 1px #e3dbd8 solid;
-        // padding: 15px 21px;
         img {
           border: 1px #e3dbd8 solid;
           width: 45px;
@@ -472,16 +455,15 @@
     }
 
     #ivan-js-size-list {
-      width: 89%;
-      // display: flex;
-      @include mobile {
-        margin-left: 3px;
-      }
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
     }
 
     #ivan-js-color-list {
       width: 89%;
-      // display: flex;
+      margin-left: 5px;
       @include mobile {
         margin-left: 33px;
       }
@@ -709,15 +691,18 @@
     & > div {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: start;
       & > span {
         color: #807f7d;
         font-size: vw_(12px);
+        min-width: 120px;
         @include tablet {
           font-size: 12px;
+          min-width: initial;
         }
         @include mobile {
           font-size: 12px;
+          min-width: initial;
         }
       }
       & > select {
