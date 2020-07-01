@@ -42,16 +42,23 @@ class ModelApiExport extends Model
         $ex->unstrict();
         $ex->setDelimiter(",");
         $ex->setFileMode("a");
-        $ex->setColumnHeaders(array('TITLE','URL'));
+        $ex->setColumnHeaders(array('TITLE','URL','EXTRA_DESCRIPTION'));
 
         $pcount = 0;
         $rows = array();
 
+        $this->load->model('extension/module/extra_description');
+
         foreach ($products as $product) {
+
+            $extraDescription =  $this->model_extension_module_extra_description
+                ->getDescription($product['product_id']);
+            $extraDescription = html_entity_decode($extraDescription, ENT_QUOTES, 'UTF-8');
 
             $rows[] = array(
                 $product['name'],
                 $this->url->link('product/product', "product_id={$product['product_id']}"),
+                $extraDescription,
             );
 
             $pcount++;
