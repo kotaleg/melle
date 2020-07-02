@@ -54,6 +54,10 @@ class ModelApiExport extends Model
             $extraDescription =  $this->model_extension_module_extra_description
                 ->getDescription($product['product_id']);
             $extraDescription = html_entity_decode($extraDescription, ENT_QUOTES, 'UTF-8');
+            $extraDescription = strip_tags($extraDescription);
+            
+            // we still can have entities like &nbsp; before this step
+            $extraDescription = html_entity_decode($extraDescription, ENT_QUOTES, 'UTF-8');
 
             $rows[] = array(
                 $product['name'],
