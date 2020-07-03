@@ -15,7 +15,6 @@
 <meta name="description" content="{{ description }}" />
 {% endif %}
 
-
 <meta property="og:site_name" content="{{site_name}}" />
 <meta property="og:url" content='{{base}}'/>
 <meta property="og:title" content="{{title}}"/>
@@ -24,38 +23,34 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta property="twitter:image" content="{{og.image}}"/>
 
-<script src="{{base}}catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
-<!-- <link href="{{base}}catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" /> -->
-<!-- <script src="{{base}}catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script> -->
-<!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css" /> -->
-
 {% for style in styles %}
-<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+<link href="{{ style.href }}{{cache_postfix}}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
 {% endfor %}
+
+<link href="{{base}}catalog/view/theme/melle/stylesheet/bootstrap.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
+<link href="{{base}}catalog/view/theme/melle/stylesheet/sass/libs.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
+<link href="{{base}}catalog/view/theme/melle/stylesheet/sass/new.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
+
+{% for link in links %}
+<link href="{{ link.href }}" rel="{{ link.rel }}" />
+{% endfor %}
+
+<script src="{{base}}catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
 
 {% for state in states %}
 <script type="text/javascript">window.__{{state.codename}}__ = {{state.json}};</script>
 {% endfor %}
 
-<script src="{{base}}catalog/view/javascript/melle/dist/manifest.js" type="text/javascript"></script>
-<script src="{{base}}catalog/view/javascript/melle/dist/vendor.js" type="text/javascript"></script>
-<script src="{{base}}catalog/view/javascript/melle/dist/melle.js" type="text/javascript"></script>
+<script src="{{base}}catalog/view/javascript/melle/dist/manifest.js{{cache_postfix}}" type="text/javascript"></script>
+<script src="{{base}}catalog/view/javascript/melle/dist/vendor.js{{cache_postfix}}" type="text/javascript"></script>
+<script src="{{base}}catalog/view/javascript/melle/dist/melle.js{{cache_postfix}}" type="text/javascript"></script>
 {% for script in scripts %}
-<script src="{{ script }}" type="text/javascript"></script>
-{% endfor %}
-
-<link href="{{base}}catalog/view/theme/melle/stylesheet/bootstrap.css" rel="stylesheet" type="text/css" />
-<link href="{{base}}catalog/view/theme/melle/stylesheet/sass/libs.css" rel="stylesheet" type="text/css" />
-<link href="{{base}}catalog/view/theme/melle/stylesheet/sass/new.css" rel="stylesheet" type="text/css" />
-{% for link in links %}
-<link href="{{ link.href }}" rel="{{ link.rel }}" />
+<script src="{{ script }}{{cache_postfix}}" type="text/javascript"></script>
 {% endfor %}
 
 {% for analytic in analytics %}
 {{ analytic }}
 {% endfor %}
-
-
 
 <!-- Global sitee tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-110511917-1"></script><script>
@@ -182,7 +177,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 {% endif %}
 
 {# отключалка яндекс Советника  #}
- 
+
 <script type="text/javascript">
  	(function() {
  	function sovetnikPluginRemoveMicroschema()
@@ -195,7 +190,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  	}
  	}
  	}
- 	 
+
  	/*Яндекс.Советник на всех десктопных браузерах на базе Chrome*/
  	var yandexDesktop = !/Mobile/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
  	if(yandexDesktop)
@@ -205,7 +200,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  	clearInterval(timerId);
  	}
  	}
- 	 
+
  	document.addEventListener("DOMNodeInserted", function (event) {
  	/*Альтернативный поиск от Яндекс*/
  	var searchYandex = /_sovetnik_/.test(event.target.className) && event.target.innerHTML == "";

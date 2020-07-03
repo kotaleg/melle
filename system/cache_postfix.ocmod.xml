@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>cache_postfix</name>
+    <code>cache_postfix</code>
+    <description>Cache Postfix</description>
+    <version>0.0.1</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/common/header.php">
+
+        <operation error="skip">
+            <search><![CDATA[$data['base'] = $server;]]></search>
+            <add position="before"><![CDATA[
+                /* CACHE_POSTFIX START */
+                if ($this->config->get('developer_sass')) {
+                    $cachedPostfix = $this->cache->get('developer_sass.cache_postfix');
+                    if (!$cachedPostfix) {
+                        $cachedPostfix = crc32(uniqid('', true));
+                        $this->cache->set('developer_sass.cache_postfix', $cachedPostfix);
+                    }
+                    $data['cache_postfix'] = "?{$cachedPostfix}";
+                }
+                /* CACHE_POSTFIX END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file path="admin/controller/common/developer.php">
+
+        <operation error="skip">
+            <search><![CDATA[public function sass() {]]></search>
+            <add position="after"><![CDATA[
+                /* CACHE_POSTFIX START */
+                $this->cache->delete('developer_sass.cache_postfix');
+                /* CACHE_POSTFIX END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+</modification>
