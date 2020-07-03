@@ -24,9 +24,6 @@ class ControllerCommonHeader extends Controller {
             $this->document->addLink($server . 'image/' . $this->config->get('config_icon'), 'icon');
         }
 
-        // $this->document->addScript('catalog/view/javascript/jquery/jquery.lazy/jquery.lazy.min.js');
-        // $this->document->addScript('catalog/view/javascript/jquery/jquery.lazy/jquery.lazy.plugins.min.js');
-
         $data['title'] = $this->document->getTitle();
 
         $data['base'] = $server;
@@ -73,12 +70,6 @@ class ControllerCommonHeader extends Controller {
         $data['checkout'] = $this->url->link('checkout/checkout', '', true);
         $data['contact'] = $this->url->link('information/contact');
         $data['telephone'] = $this->config->get('config_telephone');
-
-        // $data['language'] = $this->load->controller('common/language');
-        // $data['currency'] = $this->load->controller('common/currency');
-        // $data['search'] = $this->load->controller('common/search');
-        // $data['cart'] = $this->load->controller('common/cart');
-        // $data['menu'] = $this->load->controller('common/menu');
 
         return $this->load->view('common/header', $data);
     }
