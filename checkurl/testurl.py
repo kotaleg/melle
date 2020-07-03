@@ -35,7 +35,7 @@ with open(FILE, newline='', encoding="utf-8-sig") as csvfile:
                 print('{} -- {}'.format(r.status_code, row[0]), file=f)
             except requests.ConnectionError:
                 print('{} -- {}'.format('FAILED', row[0]), file=f)
-
+                continue
 
             for h in r.history:
                 print('redirect {} -> {}'.format(h.status_code, r.url), file=f)
