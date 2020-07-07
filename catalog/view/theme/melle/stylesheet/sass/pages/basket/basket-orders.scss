@@ -45,7 +45,6 @@
         tbody {
           tr {
             td {
-              
             }
           }
         }
@@ -79,13 +78,12 @@
               font-size: 14px;
             }
           }
-          
+
           &__price {
             border: 1px #2b2a29 solid;
             padding: 5px 2px;
             text-align: right;
             &-default {
-              
             }
           }
 
@@ -118,7 +116,7 @@
               }
             }
             & > button {
-              display: block!important;
+              display: block !important;
               width: 19px;
               height: 30px;
               text-align: center;
