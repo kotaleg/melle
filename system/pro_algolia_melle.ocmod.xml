@@ -8,7 +8,7 @@
     <link>http://prohamster.com</link>
 
     <file path="catalog/model/extension/module/pro_algolia.php">
-       
+
         <operation error="skip">
             <search><![CDATA[$this->load->model("{$this->route}/product");]]></search>
             <add position="replace"><![CDATA[
@@ -39,7 +39,7 @@
     </file>
 
     <file path="catalog/controller/extension/module/melle.php">
-       
+
         <operation error="skip">
             <search><![CDATA[$state['id'] = "{$this->codename}_header";]]></search>
             <add position="after"><![CDATA[
@@ -53,7 +53,7 @@
     </file>
 
     <file path="catalog/model/api/import_1c.php">
-       
+
         <operation error="skip">
             <search><![CDATA[$result = $this->_offersRoutine($parsed);]]></search>
             <add position="after"><![CDATA[
@@ -78,6 +78,22 @@
                         $this->model_extension_module_pro_algolia->queueSaveProduct($product['product_id']);
                     }
                 }
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file path="catalog/controller/product/product.php">
+
+        <operation error="skip">
+            <search><![CDATA[$data['description']]]></search>
+            <add position="before"><![CDATA[
+                /* IVAN MOD START */
+                $data['manufacturers'] = $this->url->link(
+                    'product/search',
+                    'refinementList[manufacturer][0]=' . utf8_strtolower($product_info['manufacturer'])
+                );
                 /* IVAN MOD END */
             ]]></add>
         </operation>
