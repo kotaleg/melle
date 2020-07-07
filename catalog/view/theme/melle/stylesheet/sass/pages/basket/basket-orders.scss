@@ -6,17 +6,12 @@
 #cart-controller {
   margin-top: -35px;
 }
-.basket-form__group--send {
-  //float: right;
-}
 #showCartForm {
   display: none;
 }
 .basket-orders {
   font-weight: 900;
-  // width: 52%;
   margin: 0;
-  // float: left;
   @include mobile {
     width: 100%;
   }
@@ -42,12 +37,6 @@
 
       @include mobile {
         display: block;
-        tbody {
-          tr {
-            td {
-            }
-          }
-        }
 
         .basket-orders {
           &__image-column {
@@ -83,8 +72,6 @@
             border: 1px #2b2a29 solid;
             padding: 5px 2px;
             text-align: right;
-            &-default {
-            }
           }
 
           &__size {
@@ -234,18 +221,8 @@
             }
           }
         }
-        // &:nth-child(3) {
-        //   text-align: center;
-        //   vertical-align: middle;
-        // }
-        // &:nth-child(4) {
-        //   max-width: 50px;
-        //   text-align: center;
-        //   vertical-align: middle;
-        // }
         &.price,
         &.total {
-          // width: 100px;
           text-align: center;
           vertical-align: middle;
           .basket-orders__price {
@@ -394,7 +371,6 @@
       #total_shipping {
         text-align: inherit;
         span {
-          width: 100%;
           display: inline;
         }
       }

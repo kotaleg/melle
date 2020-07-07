@@ -331,14 +331,7 @@ blockquote {
   }
 }
 
-input[type='submit'],
-textarea,
-button {
-  // display: block !important;
-}
-
 body .select2-container--default .select2-results > .select2-results__options {
-  // overflow-y: hidden;
   overflow-y: auto;
 }
 
@@ -348,7 +341,6 @@ body .select2-container--default .select2-results > .select2-results__options {
 
 input,
 textarea {
-  //color: #000 !important;
   &::-webkit-input-placeholder {
     color: #7a7a7a;
     opacity: 1;
@@ -492,14 +484,9 @@ input[type='checkbox']:checked + span:after {
 
 section[data-layout='col'] .catalog__content {
   width: 100%;
-  //margin-left: 60px;
 }
 .sidebar {
   width: 300px;
-  //  position: absolute;
-}
-.catalog_list_view {
-  //margin-left: 285px;
 }
 .header-page__container .top-line svg {
   fill: #fff !important;
@@ -523,7 +510,6 @@ section[data-layout='col'] .catalog__content {
   width: 340px;
   height: 100%;
   text-decoration: none;
-  //  margin-top: 30px;
   span {
     position: relative;
     color: #fff;

@@ -208,10 +208,6 @@ section[data-layout='col'] {
         width: 6.30833vw;
         height: 2.08889vw;
 
-        &:hover {
-          // background-color: #000;
-        }
-
         font-weight: 800;
         font-size: vw_(14px);
         @include tablet {
@@ -235,22 +231,17 @@ section[data-layout='col'] {
       left: 0;
       overflow: hidden;
       width: 100%;
-      // height: vw_(75px);
       height: 70px;
-      // padding: vw_(15px);
-      // padding-top: vw_(17px);
       transition: height 0.5s;
       background-color: rgba(0, 0, 0, 0.5);
       font-size: vw_(14px);
       z-index: 2;
       @include tablet {
-        // height: 75px;
         height: 100px;
         padding: 15px;
         font-size: 14px;
       }
       @include mobile {
-        // height: 65px;
         height: 100px;
         padding: 15px;
         font-size: 14px;
@@ -272,36 +263,17 @@ section[data-layout='col'] {
         padding-bottom: 10px;
       }
       &:hover {
-        // height: vw_(230px);
         height: 80%;
-        @include tablet {
-          // height: 65px;
-          height: 80%;
-        }
-        @include mobile {
-          // height: 65px;
-          height: 80%;
-        }
       }
       &.open {
-        // height: vw_(230px);
         height: 80%;
         @include tablet {
-          // height: 65px;
           height: 100%;
-        }
-        @include mobile {
-          // height: 65px;
-          height: 80%;
         }
       }
     }
     &__item-wrap {
-      // width: vw_(195px);
       margin: 0 auto;
-      @include tablet {
-        // width: 195px;
-      }
       @include mobile {
         width: 195px;
       }
