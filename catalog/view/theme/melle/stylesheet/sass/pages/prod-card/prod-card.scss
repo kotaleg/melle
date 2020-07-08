@@ -186,6 +186,10 @@
       .prod-card__form-group--send {
         width: 48%;
 
+        & > div {
+          display: flex;
+        }
+
         a {
           background-color: #e55726;
         }
