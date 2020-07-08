@@ -40,7 +40,6 @@ section[data-layout='col'] .catalog__item.new:after {
 }
 .reviews.on .reviews__right {
   display: block;
-  margin-top: 25px;
 }
 .reviews {
   position: relative;

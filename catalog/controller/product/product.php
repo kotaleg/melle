@@ -271,6 +271,22 @@ class ControllerProductProduct extends Controller {
                 $this->model_extension_module_extra_description
                     ->getDescription($data['product_id']),
                 ENT_QUOTES, 'UTF-8');
+
+            $html_dom = new d_simple_html_dom();
+            $html_dom->load($data['extra_description'], $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
+
+            $extraDescriptionPCount = 0;
+            $data['extra_description_hidden'] = '';
+            foreach($html_dom->find('p') as $id => $element) {
+                if (utf8_strlen(strip_tags($element->innertext)) > 0) {
+                    $extraDescriptionPCount++;
+                }
+                if ($extraDescriptionPCount > 3) {
+                    $data['extra_description_hidden'] .= (string) $element->outertext;
+                    $element->outertext = '';
+                }
+            }
+            $data['extra_description'] = (string) $html_dom;
             /* EXTRA DESCRIPTION END */
 
             if ($product_info['quantity'] <= 0) {

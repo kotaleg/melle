@@ -81,11 +81,23 @@
                      <span>состав: </span>{{sostav}}
                   </div>
                   {% endif %}
+               </div>
+            </div>
 
-                  {% if extra_description %}
-                  <div class="prod-card__description">{{extra_description}}</div>
+            <div class="prod-card__extra-container">
+               {% if extra_description %}
+               <div class="prod-card__description-extra">
+                  {{extra_description}}
+                  {% if extra_description_hidden %}
+                  <details>
+                     <summary>Подробнее</summary>
+                     {{extra_description_hidden}}
+                  </details>
                   {% endif %}
                </div>
+               {% endif %}
+               <!-- PRODUCT REWIEW -->
+               <melle-product-review></melle-product-review>
             </div>
 
             {% if products %}
@@ -135,9 +147,6 @@
                </ul>
             </div>
             {% endif %}
-
-            <!-- PRODUCT REWIEW -->
-            <melle-product-review></melle-product-review>
 
          </div>
       </div>
