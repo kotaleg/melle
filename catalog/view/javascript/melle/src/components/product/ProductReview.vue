@@ -83,6 +83,37 @@
         </div>
       </form>
     </div>
+    <div v-if="reviews.length > 0" class="reviews__left">
+      <h2 id="reviews" class="reviews__title">Отзывы <span> ( {{ reviews.length }} )</span>
+      </h2>
+      <ul class="reviews__list">
+        <li v-for="review in reviews" :key="review.review_id" class="reviews__item" itemprop="review" itemtype="http://schema.org/Review" itemscope>
+          <div class="reviews__person" itemprop="author" itemtype="http://schema.org/Person" itemscope>
+            <meta itemprop="name" :content="review.author" />
+            <span>{{ review.author }}</span>
+          </div>
+          <div class="reviews__data">
+            <span>{{ review.date_added }}</span>
+          </div>
+          <div class="reviews__rating" itemprop="reviewRating" itemtype="http://schema.org/Rating" itemscope>
+            <meta itemprop="ratingValue" :content="review.rating" />
+            <meta itemprop="bestRating" content="5" />
+            <star-rating
+              :item-size="20"
+              inactive-color="#d5d5d5"
+              active-color="#2b2a29"
+              :increment="1"
+              :rating="review.rating"
+              :read-only="true"
+              :show-rating="false"
+            />
+          </div>
+          <div class="reviews__text">
+            <p>{{ review.text }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -99,6 +130,7 @@ export default {
   computed: {
     ...mapGetters('header', ['isCaptcha', 'captchaKey']),
     ...mapGetters('review', ['getFormValue', 'fieldHasError', 'getFieldError']),
+    ...mapState('review', ['reviews']),
 
     name: {
       get() {

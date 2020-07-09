@@ -17,6 +17,7 @@ const state = {
 
   review_link: '',
   product_id: 0,
+  reviews: [],
 }
 
 // getters

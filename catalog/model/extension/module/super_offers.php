@@ -358,7 +358,7 @@ class ModelExtensionModuleSuperOffers extends Model
             $result['stock'] = $this->language->get('text_instock');
         }
 
-        $result['rating'] = (int)$data['rating'];
+        $result['rating'] = $data['rating'];
 
         return $result;
     }

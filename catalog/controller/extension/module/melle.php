@@ -275,6 +275,10 @@ class ControllerExtensionModuleMelle extends Controller
                 $state['zvezdochka'] = true;
                 $state['special_text'] = trim(str_replace('*', '', $state['special_text']));
             }
+
+            $this->load->model('catalog/review');
+            $state['reviewCount'] = (int) $this->model_catalog_review->getTotalReviewsByProductId($product_id);
+            $state['ratingValue'] = (float) $state['default_values']['rating'];
         }
 
         $state['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add', '', true);
@@ -310,13 +314,16 @@ class ControllerExtensionModuleMelle extends Controller
 
         $data['getRating'] = array();
         for ($i=0; $i < 5; $i++) {
-            if ($state['default_values']['rating'] > 0
-            && $state['default_values']['rating'] > $i) {
+            if ((int) $state['default_values']['rating'] > 0
+            && (int) $state['default_values']['rating'] > $i) {
                 $data['getRating'][] = true;
             } else {
                 $data['getRating'][] = false;
             }
         }
+
+        $data['reviewCount'] = $state['reviewCount'];
+        $data['ratingValue'] = $state['ratingValue'];
 
         return $this->model_extension_pro_patch_load->view("{$this->route}/product_prerender", $data);
     }
@@ -328,6 +335,17 @@ class ControllerExtensionModuleMelle extends Controller
 
         $state['product_id'] = $product_id;
         $state['review_link'] = $this->model_extension_pro_patch_url->ajax('product/product/melle_add_review', '', true);
+
+        $this->load->model('catalog/review');
+        $state['reviews'] = array_map(function($review) {
+            return array(
+                'review_id' => $review['review_id'],
+                'author' => $review['author'],
+                'date_added' => $review['date_added'],
+                'rating' => (int) $review['rating'],
+                'text' => $review['text'],
+            );
+        }, $this->model_catalog_review->getReviewsByProductId($state['product_id']));
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));

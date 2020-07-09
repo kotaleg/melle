@@ -14,7 +14,7 @@
       </div>
    </section>
 
-   <div class="prod-card">
+   <div class="prod-card" itemtype="http://schema.org/Product" itemscope>
       <div class="prod-card__container container">
          <div class="prod-card__content">
             <div class="prod-card__content-main">
@@ -29,7 +29,7 @@
                      {% endif %}
                      {% for i in images %}
                      <li class="prod-card__item-photo" data-hash="{{i.imageHash}}">
-                        <img src="{{i.thumb}}" />
+                        <img itemprop="image" src="{{i.thumb}}" />
                      </li>
                      {% endfor %}
                   </ul>
@@ -41,7 +41,7 @@
                      {% endif %}
                      {% for i in images %}
                      <li class="prod-card__item-big-photo">
-                        <img src="{{i.popup}}" data-zoom-image="{{i.popup}}" />
+                        <img itemprop="image" src="{{i.popup}}" data-zoom-image="{{i.popup}}" />
                      </li>
                      {% endfor %}
                   </ul>
@@ -55,6 +55,7 @@
                   {% endif %}
 
                   <h1 class="prod-card__title">{{h1}}</h1>
+                  <meta itemprop="name" content="{{h1}}" />
 
                   <!-- PRODUCT ELEMENT -->
                   {% if rpc %}
@@ -63,9 +64,11 @@
                   <melle-product></melle-product>
 
                   <div class="prod-card__description">{{description}}</div>
+                  <meta itemprop="description" content="{{description}}" />
 
                   {% if manufacturer %}
-                  <div class="prod-card__manufacturer">
+                  <div class="prod-card__manufacturer" itemprop="brand" itemtype="http://schema.org/Brand" itemscope>
+                     <meta itemprop="name" content="{{manufacturer}}" />
                      <span>производитель: </span><a href="{{manufacturers}}">{{manufacturer}}</a>
                   </div>
                   {% endif %}
