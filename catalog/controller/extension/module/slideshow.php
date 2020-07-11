@@ -7,10 +7,6 @@ class ControllerExtensionModuleSlideshow extends Controller {
         $this->load->model('tool/image');
         $this->load->model('tool/base');
 
-        // $this->document->addStyle('catalog/view/javascript/melle/query/swiper/swiper.min.css');
-        // $this->document->addStyle('catalog/view/javascript/jquery/swiper/css/opencart.css');
-        // $this->document->addScript('catalog/view/javascript/melle/query/swiper/swiper.min.js');
-
         $data['banners'] = array();
 
         // IVAN MOD START
