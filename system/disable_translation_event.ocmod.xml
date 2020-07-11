@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>disable_translation_event</name>
+    <code>disable_translation_event</code>
+    <description>Disable Translation Event</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/event/translation.php">
+
+        <operation error="skip">
+            <search><![CDATA[public function index(&$route, &$key) {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                return;
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+</modification>

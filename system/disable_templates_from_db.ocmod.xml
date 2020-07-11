@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>disable_templates_from_db</name>
+    <code>disable_templates_from_db</code>
+    <description>Disable Templates From DB</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/event/theme.php">
+
+        <operation error="skip">
+            <search><![CDATA[$theme_info = $this->model_design_theme->getTheme($route, $theme);]]></search>
+            <add position="replace"><![CDATA[
+                /* IVAN MOD START */
+                $theme_info = false;
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+</modification>

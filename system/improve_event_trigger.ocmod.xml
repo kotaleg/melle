@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>event_trigger</name>
+    <code>event_trigger</code>
+    <description>Event trigger</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="system/engine/event.php">
+
+        <operation error="skip">
+            <search><![CDATA[protected $registry;]]></search>
+            <add position="before"><![CDATA[
+                /* IVAN MOD START */
+                private $preparedTriggers = array();
+                private $matches = array();
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[foreach ($this->data as $value) {]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                if (isset($this->preparedTriggers[$value['trigger']])) {
+                    $preparedTrigger = $this->preparedTriggers[$value['trigger']];
+                } else {
+                    $preparedTrigger = str_replace(array('\*', '\?'), array('.*', '.'), preg_quote($value['trigger'], '/'));
+                    $this->preparedTriggers[$value['trigger']] = $preparedTrigger;
+                }
+
+                $matchKey = (string) $preparedTrigger . (string) $event;
+                if (isset($this->matches[$matchKey])) {
+                    $matchResult = $this->matches[$matchKey];
+                } else {
+                    $matchResult = preg_match('/^' . $preparedTrigger . '/', $event);
+                    $this->matches[$matchKey] = (bool) $matchResult;
+                }
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[if (preg_match('/^' . str_replace(array('\*', '\?'), array('.*', '.'), preg_quote($value['trigger'], '/')) . '/', $event)) {]]></search>
+            <add position="replace"><![CDATA[
+                /* IVAN MOD START */
+                if ($matchResult) {
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+</modification>
