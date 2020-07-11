@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_menu</name>
+    <code>melle_menu</code>
+    <description>Melle Menu</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="admin/model/catalog/category.php">
+
+        <operation error="skip">
+            <search><![CDATA[$this->cache->delete('category');]]></search>
+            <add position="after"><![CDATA[
+                /* IVAN MOD START */
+                $this->cache->delete('melle.menu');
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+</modification>

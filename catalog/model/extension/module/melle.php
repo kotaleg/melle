@@ -22,6 +22,9 @@ class ModelExtensionModuleMelle extends Controller
 
     public function getMenu()
     {
+        $menu = $this->cache->get('melle.menu');
+        if ($menu) { return $menu; }
+
         $this->load->model('catalog/category');
         $top_categories = $this->model_catalog_category->getCategories(0);
 
@@ -66,6 +69,7 @@ class ModelExtensionModuleMelle extends Controller
             );
         }
 
+        $this->cache->set('melle.menu', $menu);
         return $menu;
     }
 
