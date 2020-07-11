@@ -10,6 +10,8 @@ class ModelExtensionModuleLeadhit extends Model
     const TYPE_HITS = 'top_offers';
     const TYPE_RECOMMEND = 'cross_sale';
 
+    private $setting = array();
+
     public function __construct($registry)
     {
         parent::__construct($registry);
