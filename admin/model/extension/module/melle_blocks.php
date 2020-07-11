@@ -204,7 +204,6 @@ class ModelExtensionModuleMelleBlocks extends Model
         if (!isset($json['error'])) {
 
             $moduleId = $data['moduleId'];
-            // unset($data['moduleId']);
 
             // remove blocks
             $this->removeBlocks($moduleId);
@@ -230,6 +229,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             $json['moduleId'] = $moduleId;
             $json['saved'] = true;
 
+            $this->cache->delete('melle.melle_blocks');
         }
 
         return $json;
@@ -238,7 +238,6 @@ class ModelExtensionModuleMelleBlocks extends Model
     public function countBlocksWidth($blocks)
     {
         $widthCount = 0;
-        $blockTypes = $this->getBlockTypes();
 
         foreach ($blocks as $b) {
             if (isset($b['type'])) {
@@ -256,6 +255,8 @@ class ModelExtensionModuleMelleBlocks extends Model
     {
         $this->db->query("DELETE FROM `". DB_PREFIX . self::BLOCK_TABLE ."`
             WHERE `moduleId` = '" . (int)$moduleId . "'");
+
+        $this->cache->delete('melle.melle_blocks');
     }
 
     private function removeUnusedBlocks()
@@ -270,6 +271,8 @@ class ModelExtensionModuleMelleBlocks extends Model
             $this->db->query("DELETE FROM `". DB_PREFIX . self::BLOCK_TABLE ."`
                 WHERE `moduleId` NOT IN (" . $ids . ")");
         }
+
+        $this->cache->delete('melle.melle_blocks');
     }
 
     private function parseBlocks($blocks, $extra)

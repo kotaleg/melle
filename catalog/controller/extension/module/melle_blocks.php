@@ -30,12 +30,20 @@ class ControllerExtensionModuleMelleBlocks extends Controller
     public function index($setting)
     {
         if (!isset($setting['moduleId'])) { return; }
-        $data['moduleId'] = md5($setting['moduleId']);
 
-        $preparedBlocks = $this->extension_model->prepareBlocks($setting['moduleId'], $setting['height']);
-        $data['blocks'] = $this->renderBlocks($preparedBlocks);
+        $cacheKey = "melle.melle_blocks.module_id{$setting['moduleId']}." . serialize($setting);
+        $data = $this->cache->get($cacheKey);
 
-        $data['height'] = $setting['height'];
+        if (!$data) {
+            $data['moduleId'] = crc32($setting['moduleId']);
+
+            $preparedBlocks = $this->extension_model->prepareBlocks($setting['moduleId'], $setting['height']);
+            $data['blocks'] = $this->renderBlocks($preparedBlocks);
+
+            $data['height'] = $setting['height'];
+
+            $this->cache->set($cacheKey, $data);
+        }
 
         return $this->model_extension_pro_patch_load->view($this->route, $data);
     }
@@ -60,7 +68,7 @@ class ControllerExtensionModuleMelleBlocks extends Controller
                     break;
             }
 
-            $b['blockId'] = md5(json_encode($b));
+            $b['blockId'] = crc32(serialize($b));
             $b['class'] = $class;
             $rendered[] = $this->model_extension_pro_patch_load->view(
                     "{$this->route}/type_{$type}", $b);
