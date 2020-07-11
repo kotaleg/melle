@@ -20,6 +20,10 @@ class ModelExtensionModuleProRelated extends Model
         $products = array();
         $results = $this->getCartProducts();
 
+        if (!$results) {
+            return $products;
+        }
+
         $this->load->model('catalog/product');
         $this->load->model('extension/module/pro_znachek');
         $this->load->model('extension/module/super_offers');
