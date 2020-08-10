@@ -8,7 +8,7 @@
     <link>http://prohamster.com</link>
 
     <file path="catalog/controller/extension/payment/rbs.php">
-       
+
         <operation error="skip">
             <search><![CDATA[$product_taxSum = $this->tax->getTax($product['price'], $product['tax_class_id']);]]></search>
             <add position="before"><![CDATA[
@@ -91,7 +91,7 @@
                 if (isset($itemCode) && $itemCode) {
                     $product_data['itemCode'] = "{$itemCode}_{$product['cart_id']}";
                 }
-                /* ITEM CODE END */ 
+                /* ITEM CODE END */
             ]]></add>
         </operation>
 
@@ -109,7 +109,16 @@
                 }
 
                 $amount = $bundleAmount;
-                /* RECALCULATE TOTAL BUNDLE ITEMS END */ 
+                /* RECALCULATE TOTAL BUNDLE ITEMS END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[$product_data = array(]]></search>
+            <add position="before"><![CDATA[
+                /* FIX TAX TYPE START */
+                $tax_type = $this->config->get('payment_rbs_taxType');
+                /* FIX TAX TYPE END */
             ]]></add>
         </operation>
 
