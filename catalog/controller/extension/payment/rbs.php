@@ -161,7 +161,7 @@ class ControllerExtensionPaymentRbs extends Controller
 
         // DISCOUNT CALCULATE
         $discount = $this->rbs->discountHelper->discoverDiscount($amount,$orderBundle['cartItems']['items']);
-        if($discount > 0) { 
+        if($discount > 0) {
             $this->rbs->discountHelper->setOrderDiscount($discount);
             $recalculatedPositions = $this->rbs->discountHelper->normalizeItems($orderBundle['cartItems']['items']);
             $recalculatedAmount = $this->rbs->discountHelper->getResultAmount();
