@@ -114,7 +114,12 @@
           >{{ getActivePrice }} <span class="ruble-sign">Р</span></span
         >
 
-        <div class="prod-card__form-group prod-card__form-group--rating" itemprop="aggregateRating" itemtype="http://schema.org/AggregateRating" itemscope>
+        <div
+          class="prod-card__form-group prod-card__form-group--rating"
+          itemprop="aggregateRating"
+          itemtype="http://schema.org/AggregateRating"
+          itemscope
+        >
           <meta itemprop="reviewCount" :content="reviewCount" />
           <meta itemprop="ratingValue" :content="ratingValue" />
 

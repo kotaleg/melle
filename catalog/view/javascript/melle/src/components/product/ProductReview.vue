@@ -84,18 +84,36 @@
       </form>
     </div>
     <div v-if="reviews.length > 0" class="reviews__left">
-      <h2 id="reviews" class="reviews__title">Отзывы <span> ( {{ reviews.length }} )</span>
+      <h2 id="reviews" class="reviews__title">
+        Отзывы <span> ( {{ reviews.length }} )</span>
       </h2>
       <ul class="reviews__list">
-        <li v-for="review in reviews" :key="review.review_id" class="reviews__item" itemprop="review" itemtype="http://schema.org/Review" itemscope>
-          <div class="reviews__person" itemprop="author" itemtype="http://schema.org/Person" itemscope>
+        <li
+          v-for="review in reviews"
+          :key="review.review_id"
+          class="reviews__item"
+          itemprop="review"
+          itemtype="http://schema.org/Review"
+          itemscope
+        >
+          <div
+            class="reviews__person"
+            itemprop="author"
+            itemtype="http://schema.org/Person"
+            itemscope
+          >
             <meta itemprop="name" :content="review.author" />
             <span>{{ review.author }}</span>
           </div>
           <div class="reviews__data">
             <span>{{ review.date_added }}</span>
           </div>
-          <div class="reviews__rating" itemprop="reviewRating" itemtype="http://schema.org/Rating" itemscope>
+          <div
+            class="reviews__rating"
+            itemprop="reviewRating"
+            itemtype="http://schema.org/Rating"
+            itemscope
+          >
             <meta itemprop="ratingValue" :content="review.rating" />
             <meta itemprop="bestRating" content="5" />
             <star-rating

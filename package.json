@@ -10,7 +10,7 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "yarn run production",
     "check-pretty": "prettier -l '{catalog/view/theme/melle/stylesheet/sass/**/,catalog/view/javascript/melle/src/**/}*.{js,json,css,scss,vue}'",
-    "format": "prettier --write '{catalog/view/theme/melle/stylesheet/sass/**/,catalog/view/javascript/melle/src/**/}*.{js,json,css,scss,vue}'"
+    "pretty": "prettier --write '{catalog/view/theme/melle/stylesheet/sass/**/,catalog/view/javascript/melle/src/**/}*.{js,json,css,scss,vue}'"
   },
   "dependencies": {
     "@riophae/vue-treeselect": "^0.0.38",
