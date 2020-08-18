@@ -40,7 +40,7 @@
                   <a :href="p.href">{{ p.h1 }}</a>
                 </h3>
               </div>
-              <div class="col-xs-7">
+              <div v-if="p.in_stock" class="col-xs-7">
                 <span v-if="isSpecial(i)" class="catalog__item-price-old">
                   {{ getPrice(i) }} <span class="ruble-sign">Р</span>
                 </span>
@@ -57,13 +57,23 @@
                   {{ getPrice(i) }} <span class="ruble-sign">Р</span></span
                 >
               </div>
-              <div class="col-xs-5">
+              <div v-if="p.in_stock" class="col-xs-5">
                 <div>
                   <a
                     @click="gtmProductClick(i)"
                     :href="p.href"
                     class="ivanbuybutton"
                     >Купить</a
+                  >
+                </div>
+              </div>
+              <div v-if="!p.in_stock" class="col-sm-12">
+                <div class="text-center">
+                  <a
+                    @click="gtmProductClick(i)"
+                    :href="p.href"
+                    class="ivanbuybutton not-in-stock"
+                    >Скоро в продаже</a
                   >
                 </div>
               </div>

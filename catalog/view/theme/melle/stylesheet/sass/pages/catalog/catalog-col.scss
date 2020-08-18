@@ -208,6 +208,11 @@ section[data-layout='col'] {
         width: 6.30833vw;
         height: 2.08889vw;
 
+        &.not-in-stock {
+          width: 70%;
+          margin: auto;
+        }
+
         font-weight: 800;
         font-size: vw_(14px);
         @include tablet {

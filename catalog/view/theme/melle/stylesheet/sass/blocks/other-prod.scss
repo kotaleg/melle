@@ -59,8 +59,9 @@
       width: 4.30833vw;
       height: 1.58889vw;
 
-      &:hover {
-        // background-color: #000;
+      &.not-in-stock {
+        width: 70%;
+        margin: auto;
       }
 
       font-weight: 800;
