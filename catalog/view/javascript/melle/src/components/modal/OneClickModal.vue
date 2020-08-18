@@ -128,6 +128,7 @@ export default {
         name: this.name,
         phone: this.phone,
         agree: this.agree,
+        source: this.params.source || ''
       })
     },
 

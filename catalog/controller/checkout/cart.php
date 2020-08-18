@@ -572,7 +572,7 @@ class ControllerCheckoutCart extends Controller {
     public function melle_get_data()
     {
         $this->load->model('checkout/cart');
-        $json = $this->model_checkout_cart->getCart(); 
+        $json = $this->model_checkout_cart->getCart();
 
         $this->response->setOutput(json_encode($json));
     }
@@ -693,6 +693,19 @@ class ControllerCheckoutCart extends Controller {
                     );
                 }
 
+                $subject = 'Форма в один клик';
+
+                if (isset($parsed['source'])) {
+                    switch ($parsed['source']) {
+                        case 'buy-one-click':
+                            $subject = sprintf('Заказ в один клик %s', $parsed['name']);
+                            break;
+                        case 'notify-in-stock':
+                            $subject = sprintf('Клиент хотел бы купить: %s', $product_info['name']);
+                            break;
+                    }
+                }
+
                 $mail = new Mail($this->config->get('config_mail_engine'));
                 $mail->parameter = $this->config->get('config_mail_parameter');
                 $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
@@ -704,7 +717,7 @@ class ControllerCheckoutCart extends Controller {
                 $mail->setTo($this->config->get('config_email'));
                 $mail->setFrom($this->config->get('config_email'));
                 $mail->setSender(html_entity_decode($parsed['name'], ENT_QUOTES, 'UTF-8'));
-                $mail->setSubject(html_entity_decode(sprintf('Заказ в один клик %s', $parsed['name']), ENT_QUOTES, 'UTF-8'));
+                $mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
                 $mail->setHtml($this->load->view('mail/one_click', array(
                     'phone' => filter_var($parsed['phone'], FILTER_SANITIZE_NUMBER_INT),
                     'name' => $parsed['name'],
