@@ -62,14 +62,18 @@ class ModelExtensionModuleSuperOffers extends Model
         return $quantity;
     }
 
-    public function getOptions($product_id)
+    public function getOptions($product_id, $in_stock_only = true)
     {
         $this->load->model('tool/image');
         $po_data = array();
 
         foreach ($this->model_catalog_product->getProductOptions($product_id) as $po) {
 
-            $name = mb_strtolower($po['name']);
+            if ($po['type'] !== 'radio') {
+                continue;
+            }
+
+            $name = utf8_strtolower($po['name']);
 
             $po_class = '';
             switch ($name) {
@@ -86,32 +90,33 @@ class ModelExtensionModuleSuperOffers extends Model
 
             foreach ($po['product_option_value'] as $pov) {
 
-                $pov_image = $this->model_tool_image->resize($pov['image'], 50, 50);
-                if ($po_class !== 'color') {
-                    if (!is_file(DIR_IMAGE . $pov['image'])
-                    || substr(str_replace('\\', '/', realpath(DIR_IMAGE . $pov['image'])), 0, strlen(DIR_IMAGE)) != str_replace('\\', '/', DIR_IMAGE)) {
-                        $pov_image = false;
+                $pov_image = false;
+                if (is_file(DIR_IMAGE . $pov['image'])) {
+                    $pov_image = $this->model_tool_image->resize($pov['image'], 50, 50);
+                }
+
+                if ($in_stock_only) {
+                    if (!$this->isAnyAvailablePare($product_id, $po['option_id'], $pov['option_value_id'])) {
+                        continue;
                     }
                 }
 
-                if ($this->isAnyAvailablePare($product_id, $po['option_id'], $pov['option_value_id'])) {
-                    $po_value_data[] = array(
-                        'product_option_value_id' => $pov['product_option_value_id'],
-                        'option_value_id'         => $pov['option_value_id'],
-                        'name'                    => $pov['name'],
-                        'image'                   => $pov_image,
-                        'barcode'                 => isset($pov['barcode']) ? $pov['barcode'] : '',
-                        'quantity'                => 0,
-                        'subtract'                => 0,
-                        'price'                   => 0,
-                        'price_prefix'            => '+',
-                        'weight'                  => 0,
-                        'weight_prefix'           => '+',
+                $po_value_data[] = array(
+                    'product_option_value_id' => $pov['product_option_value_id'],
+                    'option_value_id'         => $pov['option_value_id'],
+                    'name'                    => $pov['name'],
+                    'image'                   => $pov_image,
+                    'barcode'                 => isset($pov['barcode']) ? $pov['barcode'] : '',
+                    'quantity'                => 0,
+                    'subtract'                => 0,
+                    'price'                   => 0,
+                    'price_prefix'            => '+',
+                    'weight'                  => 0,
+                    'weight_prefix'           => '+',
 
-                        'selected'                => false,
-                        'disabled_by_selection'   => false,
-                    );
-                }
+                    'selected'                => false,
+                    'disabled_by_selection'   => false,
+                );
             }
 
             // SORT

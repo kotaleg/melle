@@ -1,10 +1,9 @@
 <template>
-  <form class="add-to-cart form-vertical" id="yw3" method="post">
+  <form class="add-to-cart form-vertical" method="post">
     <div
       v-for="(o, o_key) in options"
       :key="`option-${o_key}`"
       :class="['prod-card__form-group', `prod-card__form-group--${o.class}`]"
-      v-if="o.type === 'radio'"
     >
       <div>
         <span class="ivan-product-selectors">{{ o.name }}:</span>
@@ -80,6 +79,7 @@
           </button>
 
           <span
+            v-if="in_stock"
             v-show="quantity >= getActiveMaxQuantity"
             class="catalog__item-count_label js-product-count-block"
           >
@@ -90,7 +90,7 @@
       </div>
     </div>
 
-    <div class="prod-card__form-group prod-card__form-group--price">
+    <div v-if="in_stock" class="prod-card__form-group prod-card__form-group--price">
       <div class="prod-card__price">
         <span
           v-if="isSpecial"
@@ -138,7 +138,7 @@
       </div>
     </div>
 
-    <div id="ivan-price-handler">
+    <div v-if="in_stock" class="ivan-price-handler">
       <div
         v-if="getProductCountForCurrentSelectedOptions <= 0"
         style="margin: 0px;"
@@ -191,9 +191,24 @@
       </div>
     </div>
 
+    <div v-else class="ivan-price-handler">
+      <div
+        class="prod-card__form-group--send ivan-price-button one-click-button not-in-stock"
+      >
+        <div class="modal--send"></div>
+        <a
+          @click="notifyInStock()"
+          href="javascript:void(0);"
+          class="fast-order-link btn"
+          >Сообщить о поступлении</a
+        >
+      </div>
+    </div>
+
     <input type="hidden" id="active-image-hash" :value="currentImageHash" />
 
     <one-click-modal dir="ltr" :width="500" :scrollable="false" />
+    <notify-in-stock-modal dir="ltr" :width="500" :scrollable="false" />
   </form>
 </template>
 
@@ -231,6 +246,7 @@ export default {
       'special_text',
       'reviewCount',
       'ratingValue',
+      'in_stock',
     ]),
 
     getProductCountForCurrentSelectedOptions() {
@@ -296,7 +312,10 @@ export default {
       this.addToCartRequest()
     },
     buyOneClick() {
-      this.$modal.show('one-click-modal', {})
+      this.$modal.show('one-click-modal', {source: 'buy-one-click'})
+    },
+    notifyInStock() {
+      this.$modal.show('one-click-modal', {source: 'notify-in-stock'})
     },
     goToCheckout() {
       window.location = this.checkoutLink

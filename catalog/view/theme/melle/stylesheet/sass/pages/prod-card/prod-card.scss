@@ -177,7 +177,7 @@
       width: 40%;
     }
 
-    #ivan-price-handler {
+    .ivan-price-handler {
       margin-bottom: -5px;
       font-weight: 900;
       display: flex;
@@ -229,6 +229,10 @@
 
       .one-click-button {
         margin-left: auto;
+
+        &.not-in-stock {
+          margin-left: initial;
+        }
 
         a {
           line-height: 20px;

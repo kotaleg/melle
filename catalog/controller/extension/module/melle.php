@@ -263,10 +263,10 @@ class ControllerExtensionModuleMelle extends Controller
             $state['size_list'] = $this->model_extension_module_size_list->getSizeList($product_id);
 
             $state['default_values'] = $this->model_extension_module_super_offers->getDefaultValues($product_id, $product_info);
-
+            $state['in_stock'] = ((int) $state['default_values']['max_quantity'] > 0) ? true : false;
             $state['is_options_for_product'] = (bool)$this->model_extension_module_super_offers->isOptionsForProduct($product_id);
 
-            $state['options'] = $this->model_extension_module_super_offers->getOptions($product_id);
+            $state['options'] = $this->model_extension_module_super_offers->getOptions($product_id, $state['in_stock']);
             $state['full_combinations'] = $this->model_extension_module_super_offers->getFullCombinations($product_id);
 
             // SPECIAL TEXT
@@ -302,6 +302,7 @@ class ControllerExtensionModuleMelle extends Controller
         $data['options'] = $state['options'];
         $data['size_list'] = $state['size_list'];
 
+        $data['in_stock'] = (bool) $state['in_stock'];
         $data['is_options_for_product'] = $state['is_options_for_product'];
 
         $data['zvezdochka'] = isset($state['zvezdochka']) ? $state['zvezdochka'] : false;
@@ -403,6 +404,7 @@ class ControllerExtensionModuleMelle extends Controller
                 'getPrice' => $p['default_values']['price'],
                 'getSpecial' => $p['default_values']['special'],
                 'isSpecial' => false,
+                'in_stock' => $p['in_stock'],
             );
 
             if ($product['getSpecial'] !== false

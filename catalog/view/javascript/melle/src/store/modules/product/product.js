@@ -27,6 +27,7 @@ const state = {
   current_category: '',
   quantity: 1,
 
+  in_stock: false,
   is_options_for_product: false,
   options: [],
   full_combinations: [],
@@ -310,9 +311,8 @@ const actions = {
     commit('setQuantity', q)
   },
   radioHandler({ commit, state, dispatch, getters }, payload) {
-    let o_key = payload.o_key
-    let ov_key = payload.ov_key
-    let status = payload.status
+    const o_key = payload.o_key
+    const ov_key = payload.ov_key
 
     dispatch('clearSelectionForOption', o_key)
     commit('setOptionSelectStatus', { o_key, ov_key, status: true })
@@ -323,8 +323,10 @@ const actions = {
       dispatch('findCombination', o_key)
     }
 
-    dispatch('clearDisabled')
-    dispatch('updateDisabled')
+    if (state.in_stock === true) {
+      dispatch('clearDisabled')
+      dispatch('updateDisabled')
+    }
   },
   clearSelectionForOption({ commit, state }, o_key) {
     if (!has(state.options, o_key)) {
@@ -513,7 +515,7 @@ const actions = {
     )
   },
 
-  oneClickRequest({ commit, state, rootState, dispatch, getters }, payload) {
+  oneClickRequest({ state, rootState, getters }, payload) {
     this.dispatch('header/setLoadingStatus', true)
     shop.makeRequest(
       {
@@ -521,9 +523,7 @@ const actions = {
         product_id: state.product_id,
         quantity: state.quantity,
         options: getters.getOptionsForOneClick,
-        name: payload.name,
-        phone: payload.phone,
-        agree: payload.agree,
+        ...payload
       },
       (res) => {
         this.dispatch('header/setLoadingStatus', false)

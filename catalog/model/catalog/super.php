@@ -67,6 +67,8 @@ class ModelCatalogSuper extends Model
                 'default_values' => $this->model_extension_module_super_offers->getDefaultValues($p['product_id'], $p),
             );
 
+            $d_['in_stock'] = ((int) $d_['default_values']['max_quantity'] > 0) ? true : false;
+
             // HIDE PRODUCTS
             if (isset($d_['default_values']['price'])) {
                 if ($d_['default_values']['min_quantity'] <= 0) { continue; }

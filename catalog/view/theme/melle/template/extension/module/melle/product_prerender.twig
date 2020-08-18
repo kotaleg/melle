@@ -1,4 +1,4 @@
-<form class="add-to-cart form-vertical" id="yw3" method="post">
+<form class="add-to-cart form-vertical" method="post">
 
     {% for o in options %}
     {% if o.type == 'radio' %}
@@ -52,6 +52,7 @@
         </div>
     </div>
 
+    {% if in_stock %}
     <div class="prod-card__form-group prod-card__form-group--price">
         <div class="prod-card__price">
 
@@ -85,8 +86,10 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
-    <div id="ivan-price-handler">
+    <div class="ivan-price-handler">
+        {% if in_stock %}
         <div style="margin: 0px" class="prod-card__form-group prod-card__form-group--send ivan-price-button">
            <a id="add_trigger_button" href="javascript:void(0);"><span>Добавить <br> В корзину</span></a><br>
         </div>
@@ -95,6 +98,12 @@
            <div class="modal--send"></div>
            <a href="javascript:void(0);" class="fast-order-link btn">Купить <br> в 1 клик</a>
         </div>
+        {% else %}
+        <div class="prod-card__form-group--send ivan-price-button one-click-button not-in-stock">
+           <div class="modal--send"></div>
+           <a href="javascript:void(0);" class="fast-order-link btn">Сообщить о поступлении</a>
+        </div>
+        {% endif %}
     </div>
 
 </form>

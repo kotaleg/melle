@@ -27,12 +27,6 @@
             v-model.trim="name"
           />
         </div>
-
-        <!--  <div class="reviews__form-group">
-                <div v-show="fieldHasError('email')" class="help-block error" id="ProductReviewForm_email_em_">{{ getFieldError('email') }}</div>
-                <input placeholder="ваш email" class="reg__form-input" id="ProductReviewForm_email" type="text" v-model.trim="email">
-             </div> -->
-
         <div class="reviews__form-group">
           <div
             v-show="fieldHasError('message')"
