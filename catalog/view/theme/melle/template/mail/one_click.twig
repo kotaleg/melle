@@ -504,10 +504,10 @@ body, td {
                                 <td class="w30" width="30"></td>
                                 <td class="w580" width="580">
                                     <repeater>
-                                        <p><b>Телефон:</b> {{ phone }}</p>
-                                        <p><b>Имя:</b> {{ name }}</p>
-                                        <p><b>Товар:</b> <a href="{{ product }}">{{ product_name }}</a></p>
-                                        <p><b>Кол-во:</b> {{ quantity }}</p>
+                                        <p><b>Телефон:</b>&nbsp;{{ phone }}</p>
+                                        <p><b>Имя:</b>&nbsp;{{ name }}</p>
+                                        <p><b>Товар:</b>&nbsp;<a href="{{ product }}">{{ product_name }}</a></p>
+                                        <p><b>Кол-во:</b>&nbsp;{{ quantity }}</p>
 
                                         {% if options %}
                                         <p><b>Выбранные опции:</b></p>
@@ -516,15 +516,15 @@ body, td {
                                         {% endfor %}
                                         {% endif %}
 
-                                        <p><b>Условия приняты:</b> {% if agree %}ДА{% else %}НЕТ{% endif %}</p>
+                                        <p><b>Условия приняты:</b>&nbsp;{% if agree %}ДА{% else %}НЕТ{% endif %}</p>
 
                                         {% if cart_items %}
                                         <br>
                                         <h2>Содержимое корзины:</h2>
                                         {% for ci in cart_items %}
 
-                                        <p><b>Товар:</b> <a href="{{ ci.href }}">{{ ci.name }}</a></p>
-                                        <p><b>Кол-во:</b> {{ ci.quantity }}</p>
+                                        <p><b>Товар:</b>&nbsp;<a href="{{ ci.href }}">{{ ci.name }}</a></p>
+                                        <p><b>Кол-во:</b>&nbsp;{{ ci.quantity }}</p>
                                         {% if ci.options %}
                                         <p><b>Опции:</b></p>
                                         {% for o in ci.options %}
