@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>sort_not_in_stock_products</name>
+    <code>sort_not_in_stock_products</code>
+    <description>Sort not in stock products</description>
+    <version>0.0.1</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/model/catalog/product.php">
+
+        <operation error="skip">
+            <search><![CDATA[ AS special";]]></search>
+            <add position="after"><![CDATA[
+                /* SORT_NOT_IN_STOCK_PRODUCTS START */
+                if (strcmp(__FUNCTION__, 'getProducts') === 0) {
+                    $sql .= ", (SELECT IF(MAX(so_oc.quantity) > 0, 1, 0)
+                        FROM `". DB_PREFIX . "so_option_combination` so_oc
+                        WHERE so_oc.product_id = p.product_id
+                        AND so_oc.quantity > 0) AS so_oc_in_stock";
+                }
+                /* SORT_NOT_IN_STOCK_PRODUCTS END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[p.sort_order DESC";]]></search>
+            <add position="after"><![CDATA[
+                /* SORT_NOT_IN_STOCK_PRODUCTS START */
+                if (strcmp(__FUNCTION__, 'getProducts') === 0) {
+                    $sql .= " , so_oc_in_stock DESC";
+                }
+                /* SORT_NOT_IN_STOCK_PRODUCTS END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+</modification>
