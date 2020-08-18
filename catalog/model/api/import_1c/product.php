@@ -68,7 +68,7 @@ class ModelApiImport1CProduct extends Model
                     'weight' => 0,
                     'weight_class_id' => $this->config->get('config_weight_class_id'),
                     'length_class_id' => $this->config->get('config_length_class_id'),
-                    'status' => 0,
+                    'status' => true,
                     'tax_class_id' => 0,
                     'sort_order' => 0,
 

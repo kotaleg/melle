@@ -214,17 +214,7 @@ class ModelApiImport1COffer extends Model
                 }
 
                 // UPDATE PRODUCT STATUS
-                $available = false;
-                if ($data['combinations']) {
-                    foreach ($data['combinations'] as $c) {
-                        if (isset($c['price']) && isset($c['quantity'])
-                        && $c['quantity'] > 0 && $c['price'] > 0) {
-                            $available = true;
-                        }
-                    }
-                }
-                $this->model_api_import_1c_product->updateProductStatus(
-                    $product_id, $available);
+                $this->model_api_import_1c_product->updateProductStatus($product_id, true);
 
             }
 
