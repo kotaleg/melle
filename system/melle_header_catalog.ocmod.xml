@@ -15,6 +15,7 @@
                 $this->load->model('tool/base');
 
                 $data['pagetype'] = $this->model_tool_base->getPageType();
+                $data['is_local'] = $this->model_tool_base->isLocal();
 
                 $data['og'] = array();
                 $data['og']['image'] = $this->model_tool_base->getOgImage();

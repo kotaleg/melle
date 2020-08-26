@@ -28,8 +28,8 @@
 {% endfor %}
 
 <link href="{{base}}catalog/view/theme/melle/stylesheet/bootstrap.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
-<link href="{{base}}catalog/view/theme/melle/stylesheet/sass/libs.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
-<link href="{{base}}catalog/view/theme/melle/stylesheet/sass/new.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
+{# <link href="{{base}}catalog/view/theme/melle/stylesheet/sass/libs.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
+<link href="{{base}}catalog/view/theme/melle/stylesheet/sass/new.css{{cache_postfix}}" rel="stylesheet" type="text/css" /> #}
 
 {% for link in links %}
 <link href="{{ link.href }}" rel="{{ link.rel }}" />
@@ -41,9 +41,6 @@
 <script type="text/javascript">window.__{{state.codename}}__ = {{state.json}};</script>
 {% endfor %}
 
-<script src="{{base}}catalog/view/javascript/melle/dist/manifest.js{{cache_postfix}}" type="text/javascript"></script>
-<script src="{{base}}catalog/view/javascript/melle/dist/vendor.js{{cache_postfix}}" type="text/javascript"></script>
-<script src="{{base}}catalog/view/javascript/melle/dist/melle.js{{cache_postfix}}" type="text/javascript"></script>
 {% for script in scripts %}
 <script src="{{ script }}{{cache_postfix}}" type="text/javascript"></script>
 {% endfor %}
@@ -52,6 +49,7 @@
 {{ analytic }}
 {% endfor %}
 
+{% if not is_local %}
 <!-- Global sitee tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-110511917-1"></script><script>
   window.dataLayer = window.dataLayer || [];
@@ -260,12 +258,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  	}, false);
  	}())
  	</script>
+{% endif %}
 
 </head>
 <body>
 
+    {% if not is_local %}
     <!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWDGTS9"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><!-- End Google Tag Manager (noscript) -->
+    {% endif %}
 
 <section id="melle-mount"> <!-- START MAIN SECTION -->
     {{melle_mobile_menu}}
