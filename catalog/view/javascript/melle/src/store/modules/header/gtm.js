@@ -31,7 +31,7 @@ const actions = {
     }
     let product = payload.product
 
-    if (!isUndefined(dataLayer)) {
+    if (typeof dataLayer !== 'undefined') {
       dataLayer.push({
         event: 'productClick',
         ecommerce: {
@@ -52,7 +52,7 @@ const actions = {
     }
   },
   addToCart({ commit }, product) {
-    if (!isUndefined(dataLayer)) {
+    if (typeof dataLayer !== 'undefined') {
       dataLayer.push({
         event: 'addToCart',
         ecommerce: {
@@ -71,7 +71,7 @@ const actions = {
     }
   },
   removeFromCart({ commit }, products) {
-    if (!isUndefined(dataLayer)) {
+    if (typeof dataLayer !== 'undefined') {
       dataLayer.push({
         event: 'removeFromCart',
         ecommerce: {
@@ -93,7 +93,7 @@ const actions = {
     { commit, state, rootState, rootGetters, dispatch },
     force = false
   ) {
-    if (!isUndefined(dataLayer)) {
+    if (typeof dataLayer !== 'undefined') {
       dataLayer.push({
         event: 'checkout',
         ecommerce: {
@@ -127,7 +127,7 @@ const actions = {
       })
     }
 
-    if (!isUndefined(dataLayer)) {
+    if (typeof dataLayer !== 'undefined') {
       dataLayer.push({
         event: 'rem',
         ecomm_prodid: ecomm_items,
@@ -147,7 +147,7 @@ const actions = {
       products.push(product)
     })
 
-    if (!isUndefined(dataLayer)) {
+    if (typeof dataLayer !== 'undefined') {
       dataLayer.push({
         ecommerce: {
           currencyCode: 'RUB',
