@@ -1,0 +1,121 @@
+.search {
+  min-width: 25%;
+
+  .ais-InstantSearch {
+    width: 100%;
+  }
+
+  .ais-PoweredBy {
+    text-align: right;
+  }
+
+  .search-bar-wrapper {
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    height: 30px;
+    position: relative;
+
+    @media (min-width: 768px) {
+      height: 40px;
+    }
+
+    .search-bar-form {
+      display: flex;
+      align-items: stretch;
+      justify-content: flex-start;
+
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      border: 2px solid $white-color;
+      box-sizing: border-box;
+      background: $white-color;
+
+      .search-input-wrapper {
+        position: relative;
+        display: flex;
+        flex: 1;
+        height: 100%;
+        background: none;
+
+        input[name='search'] {
+          flex: 1;
+          height: 100%;
+
+          border: none;
+          padding: 0 25px;
+          color: #001a34;
+          font-size: 12px;
+          vertical-align: center;
+          outline: none;
+          background: transparent;
+          width: calc(100% - 0.5px);
+
+          @media (min-width: 768px) {
+            font-size: inherit;
+          }
+        }
+      }
+
+      .search-button-wrapper {
+        width: 66px;
+        margin: 2px 0px 0px 0px;
+
+        button {
+          background: $white-color;
+          color: $black-color;
+          border: $white-color;
+        }
+      }
+    }
+
+    .search-autocomplete-items-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.16);
+      z-index: 50;
+      border-radius: 3px;
+      pointer-events: none;
+
+      .search-prefix {
+        height: 42px;
+        background: transparent;
+      }
+
+      .search-suggestions {
+        background: $white-color;
+        pointer-events: all;
+        padding: 5px 10px;
+
+        @media (min-width: 768px) {
+          padding: 5px 10px;
+        }
+
+        .suggestions-item {
+          text-decoration: none;
+          display: flex;
+          font-size: 12px;
+          line-height: 1.25;
+          color: #001a34;
+          position: relative;
+          cursor: pointer;
+          margin-top: 1px;
+          align-items: center;
+          padding: 12px 12px 12px 0;
+
+          @media (min-width: 768px) {
+            font-size: 16px;
+          }
+
+          &:focus,
+          &:hover {
+            background: #e5efff;
+          }
+        }
+      }
+    }
+  }
+}
