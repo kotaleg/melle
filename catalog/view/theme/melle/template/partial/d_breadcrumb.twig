@@ -1,15 +1,15 @@
 <!-- > d_breadcrumb -->
 <section class="breadcrumbs">
-   <div class="breadcrumbs__container container">
-      <div class="breadcrumbs__inner">
-         {% for breadcrumb in breadcrumbs %}
-         {% if not loop.last %}
-         <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
-         {% else %}
-         <span>{{ breadcrumb.text }}</span>
-         {% endif %}
-         {% endfor %}
-      </div>
-   </div>
+    <div class="breadcrumbs__container container">
+        <div class="breadcrumbs__inner">
+            {% for breadcrumb in breadcrumbs %}
+                {% if not loop.last %}
+                    <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
+                {% else %}
+                    <span>{{ breadcrumb.text }}</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 </section>
 <!-- /> d_breadcrumb -->
