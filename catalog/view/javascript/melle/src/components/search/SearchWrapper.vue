@@ -192,8 +192,8 @@
     </div>
 
     <div class="col-lg-8 col-xl-9 col-xxl-10">
-      <!-- <div class="search-form">
-        <div class="search-box-wrapper">
+      <div class="search-form">
+        <div class="search-box-wrapper mb-2">
           <ais-search-box
             placeholder="Введите название товара"
             submit-title="Поиск"
@@ -203,23 +203,21 @@
           />
         </div>
 
-        <div class="search-form__footer">
-          <div class="search-form__info-result">
-            <ais-stats>
-              <span slot-scope="{ nbHits }">
-                <span
-                  >Найдено:
-                  <span class="search-form__info-result-number"
-                    >{{ nbHits }}
-                  </span>
-                  <span>результатов </span>
+        <div class="align-items-center d-flex justify-content-between">
+          <ais-stats>
+            <span slot-scope="{ nbHits }">
+              <span
+                >Найдено:
+                <span class="result-number"
+                  >{{ nbHits }}
                 </span>
+                <span>результатов </span>
               </span>
-            </ais-stats>
-          </div>
+            </span>
+          </ais-stats>
           <ais-powered-by />
         </div>
-      </div> -->
+      </div>
 
       <div>
         <ais-hits :escapeHTML="false" :transform-items="transformItems">

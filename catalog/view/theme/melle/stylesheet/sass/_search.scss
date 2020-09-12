@@ -116,13 +116,33 @@
         }
       }
       .search-autocomplete-items-wrapper {
-        box-shadow: none;
+        // box-shadow: none;
         top: 10%;
         @media (min-width: 768px) {
           top: 25%;
         }
       }
     }
+  }
+}
+
+.search-form {
+  .ais-Stats {
+    font-size: 0.8rem;
+  }
+  .result-number {
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+}
+
+.ais-SearchBox {
+  input {
+    padding: 1.3rem;
+    width: 100%;
+  }
+  button {
+    display: none;
   }
 }
 
