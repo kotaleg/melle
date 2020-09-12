@@ -28,6 +28,10 @@
 
 .catalog-sort {
   .v-select {
+    width: initial;
+    @media (min-width: 576px) {
+      width: 60%;
+    }
     max-width: 200px;
   }
   .flip-sort {
