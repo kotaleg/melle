@@ -18,6 +18,15 @@ class ModelExtensionModuleMelle extends Controller
 
         $this->load->model('extension/pro_patch/url');
         $this->load->model('extension/pro_patch/db');
+        $this->load->model('extension/pro_patch/load');
+    }
+
+    public function renderOtherProducts($title, $products)
+    {
+        $data['title'] = $title;
+        $data['products'] = $products;
+
+        return $this->model_extension_pro_patch_load->view("{$this->route}/other_products", $data);
     }
 
     public function getMenu()

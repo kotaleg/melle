@@ -236,11 +236,16 @@ class ControllerProductProduct extends Controller {
 
             $data['heading_title'] = $product_info['name'];
 
+            $this->load->model('extension/module/melle');
             $this->load->model('extension/module/super_offers');
             $this->load->model('extension/module/pro_znachek');
             $this->load->model('extension/module/pro_recently');
 
-            $data['recently_viewed'] = $this->model_extension_module_pro_recently->getProductsPrepared();
+            $data['recently_viewed'] = $this->model_extension_module_melle->renderOtherProducts(
+                'Вы смотрели',
+                $this->model_extension_module_pro_recently->getProductsPrepared()
+            );
+
             $this->model_extension_module_pro_recently->addProduct($product_id);
 
             $data['znachek'] = $this->model_extension_module_pro_znachek->getZnachek($product_info['znachek'], true);
@@ -419,6 +424,11 @@ class ControllerProductProduct extends Controller {
                     'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id'], true)
                 );
             }
+
+            $data['products'] = $this->model_extension_module_melle->renderOtherProducts(
+                'Похожие товары',
+                $data['products']
+            );
 
             $this->model_catalog_product->updateViewed($this->request->get['product_id']);
 
