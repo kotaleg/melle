@@ -1,181 +1,148 @@
 <template>
-  <section class="reg">
+  <section class="sidebar-inner">
     <sidebar-buttons />
 
-    <h2 class="reg__title hideRegForm">Зарегистрируйтесь на Mademoiselle</h2>
-    <div class="reg__text-info hideRegForm">
+    <h4 class="title">Зарегистрируйтесь на Mademoiselle</h4>
+    <div class="sub-title">
       <p>* Обязательные для заполнения поля</p>
     </div>
-    <form
-      class="reg__form hideRegForm form-vertical"
-      id="registerForm"
-      method="post"
-      v-on:submit.prevent="register()"
-    >
-      <div class="reg__form-group">
-        <label class="reg__form-label">Представьтесь *</label>
-        <div
-          v-show="fieldHasError('name')"
-          class="help-block error"
-          id="CabinetRegisterForm_name_em_"
-        >
-          {{ getFieldError('name') }}
-        </div>
+    <form class="form-vertical" method="post" v-on:submit.prevent="register()">
+      <div class="form-group">
+        <label for="register_name">Представьтесь *</label>
         <input
           v-model.trim="name"
           placeholder="Укажите ФИО"
-          class="reg__form-input"
-          id="CabinetRegisterForm_name"
+          :class="['form-control', { 'is-invalid': fieldHasError('name') }]"
+          id="register_name"
           type="text"
         />
-      </div>
-      <div class="reg__form-group">
-        <label class="reg__form-label">Ваш e-mail *</label>
-        <div
-          v-show="fieldHasError('email')"
-          class="help-block error"
-          id="CabinetRegisterForm_email_em_"
-        >
-          {{ getFieldError('email') }}
+        <div v-show="fieldHasError('name')" class="invalid-feedback">
+          {{ getFieldError('name') }}
         </div>
+      </div>
+      <div class="form-group">
+        <label for="register_email">Ваш e-mail *</label>
         <input
           v-model.trim="email"
-          placeholder="Example@example.com"
-          class="reg__form-input"
-          id="CabinetRegisterForm_email"
+          placeholder="example@example.com"
+          :class="['form-control', { 'is-invalid': fieldHasError('email') }]"
+          id="register_email"
           type="text"
         />
-      </div>
-      <div class="reg__form-group">
-        <label class="reg__form-label">Телефон *</label>
-        <div
-          v-show="fieldHasError('phone')"
-          class="help-block error"
-          id="CabinetRegisterForm_phone_em_"
-        >
-          {{ getFieldError('phone') }}
+        <div v-show="fieldHasError('email')" class="invalid-feedback">
+          {{ getFieldError('email') }}
         </div>
+      </div>
+      <div class="form-group">
+        <label for="register_phone">Телефон *</label>
         <the-mask
           mask="+7 (###) ###-##-##"
           v-model.trim="phone"
           type="tel"
           :masked="false"
-          id="CabinetRegisterForm_phone"
+          id="register_phone"
           placeholder="+7 (_ _ _) _ _ _-_ _-_ _"
-          class="reg__form-input"
+          :class="['form-control', { 'is-invalid': fieldHasError('phone') }]"
         />
-      </div>
-      <div class="reg__form-group">
-        <label class="reg__form-label">Пароль *</label>
-        <div
-          v-show="fieldHasError('password')"
-          class="help-block error"
-          id="CabinetRegisterForm_password_em_"
-        >
-          {{ getFieldError('password') }}
+        <div v-show="fieldHasError('phone')" class="invalid-feedback">
+          {{ getFieldError('phone') }}
         </div>
+      </div>
+      <div class="form-group">
+        <label for="register_password">Пароль *</label>
         <input
           v-model.trim="password"
           placeholder=""
-          class="reg__form-input"
-          id="CabinetRegisterForm_password"
+          :class="['form-control', { 'is-invalid': fieldHasError('password') }]"
+          id="register_password"
           type="password"
           maxlength="64"
         />
-      </div>
-      <div class="reg__form-group">
-        <label class="reg__form-label">Повторите пароль *</label>
-        <div
-          v-show="fieldHasError('confirm')"
-          class="help-block error"
-          id="CabinetRegisterForm_repeatPassword_em_"
-        >
-          {{ getFieldError('confirm') }}
+        <div v-show="fieldHasError('password')" class="invalid-feedback">
+          {{ getFieldError('password') }}
         </div>
+      </div>
+      <div class="form-group">
+        <label for="register_password_confirm">Повторите пароль *</label>
         <input
           v-model.trim="confirm"
           placeholder=""
-          class="reg__form-input"
-          id="CabinetRegisterForm_repeatPassword"
+          :class="['form-control', { 'is-invalid': fieldHasError('confirm') }]"
+          id="register_password_confirm"
           type="password"
         />
-      </div>
-      <div class="reg__form-group">
-        <label class="reg__form-label">Дата рождения</label>
-        <div
-          v-show="fieldHasError('birth')"
-          class="help-block error"
-          id="CabinetRegisterForm_birth_em_"
-        >
-          {{ getFieldError('birth') }}
+        <div v-show="fieldHasError('confirm')" class="invalid-feedback">
+          {{ getFieldError('confirm') }}
         </div>
+      </div>
+      <div class="form-group">
+        <label for="register_birth">Дата рождения</label>
         <the-mask
           mask="##.##.####"
           v-model.trim="birth"
           type="text"
           :masked="true"
-          id="CabinetRegisterForm_birth"
+          id="register_birth"
           placeholder="__.__.___"
-          class="reg__form-input"
+          :class="['form-control', { 'is-invalid': fieldHasError('birth') }]"
         />
-      </div>
-      <div class="reg__form-group">
-        <label class="reg__form-label">Скидочная карта (при наличии)</label>
-        <div
-          v-show="fieldHasError('discount_card')"
-          class="help-block error"
-          id="CabinetRegisterForm_personal_em_"
-        >
-          {{ getFieldError('discount_card') }}
+        <div v-show="fieldHasError('birth')" class="invalid-feedback">
+          {{ getFieldError('birth') }}
         </div>
+      </div>
+      <div class="form-group">
+        <label for="register_personal">Скидочная карта (при наличии)</label>
         <input
           v-model.trim="discount_card"
           placeholder=""
-          class="reg__form-input"
-          id="CabinetRegisterForm_personal"
+          :class="[
+            'form-control',
+            { 'is-invalid': fieldHasError('discount_card') },
+          ]"
+          id="register_personal"
           type="text"
         />
+        <div v-show="fieldHasError('discount_card')" class="invalid-feedback">
+          {{ getFieldError('discount_card') }}
+        </div>
       </div>
-      <div class="reg__form-group">
+      <div class="form-group">
         <label
-          class="reg__form-label--checkbox"
-          for="CabinetRegisterForm_accept"
+          class="align-items-start checkbox-label d-flex"
+          for="register_news"
         >
-          <p-check name="newsletter" v-model="newsletter"
-            >Даю согласие на получение рассылки</p-check
-          >
+          <p-check
+            name="newsletter"
+            v-model="newsletter"
+            id="register_news"
+          ></p-check>
+          <span>
+            Даю согласие на получение рассылки
+          </span>
         </label>
-        <div
-          v-show="fieldHasError('newsletter')"
-          class="help-block error"
-          id="CabinetRegisterForm_accept_em_"
-        >
+        <div v-show="fieldHasError('newsletter')" class="invalid-feedback">
           {{ getFieldError('newsletter') }}
         </div>
       </div>
-      <div class="reg__form-group">
+      <div class="form-group">
         <label
-          class="reg__form-label--checkbox"
-          for="CabinetRegisterForm_accept"
+          class="align-items-start checkbox-label d-flex"
+          for="register_accept"
         >
-          <p-check name="agree" v-model="agree"></p-check>
-          <span
-            >Я принимаю условия
+          <p-check name="agree" v-model="agree" id="register_accept"></p-check>
+          <span>
+            Я принимаю условия
             <a :href="konfidentsialnost_link" target="_blank"
               >политики конфиденциальности</a
             >
-            и политики обработки персональных данных</span
-          >
+            и политики обработки персональных данных
+          </span>
         </label>
-        <div
-          v-show="fieldHasError('agree')"
-          class="help-block error"
-          id="CabinetRegisterForm_politic_em_"
-        >
+        <div v-show="fieldHasError('agree')" class="invalid-feedback">
           {{ getFieldError('agree') }}
         </div>
       </div>
-      <div class="reg__form-group">
+      <div class="form-group">
         <vue-recaptcha
           ref="register_recaptcha"
           @verify="onCaptchaVerified"
@@ -184,28 +151,15 @@
           :sitekey="captchaKey"
         />
       </div>
-      <div class="reg__form-group">
-        <div class="reg__form-group-left">
-          <input
-            class="mail-us__form-send"
-            type="submit"
-            name="yt0"
-            value="Регистрация"
-            id="yt0"
-          />
+      <div class="form-group row">
+        <div class="col-md-5">
+          <button class="btn btn-dark" type="submit">Регистрация</button>
         </div>
-        <div class="reg__form-group-right">
-          <div class="reg__consent">
-            <p>
-              Нажимая на кнопку «Регистрация », я соглашаюсь с условиями
-              <a
-                :href="public_offer_link"
-                class="reg__consent-link"
-                target="_blank"
-                >Публичной оферты.</a
-              >
-            </p>
-          </div>
+        <div class="col-md-7 pt-3 pt-sm-0 public-offer-confirm">
+          <p>
+            Нажимая на кнопку «Регистрация», я соглашаюсь с условиями
+            <a :href="public_offer_link" target="_blank">Публичной оферты.</a>
+          </p>
         </div>
       </div>
     </form>
@@ -331,5 +285,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss"></style>

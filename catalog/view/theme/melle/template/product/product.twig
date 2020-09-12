@@ -1,159 +1,147 @@
 {{ header }}
-<main class="main-page">
-   <section class="breadcrumbs">
-      <div class="breadcrumbs__container container">
-         <div class="breadcrumbs__inner">
-            {% for breadcrumb in breadcrumbs %}
-            {% if not loop.last %}
-            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
-            {% else %}
-            <span>{{ breadcrumb.text }}</span>
-            {% endif %}
-            {% endfor %}
-         </div>
-      </div>
-   </section>
+<main id="product-page"
+    class="main-page container-fluid"
+    itemtype="http://schema.org/Product"
+    itemscope>
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="d-flex justify-content-between align-items-center">
+                <div class="breadcrumbs">
+                    {% for breadcrumb in breadcrumbs %}
+                        {% if not loop.last %}
+                            <a href="{{ breadcrumb.href }}">
+                                {{ breadcrumb.text }}
+                            </a>
+                            <span class="divider">/</span>
+                        {% else %}
+                            <span>{{ breadcrumb.text }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
 
-   <div class="prod-card" itemtype="http://schema.org/Product" itemscope>
-      <div class="prod-card__container container">
-         <div class="prod-card__content">
-            <div class="prod-card__content-main">
+        <div class="col-md-12">
+            <div class="row">
+                {% if thumb or images %}
+                    <div class="col-lg-5">
+                        <ul class="prod-card__list-photo slider-nav">
+                            {% if thumb %}
+                                <li class="prod-card__item-photo"
+                                    data-hash="default">
+                                    <img src="{{ thumb }}" />
+                                </li>
+                            {% endif %}
+                            {% for i in images %}
+                                <li class="prod-card__item-photo"
+                                    data-hash="{{ i.imageHash }}">
+                                    <img itemprop="image" src="{{ i.thumb }}" />
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <ul class="prod-card__list-big-photo slider-for">
+                            {% if thumb %}
+                                <li class="prod-card__item-big-photo"
+                                    data-zoom-image="{{ popup }}">
+                                    <img src="{{ popup }}" />
+                                </li>
+                            {% endif %}
+                            {% for i in images %}
+                                <li class="prod-card__item-big-photo">
+                                    <img itemprop="image"
+                                        src="{{ i.popup }}"
+                                        data-zoom-image="{{ i.popup }}" />
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
 
-               {% if thumb or images %}
-               <div class="prod-card__photos">
-                  <ul class="prod-card__list-photo slider-nav">
-                     {% if thumb %}
-                     <li class="prod-card__item-photo" data-hash="default">
-                        <img src="{{thumb}}" />
-                     </li>
-                     {% endif %}
-                     {% for i in images %}
-                     <li class="prod-card__item-photo" data-hash="{{i.imageHash}}">
-                        <img itemprop="image" src="{{i.thumb}}" />
-                     </li>
-                     {% endfor %}
-                  </ul>
-                  <ul class="prod-card__list-big-photo slider-for">
-                     {% if thumb %}
-                     <li class="prod-card__item-big-photo" data-zoom-image="{{popup}}">
-                        <img src="{{popup}}" />
-                     </li>
-                     {% endif %}
-                     {% for i in images %}
-                     <li class="prod-card__item-big-photo">
-                        <img itemprop="image" src="{{i.popup}}" data-zoom-image="{{i.popup}}" />
-                     </li>
-                     {% endfor %}
-                  </ul>
-               </div>
-               {% endif %}
-
-               <div class="prod-card__info">
-
-                  {% if znachek %}
-                  <div class="prod-card__category"><span>{{znachek}}</span></div>
-                  {% endif %}
-
-                  <h1 class="prod-card__title">{{h1}}</h1>
-                  <meta itemprop="name" content="{{h1}}" />
-
-                  <!-- PRODUCT ELEMENT -->
-                  {% if rpc %}
-                  <div id="rendered-product-content">{{rpc}}</div>
-                  {% endif %}
-                  <melle-product></melle-product>
-
-                  <div class="prod-card__description">{{description}}</div>
-                  <meta itemprop="description" content="{{description}}" />
-
-                  {% if manufacturer %}
-                  <div class="prod-card__manufacturer" itemprop="brand" itemtype="http://schema.org/Brand" itemscope>
-                     <meta itemprop="name" content="{{manufacturer}}" />
-                     <span>производитель: </span><a href="{{manufacturers}}">{{manufacturer}}</a>
-                  </div>
-                  {% endif %}
-
-                  {% if den %}
-                  <div class="prod-card__manufacturer">
-                     <span>количество ден: </span>{{den}}
-                  </div>
-                  {% endif %}
-
-                  {% if sostav %}
-                  <div class="prod-card__manufacturer">
-                     <span>состав: </span>{{sostav}}
-                  </div>
-                  {% endif %}
-               </div>
-            </div>
-
-            <div class="prod-card__extra-container">
-               {% if extra_description %}
-               <div class="prod-card__description-extra">
-                  {{extra_description}}
-                  {% if extra_description_hidden %}
-                  <details>
-                     <summary>Подробнее</summary>
-                     {{extra_description_hidden}}
-                  </details>
-                  {% endif %}
-               </div>
-               {% endif %}
-               <!-- PRODUCT REWIEW -->
-               <melle-product-review></melle-product-review>
-            </div>
-
-            {% if products %}
-            <div class="other-prod">
-               <h3 class="other-prod__title">Похожие товары</h3>
-               <ul class="">
-                  {% for p in products %}
-                  <li class="other-prod__item {{p.znachek_class}}">
-                     <a href="{{p.href}}" class="other-prod__item-link"><img src="{{p.thumb}}" alt="{{p.h1}}" /></a>
-                     <div class="other-prod__item-ivaninfo">
-                        <div class="row">
-                           <div class="col-xs-12">
-                              <h3 class="ivanitemtitle"><a href="{{p.href}}">{{p.h1}} </a></h3>
-                           </div>
-                           <div class="col-xs-7"><span class="other-prod__item-price-default">{{p.price}}<span class="ruble-sign">Р</span></span></div>
-                           <div class="col-xs-5">
-                              <div><a href="{{p.href}}" class="ivanbuybutton">Купить</a></div>
-                           </div>
+                <div class="col-lg-7">
+                    {% if znachek %}
+                        <div class="prod-card__category">
+                            <span>{{ znachek }}</span>
                         </div>
-                     </div>
-                  </li>
-                  {% endfor %}
-               </ul>
-            </div>
-            {% endif %}
+                    {% endif %}
 
-            {% if recently_viewed %}
-            <div class="other-prod">
-               <h3 class="other-prod__title">Вы смотрели</h3>
-               <ul class="">
-                  {% for p in recently_viewed %}
-                  <li class="other-prod__item {{znachek_class}}">
-                     <a href="{{p.href}}" class="other-prod__item-link"><img src="{{p.thumb}}" alt="{{p.h1}}" /></a>
-                     <div class="other-prod__item-ivaninfo">
-                        <div class="row">
-                           <div class="col-xs-12">
-                              <h3 class="ivanitemtitle"><a href="{{p.href}}">{{p.h1}} </a></h3>
-                           </div>
-                           <div class="col-xs-7"><span class="other-prod__item-price-default">{{p.price}}<span class="ruble-sign">Р</span></span></div>
-                           <div class="col-xs-5">
-                              <div><a href="{{p.href}}" class="ivanbuybutton">Купить</a></div>
-                           </div>
+                    <h1 class="title mb-4">
+                        {{ h1 }}
+                    </h1>
+                    <meta itemprop="name" content="{{ h1 }}" />
+
+                    <!-- PRODUCT ELEMENT START -->
+                    {% if rpc %}
+                        <div id="rendered-product-content">
+                            {{ rpc }}
                         </div>
-                     </div>
-                  </li>
-                  {% endfor %}
-               </ul>
+                    {% endif %}
+                    <melle-product></melle-product>
+                    <!-- PRODUCT ELEMENT END -->
+
+                    <div class="description mt-4 mb-2">
+                        {{ description }}
+                    </div>
+
+                    {% if manufacturer %}
+                        <div class="manufacturer mb-2"
+                            itemprop="brand"
+                            itemtype="http://schema.org/Brand"
+                            itemscope>
+                            <meta itemprop="name"
+                                content="{{ manufacturer }}" />
+                            <span>производитель:&nbsp;</span><a href="{{
+                                manufacturers
+                                }}">
+                                {{ manufacturer }}
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if den %}
+                        <div class="manufacturer mb-2">
+                            <span>количество ден:&nbsp;</span>{{ den }}
+                        </div>
+                    {% endif %}
+
+                    {% if sostav %}
+                        <div class="manufacturer mb-2">
+                            <span>состав:&nbsp;</span>{{ sostav }}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            {% endif %}
+        </div>
 
-         </div>
-      </div>
-   </div>
+        <div class="col-md-12 my-4">
+            <div class="row">
+                {% if extra_description %}
+                    <div class="col-md-8 description-extra">
+                        {{ extra_description }}
+                        {% if extra_description_hidden %}
+                            <details>
+                                <summary>
+                                    Подробнее
+                                </summary>
+                                {{ extra_description_hidden }}
+                            </details>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <!-- PRODUCT REWIEW START -->
+                <div class="col-md-4">
+                    <melle-product-review></melle-product-review>
+                </div>
+                <!-- PRODUCT REWIEW END -->
+            </div>
+        </div>
 
+        <div class="col-md-12">
+            {{ products }}
+        </div>
+
+        <div class="col-md-12">
+            {{ recently_viewed }}
+        </div>
+    </div>
 </main>
 {{ footer }}

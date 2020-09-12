@@ -1,15 +1,15 @@
 <template>
-  <section class="pas-rec">
+  <section class="sidebar-inner">
     <sidebar-buttons />
 
-    <h2 class="pas-rec__title">Восстановление пароля</h2>
+    <h4 class="title">Восстановление пароля</h4>
 
-    <div class="pas-rec__text-info">
-      <p v-if="!sent" class="resetPasswordSuccess">
+    <div class="sub-title">
+      <p v-if="!sent">
         Для восстановления пароля, пожалуйста, укажите Ваш e-mail, указанный при
         регистрации.
       </p>
-      <p v-if="sent" class="resetPasswordSuccess">
+      <p v-if="sent" class="text-success">
         На Ваш почтовый ящик выслано письмо с инструкциями по восстановлению
         пароля
       </p>
@@ -18,22 +18,21 @@
     <form
       v-show="!sent"
       method="post"
-      id="resetPasswordForm"
       class="form-vertical"
       v-on:submit.prevent="send()"
     >
-      <div class="pas-rec__form-group">
-        <label class="pas-rec__form-label">Ваш e-mail</label>
+      <div class="form-group">
+        <label for="forgotten_email">Ваш e-mail</label>
         <input
           placeholder="example@example.com"
-          class="reg__form-input"
-          id="CabinetResetPasswordForm_email"
+          class="form-control"
+          id="forgotten_email"
           type="email"
           v-model="email"
         />
       </div>
-      <div class="pas-rec__form-group">
-        <input type="submit" value="Отправить" class="pas-rec__form-send" />
+      <div class="form-group">
+        <button type="submit" class="btn btn-dark px-5">Отправить</button>
       </div>
     </form>
   </section>
@@ -79,5 +78,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss"></style>

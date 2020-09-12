@@ -1,6 +1,6 @@
 <template>
   <div class="price-list-container">
-    <p v-for="pl in priceLists">
+    <p v-for="(pl, i) in priceLists" :key="`price-list-${i}`">
       <a @click="downloadHandler(pl.downloadLink)" class="price-list-link">{{
         pl.title
       }}</a>

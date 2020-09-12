@@ -9,8 +9,8 @@
     "watch": "yarn run development --watch",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "yarn run production",
-    "check-pretty": "prettier -l '{catalog/view/theme/melle/stylesheet/sass/**/,catalog/view/javascript/melle/src/**/}*.{js,json,css,scss,vue}'",
-    "pretty": "prettier --write '{catalog/view/theme/melle/stylesheet/sass/**/,catalog/view/javascript/melle/src/**/}*.{js,json,css,scss,vue}'"
+    "check-pretty": "prettier -l 'catalog/view/{theme/melle/stylesheet/sass/**/,javascript/melle/src/**/,theme/melle/template/product/**/}*.{js,json,css,scss,vue,twig}'",
+    "pretty": "prettier --write 'catalog/view/{theme/melle/stylesheet/sass/**/,javascript/melle/src/**/,theme/melle/template/product/**/}*.{js,json,css,scss,vue,twig}'"
   },
   "dependencies": {
     "@riophae/vue-treeselect": "^0.0.38",
@@ -52,11 +52,14 @@
     "@babel/preset-env": "^7.4.4",
     "babel-plugin-date-fns": "^0.2.1",
     "babel-plugin-lodash": "^3.3.4",
+    "browser-sync": "^2.26.12",
+    "browser-sync-webpack-plugin": "2.0.1",
     "cross-env": "^5.2.0",
     "es6-promise": "^4.2.4",
     "glob-all": "^3.1.0",
     "laravel-mix": "^2.1.11",
     "prettier": "^2.0.5",
+    "prettier-plugin-twig-melody": "^0.4.6",
     "purgecss-webpack-plugin": "^1.5.0",
     "purify-css": "^1.2.5",
     "purifycss-webpack": "^0.7.0",

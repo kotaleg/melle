@@ -1,8 +1,8 @@
-<nav style="display: none;" id="menu">
+<nav style="display: none;" id="mobile-menu">
     <ul>
         {% for item in menu  %}
         <li>
-            <a 
+            <a
                 onclick="$(this).prev('a').click();"
                 {% if not item.children %}
                 href="{{ item.url }}"
@@ -12,7 +12,9 @@
             {% if item.children %}
             <ul>
                 {% for item in item.children %}
-                    <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+                    <li>
+                        <a href="{{ item.url }}">{{ item.title }}</a>
+                    </li>
                 {% endfor %}
             </ul>
             {% endif %}

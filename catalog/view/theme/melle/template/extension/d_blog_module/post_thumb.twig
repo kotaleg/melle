@@ -1,12 +1,16 @@
-<div class="news__item-img-wrap"><a href="{{post.href}}"><img src="{{post.thumb}}" alt="{{post.image_alt}}" title="{{post.image_title}}" class="news__item-img"></a></div>
+<div class="news__item-img-wrap text-center">
+    <a href="{{post.href}}">
+        <img src="{{post.thumb}}" alt="{{post.image_alt}}" title="{{post.image_title}}" class="news__item-img img-fluid">
+    </a>
+</div>
 <div class="news__item-inner">
     {% if setting.post_thumb.date_display %}
-    <div class="news__item-data">{{post.date_published}}</div>
+    <div class="news__item-data mb-2">{{post.date_published}}</div>
     {% endif %}
 
    <a href="{{post.href}}" class="news__item-title">{{post.title}}</a>
     {% if setting.post_thumb.description_display %}
-    <div class="news__item-description">
+    <div class="news__item-description mb-2 mt-3">
        <p>{{post.short_description}}</p>
     </div>
     {% endif %}

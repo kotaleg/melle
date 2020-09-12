@@ -1,47 +1,48 @@
 {{ header }}
-<main class="main-page">
-   <section class="breadcrumbs">
-      <div class="breadcrumbs__container container">
-         <div class="breadcrumbs__inner">
-            {% for breadcrumb in breadcrumbs %}
-            {% if not loop.last %}
-            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
-            {% else %}
-            <span>{{ breadcrumb.text }}</span>
-            {% endif %}
-            {% endfor %}
-         </div>
+<main class="main-page container-fluid">
+   <div class="row">
+        <div class="col-lg-12">
+                <section class="d-flex justify-content-between align-items-center">
+                    <div class="breadcrumbs">
+                        {% for breadcrumb in breadcrumbs %}
+                        {% if not loop.last %}
+                        <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                        <span class="divider">/</span>
+                        {% else %}
+                        <span>{{ breadcrumb.text }}</span>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+
+      <div class="col-lg-12 mt-4">
+        <h1>Настройки</h1>
+        <div class="row mt-3">
+            <div class="col-sm-12 col-md-3 col-lg-2 col-xl-2">
+                <div class="account-sidebar">
+                    <div class="mb-2"><a href="{{account_link}}" class="btn btn-sm btn-dark disabled">Настройки</a></div>
+                        <div class="mb-2"><a href="{{order}}">Мои заказы</a></div>
+                        <div class="mb-2"><a href="{{address}}">Мои адреса</a></div>
+
+                        <div class="mb-2">
+                            <a href="{{logout_link}}" class="align-items-center d-flex">
+                                Выход&nbsp;
+                                <svg viewBox="0 0 384.971 384.971" height="14" width="14">
+                                <path d="M180.455,360.91H24.061V24.061h156.394c6.641,0,12.03-5.39,12.03-12.03s-5.39-12.03-12.03-12.03H12.03C5.39,0.001,0,5.39,0,12.031V372.94c0,6.641,5.39,12.03,12.03,12.03h168.424c6.641,0,12.03-5.39,12.03-12.03C192.485,366.299,187.095,360.91,180.455,360.91z"></path>
+                                <path d="M381.481,184.088l-83.009-84.2c-4.704-4.752-12.319-4.74-17.011,0c-4.704,4.74-4.704,12.439,0,17.179l62.558,63.46H96.279c-6.641,0-12.03,5.438-12.03,12.151c0,6.713,5.39,12.151,12.03,12.151h247.74l-62.558,63.46c-4.704,4.752-4.704,12.439,0,17.179c4.704,4.752,12.319,4.752,17.011,0l82.997-84.2C386.113,196.588,386.161,188.756,381.481,184.088z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-9 col-lg-10 col-xl-3 mt-4 mt-md-0">
+                <melle-account-edit></melle-account-edit>
+            </div>
+        </div>
       </div>
-   </section>
 
-   <section class="lk">
-      <div class="lk__container container">
-         <div class="lk__title">Настройки</div>
-         <div class="lk__sidebar">
-            <section class="lk-sidebar">
-               <ul class="lk-sidebar__list">
-
-                  <li class="lk-sidebar__item on"><a href="{{account_link}}">Настройки</a></li>
-                  <li class="lk-sidebar__item"><a href="{{order}}">Мои заказы</a></li>
-                  <li class="lk-sidebar__item"><a href="{{address}}">Мои адреса</a></li>
-
-                  <li class="lk-sidebar__item">
-                     <a href="{{logout_link}}">
-                        Выход
-                        <svg viewBox="0 0 384.971 384.971" height="14" width="14">
-                           <path d="M180.455,360.91H24.061V24.061h156.394c6.641,0,12.03-5.39,12.03-12.03s-5.39-12.03-12.03-12.03H12.03C5.39,0.001,0,5.39,0,12.031V372.94c0,6.641,5.39,12.03,12.03,12.03h168.424c6.641,0,12.03-5.39,12.03-12.03C192.485,366.299,187.095,360.91,180.455,360.91z"></path>
-                           <path d="M381.481,184.088l-83.009-84.2c-4.704-4.752-12.319-4.74-17.011,0c-4.704,4.74-4.704,12.439,0,17.179l62.558,63.46H96.279c-6.641,0-12.03,5.438-12.03,12.151c0,6.713,5.39,12.151,12.03,12.151h247.74l-62.558,63.46c-4.704,4.752-4.704,12.439,0,17.179c4.704,4.752,12.319,4.752,17.011,0l82.997-84.2C386.113,196.588,386.161,188.756,381.481,184.088z"></path>
-                        </svg>
-                     </a>
-                  </li>
-               </ul>
-            </section>
-         </div>
-         <div class="lk__content">
-            <melle-account-edit></melle-account-edit>
-         </div>
       </div>
-   </section>
 
 </main>
 {{ footer }}

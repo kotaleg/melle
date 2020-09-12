@@ -1,12 +1,12 @@
-<ul class="news__list">
+<div class="row">
 
     {% for post in posts %}
-    <li class="news__item">
+    <div class="col-md-4 news__item">
         {% include template('extension/d_blog_module/post_thumb') with post %}
-    </li>
+    </div>
     {% endfor %}
 
-    <div class="pagination__wrap">
+    <div class="col-md-12 pagination__wrap">
         {{pagination}}
     </div>
-</ul>
+</div>

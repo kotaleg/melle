@@ -1,76 +1,66 @@
 {{ header }}
-<main class="main-page">
-   <section class="breadcrumbs">
-      <div class="breadcrumbs__container container">
-         <div class="breadcrumbs__inner">
-            {% for breadcrumb in breadcrumbs %}
-            {% if not loop.last %}
-            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a><span>/</span>
-            {% else %}
-            <span>{{ breadcrumb.text }}</span>
-            {% endif %}
-            {% endfor %}
-         </div>
+<main class="main-page container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="row">
+                <div class="col-md-4 col-lg-6">
+                    <div class="breadcrumbs">
+                        {% for breadcrumb in breadcrumbs %}
+                            {% if not loop.last %}
+                                <a href="{{ breadcrumb.href }}">
+                                    {{ breadcrumb.text }}
+                                </a>
+                                <span class="divider">/</span>
+                            {% else %}
+                                <span>{{ breadcrumb.text }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-8 col-lg-6">
+                    <melle-catalog-sort></melle-catalog-sort>
+                </div>
+            </section>
+        </div>
 
-         <melle-catalog-sort></melle-catalog-sort>
-      </div>
-   </section>
-
-   <section data-layout="col" class="catalog">
-      <div class="catalog__container container">
-
-         <div class="catalog__sidebar">
-
-            {% if rfc %}
-            <div id="rendered-filter-content">{{rfc}}</div>
-            {% endif %}
-            <melle-catalog-filter></melle-catalog-filter>
-
-         </div>
-
-         <div class="catalog__content">
-            {% if rcc %}
-            <div id="rendered-catalog-content">{{rcc}}</div>
-            {% endif %}
-            <melle-catalog-content></melle-catalog-content>
-
-
-
-            {% if recently_viewed %}
-            <div class="other-prod">
-               <h3 class="other-prod__title">Вы смотрели</h3>
-               <ul class="">
-                  {% for p in recently_viewed %}
-                  <li class="other-prod__item {{znachek_class}}">
-                     <a href="{{p.href}}" class="other-prod__item-link"><img src="{{p.thumb}}" alt="{{p.h1}}" /></a>
-                     <div class="other-prod__item-ivaninfo">
-                        <div class="row">
-                           <div class="col-xs-12">
-                              <h3 class="ivanitemtitle"><a href="{{p.href}}">{{p.h1}} </a></h3>
-                           </div>
-                           <div class="col-xs-7"><span class="other-prod__item-price-default">{{p.price}}<span class="ruble-sign">Р</span></span></div>
-                           <div class="col-xs-5">
-                              <div><a href="{{p.href}}" class="ivanbuybutton">Купить</a></div>
-                           </div>
+        <div class="col-lg-12">
+            <section class="row catalog">
+                <div class="d-none d-lg-block col-lg-4 col-xl-3 col-xxl-2">
+                    {# FILTER START #}
+                    {% if rfc %}
+                        <div id="rendered-filter-content">
+                            {{ rfc }}
                         </div>
-                     </div>
-                  </li>
-                  {% endfor %}
-               </ul>
-            </div>
-            {% endif %}
+                    {% endif %}
+                    <melle-catalog-filter></melle-catalog-filter>
+                    {# FILTER END #}
+                </div>
+                <div class="col-lg-8 col-xl-9 col-xxl-10">
+                    {# CONTENT START #}
+                    {% if rcc %}
+                        <div id="rendered-catalog-content">
+                            {{ rcc }}
+                        </div>
+                    {% endif %}
+                    <melle-catalog-content></melle-catalog-content>
+                    {# CONTENT END #}
 
-            {% if description %}
-            <details open>
-               <summary>Показать полностью</summary>
-               <br>
-               <article style="column-count: 2;">{{description}}</article>
-            </details>
-            {% endif %}
+                    {{ recently_viewed }}
 
-         </div>
-
-      </div>
-   </section>
+                    {% if description %}
+                        <details>
+                            <summary>
+                                Показать полностью
+                            </summary>
+                            <br />
+                            <article style="column-count: 2;">
+                                {{ description }}
+                            </article>
+                        </details>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
 </main>
 {{ footer }}

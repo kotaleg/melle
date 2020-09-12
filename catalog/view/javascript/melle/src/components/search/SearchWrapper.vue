@@ -5,33 +5,36 @@
     :search-client="searchClient"
     :routing="routing"
     :class-names="{
-      'ais-InstantSearch': 'search__container container',
+      'ais-InstantSearch': 'row catalog mt-4',
     }"
   >
-    <div class="search__sidebar">
+    <div class="d-none d-lg-block col-lg-4 col-xl-3 col-xxl-2">
       <section :class="{ 'sidebar sticky-sidebar': isMobile }">
-        <div class="search-modal__filter filter">
-          <div class="filter__title">
+        <div class="filter">
+          <h1 class="title">
             <ais-stats>
               <p slot-scope="{ nbHits }">
                 Фильтр
-                <span style="font-size: 10px;">(Найдено: {{ nbHits }})</span>
+                <span style="font-size: 10px;"
+                  >(Найдено:&nbsp;{{ nbHits }})</span
+                >
               </p>
             </ais-stats>
-          </div>
-          <form v-on:submit.prevent="() => {}">
-            <div class="filter__price">
-              <div class="filter__price-title"><span>Цена, руб</span></div>
+          </h1>
+          <form v-on:submit.prevent="() => {}" class="mt-3">
+            <div class="filter-price mb-4">
+              <div class="sub-title mb-2"><span>Цена, руб</span></div>
 
               <ais-range-input attribute="price">
                 <form
                   slot-scope="{ currentRefinement, range, canRefine, refine }"
                 >
-                  <div class="super-flex">
-                    <div class="filter__price-start">
+                  <div class="d-flex">
+                    <div class="d-flex align-items-center w-50">
                       <span>от</span>
                       <input
                         type="number"
+                        class="text-center"
                         :min="range.min"
                         :max="range.max"
                         :placeholder="range.min"
@@ -51,10 +54,13 @@
                       />
                     </div>
 
-                    <div class="filter__price-end">
+                    <div
+                      class="d-flex align-items-center justify-content-end w-50"
+                    >
                       <span>до</span>
                       <input
                         type="number"
+                        class="text-center"
                         :min="range.min"
                         :max="range.max"
                         :placeholder="range.max"
@@ -81,38 +87,42 @@
             <ais-refinement-list
               attribute="manufacturer"
               :class-names="{
-                'ais-RefinementList-list': 'filter__list',
-                'ais-RefinementList-item': 'filter__item',
+                'ais-RefinementList-list':
+                  'filter-manufacturers d-flex flex-wrap align-content-center align-items-center mb-4',
+                'ais-RefinementList-item': 'manufacturer-item mr-2',
               }"
             >
-              <li
+              <div
                 slot="item"
                 slot-scope="{ item, refine }"
                 :style="{ fontWeight: item.isRefined ? 'bold' : '' }"
                 @click.prevent="refine(item.value)"
               >
-                <label>
+                <label class="d-flex align-items-center">
                   <input type="checkbox" :checked="item.isRefined" />
-                  <span style="flex-shrink: 0;"></span>
+                  <span
+                    class="d-flex justify-content-between align-items-center"
+                  ></span>
                   <span
                     ><label
                       ><ais-highlight attribute="item" :hit="item" /></label
                   ></span>
                 </label>
-              </li>
+              </div>
             </ais-refinement-list>
 
-            <div class="filter__price">
-              <div class="filter__price-title"><span>Ден:</span></div>
+            <div class="filter-price mb-4">
+              <div class="sub-title mb-2"><span>Ден:</span></div>
               <ais-range-input attribute="den">
                 <form
                   slot-scope="{ currentRefinement, range, canRefine, refine }"
                 >
-                  <div class="super-flex">
-                    <div class="filter__price-start">
+                  <div class="d-flex">
+                    <div class="d-flex align-items-center w-50">
                       <span>от</span>
                       <input
                         type="number"
+                        class="text-center"
                         :min="range.min"
                         :max="range.max"
                         :placeholder="range.min"
@@ -132,10 +142,13 @@
                       />
                     </div>
 
-                    <div class="filter__price-end">
+                    <div
+                      class="d-flex align-items-center justify-content-end w-50"
+                    >
                       <span>до</span>
                       <input
                         type="number"
+                        class="text-center"
                         :min="range.min"
                         :max="range.max"
                         :placeholder="range.max"
@@ -164,6 +177,7 @@
                 <div slot-scope="{ canRefine, refine, createURL }">
                   <a
                     :href="createURL()"
+                    class="btn btn-dark"
                     @click.prevent="refine"
                     v-if="canRefine"
                   >
@@ -177,8 +191,8 @@
       </section>
     </div>
 
-    <div class="search__content">
-      <div class="search-form">
+    <div class="col-lg-8 col-xl-9 col-xxl-10">
+      <!-- <div class="search-form">
         <div class="search-box-wrapper">
           <ais-search-box
             placeholder="Введите название товара"
@@ -205,69 +219,56 @@
           </div>
           <ais-powered-by />
         </div>
-      </div>
+      </div> -->
 
-      <div class="catalog_list_view search-hits-wrapper">
+      <div>
         <ais-hits :escapeHTML="false" :transform-items="transformItems">
-          <ul slot-scope="{ items }" class="catalog__list">
-            <li
+          <div slot-scope="{ items }" class="row mt-4 mb-2 search-hits-wrapper">
+            <div
               v-for="item in items"
               :key="item.objectID"
-              class="catalog__item"
+              class="col-md-6 col-xl-4 product-item mb-5 text-center"
             >
-              <a :href="item.href" class="catalog__item-link">
-                <img :src="item.image" :alt="item.h1" />
+              <a :href="item.href">
+                <img :src="item.image" :alt="item.h1" class="img-fluid" />
               </a>
 
-              <div
-                v-if="item.specialText"
-                class="catalog__item-price super-div"
-                style="top: 0px;"
-              >
-                <span
-                  class="catalog__item-price-default super-text"
-                  style="font-size: 0.79vw;"
-                  >{{ item.specialText }}</span
-                >
+              <div v-if="item.specialText" class="p-2 special-text">
+                <span>{{ item.specialText }}</span>
               </div>
 
-              <div class="catalog__item-ivaninfo">
-                <div class="row">
-                  <div class="col-xs-12">
-                    <h3 class="ivanitemtitle">
-                      <a :href="item.href">{{ item.h1 }}</a>
-                    </h3>
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="my-4">
+                    <a :href="item.href" class="title">{{ item.h1 }}</a>
                   </div>
-                  <div class="col-xs-7">
-                    <span v-if="item.isSpecial" class="catalog__item-price-old">
-                      {{ item.price }} <span class="ruble-sign">Р</span></span
-                    >
-
-                    <span
-                      v-if="item.isSpecial"
-                      class="catalog__item-price-default"
-                    >
+                </div>
+                <div
+                  class="d-flex align-items-center justify-content-around col-sm-12"
+                >
+                  <div v-if="item.isSpecial">
+                    <span class="price price-old mr-2">
+                      {{ item.price }}
+                      <span class="ruble-sign">Р</span>
+                    </span>
+                    <span class="price">
                       {{ item.special }}
-                      <span v-if="item.isZvezdochka" class="ruble-container"
+                      <span v-if="isZvezdochka" class="ruble-container"
                         ><span class="ruble-sign">Р</span
                         ><span class="ruble-zvezdochka">*</span></span
                       >
                       <span v-else class="ruble-sign">Р</span>
                     </span>
-
-                    <span v-else class="catalog__item-price-default">
-                      {{ item.price }} <span class="ruble-sign">Р</span></span
-                    >
                   </div>
-                  <div class="col-xs-5">
-                    <div>
-                      <a :href="item.href" class="ivanbuybutton">Купить</a>
-                    </div>
-                  </div>
+                  <span v-else class="price">
+                    {{ item.price }}
+                    <span class="ruble-sign">Р</span>
+                  </span>
+                  <a :href="item.href" class="btn btn-primary px-4">Купить</a>
                 </div>
               </div>
-            </li>
-          </ul>
+            </div>
+          </div>
         </ais-hits>
 
         <div class="text-center">

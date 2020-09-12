@@ -1,70 +1,61 @@
 <template>
-  <div :class="['reviews', { on: show_form }]">
-    <div @click="showForm()" v-show="!show_form" class="rev-btn">
-      ОСТАВИТЬ ОТЗЫВ
+  <div :class="['reviews row', { on: show_form }]">
+    <div v-show="!show_form" class="col-md-12">
+      <button @click="showForm()" class="btn btn-dark">ОСТАВИТЬ ОТЗЫВ</button>
     </div>
-    <div v-show="show_form" class="reviews__right">
-      <h2 class="reviews__title">Оставить отзыв</h2>
+    <div class="col-md-12" v-show="show_form">
+      <h4 class="title mb-3">Оставить отзыв</h4>
       <form
         class="reviews__form form-vertical"
         id="reviewForm"
         method="post"
         v-on:submit.prevent="addReview()"
       >
-        <div class="reviews__form-group">
-          <div
-            v-show="fieldHasError('name')"
-            class="help-block error"
-            id="ProductReviewForm_author_em_"
-          >
-            {{ getFieldError('name') }}
-          </div>
+        <div class="form-group">
           <input
             placeholder="представьтесь"
-            class="reg__form-input"
-            id="ProductReviewForm_author"
+            :class="['form-control', { 'is-invalid': fieldHasError('name') }]"
             type="text"
             v-model.trim="name"
           />
-        </div>
-        <div class="reviews__form-group">
-          <div
-            v-show="fieldHasError('message')"
-            class="help-block error"
-            id="ProductReviewForm_content_em_"
-          >
-            {{ getFieldError('message') }}
+          <div v-show="fieldHasError('name')" class="invalid-feedback">
+            {{ getFieldError('name') }}
           </div>
+        </div>
+        <div class="form-group">
           <textarea
             placeholder="Текст сообщения"
-            class="reg__form-input"
-            id="ProductReviewForm_content"
+            :class="[
+              'form-control',
+              { 'is-invalid': fieldHasError('message') },
+            ]"
             v-model.trim="message"
           ></textarea>
+          <div v-show="fieldHasError('message')" class="invalid-feedback">
+            {{ getFieldError('message') }}
+          </div>
         </div>
 
-        <div class="reviews__form-group reviews__form-group--rating">
-          <span>оценка: </span>
-          <star-rating
-            :item-size="20"
-            inactive-color="#d5d5d5"
-            active-color="#2b2a29"
-            :increment="1"
-            v-model="rating"
-          />
-          <div
-            v-show="fieldHasError('rating')"
-            class="help-block error"
-            id="ProductReviewForm_content_em_"
-          >
+        <div class="form-group">
+          <div class="align-items-center d-flex justify-content-around">
+            <span>оценка: </span>
+            <star-rating
+              :item-size="20"
+              inactive-color="#d5d5d5"
+              active-color="#2b2a29"
+              :increment="1"
+              v-model="rating"
+            />
+          </div>
+          <div v-show="fieldHasError('rating')" class="invalid-feedback">
             {{ getFieldError('rating') }}
           </div>
         </div>
 
-        <div class="reviews__form-group">
+        <div class="form-group">
           <vue-recaptcha
             v-if="isCaptcha"
-            ref="mailus_recaptcha"
+            ref="review_recaptcha"
             @verify="onCaptchaVerified"
             @expired="onCaptchaExpired"
             size="invisible"
@@ -72,59 +63,63 @@
           />
         </div>
 
-        <div class="reviews__form-group reviews__form-group--send">
-          <input type="submit" value="Отправить" id="yt1" />
+        <div class="form-group">
+          <button type="submit" class="btn btn-dark btn-block">
+            Отправить
+          </button>
         </div>
       </form>
     </div>
-    <div v-if="reviews.length > 0" class="reviews__left">
-      <h2 id="reviews" class="reviews__title">
+    <div v-if="reviews.length > 0" class="col-md-12">
+      <h4 class="title">
         Отзывы <span> ( {{ reviews.length }} )</span>
-      </h2>
-      <ul class="reviews__list">
-        <li
-          v-for="review in reviews"
-          :key="review.review_id"
-          class="reviews__item"
-          itemprop="review"
-          itemtype="http://schema.org/Review"
-          itemscope
-        >
+      </h4>
+      <div class="row review-list">
+        <div class="col-md-4">
           <div
-            class="reviews__person"
-            itemprop="author"
-            itemtype="http://schema.org/Person"
+            v-for="review in reviews"
+            :key="review.review_id"
+            class="d-flex flex-wrap justify-content-between review-item"
+            itemprop="review"
+            itemtype="http://schema.org/Review"
             itemscope
           >
-            <meta itemprop="name" :content="review.author" />
-            <span>{{ review.author }}</span>
+            <div
+              class="person"
+              itemprop="author"
+              itemtype="http://schema.org/Person"
+              itemscope
+            >
+              <meta itemprop="name" :content="review.author" />
+              <span>{{ review.author }}</span>
+            </div>
+            <div class="date">
+              <span>{{ review.date_added }}</span>
+            </div>
+            <div
+              class="rating"
+              itemprop="reviewRating"
+              itemtype="http://schema.org/Rating"
+              itemscope
+            >
+              <meta itemprop="ratingValue" :content="review.rating" />
+              <meta itemprop="bestRating" content="5" />
+              <star-rating
+                :item-size="20"
+                inactive-color="#d5d5d5"
+                active-color="#2b2a29"
+                :increment="1"
+                :rating="review.rating"
+                :read-only="true"
+                :show-rating="false"
+              />
+            </div>
+            <div class="w-100 mt-3">
+              <p>{{ review.text }}</p>
+            </div>
           </div>
-          <div class="reviews__data">
-            <span>{{ review.date_added }}</span>
-          </div>
-          <div
-            class="reviews__rating"
-            itemprop="reviewRating"
-            itemtype="http://schema.org/Rating"
-            itemscope
-          >
-            <meta itemprop="ratingValue" :content="review.rating" />
-            <meta itemprop="bestRating" content="5" />
-            <star-rating
-              :item-size="20"
-              inactive-color="#d5d5d5"
-              active-color="#2b2a29"
-              :increment="1"
-              :rating="review.rating"
-              :read-only="true"
-              :show-rating="false"
-            />
-          </div>
-          <div class="reviews__text">
-            <p>{{ review.text }}</p>
-          </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -186,7 +181,7 @@ export default {
     },
     addReview() {
       if (this.isCaptcha) {
-        this.$refs.mailus_recaptcha.execute()
+        this.$refs.review_recaptcha.execute()
       } else {
         this.addReviewRequest().then((res) => {
           if (res === true) {
@@ -196,7 +191,7 @@ export default {
       }
     },
     onCaptchaVerified(recaptchaToken) {
-      this.$refs.mailus_recaptcha.reset()
+      this.$refs.review_recaptcha.reset()
 
       this.captchaRequest(recaptchaToken).then((captcha_res) => {
         if (captcha_res === true) {
@@ -209,7 +204,7 @@ export default {
       })
     },
     onCaptchaExpired() {
-      this.$refs.mailus_recaptcha.reset()
+      this.$refs.review_recaptcha.reset()
     },
   },
   data() {
@@ -222,5 +217,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss"></style>

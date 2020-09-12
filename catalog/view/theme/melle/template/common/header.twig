@@ -21,11 +21,14 @@
 <meta property="og:image" content="{{og.image}}"/>
 <meta property="og:description" content="{{description}}"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta property="twitter:image" content="{{og.image}}"/>
+<meta name="twitter:image" content="{{og.image}}"/>
 
 {% for style in styles %}
 <link href="{{ style.href }}{{cache_postfix}}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
 {% endfor %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
 <link href="{{base}}catalog/view/theme/melle/stylesheet/bootstrap.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
 {# <link href="{{base}}catalog/view/theme/melle/stylesheet/sass/libs.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
@@ -35,7 +38,7 @@
 <link href="{{ link.href }}" rel="{{ link.rel }}" />
 {% endfor %}
 
-<script src="{{base}}catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+<script src="{{base}}catalog/view/javascript/jquery/jquery-2.2.4.min.js" type="text/javascript"></script>
 
 {% for state in states %}
 <script type="text/javascript">window.__{{state.codename}}__ = {{state.json}};</script>
@@ -161,10 +164,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'uid': uid,
         'clid': lh_clid,
         'offers': order_offers
-      }
+      };
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://track.leadhit.io/stat/lead_order', true);
       xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+      xhr.open('POST', 'https://track.leadhit.io/stat/lead_order', true);
       xhr.onreadystatechange = function () {
         if (this.readyState != 4) return
         console.log('order sended')
@@ -175,91 +178,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 {% endif %}
 
-{# отключалка яндекс Советника  #}
-
-<script type="text/javascript">
- 	(function() {
- 	function sovetnikPluginRemoveMicroschema()
- 	{
- 	var style = document.querySelectorAll("[itemprop]");
- 	for(var key in style) {
- 	if (typeof style[key] == "object")
- 	{
- 	style[key].removeAttribute("itemprop");
- 	}
- 	}
- 	}
-
- 	/*Яндекс.Советник на всех десктопных браузерах на базе Chrome*/
- 	var yandexDesktop = !/Mobile/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
- 	if(yandexDesktop)
- 	{
- 	var timerId = setInterval(sovetnikPluginRemoveMicroschema, 10);
- 	window.onload = function(e){
- 	clearInterval(timerId);
- 	}
- 	}
-
- 	document.addEventListener("DOMNodeInserted", function (event) {
- 	/*Альтернативный поиск от Яндекс*/
- 	var searchYandex = /_sovetnik_/.test(event.target.className) && event.target.innerHTML == "";
- 	if(searchYandex)
- 	{
- 	var style = document.querySelector("." + event.target.className);
- 	style.parentNode.removeChild(style);
- 	console.log("Заблокированы подсказки Альтернативного поиска");
- 	}
- 	/*Яндекс.Советник на Android*/
- 	var yandexAndroid = /выгодная цена/.test(event.target.innerHTML) && /Mobile/.test(navigator.userAgent) && /YaBrowser/.test(navigator.userAgent);
- 	if(yandexAndroid)
- 	{
- 	var preclass = event.target.getAttribute("class");
- 	var arClass = preclass.split(" ");
- 	var style = document.querySelector("." + arClass[0]);
- 	style.parentNode.removeChild(style);
- 	}
- 	/*Яндекс.Советник*/
- 	var yandex = /market.yandex/.test(event.target.innerHTML) || /Яндекс.Маркет/.test(event.target.innerHTML);
- 	if(yandex)
- 	{
- 	var style = document.querySelectorAll("div#" + event.target.id);
- 	for(var key in style) {
- 	if (typeof style[key] == "object")
- 	{
- 	style[key].style.display = "none";
- 	}
- 	}
- 	var style = document.querySelectorAll("div#" + event.target.id + " div");
- 	for(var key in style) {
- 	if (typeof style[key] == "object")
- 	{
- 	style[key].style.display = "none";
- 	}
- 	}
- 	var style = document.querySelectorAll("style");
- 	var patt = new RegExp("#" + event.target.id);
- 	for(var key in style) {
- 	if (typeof style[key] == "object" && (patt.test(style[key].innerText) || /market_context_headcrab/.test(style[key].innerText)))
- 	style[key].parentNode.removeChild(style[key]);
- 	}
- 	console.log("Заблокированы подсказки Яндекс.Советника");
- 	}
- 	/*Помощник supermegabest*/
- 	var style = document.querySelectorAll("div iframe");
- 	for(var key in style) {
- 	if (typeof style[key] == "object" && /offers/.test(style[key].src))
- 	{
- 	style[key].parentNode.removeChild(style[key]);
- 	var body = document.querySelector("body");
- 	body.style.marginTop = 0;
- 	console.log("Заблокированы подсказки Помощника SuperMegaBest");
- 	}
- 	}
- 	}, false);
- 	}())
- 	</script>
 {% endif %}
-
 </head>
 <body>
 
@@ -268,12 +187,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><!-- End Google Tag Manager (noscript) -->
     {% endif %}
 
+<noscript>
+    <div class="no-js-warning bg-warning">
+        <div class="text-center p-2">Для корректной работы сайта пожалуйста включите JavaScript.</div>
+    </div>
+</noscript>
+
 <section id="melle-mount"> <!-- START MAIN SECTION -->
     {{melle_mobile_menu}}
 
-    <section class="section section-1" data-anchor="section-1">
-       {% if rhc %}
-       <div id="rendered-header-content">{{rhc}}</div>
-       {% endif %}
-       <melle-header></melle-header>
-    </section>
+    {% if rhc %}
+    <div id="rendered-header-content">{{rhc}}</div>
+    {% endif %}
+    <melle-header></melle-header>

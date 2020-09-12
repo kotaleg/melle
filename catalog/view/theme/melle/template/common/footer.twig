@@ -1,41 +1,102 @@
 
 </section> <!-- END MAIN SECTION -->
 
-<section class="section section-5 fp-auto-height" data-anchor="section-5">
-   <footer>
-      <div class="footer-menu-block">
-         <ul class="footer-menu">
+<footer class="mt-4">
+    <div class="d-none d-md-block container-fluid py-5">
+        <div class="row">
+            <div class="col-md-6 col-lg-8">
+                <div class="row">
+                    {% for m in menu %}
+                    <div class="col-md-6 col-lg-4 col-xl-3 mb-3 menu-item {% if m.active %} active {% endif %}">
+                        <a href="{{m.url}}"> <b>{{ m.title }}</b> </a>
+                        {% if m.children|length > 0 %}
+                        <div class="d-flex flex-wrap flex-column mt-2 menu-children">
+                            {% for c in m.children %}
+                            <a href="{{c.url}}">{{ c.title }}</a>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-3 col-lg-2">
+                <div class="footer-contacts mb-4">
+                    <a href="{{phoneLink}}" class="phone"><b>{{ phone }}</b></a>
+                    <div class="d-flex flex-row align-items-center mt-2">
+                        <a href="https://www.instagram.com/melle.online/" target="_blank" rel="noopener noreferrer nofollow" class="social-link mr-2">
+                            <img src="data:img/png;base64,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" alt="instagram" class="img-fluid">
+                        </a>
+                        <a href="https://www.facebook.com/melle.online/" target="_blank" rel="noopener noreferrer nofollow" class="social-link">
+                            <img src="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAABECAYAAAA4E5OyAAAEyklEQVR4nO2cX4gVVRzHPzt724d1UzCl15RWfVIxE8Rt9yFBIx8SFhQNwrY/kL0kbCJID1IPGRgESqXWVhQ9LBSiqA9iuu6DYWJGUknUi/YiVLT+WWszDvudGC8zd87cmTMzd64fuA93Z+ec3+97Z86c8zu/33Rw/CQ50AEsAVYAi4BeYAEwC+gBZsiE68AE8CfwE3AZ+AH4GvgWuOPa1JrDto2jg8A6YACYY3HODH0elGBBrgGngMPAqITLHBdXSD/wArAe6HZhNHAD+AJ4HzidZcNehm2tBc7oV9zsUAzU9mb1dUZ9Z0IWgiwGxoCjwKqsDEvAKvU9JltSkUYQM0bsAc4DfXkqEEGfbNkj25qiWUGWq/NXgE6XXiakUzadl42JaUaQIWBcj86y0isbh1wKYuYSu4EDQFeJxfDpkq27ZbsVtoKYS/EgMOzUBTcMy3arW9tmYmbU3Q9sKaGztvi2D8XNdm2ukDdbXAyfLfKlIXGCDLXobRLFcNxA20gQ89jal4uZ+bKv0SM5ShAzsfmsRZ4mSemSb6GTt6hBdVcJ5xlXgQvAFS3u7tPKuCbnHgDmAgst2uqVj9vqD4StdhdrpleGGaiJj7wHfAB8b3mObcxkClgGXAz+MewK2VsSMY4Dz+rKcEGnfH0s2Hb9GLK2JAu1D4EnHYrh01cfOqgXZKdjA2wwMY7ndUnnwV0+BwUxka4i4hlB/tY8IS8xkM/9/pegICbsVzSfAj8XYMP/vvuC9CgGWjQfF9T/en9e4j9lBh3HQG24pTBgHGaxuRpYCczOqO9uaTDiC7LOiYvJuAT8E3NGTdsQaxz0bzQY8aT4gIMOknLF4v8HHYmBNOjwtKNms4nkmt8t2nf5FDQaLPG0vVgGbKbc9zu2c4WnvdZ7TLPIK3n0PG96vZBN5XZmgaeUhHtMM8tLs+1XQXpMgMh5EkqAp4EjEcduKxLWiO6YsObjyh1pGpcJM2GYCNgfKc6/ESPa3LQGejKyKsxL6cek5yo1qSDSCnLTU4JbVZif0o/fPGX7VYWHUvrxq6fUxyowU3szafjFUx5oFUg7fhgu1JQUmxcbgaVRxgBfxtjxVIPzH87Ah7M1ZQhfyykmsqHBsY8sBXkmY5t8/jK7g57iEKccddJKmJ3CKT/qfrjd1fA18AUZtVhHVJlJ4FBQkAnljrcro35MN7hzZxLp25UDvt9BQUxVwXgbCnIW+Mr/Ur/7/3r+9hTOrqAB9YIcU7lFuzCuSopIQQxbc05HKIp/gZfr94PCBDE5V+9UWopp9mq5cBdRaZmvVWgVHIZZ0G4POxAliJmXbFLgt2rcVnnazSSCGM4BL1VQkOeUdhpKXK67Kat4y72NuWGS/z9p1JlNNcR2pUm2Ou8CO+J8sBHkjtIkW1mU/br9YzflbCuqppQu2Yq3zxvAi7Yp30lq7kyDr2pQaoWnz6R+xJ1J3hnQTFXmQaU2lXme8iPwqIoGEtFs3e45VRK8XbJp/pRsegT4rpkG0lR2T6jeZFlJFoRjypfblma/Oova/4sqsXiioHjKN+q7v9GEy5Ys3w5xTOUWA8pZdxmjNYP65xrLlqvvTHCRH3Jan2ZeqBKHuQJPKCDsZJPeZcKMGWNG9LF95U4cZoLlDuA/CRvXtVfupPoAAAAASUVORK5CYII=" alt="facebook" class="img-fluid">
+                        </a>
+                    </div>
+                </div>
+                <div class="d-flex flex-column footer-navigation">
+                    {% for info in informations %}
+                        {% if info.link != false %}
+                        <a rel="nofollow" href="{{info.link}}" class="mb-2"><b>{{info.title}}</b></a>
+                        {% else %}
+                        <a href="{{ info.href }}" class="mb-2"><b>{{info.title}}</b></a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-3 col-lg-2">
+                <div class="d-flex flex-nowrap flex-column justify-content-between h-100">
+                    <a href="https://melle.online/opt/" target="_blank" rel="noopener noreferrer nofollow" class="btn btn-info">Оптовый сайт</a>
+                    <a href="{{base}}" class="text-right">
+                        <img src="data:img/png;base64,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" alt="MELLE" class="img-fluid">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-md-none container-fluid py-5">
+        <div class="row">
+            <div class="col-sm-12 mb-5">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <a href="https://melle.online/opt/" target="_blank" rel="noopener noreferrer nofollow" class="btn btn-info">Оптовый сайт</a>
+                    <a href="https://www.instagram.com/melle.online/" target="_blank" rel="noopener noreferrer nofollow" class="d-none d-sm-block">
+                        <img class="w-50" src="data:img/png;base64,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" alt="instagram" class="img-fluid">
+                    </a>
+                    <a href="https://www.facebook.com/melle.online/" target="_blank" rel="noopener noreferrer nofollow" class="d-none d-sm-block">
+                        <img class="w-50" src="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAABECAYAAAA4E5OyAAAEyklEQVR4nO2cX4gVVRzHPzt724d1UzCl15RWfVIxE8Rt9yFBIx8SFhQNwrY/kL0kbCJID1IPGRgESqXWVhQ9LBSiqA9iuu6DYWJGUknUi/YiVLT+WWszDvudGC8zd87cmTMzd64fuA93Z+ec3+97Z86c8zu/33Rw/CQ50AEsAVYAi4BeYAEwC+gBZsiE68AE8CfwE3AZ+AH4GvgWuOPa1JrDto2jg8A6YACYY3HODH0elGBBrgGngMPAqITLHBdXSD/wArAe6HZhNHAD+AJ4HzidZcNehm2tBc7oV9zsUAzU9mb1dUZ9Z0IWgiwGxoCjwKqsDEvAKvU9JltSkUYQM0bsAc4DfXkqEEGfbNkj25qiWUGWq/NXgE6XXiakUzadl42JaUaQIWBcj86y0isbh1wKYuYSu4EDQFeJxfDpkq27ZbsVtoKYS/EgMOzUBTcMy3arW9tmYmbU3Q9sKaGztvi2D8XNdm2ukDdbXAyfLfKlIXGCDLXobRLFcNxA20gQ89jal4uZ+bKv0SM5ShAzsfmsRZ4mSemSb6GTt6hBdVcJ5xlXgQvAFS3u7tPKuCbnHgDmAgst2uqVj9vqD4StdhdrpleGGaiJj7wHfAB8b3mObcxkClgGXAz+MewK2VsSMY4Dz+rKcEGnfH0s2Hb9GLK2JAu1D4EnHYrh01cfOqgXZKdjA2wwMY7ndUnnwV0+BwUxka4i4hlB/tY8IS8xkM/9/pegICbsVzSfAj8XYMP/vvuC9CgGWjQfF9T/en9e4j9lBh3HQG24pTBgHGaxuRpYCczOqO9uaTDiC7LOiYvJuAT8E3NGTdsQaxz0bzQY8aT4gIMOknLF4v8HHYmBNOjwtKNms4nkmt8t2nf5FDQaLPG0vVgGbKbc9zu2c4WnvdZ7TLPIK3n0PG96vZBN5XZmgaeUhHtMM8tLs+1XQXpMgMh5EkqAp4EjEcduKxLWiO6YsObjyh1pGpcJM2GYCNgfKc6/ESPa3LQGejKyKsxL6cek5yo1qSDSCnLTU4JbVZif0o/fPGX7VYWHUvrxq6fUxyowU3szafjFUx5oFUg7fhgu1JQUmxcbgaVRxgBfxtjxVIPzH87Ah7M1ZQhfyykmsqHBsY8sBXkmY5t8/jK7g57iEKccddJKmJ3CKT/qfrjd1fA18AUZtVhHVJlJ4FBQkAnljrcro35MN7hzZxLp25UDvt9BQUxVwXgbCnIW+Mr/Ur/7/3r+9hTOrqAB9YIcU7lFuzCuSopIQQxbc05HKIp/gZfr94PCBDE5V+9UWopp9mq5cBdRaZmvVWgVHIZZ0G4POxAliJmXbFLgt2rcVnnazSSCGM4BL1VQkOeUdhpKXK67Kat4y72NuWGS/z9p1JlNNcR2pUm2Ou8CO+J8sBHkjtIkW1mU/br9YzflbCuqppQu2Yq3zxvAi7Yp30lq7kyDr2pQaoWnz6R+xJ1J3hnQTFXmQaU2lXme8iPwqIoGEtFs3e45VRK8XbJp/pRsegT4rpkG0lR2T6jeZFlJFoRjypfblma/Oova/4sqsXiioHjKN+q7v9GEy5Ys3w5xTOUWA8pZdxmjNYP65xrLlqvvTHCRH3Jan2ZeqBKHuQJPKCDsZJPeZcKMGWNG9LF95U4cZoLlDuA/CRvXtVfupPoAAAAASUVORK5CYII=" alt="facebook" class="img-fluid">
+                    </a>
+                    <a href="{{phoneLink}}" class="phone"><b>{{ phone }}</b></a>
+                </div>
+            </div>
+
             {% for info in informations %}
-            {% if info.link != false %}
-            <li><a target="" rel="nofollow" href="{{info.link}}">{{info.title}}</a></li>
-            {% else %}
-            <li><a href="{{ info.href }}">{{info.title}}</a></li>
-            {% endif %}
+            <div class="col-sm-6">
+                {% if info.link != false %}
+                <a rel="nofollow" href="{{info.link}}" class="mb-2"><b>{{info.title}}</b></a>
+                {% else %}
+                <a href="{{ info.href }}" class="mb-2"><b>{{info.title}}</b></a>
+                {% endif %}
+            </div>
             {% endfor %}
-         </ul>
-         <div itemscope="" itemtype="http://schema.org/Organization" style="font-size:0;">
-            <span itemprop="name">Интернет магазин Mademoiselle</span>
-            Контакты:
-            <div itemprop="address" itemscope="" itemtype="http://schema.org/PostalAddress">
-               Адрес:
-               <span itemprop="streetAddress">ул. Профсоюзая, 83, кв.2</span><span itemprop="addressLocality">Москва</span>,
-            </div>
-            Телефон:<span itemprop="telephone">8-800-777-21-73</span>,
-            Электронная почта: <span itemprop="email">info@melle.online</span>
-         </div>
+        </div>
+    </div>
+</footer>
 
-         <div class="subscribe-block">
-<!--            <p class="made-in made-in-mob">Разработка сайта: <a href="#">google.com</a></p>-->
-            <div class="counts">
-
-            </div>
-            <a target="_blank" rel="noopener noreferrer nofollow" class="insta" href="https://www.instagram.com/melle.online/"><i class="fa fa-instagram" aria-hidden="true"></i></a><a target="_blank" rel="noopener noreferrer nofollow" class="button" href="https://cp.unisender.com/ru/v5/subscribe-form/view/6mpq1gouefnwzjbc5q17gmz46w96jotoumxxbpfy"><span>Подписаться на рассылку</span></a><a target="_blank" rel="noopener noreferrer nofollow" class="fb" href="https://www.facebook.com/melle.online/"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
-         </div>
-
-         <!-- <p class="made-in made-in-desc">Разработка сайта: <a target="_blank" href="{{text_powered}}" rel="noopener noreferrer nofollow">{{text_powered}}</a></p> -->
-      </div>
-   </footer>
-</section>
+<script type="application/ld+json">
+{
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "url":"{{base}}",
+    "name":"Интернет магазин Mademoiselle",
+    "telephone":"8-800-777-21-73",
+    "email":"info@melle.online",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "ул. Профсоюзая, 83, кв.2",
+        "addressLocality": "Москва",
+        "addressCountry": "RU"
+    }
+}
+</script>
 
 <div class="c-fz152__block js-cookie--modal" style="display: none;">
    <div class="container">
@@ -48,16 +109,36 @@
    <div class="c-fz152__buttons"><button class="c-fz152__button c-fz152__button--confirm js-confirm">ОК</button></div>
 </div>
 
-<link href="{{base}}catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-
 <script src="{{base}}catalog/view/javascript/melle/dist/manifest.js{{cache_postfix}}" type="text/javascript"></script>
 <script src="{{base}}catalog/view/javascript/melle/dist/vendor.js{{cache_postfix}}" type="text/javascript"></script>
 <script src="{{base}}catalog/view/javascript/melle/dist/melle.js{{cache_postfix}}" type="text/javascript"></script>
 
-<script src="{{base}}catalog/view/javascript/melle/query/script.js"></script>
-<script src="{{base}}catalog/view/javascript/melle/query/old.js"></script>
+{# MOBILE MENU START #}
+<script src="{{base}}catalog/view/javascript/melle/query/mmenu/jquery.mmenu.all.js"></script>
+<script>
+$(function() {
+    if(jQuery().mmenu) {
+        jQuery('nav#mobile-menu').mmenu({
+            extensions: [
+                'fx-panels-zoom',
+                'fx-listitems-slide',
+                'multiline',
+                'listview-large',
+            ],
+            navbar: {title: 'Меню'}
+        }, {
+            language: 'ru'
+        });
+        jQuery('nav#mobile-menu').css('display', '');
+    }
+});
+</script>
+{# MOBILE MENU END #}
 
-<script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&amp;render=explicit" async defer></script>
+{# <script src="{{base}}catalog/view/javascript/melle/query/script.js"></script>
+<script src="{{base}}catalog/view/javascript/melle/query/old.js"></script> #}
+
+{# <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&amp;render=explicit" async defer></script> #}
 
 {% if pagetype == 'checkout' %}
 <script src="{{base}}catalog/view/javascript/bootstrap/js/bootstrap.min.js"></script>
@@ -147,6 +228,89 @@ lh.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'tr
 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lh, s);
 })();/*
 "PLEASE DO NOT MAKE ANY CHANGES IN THIS JS-CODE!"*/
+</script>
+
+{# отключалка яндекс Советника  #}
+<script type="text/javascript">
+     (function() {
+     function sovetnikPluginRemoveMicroschema()
+     {
+     var style = document.querySelectorAll("[itemprop]");
+     for(var key in style) {
+     if (typeof style[key] == "object")
+     {
+     style[key].removeAttribute("itemprop");
+     }
+     }
+     }
+
+     /*Яндекс.Советник на всех десктопных браузерах на базе Chrome*/
+     var yandexDesktop = !/Mobile/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
+     if(yandexDesktop)
+     {
+     var timerId = setInterval(sovetnikPluginRemoveMicroschema, 10);
+     window.onload = function(e){
+     clearInterval(timerId);
+     }
+     }
+
+     document.addEventListener("DOMNodeInserted", function (event) {
+     /*Альтернативный поиск от Яндекс*/
+     var searchYandex = /_sovetnik_/.test(event.target.className) && event.target.innerHTML == "";
+     if(searchYandex)
+     {
+     var style = document.querySelector("." + event.target.className);
+     style.parentNode.removeChild(style);
+     console.log("Заблокированы подсказки Альтернативного поиска");
+     }
+     /*Яндекс.Советник на Android*/
+     var yandexAndroid = /выгодная цена/.test(event.target.innerHTML) && /Mobile/.test(navigator.userAgent) && /YaBrowser/.test(navigator.userAgent);
+     if(yandexAndroid)
+     {
+     var preclass = event.target.getAttribute("class");
+     var arClass = preclass.split(" ");
+     var style = document.querySelector("." + arClass[0]);
+     style.parentNode.removeChild(style);
+     }
+     /*Яндекс.Советник*/
+     var yandex = /market.yandex/.test(event.target.innerHTML) || /Яндекс.Маркет/.test(event.target.innerHTML);
+     if(yandex)
+     {
+     var style = document.querySelectorAll("div#" + event.target.id);
+     for(var key in style) {
+     if (typeof style[key] == "object")
+     {
+     style[key].style.display = "none";
+     }
+     }
+     var style = document.querySelectorAll("div#" + event.target.id + " div");
+     for(var key in style) {
+     if (typeof style[key] == "object")
+     {
+     style[key].style.display = "none";
+     }
+     }
+     var style = document.querySelectorAll("style");
+     var patt = new RegExp("#" + event.target.id);
+     for(var key in style) {
+     if (typeof style[key] == "object" && (patt.test(style[key].innerText) || /market_context_headcrab/.test(style[key].innerText)))
+     style[key].parentNode.removeChild(style[key]);
+     }
+     console.log("Заблокированы подсказки Яндекс.Советника");
+     }
+     /*Помощник supermegabest*/
+     var style = document.querySelectorAll("div iframe");
+     for(var key in style) {
+     if (typeof style[key] == "object" && /offers/.test(style[key].src))
+     {
+     style[key].parentNode.removeChild(style[key]);
+     var body = document.querySelector("body");
+     body.style.marginTop = 0;
+     console.log("Заблокированы подсказки Помощника SuperMegaBest");
+     }
+     }
+     }, false);
+     }())
 </script>
 {% endif %}
 

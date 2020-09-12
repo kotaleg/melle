@@ -19,28 +19,28 @@
         <form
           class="fast-order form-vertical"
           enctype="multipart/form-data"
-          id="yw0"
           method="post"
           v-on:submit.prevent="oneClick()"
         >
-          <div class="fast-order__text-info">
+          <div class="sub-title">
             <p>* Обязательные для заполнения поля</p>
           </div>
 
-          <div class="fast-order__form-group">
-            <label for="AbstractForm_field_9" class="required"
+          <div class="form-group">
+            <label for="one-click-name" class="required"
               >Представьтесь <span class="required">*</span></label
             >
             <input
               placeholder="Укажите ФИО"
-              id="AbstractForm_field_9"
+              id="one-click-name"
               type="text"
+              class="form-control"
               v-model="name"
             />
           </div>
 
-          <div class="fast-order__form-group">
-            <label for="AbstractForm_field_10" class="required"
+          <div class="form-group">
+            <label for="one-click-phone" class="required"
               >Телефон <span class="required">*</span></label
             >
             <the-mask
@@ -48,15 +48,19 @@
               v-model.trim="phone"
               type="tel"
               :masked="false"
-              id="AbstractForm_field_7"
+              id="one-click-phone"
               placeholder="+7 (_ _ _) _ _ _-_ _-_ _"
-              class="mail-us__form-input"
+              class="form-control"
             />
           </div>
 
-          <div class="field--checkbox">
-            <label for="AbstractForm_politic">
-              <p-check name="agree" v-model="agree"></p-check>
+          <div class="form-group">
+            <label for="one-click-agree">
+              <p-check
+                name="agree"
+                id="one-click-agree"
+                v-model="agree"
+              ></p-check>
               <span class="label-content"
                 >Я принимаю условия<a
                   :href="konfidentsialnost_link"
@@ -68,8 +72,8 @@
             </label>
           </div>
 
-          <div class="button-row">
-            <button type="submit" class="btn no-btn">Отправить</button>
+          <div class="button-row text-right">
+            <button type="submit" class="btn btn-dark">Отправить</button>
           </div>
         </form>
       </div>
@@ -128,7 +132,7 @@ export default {
         name: this.name,
         phone: this.phone,
         agree: this.agree,
-        source: this.params.source || ''
+        source: this.params.source || '',
       })
     },
 
@@ -167,5 +171,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss"></style>

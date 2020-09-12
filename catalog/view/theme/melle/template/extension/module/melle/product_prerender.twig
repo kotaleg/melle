@@ -1,15 +1,15 @@
-<form class="add-to-cart form-vertical" method="post">
+<form class="form-vertical" method="post">
 
     {% for o in options %}
     {% if o.type == 'radio' %}
-    <div class="prod-card__form-group prod-card__form-group--{{o.class}}">
-    <div>
-        <span class="ivan-product-selectors">{{ o.name }}:</span>
-        <div id="ivan-js-{{o.class}}-list" class="{{o.class}}">
+    <div class="mb-3">
+    <div class="align-items-center d-flex justify-content-start">
+        <span class="option-selector">{{ o.name }}:</span>
+        <div class="d-flex flex-row flex-wrap justify-content-start">
 
             {% for ov in o.product_option_value %}
-            <label class="radio-inline ivan-{{o.class}}-radio">
-                <div class="{% if ov.disabled_by_selection %}krestik{% endif %}">
+            <label class="{{o.class}}-radio radio-inline text-center my-1 mr-2">
+                <div class="d-flex flex-column justify-content-center {% if ov.disabled_by_selection %} krestik {% endif %}">
                     <input type="radio"
                         name="ShopCartItem[{{o.class}}]"
                         placeholder="{{ov.name}}"
@@ -30,10 +30,10 @@
             {% endfor %}
 
             {% if size_list and o.class == 'size' %}
-            <a id="tablitsa-razmerov"
+            <a id="size-list"
                 data-fancybox=""
-                class="hidden-sm"
-                href="size_list">таблица<br>размеров</a>
+                class="d-none d-sm-block"
+                href="javascript:void(0)">таблица<br>размеров</a>
             {% endif %}
         </div>
     </div>
@@ -41,26 +41,23 @@
     {% endif %}
     {% endfor %}
 
-    <div class="prod-card__form-group prod-card__form-group--count">
-        <span class="ivan-product-selectors">кол-во:</span>
-        <div class="prod-card__count-wrap">
-           <div class="prod-card__count">
-            <button class="item_minus" type="button">-</button>
-            <input id="productCounter" class="item_col keyPressedNum" value="{{quantity}}">
-            <button class="item_plus" type="button">+</button>
-           </div>
+    <div class="align-items-center d-flex justify-content-start">
+        <span class="option-selector">кол-во:</span>
+        <div class="align-items-center d-flex quantity-container">
+            <button class="p-0 px-2 text-center" type="button">-</button>
+            <input id="productCounter" class="p-0 text-center" value="{{quantity}}">
+            <button class="p-0 px-2 text-center" type="button">+</button>
         </div>
     </div>
 
     {% if in_stock %}
-    <div class="prod-card__form-group prod-card__form-group--price">
-        <div class="prod-card__price">
-
+    <div class="align-items-center d-flex justify-content-start my-3">
+        <div>
             {% if isSpecial %}
-            <span class="prod-card__price-default prod-card__price-ivanold">{{ getActivePrice }} <span class="ruble-sign">Р</span></span>
-            <span class="prod-card__price-default">{{ getSpecial }}
+            <span class="price-old">{{ getActivePrice }} <span class="ruble-sign">Р</span></span>
+            <span class="ml-3 price">{{ getSpecial }}
                 {% if zvezdochka %}
-                <span  class="ruble-container-p">
+                <span  class="ruble-container">
                     <span class="ruble-sign">Р</span><span class="ruble-zvezdochka-p">*</span>
                 </span>
                 {% else %}
@@ -70,38 +67,26 @@
             {% endif %}
 
             {% if zvezdochka %}
-            <span class="special-text-info">{{ special_text }}</span>
+            <span class="ml-3 special-text-info">{{ special_text }}</span>
             {% endif %}
 
             {% if not isSpecial %}
-            <span class="prod-card__price-default">{{ getActivePrice }} <span class="ruble-sign">Р</span></span>
+            <span class="price">{{ getActivePrice }} <span class="ruble-sign">Р</span></span>
             {% endif %}
-
-            <div class="prod-card__form-group prod-card__form-group--rating">
-              <div class="star-rating star-rating--span">
-                {% for r in getRating %}
-                <span class="fa fa-lg {% if r == true %}fa-star{% else %}fa-star-o{% endif %}" />
-                {% endfor %}
-              </div>
-            </div>
         </div>
     </div>
     {% endif %}
 
-    <div class="ivan-price-handler">
+    <div class="d-flex flex-row justify-content-between">
         {% if in_stock %}
-        <div style="margin: 0px" class="prod-card__form-group prod-card__form-group--send ivan-price-button">
-           <a id="add_trigger_button" href="javascript:void(0);"><span>Добавить <br> В корзину</span></a><br>
-        </div>
-
-        <div class="prod-card__form-group--send ivan-price-button one-click-button">
-           <div class="modal--send"></div>
-           <a href="javascript:void(0);" class="fast-order-link btn">Купить <br> в 1 клик</a>
-        </div>
+        <a id="add_trigger_button" href="javascript:void(0);" class="add-button p-2 p-sm-3 w-100 text-center"><span class="m-auto">Добавить <br> В корзину</span></a><br>
+        <a href="javascript:void(0);" class="d-flex ml-3 ml-sm-5 one-click-button p-2 p-sm-3 w-100"><span class="m-auto"
+          >Купить <br />
+          в 1 клик</span
+        ></a>
         {% else %}
-        <div class="prod-card__form-group--send ivan-price-button one-click-button not-in-stock">
-           <div class="modal--send"></div>
-           <a href="javascript:void(0);" class="fast-order-link btn">Сообщить о поступлении</a>
+        <div class="d-flex flex-row justify-content-between">
+           <a href="javascript:void(0);" class="d-flex one-click-button p-2 p-sm-3 text-center w-50 not-in-stock"><span class="m-auto">Сообщить о поступлении</span></a>
         </div>
         {% endif %}
     </div>

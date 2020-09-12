@@ -1,172 +1,180 @@
 <template>
   <section :class="{ 'sidebar sticky-sidebar': isMobile }">
-    <div class="search-modal__filter filter">
-      <div class="filter__title">
+    <div class="filter">
+      <h4 class="title">
         Фильтр
-        <span style="font-size: 10px;">(Найдено: {{ product_total }})</span>
-      </div>
+        <span class="found">(Найдено:&nbsp;{{ product_total }})</span>
+      </h4>
 
-      <form v-on:submit.prevent="openSidebar(false)">
-        <div class="filter__relevant-category">
-          <label>
+      <form v-on:submit.prevent="openSidebar(false)" class="mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <label class="d-flex align-items-center">
             <input
               name="CatalogFilterForm[hits]"
               type="checkbox"
               v-model="hit"
             />
-            <span></span><span>Хиты</span>
+            <span
+              class="d-flex justify-content-between align-items-center"
+            ></span
+            ><span>Хиты</span>
           </label>
-          <label>
+          <label class="d-flex align-items-center">
             <input
               name="CatalogFilterForm[news]"
               type="checkbox"
               v-model="neww"
             />
-            <span></span><span>Новинки</span>
+            <span
+              class="d-flex justify-content-between align-items-center"
+            ></span
+            ><span>Новинки</span>
           </label>
-          <label>
+          <label class="d-flex align-items-center">
             <input
               name="CatalogFilterForm[actions]"
               type="checkbox"
               v-model="act"
             />
-            <span></span><span>Акции</span>
+            <span
+              class="d-flex justify-content-between align-items-center"
+            ></span
+            ><span>Акции</span>
           </label>
         </div>
 
-        <div class="filter__price">
-          <div class="filter__price-title"><span>Цена, руб</span></div>
-          <div class="super-flex">
-            <div class="filter__price-start">
+        <div class="filter-price mb-4">
+          <div class="sub-title mb-2"><span>Цена, руб</span></div>
+          <div class="d-flex">
+            <div class="d-flex align-items-center w-50">
               <span>от</span>
               <input
                 name="CatalogFilterForm[price_from]"
                 type="text"
+                class="text-center"
                 v-model.trim="min_price"
               />
             </div>
-            <div class="filter__price-end">
+            <div class="d-flex align-items-center justify-content-end w-50">
               <span>до</span>
               <input
                 name="CatalogFilterForm[price_to]"
                 type="text"
+                class="text-center"
                 v-model.trim="max_price"
               />
             </div>
           </div>
-
-          <vue-slider
-            ref="price_slider"
-            class="mt-14 vsc-class"
-            v-bind="getSliderOptions('price')"
-            v-model="price"
-          >
-          </vue-slider>
         </div>
 
-        <ul class="filter__list">
-          <li
+        <div
+          class="filter-manufacturers d-flex flex-wrap align-content-center align-items-center mb-4"
+        >
+          <div
             v-for="(item, i) in getFilterValue('manufacturers')"
-            class="filter__item"
+            :key="`filter-manufacturer-${i}`"
+            class="manufacturer-item mr-2"
           >
-            <label>
+            <label class="d-flex align-items-center">
               <input
                 @click="updateManufacturerStatus(i)"
                 :checked="item.checked"
                 type="checkbox"
                 name="CatalogFilterForm[producers][]"
               />
-              <span style="flex-shrink: 0;"></span>
+              <span
+                class="d-flex justify-content-between align-items-center"
+              ></span>
               <span>
                 <label>{{ item.label }}</label>
               </span>
             </label>
-          </li>
-        </ul>
-
-        <div class="select-section">
-          <div class="select-section-item text-right">
-            <span class="filter__select-name">размер:</span>
-            <v-select
-              style="display: inline-block;"
-              v-model="size"
-              :options="getFilterValue('all_sizes')"
-              placeholder="Все"
-              :searchable="false"
-              :closeOnSelect="true"
-              maxHeight="200px"
-            >
-              <span slot="no-options"></span>
-            </v-select>
-          </div>
-
-          <div class="select-section-item text-right">
-            <span class="filter__select-name">цвет:</span>
-            <v-select
-              style="display: inline-block;"
-              v-model="color"
-              :options="getFilterValue('all_colors')"
-              placeholder="Все"
-              :searchable="false"
-              :closeOnSelect="true"
-              maxHeight="200px"
-            >
-              <span slot="no-options"></span>
-            </v-select>
-          </div>
-
-          <div class="select-section-item text-right">
-            <span class="filter__select-name">материал:</span>
-            <v-select
-              style="display: inline-block;"
-              v-model="material"
-              :options="getFilterValue('all_materials')"
-              placeholder="Все"
-              :searchable="false"
-              :closeOnSelect="true"
-              maxHeight="200px"
-            >
-              <span slot="no-options"></span>
-            </v-select>
           </div>
         </div>
 
-        <div class="filter__price">
-          <div class="filter__price-title"><span>Ден:</span></div>
-          <div class="super-flex">
-            <div class="filter__price-start">
+        <div
+          class="d-flex align-items-center justify-content-between mb-4 text-right"
+        >
+          <span class="sub-title">размер:</span>
+          <v-select
+            class="d-inline-block"
+            v-model="size"
+            :options="getFilterValue('all_sizes')"
+            placeholder="Все"
+            :searchable="false"
+            :closeOnSelect="true"
+            maxHeight="200px"
+          >
+            <span slot="no-options"></span>
+          </v-select>
+        </div>
+
+        <div
+          class="d-flex align-items-center justify-content-between mb-4 text-right"
+        >
+          <span class="sub-title">цвет:</span>
+          <v-select
+            class="d-inline-block"
+            v-model="color"
+            :options="getFilterValue('all_colors')"
+            placeholder="Все"
+            :searchable="false"
+            :closeOnSelect="true"
+            maxHeight="200px"
+          >
+            <span slot="no-options"></span>
+          </v-select>
+        </div>
+
+        <div
+          class="d-flex align-items-center justify-content-between mb-4 text-right"
+        >
+          <span class="sub-title">материал:</span>
+          <v-select
+            class="d-inline-block"
+            v-model="material"
+            :options="getFilterValue('all_materials')"
+            placeholder="Все"
+            :searchable="false"
+            :closeOnSelect="true"
+            maxHeight="200px"
+          >
+            <span slot="no-options"></span>
+          </v-select>
+        </div>
+
+        <div class="filter-price mb-4">
+          <div class="sub-title mb-2"><span>Ден:</span></div>
+          <div class="d-flex">
+            <div class="d-flex align-items-center w-50">
               <span>от</span>
               <input
                 name="CatalogFilterForm[den_from]"
                 type="text"
+                class="text-center"
                 v-model.trim="min_den"
               />
             </div>
-            <div class="filter__price-end">
+            <div class="d-flex align-items-center justify-content-end w-50">
               <span>до</span>
               <input
                 name="CatalogFilterForm[den_to]"
                 type="text"
+                class="text-center"
                 v-model.trim="max_den"
               />
             </div>
           </div>
-
-          <vue-slider
-            ref="den_slider"
-            class="mt-14 vsc-class"
-            v-bind="getSliderOptions('den')"
-            v-model="den"
-          >
-          </vue-slider>
         </div>
 
-        <div class="filter__buttons">
-          <input type="submit" value="Показать" class="show-shitty-results" />
+        <div class="filter-buttons d-none">
+          <button type="submit" class="btn show-shitty-results">
+            Показать
+          </button>
           <button
             @click="clearSelection"
             type="button"
-            class="clear-shitty-results"
+            class="btn clear-shitty-results"
           >
             Сбросить
           </button>
@@ -178,13 +186,10 @@
 
 <script>
 import { mapState, mapActions, mapGetters, clone } from 'vuex'
-import vueSlider from 'vue-slider-component'
 import Stickyfill from 'stickyfilljs'
 
 export default {
-  components: {
-    vueSlider,
-  },
+  components: {},
   computed: {
     ...mapGetters('filter', [
       'isFilterChanged',
@@ -336,5 +341,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss"></style>

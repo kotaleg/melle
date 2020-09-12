@@ -1,98 +1,85 @@
-<section class="sidebar sticky-sidebar">
-    <div class="search-modal__filter filter">
-     <div class="filter__title">Фильтр <span style="font-size: 10px;">(Найдено: {{ product_total }})</span></div>
-
-     <form>
-        <div class="filter__relevant-category">
-           <label>
-              <input name="CatalogFilterForm[hits]" type="checkbox" checked="{{hit}}">
-              <span></span><span>Хиты</span>
-           </label>
-           <label>
-              <input name="CatalogFilterForm[news]" type="checkbox" checked="{{neww}}">
-              <span></span><span>Новинки</span>
-           </label>
-           <label>
-              <input name="CatalogFilterForm[actions]" type="checkbox" checked="{{act}}">
-              <span></span><span>Акции</span>
-           </label>
+<div class="filter">
+    <h4 class="title">Фильтр <span class="found">(Найдено:&nbsp;{{ product_total }})</span></h4>
+    <form class="mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <label class="d-flex align-items-center">
+                <input type="checkbox" checked="{{hit}}">
+                <span class="d-flex justify-content-between align-items-center"></span>
+                <span>Хиты</span>
+            </label>
+            <label class="d-flex align-items-center">
+                <input type="checkbox" checked="{{neww}}">
+                <span class="d-flex justify-content-between align-items-center"></span>
+                <span>Новинки</span>
+            </label>
+            <label class="d-flex align-items-center">
+                <input type="checkbox" checked="{{act}}">
+                <span class="d-flex justify-content-between align-items-center"></span>
+                <span>Акции</span>
+            </label>
         </div>
-
-        <div class="filter__price">
-            <div class="filter__price-title"><span>Цена, руб</span></div>
-            <div class="super-flex">
-                <div class="filter__price-start"><span>от</span>
-                    <input name="CatalogFilterForm[price_from]" type="text" value="{{min_price}}">
+        <div class="filter-price mb-4">
+            <div class="sub-title mb-2"><span>Цена, руб</span></div>
+            <div class="d-flex">
+                <div class="d-flex align-items-center w-50">
+                    <span>от</span>
+                    <input type="text" value="{{min_price}}" class="text-center">
                 </div>
-                <div class="filter__price-end"><span>до</span>
-                    <input name="CatalogFilterForm[price_to]" type="text" value="{{max_price}}">
+                <div class="d-flex align-items-center justify-content-end w-50">
+                    <span>до</span>
+                    <input type="text" value="{{max_price}}" class="text-center">
                 </div>
             </div>
         </div>
-
-        <ul class="filter__list">
+        <div class="filter-manufacturers d-flex flex-wrap align-content-center align-items-center mb-4">
             {% for item in manufacturers %}
-            <li class="filter__item">
-                <label>
-                    <input
-                        checked="{{item.checked}}"
-                        type="checkbox"
-                        name="CatalogFilterForm[producers][]">
-                    <span style="flex-shrink: 0"></span>
-                    <span>
-                        <label>{{ item.label }}</label>
-                    </span>
+            <div class="manufacturer-item mr-2">
+                <label class="d-flex align-items-center">
+                <input
+                    checked="{{item.checked}}"
+                    type="checkbox">
+                <span class="d-flex justify-content-between align-items-center"></span>
+                <span>{{ item.label }}</span>
                 </label>
-            </li>
+            </div>
             {% endfor %}
-        </ul>
-
-        <div class="select-section">
-            <div class="select-section-item text-right">
-                <span class="filter__select-name">размер:</span>
-                <select style="display: inline-block;" placeholder="Все">
-                    {% for o in all_sizes %}
-                    <option value="{{o.value}}">{{o.label}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="select-section-item text-right">
-                <span class="filter__select-name">цвет:</span>
-                <select style="display: inline-block;" placeholder="Все">
-                    {% for o in all_colors %}
-                    <option value="{{o.value}}">{{o.label}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="select-section-item text-right">
-                <span class="filter__select-name">материал:</span>
-                <select style="display: inline-block;" placeholder="Все">
-                    {% for o in all_materials %}
-                    <option value="{{o.value}}">{{o.label}}</option>
-                    {% endfor %}
-                </select>
-            </div>
         </div>
-
-        <div class="filter__price">
-            <div class="filter__price-title"><span>Ден:</span></div>
-            <div class="super-flex">
-                <div class="filter__price-start"><span>от</span>
-                    <input name="CatalogFilterForm[den_from]" type="text" value="{{min_den}}">
+        <div class="d-flex align-items-center justify-content-between mb-4 text-right">
+            <span class="sub-title">размер:</span>
+            <select class="d-inline-block" placeholder="Все">
+                {% for o in all_sizes %}
+                <option value="{{o.value}}">{{o.label}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mb-4 text-right">
+            <span class="sub-title">цвет:</span>
+            <select class="d-inline-block" placeholder="Все">
+                {% for o in all_colors %}
+                <option value="{{o.value}}">{{o.label}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mb-4 text-right">
+            <span class="sub-title">материал:</span>
+            <select class="d-inline-block" placeholder="Все">
+                {% for o in all_materials %}
+                <option value="{{o.value}}">{{o.label}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-price mb-4">
+            <div class="sub-title mb-2"><span>Ден:</span></div>
+            <div class="d-flex">
+                <div class="d-flex align-items-center w-50">
+                    <span>от</span>
+                    <input type="text" value="{{min_den}}" class="text-center">
                 </div>
-                <div class="filter__price-end"><span>до</span>
-                    <input name="CatalogFilterForm[den_to]" type="text" value="{{max_den}}">
+                <div class="d-flex align-items-center justify-content-end w-50">
+                    <span>до</span>
+                    <input type="text" value="{{max_den}}" class="text-center">
                 </div>
             </div>
         </div>
-
-        <div class="filter__buttons">
-            <input type="submit" value="Показать" class="show-shitty-results" />
-            <button type="button" class="clear-shitty-results">Сбросить</button>
-        </div>
-
-     </form>
-    </div>
-</section>
+    </form>
+</div>
