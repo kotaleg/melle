@@ -83,7 +83,12 @@ class ControllerProductCategory extends Controller {
             $data['rfc'] = $this->load->controller('extension/module/melle/renderFilterContent', $filter_state);
 
             $this->load->model('extension/module/pro_recently');
-            $data['recently_viewed'] = $this->model_extension_module_pro_recently->getProductsPrepared();
+            $this->load->model('extension/module/melle');
+
+            $data['recently_viewed'] = $this->model_extension_module_melle->renderOtherProducts(
+                'Вы смотрели',
+                $this->model_extension_module_pro_recently->getProductsPrepared()
+            );
 
             $data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
 
