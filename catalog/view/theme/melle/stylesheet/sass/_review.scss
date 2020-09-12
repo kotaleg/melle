@@ -1,0 +1,20 @@
+.reviews {
+  .title {
+    span {
+      color: #807f7d;
+    }
+  }
+
+  .review-list {
+    .review-item {
+      .person {
+        text-transform: uppercase;
+        color: $black-color;
+        font-weight: bold;
+      }
+      .date {
+        color: #807f7d;
+      }
+    }
+  }
+}

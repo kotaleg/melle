@@ -1,0 +1,121 @@
+.sidebar-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  background: $white-color;
+  transition: background 0.5s ease-in-out;
+
+  &.sidebar-opened {
+    display: block;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    z-index: 2000;
+    overflow-y: auto;
+    color: #807f7d;
+    background-color: #fff;
+    transition: left 0.5s, right 0.5s;
+
+    @media (min-width: 576px) {
+      width: initial;
+      .sidebar-inner {
+        width: 410px;
+      }
+    }
+  }
+
+  .close-button {
+    position: relative;
+    cursor: pointer;
+    border: 0;
+    outline: none;
+    background: transparent;
+
+    width: 30px;
+    height: 30px;
+
+    &::before {
+      position: absolute;
+      left: 0;
+      width: 30px;
+      height: 2px;
+      content: '';
+      transform: rotate(45deg);
+      background: #918d8a;
+    }
+    &::after {
+      position: absolute;
+      left: 0;
+      width: 30px;
+      height: 2px;
+      content: '';
+      transform: rotate(-45deg);
+      background: #918d8a;
+    }
+  }
+
+  .panel-buttons {
+    color: $black-color;
+    font-size: 0.9rem;
+    span {
+      color: $gray-color;
+    }
+
+    .shop-cart-container {
+      flex-shrink: 0;
+      fill: $gray-color;
+
+      a {
+        text-decoration: none;
+      }
+
+      .itemCartCount {
+        font-size: 0.8rem;
+        font-style: normal;
+        position: relative;
+        bottom: 0;
+        line-height: 19px;
+        vertical-align: middle;
+      }
+
+      &:hover {
+        fill: $black-color;
+      }
+    }
+  }
+
+  .title {
+    color: $black-color;
+  }
+
+  .checkbox-label {
+    font-size: 0.9rem;
+    a {
+      color: $black-color;
+    }
+  }
+
+  .public-offer-confirm {
+    font-size: 0.7rem;
+    a {
+      color: $black-color;
+    }
+  }
+}
+
+.sticky-sidebar {
+  position: sticky;
+  top: 5%;
+
+  &:before,
+  &:after {
+    content: '';
+    display: table;
+  }
+}

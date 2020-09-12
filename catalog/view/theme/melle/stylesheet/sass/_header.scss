@@ -1,0 +1,77 @@
+header {
+  position: relative;
+  a {
+    text-decoration: none;
+  }
+
+  .header-container {
+    z-index: 1000;
+    .header-top {
+      background-color: #000;
+      font-size: 1rem;
+
+      @media (min-width: 1200px) {
+        font-size: 1.2rem;
+      }
+    }
+    .header-bottom {
+      .header-bottom-container {
+        background-color: $ocean-color;
+        position: relative;
+      }
+    }
+
+    .menu-item {
+      font-size: 1rem;
+
+      .menu-children {
+        display: none;
+        position: absolute;
+        max-width: 70%;
+        background-color: $ocean-color;
+        font-size: 0.9rem;
+
+        @media (min-width: 1200px) {
+          max-width: 50%;
+          font-size: 1.1rem;
+        }
+      }
+
+      &:last-child,
+      &:nth-last-child(2) {
+        .menu-children {
+          right: 1rem;
+        }
+      }
+
+      &.active {
+        .menu-children {
+          display: flex;
+        }
+      }
+
+      a {
+        font-weight: 500;
+      }
+
+      @media (min-width: 1200px) {
+        font-size: 1.3rem;
+      }
+    }
+  }
+
+  .cart-container {
+    background-color: $white-color;
+    color: $black-color;
+    cursor: pointer;
+    box-shadow: 0px 6px 46px 0px rgba(0, 0, 0, 0.18);
+
+    @media (min-width: 1200px) {
+      font-size: 1.3rem;
+    }
+  }
+
+  #menu-trigger {
+    cursor: pointer;
+  }
+}

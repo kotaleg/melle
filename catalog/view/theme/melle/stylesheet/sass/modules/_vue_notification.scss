@@ -1,0 +1,15 @@
+.vue-notification {
+  padding: 15px;
+  border: 1px solid #000;
+  background-color: #fff;
+  color: #000;
+  font-size: 1rem !important;
+  border-left-color: #000 !important;
+
+  &.success {
+    background: #fff;
+  }
+  &.warn {
+    background: #fff;
+  }
+}

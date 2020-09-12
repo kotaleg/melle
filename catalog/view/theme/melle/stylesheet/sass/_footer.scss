@@ -1,0 +1,23 @@
+footer {
+  background-color: #000;
+  color: $white-color;
+
+  .filler {
+    background-color: $ocean-color;
+    height: 3rem;
+  }
+
+  .phone {
+    color: $ocean-color;
+  }
+
+  .social-link {
+    max-width: 2rem;
+  }
+
+  .menu-item {
+    .menu-children {
+      font-size: 0.8rem;
+    }
+  }
+}

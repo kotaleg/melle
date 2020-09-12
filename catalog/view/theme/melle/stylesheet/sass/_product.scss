@@ -1,0 +1,176 @@
+#product-page {
+  .description {
+    font-size: 1rem;
+
+    @media (min-width: 576px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .manufacturer {
+    font-size: 1rem;
+
+    @media (min-width: 576px) {
+      font-size: 1.5rem;
+    }
+
+    span {
+      color: #807f7d;
+    }
+  }
+
+  .price {
+    position: relative;
+    font-size: 3rem;
+    font-weight: 600;
+
+    .ruble-zvezdochka {
+      top: 0.1rem;
+    }
+  }
+
+  .price-old {
+    font-size: 2rem;
+    text-decoration: line-through;
+  }
+
+  .add-button {
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 1rem;
+    background-color: $black-color;
+    color: white;
+    cursor: pointer;
+
+    @media (min-width: 768px) {
+      font-size: 1.2rem;
+    }
+
+    .count {
+      width: 70%;
+      background-color: #fd0000;
+    }
+    .plus {
+      width: 30%;
+    }
+
+    &:hover {
+      background-color: black;
+    }
+  }
+
+  .one-click-button {
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 1rem;
+    background-color: #87b52d;
+    color: white;
+    cursor: pointer;
+
+    @media (min-width: 768px) {
+      font-size: 1.2rem;
+    }
+  }
+
+  .option-selector {
+    color: $black-color;
+    min-width: 80px;
+    font-size: 1rem;
+
+    @media (min-width: 576px) {
+      min-width: 110px;
+      font-size: 1.5rem;
+    }
+  }
+
+  .radio-inline {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    border: 2px #e3dbd8 solid;
+
+    input {
+      position: absolute;
+      opacity: 0;
+      display: none;
+    }
+
+    &.check {
+      border: 2px #22e8f5 solid;
+    }
+
+    &.disabled {
+      opacity: 0.3;
+    }
+  }
+
+  .size-radio {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.7rem 1rem;
+  }
+
+  .krestik {
+    position: relative;
+
+    &::before,
+    &::after {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: 4px;
+      background-color: red;
+    }
+
+    &::before {
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }
+
+  .quantity-container {
+    position: relative;
+    font-size: 2rem;
+
+    button {
+      color: #6d6b6a;
+      border: 0;
+      background-color: transparent;
+    }
+    input {
+      color: #000;
+      border: 0;
+      background-color: transparent;
+      font-weight: bold;
+      width: 30% !important;
+
+      @media (min-width: 576px) {
+        width: 15% !important;
+      }
+    }
+  }
+
+  .product-max-count {
+    position: absolute;
+    bottom: -20px;
+    font-size: 1rem;
+    white-space: nowrap;
+    color: #6d6b6a;
+    span {
+      color: black;
+    }
+  }
+
+  .special-text-info {
+    font-size: 1rem;
+  }
+
+  #size-list {
+    display: inline-block;
+    cursor: pointer;
+  }
+}
