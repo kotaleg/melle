@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Notifications from 'vue-notification'
-import vClickOutside from 'v-click-outside'
 import VueTheMask from 'vue-the-mask'
 import PrettyCheck from 'pretty-checkbox-vue/check'
 import VTooltip from 'v-tooltip'
 import VModal from 'vue-js-modal'
 import vSelect from 'vue-select'
+import 'vue-loading-overlay/dist/vue-loading.min.css'
 
 import router from './router'
 import filterHelper from './router/filterHelper'
@@ -21,7 +21,6 @@ Vue.config.productionTip = false
 Vue.prototype.$codename = 'melle'
 
 Vue.use(Notifications)
-Vue.use(vClickOutside)
 Vue.use(VueTheMask)
 Vue.use(VTooltip)
 Vue.use(VModal, { dialog: true })
@@ -51,19 +50,15 @@ Vue.component(
   'melle-search-wrapper',
   require('./components/search/SearchWrapper.vue')
 )
-Vue.component(
-  'melle-checkout-rp',
-  require('./components/checkout/RelatedProducts.vue')
-)
-Vue.component(
-  'melle-price-list',
-  require('./components/priceList/PriceList.vue')
-)
-Vue.component('melle-leadhit', require('./components/leadhit/Leadhit.vue'))
-Vue.component(
-  'melle-slideshow',
-  require('./components/slideshow/slideshow.vue')
-)
+// Vue.component(
+//   'melle-checkout-rp',
+//   require('./components/checkout/RelatedProducts.vue')
+// )
+// Vue.component('melle-leadhit', require('./components/leadhit/Leadhit.vue'))
+// Vue.component(
+//   'melle-slideshow',
+//   require('./components/slideshow/slideshow.vue')
+// )
 
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
@@ -72,10 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
     el: '#' + Vue.prototype.$codename + '-mount',
   })
 
-  if (document.getElementById(Vue.prototype.$codename + '-checkout-bottom')) {
-    new Vue({
-      store,
-      el: '#' + Vue.prototype.$codename + '-checkout-bottom',
-    })
-  }
+  // if (document.getElementById(Vue.prototype.$codename + '-checkout-bottom')) {
+  //   new Vue({
+  //     store,
+  //     el: '#' + Vue.prototype.$codename + '-checkout-bottom',
+  //   })
+  // }
 })
