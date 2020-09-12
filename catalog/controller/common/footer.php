@@ -60,8 +60,18 @@ class ControllerCommonFooter extends Controller {
         $data['scripts'] = $this->document->getScripts('footer');
 
         $this->load->model('tool/base');
+        $data['base'] = $this->model_tool_base->getBase();
         $data['pagetype'] = $this->model_tool_base->getPageType();
         $data['is_local'] = $this->model_tool_base->isLocal();
+
+        $this->load->model('extension/module/melle');
+        $data['menu'] = array_map(function($item) {
+            $item['children'] = array_slice($item['children'], 0, 5);
+            return $item;
+        }, $this->model_extension_module_melle->getMenu());
+
+        $data['phone'] = $this->config->get('config_telephone');
+        $data['phoneLink'] = preg_replace('/\s+/', '', "tel:{$data['phone']}");
 
         return $this->load->view('common/footer', $data);
     }
