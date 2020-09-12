@@ -523,7 +523,7 @@ const actions = {
         product_id: state.product_id,
         quantity: state.quantity,
         options: getters.getOptionsForOneClick,
-        ...payload
+        ...payload,
       },
       (res) => {
         this.dispatch('header/setLoadingStatus', false)

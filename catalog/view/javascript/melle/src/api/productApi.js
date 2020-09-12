@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { isArray, isObject, has, sortBy } from 'lodash'
 
 export default {
