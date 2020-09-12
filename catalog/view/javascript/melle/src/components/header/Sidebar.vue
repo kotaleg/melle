@@ -49,10 +49,8 @@ export default {
     handleInit(create = true) {
       if (create === true) {
         document.documentElement.classList.add('open-menu')
-        document.body.style = 'overflow:hidden;'
       } else {
         document.documentElement.classList.remove('open-menu')
-        document.body.style = ''
       }
     },
   },
