@@ -1,0 +1,24 @@
+<div class="other-products my-4">
+    <h4 class="title">{{title}}</h4>
+    <div class="row">
+        {% for p in products %}
+        <div class="col-md-4 col-lg-3 text-center product-item">
+            {# {{znachek_class}} #}
+            <a href="{{p.href}}" class="link">
+                <img src="{{p.thumb}}" alt="{{p.h1}}" class="img-fluid" />
+            </a>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="mt-3 mb-3">
+                        <a href="{{p.href}}" class="title">{{p.h1}}</a>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-around col-sm-12">
+                    <span class="price">{{p.price}}<span class="ruble-sign">Р</span></span>
+                    <a href="{{p.href}}" class="btn btn-primary">Купить</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
