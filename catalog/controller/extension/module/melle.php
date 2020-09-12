@@ -32,9 +32,6 @@ class ControllerExtensionModuleMelle extends Controller
 
     public function getMobileMenu()
     {
-        // MOBILE MENU
-        $this->document->addScript('catalog/view/javascript/melle/query/mmenu-old/jquery.mmenu.all.js');
-
         $data['menu'] = $this->extension_model->getMenu();
 
         return $this->model_extension_pro_patch_load->view("{$this->route}/mobile_menu", $data);
@@ -51,7 +48,7 @@ class ControllerExtensionModuleMelle extends Controller
         for ($i = 0; $i < sizeof($lng); $i++) { $state[$lng[$i]] = $this->language->get($lng[$i]); }
 
         $state['base'] = $this->model_tool_base->getBase();
-        $state['phone'] = '8 800 777 21 73';
+        $state['phone'] = $this->config->get('config_telephone');
 
         if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
             $state['logo'] = $state['base'] . 'image/' . $this->config->get('config_logo');
@@ -123,13 +120,18 @@ class ControllerExtensionModuleMelle extends Controller
         $data['logo'] = $state['logo'];
 
         $data['phone'] = $state['phone'];
-        $data['phoneLink'] = preg_replace('/\s\s+/', '', "tel:{$data['phone']}");
+        $data['phoneLink'] = preg_replace('/\s+/', '', "tel:{$data['phone']}");
 
         $data['delivery_link'] = $state['delivery_link'];
         $data['is_logged'] = $state['is_logged'];
         $data['account_link'] = $state['account_link'];
         $data['logout_link'] = $state['logout_link'];
         $data['menu'] = $state['menu'];
+
+        $data['search'] = $this->model_extension_pro_patch_load->view('common/search', array(
+            'action' => $this->model_extension_pro_patch_url->ajax('product/search', '', true),
+            'search_route' => 'product/search'
+        ));
 
         return $this->model_extension_pro_patch_load->view("{$this->route}/header_prerender", $data);
     }
@@ -389,6 +391,7 @@ class ControllerExtensionModuleMelle extends Controller
         $data['products'] = array();
 
         foreach ($state['products'] as $p) {
+            $p['image'] = 'https://melle.online/resizeImage/catalog/import_files/3f/3f744ecc9b4111e5b607b870f487949e_eafb22e6c5f711e78125002590080d37.jpg?w=365&h=458';
             $product = array(
                 'product_id' => $p['product_id'],
                 'href' => $p['href'],
