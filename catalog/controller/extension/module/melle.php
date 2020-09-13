@@ -391,7 +391,6 @@ class ControllerExtensionModuleMelle extends Controller
         $data['products'] = array();
 
         foreach ($state['products'] as $p) {
-            $p['image'] = 'https://melle.online/resizeImage/catalog/import_files/3f/3f744ecc9b4111e5b607b870f487949e_eafb22e6c5f711e78125002590080d37.jpg?w=365&h=458';
             $product = array(
                 'product_id' => $p['product_id'],
                 'href' => $p['href'],
