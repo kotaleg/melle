@@ -70,6 +70,12 @@
         padding-bottom: 30px;
       }
     }
+
+    & + .melle-block-type-3 {
+      @media (max-width: 576px) {
+        margin-top: 1rem;
+      }
+    }
   }
 
   .melle-block-type-4 {
@@ -81,4 +87,3 @@
   }
 
 }
-
