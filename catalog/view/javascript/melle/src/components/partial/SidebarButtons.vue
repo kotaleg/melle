@@ -48,7 +48,6 @@ export default {
       'account_link',
       'logout_link',
     ]),
-    ...mapGetters('header', ['phoneLink']),
     ...mapState('cart', {
       cartCount: 'count',
     }),

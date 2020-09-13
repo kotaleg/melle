@@ -52,7 +52,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div v-if="isCaptch && captchaKey" class="form-group">
           <vue-recaptcha
             v-if="isCaptcha"
             ref="review_recaptcha"
@@ -180,7 +180,7 @@ export default {
       this.show_form = !this.show_form
     },
     addReview() {
-      if (this.isCaptcha) {
+      if (this.isCaptcha && this.captchaKey && this.$refs.review_recaptcha) {
         this.$refs.review_recaptcha.execute()
       } else {
         this.addReviewRequest().then((res) => {

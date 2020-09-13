@@ -25,35 +25,38 @@
             <div class="row">
                 {% if thumb or images %}
                     <div class="col-lg-5">
-                        <ul class="prod-card__list-photo slider-nav">
-                            {% if thumb %}
-                                <li class="prod-card__item-photo"
-                                    data-hash="default">
-                                    <img src="{{ thumb }}" />
-                                </li>
-                            {% endif %}
-                            {% for i in images %}
-                                <li class="prod-card__item-photo"
-                                    data-hash="{{ i.imageHash }}">
-                                    <img itemprop="image" src="{{ i.thumb }}" />
-                                </li>
-                            {% endfor %}
-                        </ul>
-                        <ul class="prod-card__list-big-photo slider-for">
-                            {% if thumb %}
-                                <li class="prod-card__item-big-photo"
-                                    data-zoom-image="{{ popup }}">
-                                    <img src="{{ popup }}" />
-                                </li>
-                            {% endif %}
-                            {% for i in images %}
-                                <li class="prod-card__item-big-photo">
-                                    <img itemprop="image"
-                                        src="{{ i.popup }}"
-                                        data-zoom-image="{{ i.popup }}" />
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        <div class="d-none mt-3 product-images">
+                            <ul class="d-none d-md-block d-flex flex-column flex-shrink-0 justify-content-center p-0 slider-nav">
+                                {% if thumb %}
+                                    <li class="prod-card__item-photo"
+                                        data-hash="default">
+                                        <img src="{{ thumb }}" class="img-fluid" />
+                                    </li>
+                                {% endif %}
+                                {% for i in images %}
+                                    <li class="prod-card__item-photo"
+                                        data-hash="{{ i.imageHash }}">
+                                        <img itemprop="image" src="{{ i.thumb }}" class="img-fluid" />
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <ul class="prod-card__list-big-photo slider-for">
+                                {% if thumb %}
+                                    <li class="prod-card__item-big-photo"
+                                        data-zoom-image="{{ popup }}">
+                                        <img src="{{ popup }}" class="img-fluid" />
+                                    </li>
+                                {% endif %}
+                                {% for i in images %}
+                                    <li class="prod-card__item-big-photo">
+                                        <img itemprop="image"
+                                            src="{{ i.popup }}"
+                                            data-zoom-image="{{ i.popup }}"
+                                            class="img-fluid" />
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 {% endif %}
 

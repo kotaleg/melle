@@ -3,7 +3,7 @@
 <!--[if IE 8 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
 <!--[if IE 9 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->
-<html dir="{{ direction }}" lang="{{ lang }}">
+<html dir="{{ direction }}" lang="{{ lang }}" class="{{pagetype}}">
 <!--<![endif]-->
 <head>
 <meta charset="UTF-8" />
@@ -23,16 +23,13 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="{{og.image}}"/>
 
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<link href="{{base}}catalog/view/theme/melle/stylesheet/bootstrap.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
+
 {% for style in styles %}
 <link href="{{ style.href }}{{cache_postfix}}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
 {% endfor %}
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-<link href="{{base}}catalog/view/theme/melle/stylesheet/bootstrap.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
-{# <link href="{{base}}catalog/view/theme/melle/stylesheet/sass/libs.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
-<link href="{{base}}catalog/view/theme/melle/stylesheet/sass/new.css{{cache_postfix}}" rel="stylesheet" type="text/css" /> #}
 
 {% for link in links %}
 <link href="{{ link.href }}" rel="{{ link.rel }}" />

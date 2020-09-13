@@ -79,6 +79,19 @@
             {% endfor %}
         </div>
     </div>
+
+    <div class="p-2 cookie-block js-cookie--modal d-none">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center cookie-container">
+                <div class="cookie-content text-center my-3">
+                    На нашем сайте используются файлы cookie. Продолжая пользоваться сайтом, вы выражаете согласие на использование нами данных файлов. Подробнее&nbsp;вы можете прочитать в разделе "Политика конфиденциальности".
+                </div>
+            </div>
+        </div>
+        <div class="cookie-buttons text-center">
+            <button class="btn btn-dark px-5 js-confirm">ОК</button>
+        </div>
+    </div>
 </footer>
 
 <script type="application/ld+json">
@@ -98,20 +111,11 @@
 }
 </script>
 
-<div class="c-fz152__block js-cookie--modal" style="display: none;">
-   <div class="container">
-      <div class="c-fz152__container">
-         <div class="c-fz152__content">
-            <p>На нашем сайте используются файлы cookie. Продолжая пользоваться сайтом, вы выражаете согласие на использование нами данных файлов. Подробнее&nbsp;вы можете прочитать в разделе "Политика конфиденциальности".</p>
-         </div>
-      </div>
-   </div>
-   <div class="c-fz152__buttons"><button class="c-fz152__button c-fz152__button--confirm js-confirm">ОК</button></div>
-</div>
-
 <script src="{{base}}catalog/view/javascript/melle/dist/manifest.js{{cache_postfix}}" type="text/javascript"></script>
 <script src="{{base}}catalog/view/javascript/melle/dist/vendor.js{{cache_postfix}}" type="text/javascript"></script>
 <script src="{{base}}catalog/view/javascript/melle/dist/melle.js{{cache_postfix}}" type="text/javascript"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&amp;render=explicit" async defer></script>
+<script src="{{base}}catalog/view/javascript/melle/query/old.js{{cache_postfix}}" type="text/javascript"></script>
 
 {# MOBILE MENU START #}
 <script src="{{base}}catalog/view/javascript/melle/query/mmenu/jquery.mmenu.all.js"></script>
@@ -135,18 +139,21 @@ $(function() {
 </script>
 {# MOBILE MENU END #}
 
-{# <script src="{{base}}catalog/view/javascript/melle/query/script.js"></script>
-<script src="{{base}}catalog/view/javascript/melle/query/old.js"></script> #}
-
-{# <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&amp;render=explicit" async defer></script> #}
-
 {% if pagetype == 'checkout' %}
 <script src="{{base}}catalog/view/javascript/bootstrap/js/bootstrap.min.js"></script>
 {% endif %}
 
 {% if pagetype == 'product' %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
+<script type="text/javascript">
+$(function() {
+    setTimeout(function() {
+        $('.product-images').removeClass('d-none').addClass('d-flex');
+        jQuery().zoom&&$(window).width()>1200&&($(document).on("gallery.zoom.init",".prod-card__item-big-photo",function(){$(this).zoom()}),$(".prod-card__item-big-photo").length>0&&$(".prod-card__item-big-photo").trigger("gallery.zoom.init"));
+        jQuery().slick&&($(".slider-for").slick({slidesToShow:1,slidesToScroll:1,arrows:!1,fade:!0,asNavFor:".slider-nav"}),$(".slider-nav").slick({slidesPerRow:1,slidesToShow:2,slidesToScroll:1,asNavFor:".slider-for",dots:!1,focusOnSelect:!0,vertical:!0,adaptiveHeight:!0,centerMode:!0,responsive:[{breakpoint:1024,settings:{}},{breakpoint:768,settings:{vertical:!1,arrows:!1}}]}));
+        jQuery().fancybox&&$("[data-fancybox]").fancybox({});
+    }, 300);
+});
+</script>
 {% endif %}
 
 {% for script in scripts %}
@@ -160,7 +167,7 @@ $(function() {
 </script><!-- {/literal} END JIVOSITE CODE -->
 
 <!-- Yandex.Metrika counter -->
-<script type="text/javascript" >
+<script type="text/javascript">
    (function (d, w, c) {
        (w[c] = w[c] || []).push(function() {
            try {

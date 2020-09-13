@@ -53,7 +53,7 @@
             >
           </div>
 
-          <a v-else :href="p.href" class="btn btn-primary btn-block w-75"
+          <a v-else :href="p.href" class="btn btn-primary btn-block w-75 m-auto"
             >Скоро в продаже</a
           >
         </div>

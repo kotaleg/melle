@@ -142,7 +142,7 @@
           {{ getFieldError('agree') }}
         </div>
       </div>
-      <div class="form-group">
+      <div v-if="isCaptch && captchaKey" class="form-group">
         <vue-recaptcha
           ref="register_recaptcha"
           @verify="onCaptchaVerified"
@@ -264,7 +264,7 @@ export default {
     ...mapActions('register', ['updateFormValue', 'registerRequest']),
 
     register() {
-      if (this.isCaptcha) {
+      if (this.isCaptcha && this.captchaKey && this.$refs.register_recaptcha) {
         this.$refs.register_recaptcha.execute()
       } else {
         this.registerRequest()

@@ -1,5 +1,6 @@
 header {
   position: relative;
+  margin-bottom: 1rem;
   a {
     text-decoration: none;
   }
@@ -18,6 +19,16 @@ header {
       .header-bottom-container {
         background-color: $ocean-color;
         position: relative;
+      }
+
+      .mobile-login {
+        img {
+          display: none;
+
+          @media (min-width: 450px) {
+            display: inline-block;;
+          }
+        }
       }
     }
 
@@ -73,5 +84,15 @@ header {
 
   #menu-trigger {
     cursor: pointer;
+  }
+}
+
+html {
+  &.home {
+    header {
+      @media (max-width: 576px) {
+        margin-bottom: 0;
+      }
+    }
   }
 }

@@ -98,7 +98,7 @@
         </div>
 
         <div
-          v-if="isCaptcha"
+          v-if="isCaptch && captchaKey"
           class="mail-us__form-group js-mail-us__form-group--captcha"
         >
           <vue-recaptcha
@@ -202,7 +202,7 @@ export default {
     ...mapActions('mail_us', ['updateFormValue', 'mailUsRequest']),
 
     mailUs() {
-      if (this.isCaptcha) {
+      if (this.isCaptcha && this.captchaKey && this.$refs.mailus_recaptcha) {
         this.$refs.mailus_recaptcha.execute()
       } else {
         this.mailUsRequest().then((res) => {

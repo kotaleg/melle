@@ -1,14 +1,15 @@
-<a href="{{link}}" id="melle-block-{{blockId}}" class="melle-block melle-block-{{type}} {{class}}" style="height: {{height}}px;">
+<div id="melle-block-{{blockId}}" class="col-sm-6 col-md-12 melle-block melle-block-{{type}} text-center">
+    {% if image %}
+    <div class="background-container" style="{% if image %}background-image:url('{{image}}');{% endif %}{% if height %}height:{{height}}px;{% endif %}">
+        <div class="align-items-center d-flex flex-column h-100 inner-content justify-content-center m-auto w-100">
+            {% if text %}
+            <div class="text"><b>{{text}}</b></div>
+            {% endif %}
 
-    <div class="col-sm-6 text-right">
-        {% if image %}
-        <img src="{{image}}" alt="{{text}}" class="melleb-image">
-        {% endif %}
+            {% if buttonText %}
+            <button type="button" class="btn btn-success mt-4">{{buttonText}}</button>
+            {% endif %}
+        </div>
     </div>
-    <div class="col-sm-6 text-left">
-        {% if text %}
-        <div class="melleb-text">{{text}}</div>
-        {% endif %}
-    </div>
-
-</a>
+    {% endif %}
+</div>

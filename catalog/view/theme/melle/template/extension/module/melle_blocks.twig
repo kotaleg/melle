@@ -1,7 +1,10 @@
-<div id="melle-blocks-{{moduleId}}" class="melle-blocks">
+<div id="melle-blocks-{{moduleId}}" class="pb-4 pb-md-5 melle-blocks col-md-{{width}}">
+    {# style="{% if backgroundColor %}background-color:{{backgroundColor}};{% endif %}" #}
 
-    {% for b in blocks %}
-        {{b}}
-    {% endfor %}
+    <div class="row">
+        {% for b in blocks %}
+            {{b}}
+        {% endfor %}
+    </div>
 
 </div>

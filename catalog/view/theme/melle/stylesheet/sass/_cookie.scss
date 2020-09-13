@@ -1,0 +1,27 @@
+.cookie-block {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #d2d1cf;
+  box-shadow: 1px 1px 5px #aaa;
+  z-index: 100500;
+}
+
+.cookie-container {
+  justify-content: space-between;
+}
+
+.cookie-content {
+  color: black;
+  font-size: 1rem;
+}
+
+
+@media (max-width: 576px) {
+  .cookie-content {
+    line-height: 1em;
+  }
+}

@@ -158,7 +158,6 @@ export default {
       'checkout_link',
     ]),
     ...mapState('header', ['phone']),
-    ...mapGetters('header', ['phoneLink']),
     ...mapGetters('cart', ['hasProducts']),
   },
   methods: {

@@ -12,6 +12,7 @@ class ModelExtensionModuleMelleBlocks extends Model
     const BTYPE_1 = 'type-1';
     const BTYPE_2 = 'type-2';
     const BTYPE_3 = 'type-3';
+    const BTYPE_4 = 'type-4';
 
     public function __construct($registry)
     {
@@ -23,18 +24,13 @@ class ModelExtensionModuleMelleBlocks extends Model
         $blocks = array();
 
         $this->load->model('tool/base');
+        $this->load->model('tool/image');
 
         foreach ($this->getBlocks($moduleId) as $b) {
 
             if (isset($b['image']) && is_file(DIR_IMAGE . $b['image'])) {
+                // $b['image'] = $this->model_tool_image->resize($b['image'], $height, $height);
                 $b['image'] = $this->model_tool_base->formatImageLink($b['image']);
-
-                switch ($b['type']) {
-                    case self::BTYPE_1:
-                    case self::BTYPE_2:
-                        $b['image'] = '/' . str_replace($this->model_tool_base->getBase(), '', $b['image']);
-                        break;
-                }
             }
 
             if (!empty($b['link']) && mb_strlen($b['link']) > 3) {
@@ -49,9 +45,7 @@ class ModelExtensionModuleMelleBlocks extends Model
                     }
                 }
             }
-
             $b['height'] = $height;
-
             $blocks[] = $b;
         }
 

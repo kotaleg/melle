@@ -12,6 +12,11 @@ class ModelExtensionModuleMelleBlocks extends Model
     const BTYPE_1 = 'type-1';
     const BTYPE_2 = 'type-2';
     const BTYPE_3 = 'type-3';
+    const BTYPE_4 = 'type-4';
+
+    const WIDTH_TYPES = [
+        1,2,3,4,5,6,7,8,9,10,11,12,
+    ];
 
     public function __construct($registry)
     {
@@ -36,6 +41,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             `image` varchar(255) NOT NULL,
             `text` varchar(255) NOT NULL,
             `buttonText` varchar(255) NOT NULL,
+            `backgroundColor` varchar(16) NOT NULL,
             `sortOrder` int(3) NOT NULL,
             `status` tinyint(1) NOT NULL,
 
@@ -62,12 +68,24 @@ class ModelExtensionModuleMelleBlocks extends Model
         return $scripts;
     }
 
+    public function prepareWidthTypes()
+    {
+        return array_map(function($item) {
+            return array(
+                'id' => $item,
+                'label' => "{$item}/12",
+            );
+        }, self::WIDTH_TYPES);
+    }
+
     public function prepareItem($moduleId)
     {
         $item = array(
             'moduleId' => '',
             'name' => 'Кастомизируемый блок #',
             'height' => 400,
+            'width' => 12,
+            'backgroundColor' => '#FFFFFF',
             'status' => false,
             'blocks' => false,
         );
@@ -79,7 +97,11 @@ class ModelExtensionModuleMelleBlocks extends Model
             $item['moduleId'] = $moduleId;
             $item['name'] = $moduleInfo['name'];
             $item['height'] = $moduleInfo['height'];
+            $item['width'] = $moduleInfo['width'];
             $item['status'] = $moduleInfo['status'];
+            if ($moduleInfo['backgroundColor']) {
+                $item['backgroundColor'] = $moduleInfo['backgroundColor'];
+            }
         }
 
         return $item;
@@ -139,7 +161,7 @@ class ModelExtensionModuleMelleBlocks extends Model
         $types = array();
         $types[] = array(
             'type' => self::BTYPE_1,
-            'typeDescription' => 'Обычный блок 25%',
+            'typeDescription' => 'Картинка с подписью 25%',
             'typeWidth' => 25,
 
             'link' => '',
@@ -151,8 +173,8 @@ class ModelExtensionModuleMelleBlocks extends Model
         );
         $types[] = array(
             'type' => self::BTYPE_2,
-            'typeDescription' => 'Широкий блок 50%',
-            'typeWidth' => 50,
+            'typeDescription' => 'Широкий блок с текстом 100%',
+            'typeWidth' => 100,
 
             'link' => '',
             'image' => '',
@@ -163,13 +185,26 @@ class ModelExtensionModuleMelleBlocks extends Model
         );
         $types[] = array(
             'type' => self::BTYPE_3,
-            'typeDescription' => 'Мелкий блок 25%',
-            'typeWidth' => 25,
+            'typeDescription' => 'Картинка без подписи 50%',
+            'typeWidth' => 50,
 
             'link' => '',
             'image' => '',
             'thumb' => $this->model_tool_image->resize('no_image.png', 100, 100),
             'text' => '',
+            'buttonText' => '',
+            'sortOrder' => 1,
+        );
+        $types[] = array(
+            'type' => self::BTYPE_4,
+            'typeDescription' => 'Картинка без подписи 33.3%',
+            'typeWidth' => 33.3333333333333,
+
+            'link' => '',
+            'image' => '',
+            'thumb' => $this->model_tool_image->resize('no_image.png', 100, 100),
+            'text' => '',
+            'buttonText' => '',
             'sortOrder' => 1,
         );
 
@@ -193,8 +228,20 @@ class ModelExtensionModuleMelleBlocks extends Model
             $json['error'][] = 'Какое то хреновое имя';
         }
 
+        if (!in_array($data['width'], self::WIDTH_TYPES)) {
+            $json['error'][] = 'Некоректно заданна шрина';
+        }
+
         if ((float)$data['height'] < 10) {
             $json['error'][] = 'Слишком маленькая высота';
+        }
+
+        if (isset($data['backgroundColor']['hex'])) {
+            $data['backgroundColor'] = $data['backgroundColor']['hex'];
+        }
+
+        if (utf8_strlen($data['backgroundColor']) <= 1) {
+            $json['error'][] = 'Не очень похоже на корректный цвет';
         }
 
         if ((float)$this->countBlocksWidth($data['blocks']) != 100) {
@@ -248,7 +295,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             }
         }
 
-        return $widthCount;
+        return round($widthCount, 2);
     }
 
     private function removeBlocks($moduleId)

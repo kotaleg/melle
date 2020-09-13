@@ -20,7 +20,7 @@
           <a :href="p.url">{{ p.name }}</a>
         </h3>
         <div class="stars">
-          <div v-for="s in getStars(p.rating)" class="star">
+          <div v-for="(s,i) in getStars(p.rating)" :key="`star-${i}`" class="star">
             <svg
               v-if="s"
               xmlns="http://www.w3.org/2000/svg"

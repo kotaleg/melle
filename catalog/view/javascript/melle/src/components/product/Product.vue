@@ -169,7 +169,7 @@
       >
     </div>
 
-    <div v-else class="d-flex flex-row justify-content-between">
+    <div v-else class="d-flex flex-row justify-content-between mt-3">
       <a
         @click="notifyInStock()"
         href="javascript:void(0);"
