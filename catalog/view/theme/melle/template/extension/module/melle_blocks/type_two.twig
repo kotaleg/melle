@@ -1,6 +1,6 @@
 <div id="melle-block-{{blockId}}" class="col-sm-12 melle-block melle-block-{{type}}">
-
     {% if image %}
+    <a href="{{link}}">
     <div class="background-container p-4 p-sm-5" style="{% if image %}background-image:url('{{image}}');{% endif %}{% if height %}height:{{height}}px;{% endif %}">
         <div class="inner-content">
             {% if text %}
@@ -12,6 +12,6 @@
             {% endif %}
         </div>
     </div>
+    </a>
     {% endif %}
-
 </div>
