@@ -104,7 +104,7 @@
 
         <div
           @click="enableElement('cart')"
-          class="d-flex d-lg-none align-items-center text-center h-100 px-3 cart-container"
+          class="d-flex d-lg-none align-items-center text-center px-3 cart-container"
         >
           <div>Корзина</div>
         </div>
