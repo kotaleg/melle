@@ -31,8 +31,8 @@
 
   .melle-block-type-2 {
     @media (max-width: 576px) {
-      padding-right: 0!important;
-      padding-left: 0!important;
+      padding-right: 0 !important;
+      padding-left: 0 !important;
     }
 
     .inner-content {
@@ -85,5 +85,4 @@
       }
     }
   }
-
 }

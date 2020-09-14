@@ -30,13 +30,16 @@
                                 {% if thumb %}
                                     <li class="prod-card__item-photo"
                                         data-hash="default">
-                                        <img src="{{ thumb }}" class="img-fluid" />
+                                        <img src="{{ thumb }}"
+                                            class="img-fluid" />
                                     </li>
                                 {% endif %}
                                 {% for i in images %}
                                     <li class="prod-card__item-photo"
                                         data-hash="{{ i.imageHash }}">
-                                        <img itemprop="image" src="{{ i.thumb }}" class="img-fluid" />
+                                        <img itemprop="image"
+                                            src="{{ i.thumb }}"
+                                            class="img-fluid" />
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -44,7 +47,8 @@
                                 {% if thumb %}
                                     <li class="prod-card__item-big-photo"
                                         data-zoom-image="{{ popup }}">
-                                        <img src="{{ popup }}" class="img-fluid" />
+                                        <img src="{{ popup }}"
+                                            class="img-fluid" />
                                     </li>
                                 {% endif %}
                                 {% for i in images %}

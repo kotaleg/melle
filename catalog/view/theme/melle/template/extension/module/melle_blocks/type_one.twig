@@ -1,19 +1,24 @@
-<div id="melle-block-{{blockId}}" class="col-sm-6 col-md-3 melle-block melle-block-{{type}} text-center mt-3 mb-3 mb-md-0">
-
+<div id="melle-block-{{ blockId }}"
+    class="col-sm-6 col-md-3 melle-block melle-block-{{
+    type
+    }} text-center mt-3 mb-3 mb-md-0">
     <div class="py-2">
         {% if image %}
-        <a href="{{link}}">
-            <img src="{{image}}" alt="{{text}}" class="img-fluid">
-        </a>
+            <a href="{{ link }}">
+                <img src="{{ image }}" alt="{{ text }}" class="img-fluid" />
+            </a>
         {% endif %}
     </div>
 
     {% if buttonText %}
-    <div class="sub-text mt-2"><a href="{{link}}"><b>{{buttonText}}</b></a></div>
+        <div class="sub-text mt-2">
+            <a href="{{ link }}"><b>{{ buttonText }}</b></a>
+        </div>
     {% endif %}
 
     {% if text %}
-    <div class="text mt-2">{{text}}</div>
+        <div class="text mt-2">
+            {{ text }}
+        </div>
     {% endif %}
-
 </div>

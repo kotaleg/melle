@@ -25,8 +25,12 @@
               <a :href="p.url" class="title">{{ p.name }}</a>
             </div>
           </div>
-          <div class="d-flex align-items-center justify-content-around col-sm-12">
-            <span class="price">{{ p.price }}<span class="ruble-sign">Р</span></span>
+          <div
+            class="d-flex align-items-center justify-content-around col-sm-12"
+          >
+            <span class="price"
+              >{{ p.price }}<span class="ruble-sign">Р</span></span
+            >
             <a :href="p.url" class="btn btn-primary">Купить</a>
           </div>
         </div>

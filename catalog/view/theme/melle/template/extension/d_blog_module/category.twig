@@ -1,32 +1,34 @@
-{{header}}
+{{ header }}
 <main class="main-page container-fluid">
-<style>
-{{custom_style}}
-</style>
-{% include template('partial/d_breadcrumb') %}
+    <style>
+        {{ custom_style }}
+    </style>
+    {% include template('partial/d_breadcrumb') %}
 
-   <section class="news">
-      <div class="news__container">
-         <div class="row">
-            <div class="col-lg-12">
-                <h1 class="title mt-4">{{ heading_title }}</h1>
+    <section class="news">
+        <div class="news__container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="title mt-4">
+                        {{ heading_title }}
+                    </h1>
 
-                {% if description %}
-                {{description}}
-                {% endif %}
+                    {% if description %}
+                        {{ description }}
+                    {% endif %}
 
-                {% if posts %}
-                    {% include template(layout_template) with posts %}
-                {% endif %}
+                    {% if posts %}
+                        {% include template(layout_template) with posts %}
+                    {% endif %}
 
-                {% if not posts %}
-                    <p class="bm-empty">{{text_empty}}</p>
-                {% endif %}
+                    {% if not posts %}
+                        <p class="bm-empty">
+                            {{ text_empty }}
+                        </p>
+                    {% endif %}
+                </div>
             </div>
-         </div>
-
-      </div>
-   </section>
-
+        </div>
+    </section>
 </main>
-{{footer}}
+{{ footer }}

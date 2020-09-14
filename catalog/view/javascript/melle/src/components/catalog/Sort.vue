@@ -34,7 +34,10 @@
       </div>
     </div>
     <div class="d-md-none">
-      <details class="filter-switch mobile p-3 text-center" :open="isElementActive('filter')">
+      <details
+        class="filter-switch mobile p-3 text-center"
+        :open="isElementActive('filter')"
+      >
         <summary @click="enableElement('filter')" class="p-1">Фильтр</summary>
       </details>
 
@@ -84,7 +87,7 @@ export default {
   components: {},
   computed: {
     ...mapGetters('filter', ['getFilterValue']),
-    ...mapGetters('header', ['isElementActive',]),
+    ...mapGetters('header', ['isElementActive']),
 
     sort: {
       get() {

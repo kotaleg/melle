@@ -208,9 +208,7 @@
             <span slot-scope="{ nbHits }">
               <span
                 >Найдено:
-                <span class="result-number"
-                  >{{ nbHits }}
-                </span>
+                <span class="result-number">{{ nbHits }} </span>
                 <span>результатов </span>
               </span>
             </span>

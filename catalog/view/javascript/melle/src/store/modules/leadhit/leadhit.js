@@ -59,7 +59,7 @@ const actions = {
     )
 
     if (res && has(res, 'data') && isArray(res.data)) {
-      commit('setValue', { k: 'hits', v: res.data.slice(0,6) })
+      commit('setValue', { k: 'hits', v: res.data.slice(0, 6) })
     }
   },
 
@@ -74,7 +74,7 @@ const actions = {
     })
 
     if (res && has(res, 'data') && isArray(res.data)) {
-      commit('setValue', { k: 'recommend', v: res.data.slice(0,6) })
+      commit('setValue', { k: 'recommend', v: res.data.slice(0, 6) })
     }
   },
 }

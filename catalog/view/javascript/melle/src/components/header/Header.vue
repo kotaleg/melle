@@ -1,7 +1,5 @@
 <template>
-  <header
-    class="d-flex flex-row align-items-stretch justify-content-between"
-  >
+  <header class="d-flex flex-row align-items-stretch justify-content-between">
     <notifications
       :group="this.$codename + '_header'"
       position="bottom right"
@@ -67,10 +65,17 @@
             <search />
           </div>
 
-          <a :href="phoneLink" class="d-none d-sm-block d-lg-none">{{ phone }}</a>
+          <a :href="phoneLink" class="d-none d-sm-block d-lg-none">{{
+            phone
+          }}</a>
 
           <div class="login mobile-login d-flex d-lg-none ml-2">
-            <img width="25" class="img-fluid mr-1" src="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAhCAYAAAC803lsAAAD9klEQVRYha2YW4hWVRTH/6Nfo2GTNmZWRJGXirIyh65UM12eJghHqF5q6EmDEH0qSqQLBPbSlSgpbMAgu4FSlBVokNDlpVDDLjaIZaljt1HL5uIvtvwP7c6cs8/5xhYs9vnO+q//Xmdf1l77awE0TjlV0ixJJ0kKJAcl9Uv6dTx0jSawkyTdKmmRpBskzSzB7ZG0WdLrkjZKGq5DXmdEJktaJmm5pNOj9z9L+l7SL/49Q9IcSadFmB8kPS5ptaSRZC8hkIReC3zHv/IpcA9wdsJnDrAM2Br5bQPmp/pKBRHIRkz0BdCVs08ErnNgi4ErgAk5TDfwtTmOAL3NBvKonUeBh91pbL8J2MlYCV9+dQ47CXgqQi6tG8i9dhgCbi+w9zjAINuBJ4Cno8D+Lhi9oEsivzuqArncARSCgXbgd9tX5qaiATxp24/AiQX+S20/BJxfFkgg2m7gqpIpW277hhJ72IVbjLmzBPOS7R8bPyaQsOiC7ABaS0heM8mixCJfYsxzJfY2YE+eZ4J3cWjv8/MDkoZKdnuWI3YnMsI+t1NK7CEDr/Tzg9nLLJBOSedK+kbShkQnLW7TyalaXnHAHZIujgPpcbvW50aZHPL79gRmco1gw4iv8/PCOJAut+9XfMsOtzcmMJ1ud1ZwbfxP305WQ9ZGRcrv8CI7CMwrsF9jnpCRZ1VwtZtrX7ZrzvKLbyscM33R+D+A+4FLgAXAI8Cftj1Wk2vQ+Nbw44LoPKnjHLZ2X0F6z+SZgiOhTHfZZ1ojqhdaK+Y0k7DQ7pb0sqReSRdJOirpS0l9kj6vyaNoYR+rR0IdsV/SXklnNEHyf8iwN0wjjMiApEEXPadI+q1GByc478x24sJbO+yUXZJGa3DMdYXYf8zfc/eR56o7MZ8nu+54DzicWCNhEb8N3AVMSfD1Gv9GfNas8MvVJQGs8omZyahLgPVeuH3uPBRBRyPcAZ/SRSfxW8YsjgOZ65eDua+4BfgpIn4XuA2YmvjS6R6NTZFfP9AZYWYCw9YZ+dP3Qzut8O+HIqJAelnNLRnrVcBn5hhx+amoYltXVAZcb2OYgjV+HnYx0zKOIDKd6OnJpuxZ847G2Tnv9Go0CiFL3nwcAeS1J6r+cOJTWSAh/+82cP1xjkTRyGw291f5HVXk0BGdAWsS1VozGjp905wDwHl53zKyLueDIJ/kC90mdX502Rrwh47hSJFeGt3yjniln9lEEOcAL0SXtG2+BRbiq8jaXARn95FA+o7vPguc7DLsNOBKV/ofRLtkyAmxKKnVDiTTC4G1wF/Rqs8kzqSxhDTwPDC7Th/N/j8yVVK3S8V5PvjaXAZkh95WSZtcCh6uxSrpH4b65ELPcnlyAAAAAElFTkSuQmCC" alt="Аккаунт">
+            <img
+              width="25"
+              class="img-fluid mr-1"
+              src="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAhCAYAAAC803lsAAAD9klEQVRYha2YW4hWVRTH/6Nfo2GTNmZWRJGXirIyh65UM12eJghHqF5q6EmDEH0qSqQLBPbSlSgpbMAgu4FSlBVokNDlpVDDLjaIZaljt1HL5uIvtvwP7c6cs8/5xhYs9vnO+q//Xmdf1l77awE0TjlV0ixJJ0kKJAcl9Uv6dTx0jSawkyTdKmmRpBskzSzB7ZG0WdLrkjZKGq5DXmdEJktaJmm5pNOj9z9L+l7SL/49Q9IcSadFmB8kPS5ptaSRZC8hkIReC3zHv/IpcA9wdsJnDrAM2Br5bQPmp/pKBRHIRkz0BdCVs08ErnNgi4ErgAk5TDfwtTmOAL3NBvKonUeBh91pbL8J2MlYCV9+dQ47CXgqQi6tG8i9dhgCbi+w9zjAINuBJ4Cno8D+Lhi9oEsivzuqArncARSCgXbgd9tX5qaiATxp24/AiQX+S20/BJxfFkgg2m7gqpIpW277hhJ72IVbjLmzBPOS7R8bPyaQsOiC7ABaS0heM8mixCJfYsxzJfY2YE+eZ4J3cWjv8/MDkoZKdnuWI3YnMsI+t1NK7CEDr/Tzg9nLLJBOSedK+kbShkQnLW7TyalaXnHAHZIujgPpcbvW50aZHPL79gRmco1gw4iv8/PCOJAut+9XfMsOtzcmMJ1ud1ZwbfxP305WQ9ZGRcrv8CI7CMwrsF9jnpCRZ1VwtZtrX7ZrzvKLbyscM33R+D+A+4FLgAXAI8Cftj1Wk2vQ+Nbw44LoPKnjHLZ2X0F6z+SZgiOhTHfZZ1ojqhdaK+Y0k7DQ7pb0sqReSRdJOirpS0l9kj6vyaNoYR+rR0IdsV/SXklnNEHyf8iwN0wjjMiApEEXPadI+q1GByc478x24sJbO+yUXZJGa3DMdYXYf8zfc/eR56o7MZ8nu+54DzicWCNhEb8N3AVMSfD1Gv9GfNas8MvVJQGs8omZyahLgPVeuH3uPBRBRyPcAZ/SRSfxW8YsjgOZ65eDua+4BfgpIn4XuA2YmvjS6R6NTZFfP9AZYWYCw9YZ+dP3Qzut8O+HIqJAelnNLRnrVcBn5hhx+amoYltXVAZcb2OYgjV+HnYx0zKOIDKd6OnJpuxZ847G2Tnv9Go0CiFL3nwcAeS1J6r+cOJTWSAh/+82cP1xjkTRyGw291f5HVXk0BGdAWsS1VozGjp905wDwHl53zKyLueDIJ/kC90mdX502Rrwh47hSJFeGt3yjniln9lEEOcAL0SXtG2+BRbiq8jaXARn95FA+o7vPguc7DLsNOBKV/ofRLtkyAmxKKnVDiTTC4G1wF/Rqs8kzqSxhDTwPDC7Th/N/j8yVVK3S8V5PvjaXAZkh95WSZtcCh6uxSrpH4b65ELPcnlyAAAAAElFTkSuQmCC"
+              alt="Аккаунт"
+            />
             <a
               v-if="!is_logged"
               @click="enableElement('login')"

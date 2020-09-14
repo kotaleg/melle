@@ -12,7 +12,7 @@ export default {
   props: {
     sourceType: {
       type: [String],
-      required: true
+      required: true,
     },
   },
   components: {
@@ -27,7 +27,7 @@ export default {
         return this.recommend
       }
       return []
-    }
+    },
   },
   methods: {},
   created() {

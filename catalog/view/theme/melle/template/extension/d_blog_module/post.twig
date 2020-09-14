@@ -1,31 +1,37 @@
-{{header}}
+{{ header }}
 <main class="main-page container-fluid">
-<style>
-{{custom_style}}
-</style>
-{% include template('partial/d_breadcrumb') %}
+    <style>
+        {{ custom_style }}
+    </style>
+    {% include template('partial/d_breadcrumb') %}
 
-   {{content_top}}
+    {{ content_top }}
 
-   <section class="news-one">
-      <div class="news-one__container">
-         <h1 class="title mt-4">{{ heading_title }}</h1>
-         <div class="news-one__news">
-            {% if thumb %}
-            <img src="{{thumb}}" title="{{image_title}}" alt="{{image_alt}}" class="news-one__news-img img-fluid">
-            {% endif %}
+    <section class="news-one">
+        <div class="news-one__container">
+            <h1 class="title mt-4">
+                {{ heading_title }}
+            </h1>
+            <div class="news-one__news">
+                {% if thumb %}
+                    <img src="{{ thumb }}"
+                        title="{{ image_title }}"
+                        alt="{{ image_alt }}"
+                        class="news-one__news-img img-fluid" />
+                {% endif %}
 
-            {% if setting.post.date_display %}
-            <div class="news-one__news-data mb-3"><span>{{date_published}}</span></div>
-            {% endif %}
-         </div>
-         <div>
-            {{description}}
-         </div>
-      </div>
-   </section>
+                {% if setting.post.date_display %}
+                    <div class="news-one__news-data mb-3">
+                        <span>{{ date_published }}</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div>
+                {{ description }}
+            </div>
+        </div>
+    </section>
 
-   {{content_bottom}}
-
+    {{ content_bottom }}
 </main>
-{{footer}}
+{{ footer }}
