@@ -4,7 +4,7 @@ import shop from '../../../api/shop'
 
 // initial state
 const state = {
-  slidesData: [],
+  slidesData: {},
 }
 
 // getters

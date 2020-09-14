@@ -1,13 +1,6 @@
 <template>
-  <div id="retail-rocket-section">
-    <div class="col-sm-12 col-md-6 rr-block">
-      <h3>Хиты продаж</h3>
-      <carousel-block :items="hits" />
-    </div>
-    <div class="col-sm-12 col-md-6 rr-block">
-      <h3>Мы рекомендуем Вам</h3>
-      <carousel-block :items="recommend" />
-    </div>
+  <div class="">
+    <carousel-block :items="items" />
   </div>
 </template>
 
@@ -16,19 +9,36 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import CarouselBlock from './CarouselBlock.vue'
 
 export default {
+  props: {
+    sourceType: {
+      type: [String],
+      required: true
+    },
+  },
   components: {
     CarouselBlock,
   },
   computed: {
     ...mapState('leadhit', ['hits', 'recommend']),
+    items() {
+      if (this.sourceType === 'hits') {
+        return this.hits
+      } else if (this.sourceType === 'recommend') {
+        return this.recommend
+      }
+      return []
+    }
   },
   methods: {},
   created() {
     this.$store.dispatch('leadhit/initData')
   },
   mounted() {
-    this.$store.dispatch('leadhit/getHits')
-    this.$store.dispatch('leadhit/getRecommend')
+    if (this.sourceType === 'hits') {
+      this.$store.dispatch('leadhit/getHits')
+    } else if (this.sourceType === 'recommend') {
+      this.$store.dispatch('leadhit/getRecommend')
+    }
   },
 }
 </script>

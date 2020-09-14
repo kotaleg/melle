@@ -5,6 +5,7 @@ import shop from '../../../api/shop'
 
 // initial state
 const state = {
+  initialised: false,
   lead_uid: '',
   site_id: '',
   base_url: '',
@@ -22,8 +23,12 @@ const getters = {}
 // actions
 const actions = {
   initData({ commit, state }) {
+    if (state.initialised === true) {
+      return
+    }
     shop.getInlineState('_leadhit', (data) => {
       commit('setData', data)
+      commit('setValue', { k: 'initialised', v: true })
     })
   },
 
@@ -54,7 +59,7 @@ const actions = {
     )
 
     if (res && has(res, 'data') && isArray(res.data)) {
-      commit('setValue', { k: 'hits', v: res.data })
+      commit('setValue', { k: 'hits', v: res.data.slice(0,6) })
     }
   },
 
@@ -69,7 +74,7 @@ const actions = {
     })
 
     if (res && has(res, 'data') && isArray(res.data)) {
-      commit('setValue', { k: 'recommend', v: res.data })
+      commit('setValue', { k: 'recommend', v: res.data.slice(0,6) })
     }
   },
 }

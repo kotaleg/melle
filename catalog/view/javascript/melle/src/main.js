@@ -50,15 +50,7 @@ Vue.component(
   'melle-search-wrapper',
   require('./components/search/SearchWrapper.vue')
 )
-// Vue.component(
-//   'melle-checkout-rp',
-//   require('./components/checkout/RelatedProducts.vue')
-// )
-// Vue.component('melle-leadhit', require('./components/leadhit/Leadhit.vue'))
-// Vue.component(
-//   'melle-slideshow',
-//   require('./components/slideshow/slideshow.vue')
-// )
+Vue.component('melle-leadhit', require('./components/leadhit/Leadhit.vue'))
 
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
@@ -66,11 +58,4 @@ document.addEventListener('DOMContentLoaded', () => {
     store,
     el: '#' + Vue.prototype.$codename + '-mount',
   })
-
-  // if (document.getElementById(Vue.prototype.$codename + '-checkout-bottom')) {
-  //   new Vue({
-  //     store,
-  //     el: '#' + Vue.prototype.$codename + '-checkout-bottom',
-  //   })
-  // }
 })

@@ -1,0 +1,21 @@
+.slider-block {
+  background-color: #f4f4f4;
+
+  h4 {
+    text-transform: uppercase;
+  }
+
+  .slider-item {
+    .title-container {
+      max-width: 250px;
+    }
+
+    @media (min-width: 576px) {
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+}
