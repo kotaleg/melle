@@ -1,8 +1,8 @@
-<div class="form-group {% if required %}required{% endif %} row-{{id}}">
+<div class="form-group row {% if required %}required{% endif %} row-{{id}}">
 
-    <label class="control-label {{page == 'checkout' ? 'col-sm-4' : 'col-sm-2' }}" for="{{id}}">{{label}}</label>
+    <label class="control-label {{page == 'checkout' ? 'col-sm-4 col-lg-3' : 'col-sm-2' }}" for="{{id}}">{{label}}</label>
 
-    <div class="{{page == 'checkout' ? 'col-sm-8' : 'col-sm-10'}}">
+    <div class="{{page == 'checkout' ? 'col-sm-8 col-lg-9' : 'col-sm-10'}}">
 
       {% if type == 'select' or type == 'select2' %}
 
