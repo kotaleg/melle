@@ -466,9 +466,12 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
         }
 
         /* IVAN MODIFICATION */
+        $this->load->model('extension/module/melle');
         $this->load->model('extension/module/pro_related');
-        $this->_templateData['cart_related_products'] =
-            $this->model_extension_module_pro_related->prepareCartProducts();
+        $this->_templateData['cart_related_products'] = $this->model_extension_module_melle->renderOtherProducts(
+            'С этим товаром покупают',
+            $this->model_extension_module_pro_related->prepareCartProducts()
+        );
         /* IVAN MODIFICATION */
 
         $this->setOutputContent(trim($this->renderPage('checkout/simplecheckout', $this->_templateData, $childrens)));

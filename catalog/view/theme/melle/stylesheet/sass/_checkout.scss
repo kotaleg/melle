@@ -1,0 +1,622 @@
+.basket-orders {
+  font-weight: 900;
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .basket-orders {
+      width: 100%;
+  }
+}
+
+.basket-orders__container {
+  width: 98% !important;
+}
+
+.basket-orders__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__table {
+      display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .basket-orders__table-wrap {
+      overflow: auto;
+  }
+}
+
+.basket-orders__table-mobile {
+  display: none;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__table-mobile {
+      display: block;
+  }
+
+  .basket-orders__table-mobile .basket-orders__image-column {
+      vertical-align: top;
+      padding: 10px 0;
+  }
+
+  .basket-orders__table-mobile .basket-orders__name-column {
+      vertical-align: top;
+      padding: 10px;
+      position: relative;
+  }
+
+  .basket-orders__table-mobile .basket-orders__total-column {
+      vertical-align: middle;
+      min-width: 75px;
+      padding: 10px 0;
+      position: relative;
+  }
+
+  .basket-orders__table-mobile .basket-orders__photo {
+      border: 1px #2b2a29 solid;
+      width: 80px;
+      height: 130px;
+  }
+
+  .basket-orders__table-mobile .basket-orders__title h3 {
+      font-weight: 600;
+      font-size: 14px;
+  }
+
+  .basket-orders__table-mobile .basket-orders__price {
+      border: 1px #2b2a29 solid;
+      padding: 5px 2px;
+      text-align: right;
+  }
+
+  .basket-orders__table-mobile .basket-orders__size {
+      font-size: 14px;
+      font-weight: 400;
+      margin-top: 5px;
+  }
+
+  .basket-orders__table-mobile .basket-orders__size p {
+      margin-bottom: 5px;
+  }
+
+  .basket-orders__table-mobile .basket-orders__count {
+      position: absolute;
+      bottom: 10px;
+      display: inline-flex;
+      text-align: left;
+      border: 1px solid #2b2a29;
+      width: 85px;
+      margin: auto;
+      color: #6d6b6a;
+      background-color: white;
+      font-size: 12px;
+  }
+
+  .basket-orders__table-mobile .basket-orders__count .catalog__item-count_label {
+      color: #807f7d;
+  }
+
+  .basket-orders__table-mobile .basket-orders__count .catalog__item-count_label .ng-binding {
+      color: #2b2a29;
+  }
+
+  .basket-orders__table-mobile .basket-orders__count > button {
+      display: block !important;
+      width: 19px;
+      height: 30px;
+      text-align: center;
+      color: #6d6b6a;
+      border: 0;
+      background-color: transparent;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 0;
+  }
+
+  .basket-orders__table-mobile .basket-orders__count > button:hover {
+      cursor: pointer;
+  }
+
+  .basket-orders__table-mobile .basket-orders__count > input {
+      width: 46px;
+      text-align: center;
+      color: black;
+      border: 0;
+      background-color: transparent;
+      font-size: 20px;
+  }
+
+  .basket-orders__table-mobile .basket-orders__del {
+      position: absolute;
+      right: 0;
+      top: 10px;
+  }
+}
+
+.basket-orders__table thead th {
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  color: #807f7d;
+  border-top: 1px solid #e7e7e7;
+  border-bottom: 1px solid #e7e7e7;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.basket-orders__table thead th:first-child {
+  text-align: left;
+}
+
+.basket-orders__table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.basket-orders__table tbody td {
+  padding: 30px 0;
+}
+
+.basket-orders__table tbody td > div > span {
+  color: #2b2a29;
+  font-size: 12px;
+}
+
+.basket-orders__table tbody td.options {
+  max-width: 100px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
+}
+
+.basket-orders__table tbody td.image {
+  width: 83px;
+}
+
+.basket-orders__table tbody td.image a {
+  display: block;
+  margin-left: -2px;
+}
+
+.basket-orders__table tbody td.image img {
+  width: 100%;
+  height: auto;
+}
+
+.basket-orders__table tbody td.name {
+  padding-left: 40px;
+  vertical-align: middle;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .basket-orders__table tbody td.name {
+      padding-left: 20px;
+  }
+}
+
+.basket-orders__table tbody td.name .basket-orders__title {
+  width: 60%;
+  margin-bottom: 10px;
+}
+
+.basket-orders__table tbody td.name .basket-orders__title > a {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.basket-orders__table tbody td.name .basket-orders__title > a:link, .basket-orders__table tbody td.name .basket-orders__title > a:visited, .basket-orders__table tbody td.name .basket-orders__title > a:active, .basket-orders__table tbody td.name .basket-orders__title > a:hover {
+  color: #2b2a29;
+}
+
+.basket-orders__table tbody td.name .basket-orders__title > a h3 {
+  color: #2b2a29;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.basket-orders__table tbody td.name .basket-orders__article {
+  margin-bottom: 10px;
+  color: #807f7d;
+  font-size: 12px;
+}
+
+.basket-orders__table tbody td.name .basket-orders__manufacturer {
+  color: #807f7d;
+  font-size: 12px;
+}
+
+.basket-orders__table tbody td.name .basket-orders__manufacturer a {
+  text-transform: uppercase;
+}
+
+.basket-orders__table tbody td.name .basket-orders__manufacturer a:link, .basket-orders__table tbody td.name .basket-orders__manufacturer a:visited, .basket-orders__table tbody td.name .basket-orders__manufacturer a:active, .basket-orders__table tbody td.name .basket-orders__manufacturer a:hover {
+  color: #2b2a29;
+}
+
+.basket-orders__table tbody td.price, .basket-orders__table tbody td.total {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.basket-orders__table tbody td.price .basket-orders__price, .basket-orders__table tbody td.total .basket-orders__price {
+  color: #2b2a29;
+}
+
+.basket-orders__table tbody td.price .basket-orders__price-old, .basket-orders__table tbody td.total .basket-orders__price-old {
+  display: block;
+  text-decoration: line-through;
+  font-size: 14px;
+}
+
+.basket-orders__table tbody td.price .basket-orders__price-default, .basket-orders__table tbody td.total .basket-orders__price-default {
+  display: block;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+.basket-orders__table tbody td.quantity {
+  width: 100px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.basket-orders__table tbody td.quantity .basket-orders__count {
+  border: 1px solid black;
+  display: flex;
+  width: 85px;
+  margin: auto;
+  color: #6d6b6a;
+  background-color: white;
+  font-size: 12px;
+}
+
+.basket-orders__table tbody td.quantity .basket-orders__count .catalog__item-count_label {
+  color: #807f7d;
+}
+
+.basket-orders__table tbody td.quantity .basket-orders__count .catalog__item-count_label .ng-binding {
+  color: #000;
+}
+
+.basket-orders__table tbody td.quantity .basket-orders__count > button {
+  width: 19px;
+  height: 30px;
+  text-align: center;
+  color: #6d6b6a;
+  border: 0;
+  background-color: transparent;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0;
+}
+
+.basket-orders__table tbody td.quantity .basket-orders__count > button:hover {
+  cursor: pointer;
+}
+
+.basket-orders__table tbody td.quantity .basket-orders__count > input {
+  width: 46px;
+  text-align: center;
+  color: black;
+  border: 0;
+  background-color: transparent;
+  font-size: 20px;
+}
+
+.basket-orders__table tbody td.remove {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.basket-orders__table tbody td.remove button {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+}
+
+.basket-orders__table tbody td.remove button > svg {
+  fill: #94918e;
+}
+
+.basket-orders__table tbody td.remove button:hover > svg {
+  fill: #6a6969;
+}
+
+.basket-orders__footer {
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding: 30px 40px;
+  background: white;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__footer {
+      display: none;
+  }
+}
+
+.basket-orders__footer-mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__footer-mobile {
+      display: block;
+  }
+}
+
+.basket-orders__totals-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.basket-orders__totals-mobile .total-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  position: relative;
+}
+
+.basket-orders__totals-mobile .total-item > div {
+  z-index: 100;
+  background: #fff;
+  padding: 4px;
+}
+
+.basket-orders__totals-mobile .total-item .dotted-item {
+  content: '';
+  position: absolute;
+  border-bottom: 2px #000 solid;
+  border-style: dotted;
+  bottom: 8px;
+  height: 3px;
+  width: inherit;
+  z-index: 50;
+}
+
+.basket-orders__totals-mobile .total-item_last {
+  color: red;
+}
+
+.basket-orders__totals-mobile .total-item_last .dotted-item {
+  border-color: red;
+}
+
+.basket-orders__totals-mobile #total_shipping {
+  text-align: inherit;
+}
+
+.basket-orders__totals-mobile #total_shipping span {
+  display: inline;
+}
+
+.basket-orders__result-total {
+  text-align: right;
+  margin-bottom: 10px;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.basket-orders__result-total .total-price {
+  color: red;
+}
+
+.basket-orders__discount {
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__discount {
+      width: 100%;
+      margin-bottom: 20px;
+  }
+}
+
+.basket-orders__discount .help-block {
+  right: 150px;
+  left: auto;
+}
+
+.basket-orders__discount form {
+  display: flex;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__discount form {
+      flex-direction: column;
+      width: 100%;
+  }
+}
+
+.basket-orders__discount-input {
+  width: 260px;
+  height: 36px;
+  margin-right: 10px;
+  padding: 0 25px;
+  color: #6d6b6a;
+  border: 0;
+  background-color: white;
+  font-size: 12px;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__discount-input {
+      width: 100%;
+      margin-bottom: 10px;
+  }
+}
+
+.basket-orders__discount-send {
+  width: 140px;
+  height: 36px;
+  background-color: #2b2a29;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #fff;
+  text-transform: uppercase;
+  border: 0px;
+  cursor: pointer;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__discount-send {
+      width: 100%;
+  }
+}
+
+.basket-orders__discount-send:hover {
+  background-color: #000;
+}
+
+.basket-orders__full-price .full-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: #2b2a29;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__full-price .full-price {
+      align-items: center;
+  }
+}
+
+.basket-orders__full-price .full-price__number {
+  font-size: 14px;
+}
+
+.basket-orders__full-price .full-price__sum {
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.basket-orders__full-price .full-price__discount {
+  margin-bottom: 15px;
+  font-size: 12px;
+}
+
+.basket-orders__full-price .full-price__end {
+  font-size: 24px;
+}
+
+.basket-orders__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__buttons {
+      flex-direction: column;
+  }
+
+  .basket-orders__buttons > button:not(:last-child) {
+      margin-bottom: 20px;
+  }
+}
+
+.basket-orders__prev-button {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+}
+
+.basket-orders__prev-button:link, .basket-orders__prev-button:visited, .basket-orders__prev-button:active, .basket-orders__prev-button:hover {
+  color: #2b2a29;
+}
+
+.basket-orders__prev-button > svg {
+  margin-right: 10px;
+  fill: #94918e;
+}
+
+.basket-orders__prev-button:hover {
+  text-decoration: underline;
+}
+
+.basket-orders__prev-button:hover > svg {
+  fill: #6a6969;
+}
+
+.basket-orders__reset-button {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+}
+
+@media (max-width: 767px) {
+  .basket-orders__reset-button {
+      margin: 20px 0;
+  }
+}
+
+.basket-orders__reset-button:link, .basket-orders__reset-button:visited, .basket-orders__reset-button:active, .basket-orders__reset-button:hover {
+  color: #2b2a29;
+}
+
+.basket-orders__reset-button > svg {
+  margin-right: 10px;
+  fill: #94918e;
+}
+
+.basket-orders__reset-button:hover {
+  text-decoration: underline;
+}
+
+.basket-orders__reset-button:hover > svg {
+  fill: #6a6969;
+}
+
+.basket-orders__send-button {
+  width: 210px;
+  height: 36px;
+  background-color: #2b2a29;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #fff;
+  text-transform: uppercase;
+  border: 0px;
+  cursor: pointer;
+  display: block;
+}
+
+.basket-orders__send-button:hover {
+  background-color: #000;
+}
+
+.basket-orders__discount-input {
+  border: 1px solid #6d6b6a;
+}

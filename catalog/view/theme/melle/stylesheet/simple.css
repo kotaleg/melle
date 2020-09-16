@@ -234,9 +234,9 @@
    background: url('../../image/button-active.png') repeat-x;
 }
 
-#simplecheckout_customer .simplecheckout-block-content {
+/* #simplecheckout_customer .simplecheckout-block-content {
     text-align: center;
-}
+} */
 .simplecheckout-login {
     display: inline-block;
 }
