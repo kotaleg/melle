@@ -1,6 +1,11 @@
 .slider-block {
   background-color: #f4f4f4;
 
+  @media (min-width: 1200px) {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+
   h4 {
     text-transform: uppercase;
   }
@@ -10,11 +15,21 @@
       max-width: 250px;
     }
 
+    .btn-primary {
+      border-color: #00abb2;
+      background-color: #00abb2;
+      &:hover {
+        border-color:$black-color;
+        background-color:$black-color;
+      }
+    }
+
     @media (min-width: 576px) {
       img {
         max-width: 100%;
         height: auto;
       }
     }
+
   }
 }

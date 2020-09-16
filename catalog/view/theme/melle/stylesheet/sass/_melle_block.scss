@@ -1,4 +1,17 @@
 .melle-blocks {
+
+  @media (min-width: 1200px) {
+    &:nth-child(1) {
+      padding-right: 15px;
+      padding-left: 30px;
+    }
+
+    &:nth-child(2) {
+      padding-right: 30px;
+      padding-left: 15px;
+    }
+  }
+
   .melle-block {
     .text {
       font-size: 1rem;
@@ -26,6 +39,14 @@
     }
     img {
       box-shadow: 0px 6px 174px 0px rgba(0, 0, 0, 0.15);
+    }
+
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+
+    @media (min-width: 1200px) {
+      padding-top: 40px;
+      padding-bottom: 40px;
     }
   }
 
@@ -71,14 +92,33 @@
       }
     }
 
-    & + .melle-block-type-3 {
-      @media (max-width: 576px) {
-        margin-top: 1rem;
-      }
+    @media (max-width: 768px) {
+      margin-top: 1.5rem;
     }
   }
 
   .melle-block-type-4 {
+    @media (max-width: 576px) {
+      &:first-child {
+        padding-top: 1.5rem;
+      }
+      &:nth-child(2) {
+        padding-bottom: 1.5rem;
+      }
+
+      & + .melle-block-type-4 {
+        padding-top: 1rem;
+      }
+    }
+
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+
+    @media (min-width: 1200px) {
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+
     &:nth-child(3) {
       @media (max-width: 768px) {
         display: none;

@@ -1,6 +1,17 @@
+.footer-divider {
+  background-color: $ocean-color;
+  height: 35px;
+  margin-top: 1.5rem;
+}
+
 footer {
   background-color: #000;
   color: $white-color;
+
+  .footer-container {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
 
   .filler {
     background-color: $ocean-color;
@@ -13,11 +24,21 @@ footer {
 
   .social-link {
     max-width: 2rem;
+    display: none;
+    @media (min-width: 400px) {
+      display: block;
+    }
   }
 
   .menu-item {
     .menu-children {
       font-size: 0.8rem;
+    }
+  }
+
+  .information-container {
+    .information-item {
+      flex: 1 1 50%; /*grow | shrink | basis */
     }
   }
 }

@@ -180,3 +180,22 @@ button {
     color: #807f7d;
   }
 }
+
+// HOME STYLES
+html {
+  &.home {
+    header {
+      @media (max-width: 576px) {
+        margin-bottom: 0;
+      }
+    }
+    .footer-divider {
+      margin-top: 0;
+    }
+    .section-3 {
+      @media (min-width: 1200px) {
+        margin-top: 20px;
+      }
+    }
+  }
+}
