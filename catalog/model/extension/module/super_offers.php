@@ -386,6 +386,29 @@ class ModelExtensionModuleSuperOffers extends Model
 
     /* ORDER FUNCTIONS */
 
+    public function getFirstCombinationForOrderProduct($order_id, $order_product_id, $product_id)
+    {
+        $order_options = $this->getOrderOptions($order_id, $order_product_id);
+
+        $options = array();
+        foreach ($order_options as $option) {
+
+            $real = $this->getRealOptionIds($option['product_option_id'], $option['product_option_value_id']);
+            if ($real['option_id'] !== false && $real['option_value_id'] !== false) {
+                $options[] = array(
+                    'option_id'         => $real['option_id'],
+                    'option_value_id'   => $real['option_value_id']
+                );
+            }
+        }
+
+        if (!$this->isOptionsForProduct($product_id)) {
+            return null;
+        }
+
+        return $this->super_offers->getCombinationForActiveOptions($product_id, $options);
+    }
+
     public function quantityHandler($order_id, $prefix)
     {
         $order_data = $this->getOrderData($order_id);

@@ -64,6 +64,10 @@ class ControllerProductCategory extends Controller {
         $category_info = $this->model_catalog_category->getCategory($category_id);
 
         if ($category_info) {
+            /* RETAIL R START */
+            $this->request->get['rr_category_id'] = (int) $category_id;
+            /* RETAIL R END */
+
             $this->document->setTitle($category_info['meta_title']);
             $this->document->setDescription($category_info['meta_description']);
             $this->document->setKeywords($category_info['meta_keyword']);

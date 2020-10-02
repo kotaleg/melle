@@ -281,6 +281,15 @@ class ControllerExtensionModuleMelle extends Controller
             $this->load->model('catalog/review');
             $state['reviewCount'] = (int) $this->model_catalog_review->getTotalReviewsByProductId($product_id);
             $state['ratingValue'] = (float) $state['default_values']['rating'];
+
+            $state['full_combinations'] = array_map(function($combination) {
+                $combination['rr_product_id'] = hash('crc32b', hash('sha256', $combination['import_id']));
+                return $combination;
+            }, $state['full_combinations']);
+
+            /* RETAIL R START */
+            $this->request->get['rr_product_id'] = $this->get_rr_product_id($state['full_combinations']);
+            /* RETAIL R END */
         }
 
         $state['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add', '', true);
@@ -290,6 +299,21 @@ class ControllerExtensionModuleMelle extends Controller
         $this->document->addState($state['id'], json_encode($state));
         return $state;
     }
+
+    /* RETAIL R START */
+    private function get_rr_product_id(array $combinations)
+    {
+        if (!empty($combinations)) {
+            shuffle($combinations);
+            $random_combination = array_pop($combinations);
+            if (isset($random_combination['rr_product_id'])) {
+                return $random_combination['rr_product_id'];
+            }
+        }
+
+        return null;
+    }
+    /* RETAIL R END */
 
     public function renderProductContent($state)
     {

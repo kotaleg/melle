@@ -39,24 +39,25 @@
                     unset($this->session->data['sp_order_id']);
 
                     $this->load->model('checkout/order');
-
-                    $total = 0;
-                    foreach ($this->model_checkout_order->getOrderTotals($data['success_data']['order_id']) as $t) {
-                        if (strcmp($t['code'], 'total') === 0) {
-                            $total = $t['value'];
-                        }
-                    }
-
-                    $data['success_data']['total'] = number_format($total, 2, '.', '');
+                    $this->load->model('extension/module/super_offers');
 
                     $order_offers = array();
                     foreach ($this->model_checkout_order->getOrderProducts($data['success_data']['order_id']) as $p) {
+                        $orderProductCombination = $this->model_extension_module_super_offers
+                            ->getFirstCombinationForOrderProduct(
+                                $data['success_data']['order_id'],
+                                $p['order_product_id'],
+                                $p['product_id'],
+                            );
+
+                        if (!isset($orderProductCombination['order_id'])) {
+                            continue;
+                        }
+
                         $order_offers[] = array(
-                            'url' => $this->url->link('product/product', 'product_id=' . (int)$p['product_id']),
-                            'name' => (string)$p['name'],
+                            'id' => (string) hash('crc32b', hash('sha256', $orderProductCombination['order_id'])) ,
                             'price' => (float)$p['price'],
-                            'count' => (int)$p['quantity'],
-                            'currency' => 'RUB',
+                            'qnt' => (int)$p['quantity'],
                         );
                     }
 

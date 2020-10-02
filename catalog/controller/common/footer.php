@@ -73,6 +73,15 @@ class ControllerCommonFooter extends Controller {
         $data['phone'] = $this->config->get('config_telephone');
         $data['phoneLink'] = preg_replace('/\s+/', '', "tel:{$data['phone']}");
 
+        /* RETAIL R START */
+        if (isset($this->request->get['rr_product_id'])) {
+            $data['rr_product_id'] = $this->request->get['rr_product_id'];
+        }
+        if (isset($this->request->get['rr_category_id'])) {
+            $data['rr_category_id'] = $this->request->get['rr_category_id'];
+        }
+        /* RETAIL R END */
+
         return $this->load->view('common/footer', $data);
     }
 }
