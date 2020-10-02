@@ -219,7 +219,6 @@ export default {
       'reviewCount',
       'ratingValue',
       'in_stock',
-      'rr_product_id',
     ]),
 
     getProductCountForCurrentSelectedOptions() {
@@ -283,10 +282,6 @@ export default {
 
     addToCart() {
       this.addToCartRequest()
-
-      if (this.rr_product_id) {
-        this.rrAddToCart(this.rr_product_id)
-      }
     },
     buyOneClick() {
       this.$modal.show('one-click-modal', { source: 'buy-one-click' })
@@ -296,9 +291,6 @@ export default {
     },
     goToCheckout() {
       window.location = this.checkoutLink
-    },
-    rrAddToCart(rrProductId) {
-      try { rrApi.addToBasket(rrProductId) } catch(e) {}
     },
   },
   created() {
