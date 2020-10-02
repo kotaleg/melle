@@ -52,7 +52,7 @@
           </div>
         </div>
 
-        <div v-if="isCaptch && captchaKey" class="form-group">
+        <div v-if="isCaptcha && captchaKey" class="form-group">
           <vue-recaptcha
             v-if="isCaptcha"
             ref="review_recaptcha"
