@@ -47,7 +47,7 @@
                             ->getFirstCombinationForOrderProduct(
                                 $data['success_data']['order_id'],
                                 $p['order_product_id'],
-                                $p['product_id'],
+                                $p['product_id']
                             );
 
                         if (!isset($orderProductCombination['order_id'])) {
