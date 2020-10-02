@@ -44,18 +44,23 @@ class ModelExtensionModuleSuperOffers extends Model
         return $this->super_offers->prepareActiveOptions($product_id, $product_options);
     }
 
+    public function getCombinationForProductWithOptions($product_id, $options)
+    {
+        if ($this->isOptionsForProduct($product_id)) {
+            $active_options = $this->super_offers->prepareActiveOptions($product_id, $options);
+            return $this->super_offers->getCombinationForActiveOptions($product_id, $active_options);
+        }
+    }
+
     public function getAvailableForProductWithOptions($product_id, $options)
     {
         $quantity = 0;
 
-        if ($this->isOptionsForProduct($product_id)) {
-            $active_options = $this->super_offers->prepareActiveOptions($product_id, $options);
-            $combination = $this->super_offers->getCombinationForActiveOptions($product_id, $active_options);
+        $combination = $this->getCombinationForProductWithOptions($product_id, $options);
 
-            if ($combination !== null) {
-                if ($combination['quantity'] != $this->super_offers->getNullValue()) {
-                    $quantity = $combination['quantity'];
-                }
+        if ($combination !== null) {
+            if ($combination['quantity'] != $this->super_offers->getNullValue()) {
+                $quantity = $combination['quantity'];
             }
         }
 

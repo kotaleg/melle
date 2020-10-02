@@ -501,6 +501,7 @@ class ControllerCheckoutCart extends Controller {
         $this->load->model('extension/pro_patch/url');
         $this->load->model('extension/pro_patch/json');
         $this->load->model('extension/module/super_offers');
+        $this->load->model('extension/module/offer_id');
         $this->load->model('catalog/product');
 
         $this->load->language('checkout/cart');
@@ -531,6 +532,8 @@ class ControllerCheckoutCart extends Controller {
                     // CHECK IF AVAILABLE
                     $available = $this->model_extension_module_super_offers->getAvailableForProductWithOptions(
                         $product_id, $options);
+                    $combination = $this->model_extension_module_super_offers
+                        ->getCombinationForProductWithOptions($product_id, $options);
 
                     if ($available <= 0) {
                         $json['error'][] = sprintf($this->language->get('text_no_more'), $available);
@@ -546,6 +549,12 @@ class ControllerCheckoutCart extends Controller {
                         if ($quantity >= 1) {
                             $this->cart->add($product_id, $quantity, $options);
                             $json['added'] = true;
+
+                            if (isset($combination['import_id'])) {
+                                $json['rr_product_id'] = $this->model_extension_module_offer_id
+                                    ->createAndReturnId($combination['import_id']);
+                            }
+
                             $json['success'][] = sprintf($this->language->get('text_success'), $product_info['name']);
                         } else {
                             $json['error'][] = sprintf($this->language->get('text_no_more'), $available);
