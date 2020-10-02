@@ -50,14 +50,22 @@
                                 $p['product_id']
                             );
 
-                        if (!isset($orderProductCombination['order_id'])) {
+                        if (!isset($orderProductCombination['import_id'])) {
+                            continue;
+                        }
+
+                        $this->load->model('extension/module/offer_id');
+                        $orderProductOfferId = $this->model_extension_module_offer_id
+                            ->createAndReturnId($orderProductCombination['import_id']);
+
+                        if (!$orderProductOfferId) {
                             continue;
                         }
 
                         $order_offers[] = array(
-                            'id' => (string) hash('crc32b', hash('sha256', $orderProductCombination['order_id'])) ,
-                            'price' => (float)$p['price'],
-                            'qnt' => (int)$p['quantity'],
+                            'id' => (int) $orderProductOfferId,
+                            'price' => (float) $p['price'],
+                            'qnt' => (int) $p['quantity'],
                         );
                     }
 

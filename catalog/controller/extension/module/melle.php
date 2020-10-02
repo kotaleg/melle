@@ -282,12 +282,13 @@ class ControllerExtensionModuleMelle extends Controller
             $state['reviewCount'] = (int) $this->model_catalog_review->getTotalReviewsByProductId($product_id);
             $state['ratingValue'] = (float) $state['default_values']['rating'];
 
+            /* RETAIL R START */
+            $this->load->model('extension/module/offer_id');
             $state['full_combinations'] = array_map(function($combination) {
-                $combination['rr_product_id'] = hash('crc32b', hash('sha256', $combination['import_id']));
+                $combination['rr_product_id'] = $this->model_extension_module_offer_id->createAndReturnId($combination['import_id']);
                 return $combination;
             }, $state['full_combinations']);
 
-            /* RETAIL R START */
             $this->request->get['rr_product_id'] = $this->get_rr_product_id($state['full_combinations']);
             /* RETAIL R END */
         }
