@@ -56,3 +56,4 @@ opt
 
 system/logs/*
 php.ini*
+catalog/view/javascript/melle/dist*
