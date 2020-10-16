@@ -41,6 +41,12 @@
                     $this->load->model('checkout/order');
                     $this->load->model('extension/module/super_offers');
 
+                    $orderInfo = $this->model_checkout_order->getOrder($data['success_data']['order_id']);
+                    if (isset($orderInfo['email']) && isset($orderInfo['firstname']) && isset($orderInfo['lastname'])) {
+                        $data['success_data']['email'] = $orderInfo['email'];
+                        $data['success_data']['name'] = $orderInfo['firstname'] . $orderInfo['lastname'];
+                    }
+
                     $order_offers = array();
                     foreach ($this->model_checkout_order->getOrderProducts($data['success_data']['order_id']) as $p) {
                         $orderProductCombination = $this->model_extension_module_super_offers

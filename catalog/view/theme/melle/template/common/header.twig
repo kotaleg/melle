@@ -130,6 +130,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             items: {{success_data.order_offers}}
         });
     } catch(e) {}
+    {% if success_data.email %}
+    try {
+        rrApi.setEmail("{{success_data.email}}", { name: "{{success_data.name}}" });
+    } catch(e) {}
+    {% endif %}
 })
 </script>
 {% endif %}
