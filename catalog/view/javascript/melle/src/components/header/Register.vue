@@ -142,7 +142,7 @@
           {{ getFieldError('agree') }}
         </div>
       </div>
-      <div v-if="isCaptch && captchaKey" class="form-group">
+      <div v-if="isCaptcha && captchaKey" class="form-group">
         <vue-recaptcha
           ref="register_recaptcha"
           @verify="onCaptchaVerified"
