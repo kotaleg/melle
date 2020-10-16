@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, has } from 'lodash'
+import { has } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -48,6 +48,15 @@ const actions = {
         }
 
         notify.messageHandler(res.data, '_sidebar')
+
+        // RR START
+        if (has(res.data, 'isNewsletter') && res.data.isNewsletter === true) {
+          try {
+            rrApi.setEmail(state.form.email)
+            console.log(state.form.email)
+          } catch(e) {}
+        }
+        // RR END
       }
     )
   },

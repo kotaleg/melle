@@ -57,6 +57,7 @@
                             }
 
                             $json['redirect'] = $this->model_extension_pro_patch_url->ajax('account/account', '', true);
+                            $json['isNewsletter'] = (isset($customer_info['newsletter']) && $customer_info['newsletter']) ? true : false;
                         }
                     }
 

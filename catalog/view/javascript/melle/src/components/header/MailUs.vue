@@ -98,7 +98,7 @@
         </div>
 
         <div
-          v-if="isCaptch && captchaKey"
+          v-if="isCaptcha && captchaKey"
           class="mail-us__form-group js-mail-us__form-group--captcha"
         >
           <vue-recaptcha

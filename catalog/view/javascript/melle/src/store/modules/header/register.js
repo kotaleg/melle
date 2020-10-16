@@ -60,6 +60,14 @@ const actions = {
           }
 
           notify.messageHandler(res.data, '_sidebar')
+
+          // RR START
+          if (state.form.newsletter) {
+            try {
+              rrApi.setEmail(state.form.email)
+            } catch(e) {}
+          }
+          // RR END
         }
       )
     })
