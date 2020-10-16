@@ -753,8 +753,6 @@ class ModelApiExport extends Model
                     }
                 }
 
-                $name = trim(implode(' ', array($name, $color, $size)));
-
                 $this->_str .= "  <name>" . htmlspecialchars($name) . "</name>\n";
 
                 if ($c['barcode']) {
