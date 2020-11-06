@@ -771,28 +771,35 @@ class ModelApiExport extends Model
         $this->load->model('tool/base');
         $base_path = $this->model_tool_base->getBase();
 
-        $f = fopen($file, 'w');
+        $xmlObject = new \pro_xml\pro_xml('', [
+            'version' => '1.0',
+            'encoding' => 'UTF-8',
+        ]);
 
-        $this->_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" .
-            "<yml_catalog date=\"" . date('Y-m-d H:i') . "\">\n" .
-            "<shop>\n" .
-            "<name>" . htmlspecialchars($this->config->get('config_meta_title')) . "</name>\n" .
-            "<company>" . htmlspecialchars($this->config->get('config_meta_title')) . "</company>\n" .
-            "<url>{$base_path}</url>\n" .
-            "<currencies>\n" .
-            "  <currency id=\"RUR\" rate=\"1\" plus=\"0\"/>\n" .
-            "</currencies>\n" .
-            "<categories>\n";
-        fwrite($f, $this->_str);
+        $ymlCatalog = $xmlObject->addChild('yml_catalog', true)
+            ->setAttribute('date', date('Y-m-d H:i'));
+
+        $shop = $ymlCatalog->addChild('shop', true)
+            ->add([
+                'name' => htmlspecialchars($this->config->get('config_meta_title')),
+                'company' => htmlspecialchars($this->config->get('config_meta_title')),
+                'url' => $base_path,
+                'currencies' => [
+                    'currency' => [
+                        '@id' => 'RUR',
+                        '@rate' => '1',
+                        '@plus' => '0'
+                    ],
+            ]]);
+
+        $categories = $shop->addChild('categories', true);
 
         foreach ($this->getCategories() as $cat) {
-            $group_name = htmlspecialchars($cat['name']);
-            $this->_str = "  <category id=\"{$cat['category_id']}\">{$group_name}</category>\n";
-            fwrite($f, $this->_str);
+            $categories->addChild(['category' => htmlspecialchars($cat['name'])], true)
+                ->setAttribute('id', $cat['category_id']);
         }
 
-        $this->_str = "</categories>\n" . "<offers>\n";
-        fwrite($f, $this->_str);
+        $offers = $shop->addChild('offers', true);
 
         $pcount = 0;
         $ccount = 0;
@@ -813,18 +820,10 @@ class ModelApiExport extends Model
 
             foreach ($combinations as $c) {
 
-                $name = ($product['h1']) ? $product['h1'] : $product['name'];
-
                 $price = $this->tax->calculate(
                     $c['price'], $product['tax_class_id'], $this->config->get('config_tax'));
 
-
                 $price = (int) preg_replace('/\s+/', '', $price);
-
-                $this->_str = '';
-
-                $seo_url = $this->getSeoUrl($product['product_id']);
-                $cc = $this->getCloseCat($product['product_id']);
 
                 if ($product['image'] && is_file(DIR_IMAGE.$product['image'])) {
                     $image = $base_path . 'image/' . $product['image'];
@@ -839,77 +838,68 @@ class ModelApiExport extends Model
                 $offerId = hash('crc32b', hash('sha256', $c['import_id']));
                 $available = ($c['quantity'] > 0) ? 'true' : 'false';
 
-                $this->_str .= "<offer id=\"{$offerId}\" available=\"{$available}\">\n" .
-                    "  <url>{$seo_url}</url>\n" .
-                    "  <price>". $price ."</price>\n" .
-                    "  <currencyId>RUR</currencyId>\n" .
-                    "  <categoryId>{$cc}</categoryId>\n" .
-                    "  <picture>{$image}</picture>\n" .
-                    ((!empty($product['manufacturer'])) ? "  <vendor>" . htmlspecialchars($product['manufacturer']) . "</vendor>\n" : "") .
-                    ((!empty($product['description'])) ? "  <description>" . htmlspecialchars(strip_tags($product['description'])) . "</description>\n" : "<description>Описание у товара скоро появится</description>\n")
-                    ."  <sales_notes>мин.сумма заказа: 1000р, мин.партия: 1шт</sales_notes>\n";
+                $offerData = [
+                    '@id' => $offerId,
+                    '@available' => $available,
+                    'url' => $this->getSeoUrl($product['product_id']),
+                    'price' => $price,
+                    'currencyId' => 'RUR',
+                    'categoryId' => $this->getCloseCat($product['product_id']),
+                    'picture' => $image,
+                ];
+
+                if (!empty($product['manufacturer'])) {
+                    $offerData['vendor'] = htmlspecialchars($product['manufacturer']);
+                }
+
+                $offerData['description'] = 'Описание у товара скоро появится';
+                if (!empty($product['description'])) {
+                    $offerData['description'] = htmlspecialchars(strip_tags($product['description']));
+                }
+
+                $offerData['sales_notes'] = 'мин.сумма заказа: 1000р, мин.партия: 1шт';
 
                 if (isset($product['sku']) && $product['sku']) {
-                    $this->_str .= "  <shop-sku>{$product['sku']}</shop-sku>\n";
+                    $offerData['shop-sku'] = $product['sku'];
                 }
-
-                /* OPTIONS */
-                $color = '';
-                $size = '';
-
-                if (isset($c['required'])) {
-                    foreach ($c['required'] as $reqValues) {
-                        if (isset($reqValues['option_a'])
-                        && isset($reqValues['option_value_a'])) {
-
-                            foreach ($options as $o) {
-                                if (!isset($o['class'])
-                                || !isset($o['option_id'])
-                                || !isset($o['name'])) {
-                                    continue;
-                                }
-
-                                if ($o['option_id'] === $reqValues['option_a']) {
-                                    if (isset($o['product_option_value'])) {
-                                        foreach ($o['product_option_value'] as $pov) {
-                                            if (isset($pov['name'])
-                                            && isset($pov['option_value_id'])
-                                            && $pov['option_value_id'] === $reqValues['option_value_a']) {
-
-                                                $isIntOption = false;
-
-                                                $this->_str .= "  <param name=\"{$o['name']}\"" . (($isIntOption) ? " unit=\"INT\"" : "") . ">{$pov['name']}</param>\n";
-
-                                                switch ($o['class']) {
-                                                    case 'color':
-                                                        $color = $pov['name'];
-                                                        break;
-
-                                                    case 'size':
-                                                        $size = $pov['name'];
-                                                        break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-                $name = trim(implode(' ', array($name, $color, $size)));
-
-                $this->_str .= "  <name>" . htmlspecialchars($name) . "</name>\n";
 
                 if ($c['barcode']) {
-                    $this->_str .= "  <barcode>" . htmlspecialchars($c['barcode']) . "</barcode>\n";
+                    $offerData['barcode'] = htmlspecialchars($c['barcode']);
                 }
 
-                $this->_str .= "</offer>\n";
-                fwrite($f, $this->_str);
-                unset($this->_str);
+                $offer = $offers->add([
+                    'offer' => $offerData,
+                ], true);
+
+                /* OPTIONS START */
+                $color = '';
+                $size = '';
+                $optionValues = $this->getOptionValuesForCombination($options, $c);
+
+                foreach ($optionValues as $optionData) {
+                    switch ($optionData['optionClass']) {
+                        case 'color':
+                            $color = $optionData['productOptionName'];
+                            break;
+
+                        case 'size':
+                            $size = $optionData['productOptionName'];
+                            break;
+                    }
+
+                    $offer->add([
+                        'param' => [
+                            '@name' => $optionData['optionName'],
+                            '@' => $optionData['productOptionName'],
+                        ]
+                    ]);
+                }
+                /* OPTIONS END */
+
+                $name = ($product['h1']) ? $product['h1'] : $product['name'];
+                $name = trim(implode(' ', array($name, $color, $size)));
+
+                $offer->addChild(['name' => htmlspecialchars($name)]);
 
                 $ccount++;
             }
@@ -917,11 +907,8 @@ class ModelApiExport extends Model
             $pcount++;
         }
 
-        $this->_str = "</offers>\n" .
-            "</shop>\n" .
-            "</yml_catalog>";
-
-        fwrite($f, $this->_str);
+        $f = fopen($file, 'w');
+        fwrite($f, $xmlObject->xml());
         fclose($f);
 
         $json['message'][] = "Обработано {$pcount} товаров.";
