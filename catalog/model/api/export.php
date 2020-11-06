@@ -75,6 +75,88 @@ class ModelApiExport extends Model
         return $json;
     }
 
+    public function actionNoconnectedimageExport()
+    {
+        $file = $this->export_path . 'noConnectedImageLog.csv';
+        if (is_file($file)) { @unlink($file); }
+        $this->createPath($file);
+
+        $f = fopen($file, 'w');
+
+        $this->_str = "\xEF\xBB\xBF";
+        fwrite($f, $this->_str);
+        fclose($f);
+
+        $ex = new \pro_csv\pro_csv('EXPORT');
+        $ex->unstrict();
+        $ex->setDelimiter(",");
+        $ex->setFileMode("a");
+        $ex->setColumnHeaders(array('PRODUCT_ID','TITLE','COLOR','SIZE'));
+
+        $pcount = 0;
+        $rows = array();
+
+        $this->load->model('catalog/product');
+        $this->load->model('api/import_1c/product');
+        $this->load->model('extension/module/super_offers');
+        $products = $this->model_catalog_product->getProducts();
+
+        foreach ($products as $product) {
+
+            $combinations = $this->model_extension_module_super_offers
+                ->getFullCombinations($product['product_id']);
+
+            $options = $this->model_extension_module_super_offers
+                ->getOptions($product['product_id']);
+
+            foreach ($combinations as $c) {
+
+                if ($c['quantity'] <= 0) {
+                    continue;
+                }
+
+                if ($c['image']) {
+                    continue;
+                }
+
+                /* OPTIONS START */
+                $color = '';
+                $size = '';
+                $optionValues = $this->getOptionValuesForCombination($options, $c);
+
+                foreach ($optionValues as $optionData) {
+                    switch ($optionData['optionClass']) {
+                        case 'color':
+                            $color = $optionData['productOptionName'];
+                            break;
+
+                        case 'size':
+                            $size = $optionData['productOptionName'];
+                            break;
+                    }
+                }
+                /* OPTIONS END */
+
+                $name = ($product['h1']) ? $product['h1'] : $product['name'];
+
+                $rows[] = array(
+                    $product['product_id'],
+                    $name,
+                    $color,
+                    $size,
+                );
+            }
+
+            $pcount++;
+        }
+
+        $json['filePath'] = str_replace($this->getRootPath(), HTTPS_SERVER, $file);
+        $json['success'] = $ex->export($file, $rows);
+
+        $json['message'][] = "Обработано {$pcount} товаров.";
+        return $json;
+    }
+
     public function actionShopscriptExport()
     {
         $file = $this->export_path . 'shopscript-full.csv';
