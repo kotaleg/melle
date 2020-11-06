@@ -1308,11 +1308,8 @@ class ModelApiExport extends Model
             $pcount++;
         }
 
-        $this->_str = "</offers>\n" .
-            "</shop>\n" .
-            "</yml_catalog>";
-
-        fwrite($f, $this->_str);
+        $f = fopen($file, 'w');
+        fwrite($f, $xmlObject->xml());
         fclose($f);
 
         $json['message'][] = "Обработано {$pcount} товаров.";
