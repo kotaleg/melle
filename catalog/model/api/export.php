@@ -750,6 +750,10 @@ class ModelApiExport extends Model
 
             foreach ($combinations as $c) {
 
+                if ($c['quantity'] <= 0) {
+                    continue;
+                }
+
                 $this->load->model('extension/module/offer_id');
                 $offerId = $this->model_extension_module_offer_id->createAndReturnId($c['import_id']);
 
@@ -1063,10 +1067,6 @@ class ModelApiExport extends Model
 
             foreach ($combinations as $c) {
 
-                if ($c['quantity'] < 3) {
-                    continue;
-                }
-
                 $price = $this->tax->calculate(
                     $c['price'], $product['tax_class_id'], $this->config->get('config_tax'));
 
@@ -1083,7 +1083,7 @@ class ModelApiExport extends Model
                 }
 
                 $offerId = hash('crc32b', hash('sha256', $c['import_id']));
-                $available = ($c['quantity'] > 0) ? 'true' : 'false';
+                $available = ($c['quantity'] >= 3) ? 'true' : 'false';
 
                 $offerData = [
                     '@id' => $offerId,
