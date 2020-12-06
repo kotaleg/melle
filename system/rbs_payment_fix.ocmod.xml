@@ -54,24 +54,25 @@
                 /* EXTRA NAME START */
                 try {
                     $this->load->model('catalog/product');
-                    $this->load->model('api/export');
+                    $this->load->model('extension/module/melle');
 
-                    $productExtra = $this->model_catalog_product->getProduct($product['product_id']);
-                    $itemCode = isset($productExtra['name']) ? $productExtra['name'] : $itemCode;
-                    $name = $this->model_api_export->getClosestCategoryNameForProduct($product['product_id']);
+                    $productInfo = $this->model_catalog_product->getProduct($product['product_id']);
+                    $itemCode = isset($productInfo['name']) ? $productInfo['name'] : '';
+                    $sku = isset($productInfo['sku']) ? $productInfo['sku'] : '';
 
-                    if (isset($productExtra['name']) && $productExtra['name']) {
-                        if (strpos($productExtra['name'], ' ')) {
-                            $nameEx = explode(' ', $productExtra['name']);
-                            $nameEx = array_shift($nameEx);
-                        } else {
-                            $nameEx = $productExtra['name'];
-                        }
-
-                        if ($nameEx) {
-                            $name .= " {$nameEx}";
+                    $productOptions = '';
+                    if (isset($product['option']) && is_array($product['option'])) {
+                        foreach ($product['option'] as $optionData) {
+                            if (isset($optionData['name']) && isset($optionData['value'])) {
+                                $productOptions .= "{$optionData['name']}: {$optionData['value']} ";
+                            }
                         }
                     }
+
+                    $closestCategoryType = $this->model_extension_module_melle
+                        ->getClosestCategoryTypeForProduct($product['product_id']);
+
+                    $name = implode(' ', [$closestCategoryType, $sku, $productOptions]);
 
                     if ($name) {
                         $product['name'] = $name;
@@ -118,6 +119,15 @@
             <add position="before"><![CDATA[
                 /* FIX TAX TYPE START */
                 $tax_type = $this->config->get('payment_rbs_taxType');
+                /* FIX TAX TYPE END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[$orderBundle['cartItems']['items'][] = $delivery;]]></search>
+            <add position="before"><![CDATA[
+                /* FIX TAX TYPE START */
+                $delivery['name'] = 'доставка';
                 /* FIX TAX TYPE END */
             ]]></add>
         </operation>

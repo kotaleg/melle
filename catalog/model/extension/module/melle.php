@@ -161,4 +161,52 @@ class ModelExtensionModuleMelle extends Controller
         }
     }
 
+    public function getProductCategoriesWithPathAndType($productId)
+    {
+        return $this->db->query("SELECT ptc.category_id,
+            (
+                SELECT GROUP_CONCAT(cp.path_id
+                ORDER BY level SEPARATOR '-')
+                FROM `". DB_PREFIX ."category_path` cp
+                WHERE cp.category_id = ptc.category_id
+                GROUP BY cp.category_id
+            ) AS `path`
+            FROM `". DB_PREFIX ."product_to_category` ptc
+            WHERE `product_id` = '" . (int) $productId . "'")->rows;
+    }
+
+    public function getCategoryType($categoryId)
+    {
+        $q = $this->db->query("SELECT c.category_type
+            FROM `". DB_PREFIX ."category` c
+            WHERE `category_id` = '" . (int) $categoryId . "'
+            AND `status` = 1")->row;
+
+        if (isset($q['category_type'])) {
+            return $q['category_type'];
+        }
+    }
+
+    public function getClosestCategoryTypeForProduct($productId)
+    {
+        $categories = $this->getProductCategoriesWithPathAndType($productId);
+
+        // SORT BY PATH LENGTH
+        usort($categories, function($a, $b) {
+            return strlen($b['path']) - strlen($a['path']);
+        });
+
+        foreach ($categories as $key => $categoryData) {
+            $pathParts = explode('-', $categoryData['path']);
+            $pathParts = array_reverse($pathParts);
+
+            foreach ($pathParts as $categoryId) {
+                $categoryType = $this->getCategoryType($categoryId);
+                if (utf8_strlen(trim($categoryType)) > 0) {
+                    return $categoryType;
+                }
+            }
+        }
+    }
+
 }
