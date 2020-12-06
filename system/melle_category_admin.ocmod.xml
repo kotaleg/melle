@@ -26,7 +26,7 @@
 
         <operation error="skip">
             <search><![CDATA[, date_modified = NOW() WHERE category_id = '" . (int)$category_id . "'");]]></search>
-            <add position="replace"><![CDATA[, date_modified = NOW(), `import_id` = '".$this->db->escape($data['import_id'])."', `sitemap_p` = '".$this->db->escape($data['sitemap_p'])."' WHERE category_id = '" . (int)$category_id . "'");]]></add>
+            <add position="replace"><![CDATA[, date_modified = NOW(), `import_id` = '".$this->db->escape($data['import_id'])."', `sitemap_p` = '".$this->db->escape($data['sitemap_p'])."', `category_type` = '".$this->db->escape($data['category_type'])."' WHERE category_id = '" . (int)$category_id . "'");]]></add>
         </operation>
     </file>
 
@@ -51,10 +51,19 @@
                     $data['sitemap_p'] = 0.5;
                 }
 
+                if (isset($this->request->post['category_type'])) {
+                    $data['category_type'] = $this->request->post['category_type'];
+                } elseif (!empty($category_info)) {
+                    $data['category_type'] = $category_info['category_type'];
+                } else {
+                    $data['category_type'] = '';
+                }
+
                 $data['entry_small_description'] = $this->language->get('entry_small_description');
                 $data['entry_h1'] = $this->language->get('entry_h1');
                 $data['entry_import_id'] = $this->language->get('entry_import_id');
                 $data['entry_sitemap_p'] = $this->language->get('entry_sitemap_p');
+                $data['entry_category_type'] = $this->language->get('entry_category_type');
                 /* IVAN MOD END */
             ]]></add>
         </operation>
@@ -68,6 +77,7 @@
                 $_['entry_small_description'] = 'Краткое описание';
                 $_['entry_h1'] = 'H1';
                 $_['entry_import_id'] = 'Import ID';
+                $_['entry_category_type'] = 'Тип категории';
                 $_['entry_sitemap_p'] = 'Приоритет (Sitemap)';
                 /* IVAN MOD END */
             ]]></add>
@@ -106,6 +116,13 @@
                     <label class="col-sm-2 control-label" for="input-importid">{{ entry_import_id }}</label>
                     <div class="col-sm-10">
                       <input type="text" name="import_id" value="{{ import_id }}" placeholder="{{ entry_import_id }}" id="input-importid" class="form-control" readonly="readonly" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-importid">{{ entry_category_type }}</label>
+                    <div class="col-sm-10">
+                      <input type="text" name="category_type" value="{{ category_type }}" placeholder="{{ entry_category_type }}" id="input-importid" class="form-control" />
                     </div>
                   </div>
                   <!-- IVAN MOD END -->
