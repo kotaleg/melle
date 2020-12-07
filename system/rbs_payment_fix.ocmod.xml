@@ -58,7 +58,6 @@
 
                     $productInfo = $this->model_catalog_product->getProduct($product['product_id']);
                     $itemCode = isset($productInfo['name']) ? $productInfo['name'] : '';
-                    $sku = isset($productInfo['sku']) ? $productInfo['sku'] : '';
 
                     $productOptions = '';
                     if (isset($product['option']) && is_array($product['option'])) {
@@ -72,7 +71,7 @@
                     $closestCategoryType = $this->model_extension_module_melle
                         ->getClosestCategoryTypeForProduct($product['product_id']);
 
-                    $name = implode(' ', [$closestCategoryType, $sku, $productOptions]);
+                    $name = implode(' ', [$closestCategoryType, $productOptions]);
 
                     if ($name) {
                         $product['name'] = $name;
