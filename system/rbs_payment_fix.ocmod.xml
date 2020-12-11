@@ -63,7 +63,7 @@
                     if (isset($product['option']) && is_array($product['option'])) {
                         foreach ($product['option'] as $optionData) {
                             if (isset($optionData['name']) && isset($optionData['value'])) {
-                                $productOptions .= "{$optionData['name']}: {$optionData['value']} ";
+                                $productOptions .= "{$optionData['value']} ";
                             }
                         }
                     }
@@ -71,7 +71,7 @@
                     $closestCategoryType = $this->model_extension_module_melle
                         ->getClosestCategoryTypeForProduct($product['product_id']);
 
-                    $name = implode(' ', [$closestCategoryType, $productOptions]);
+                    $name = implode(' ', [$closestCategoryType, $itemCode, $productOptions]);
 
                     if ($name) {
                         $product['name'] = $name;
