@@ -30,7 +30,7 @@
                                 {% if thumb %}
                                     <li class="prod-card__item-photo"
                                         data-hash="default">
-                                        <img src="{{ thumb }}"
+                                        <img data-lazy="{{ thumb }}"
                                             class="img-fluid" />
                                     </li>
                                 {% endif %}
@@ -38,7 +38,8 @@
                                     <li class="prod-card__item-photo"
                                         data-hash="{{ i.imageHash }}">
                                         <img itemprop="image"
-                                            src="{{ i.thumb }}"
+                                            {% if loop.first %}src="{{ i.popup }}"{% endif %}
+                                            data-lazy="{{ i.thumb }}"
                                             class="img-fluid" />
                                     </li>
                                 {% endfor %}
@@ -47,14 +48,15 @@
                                 {% if thumb %}
                                     <li class="prod-card__item-big-photo"
                                         data-zoom-image="{{ popup }}">
-                                        <img src="{{ popup }}"
+                                        <img data-lazy="{{ popup }}"
                                             class="img-fluid" />
                                     </li>
                                 {% endif %}
                                 {% for i in images %}
                                     <li class="prod-card__item-big-photo">
                                         <img itemprop="image"
-                                            src="{{ i.popup }}"
+                                            {% if loop.first %}src="{{ i.popup }}"{% endif %}
+                                            data-lazy="{{ i.popup }}"
                                             data-zoom-image="{{ i.popup }}"
                                             class="img-fluid" />
                                     </li>

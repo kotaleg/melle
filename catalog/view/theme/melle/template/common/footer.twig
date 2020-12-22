@@ -154,9 +154,9 @@ $(function() {
     setTimeout(function() {
         $('.product-images').removeClass('d-none').addClass('d-flex');
         jQuery().zoom&&$(window).width()>1200&&($(document).on("gallery.zoom.init",".prod-card__item-big-photo",function(){$(this).zoom()}),$(".prod-card__item-big-photo").length>0&&$(".prod-card__item-big-photo").trigger("gallery.zoom.init"));
-        jQuery().slick&&($(".slider-for").slick({slidesToShow:1,slidesToScroll:1,arrows:!1,fade:!0,asNavFor:".slider-nav"}),$(".slider-nav").slick({slidesPerRow:1,slidesToShow:2,slidesToScroll:1,asNavFor:".slider-for",dots:!1,focusOnSelect:!0,vertical:!0,adaptiveHeight:!0,centerMode:!0,responsive:[{breakpoint:1024,settings:{}},{breakpoint:768,settings:{vertical:!1,arrows:!1}}]}));
+        jQuery().slick&&($(".slider-for").slick({lazyLoad:'ondemand',slidesToShow:1,slidesToScroll:1,arrows:!1,fade:!0,asNavFor:".slider-nav"}),$(".slider-nav").slick({lazyLoad:'ondemand',slidesPerRow:1,slidesToShow:2,slidesToScroll:1,asNavFor:".slider-for",dots:!1,focusOnSelect:!0,vertical:!0,adaptiveHeight:!0,centerMode:!0,responsive:[{breakpoint:1024,settings:{}},{breakpoint:768,settings:{vertical:!1,arrows:!1}}]}));
         jQuery().fancybox&&$("[data-fancybox]").fancybox({});
-    }, 300);
+    }, 500);
 });
 </script>
 {% endif %}

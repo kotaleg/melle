@@ -233,8 +233,8 @@ class ControllerProductProduct extends Controller {
             $this->document->addScript('catalog/view/javascript/melle/query/slick/slick.min.js');
             $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick.css');
             $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick-theme.css');
-            $this->document->addStyle('https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css');
-            $this->document->addScript('https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js');
+            $this->document->addStyle('https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css');
+            $this->document->addScript('https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js');
 
             $data['heading_title'] = $product_info['name'];
 

@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /* FANCY START */
     if(jQuery().fancybox) {
         $('[data-fancybox]').fancybox({
-            // Options will go here
+            defaultType: "image",
         });
     }
     /* FANCY END */
