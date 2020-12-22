@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>pro_image_proxy</name>
+    <code>pro_image_proxy</code>
+    <description>Image Proxy PRO</description>
+    <version>0.0.1</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="admin/model/tool/image.php">
+        <operation error="skip">
+            <search><![CDATA[if (!is_file(DIR_IMAGE . $filename)]]></search>
+            <add position="before"><![CDATA[
+                // PRO_IMAGE_PROXY START
+                $this->load->model('extension/module/pro_image_proxy');
+                $preparedImageUrl = $this->model_extension_module_pro_image_proxy
+                    ->prepareUrl($filename, $width, $height);
+                if (is_string($preparedImageUrl)) {
+                    return $preparedImageUrl;
+                }
+                // PRO_IMAGE_PROXY END
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/tool/image.php">
+        <operation error="skip">
+            <search><![CDATA[if (!is_file(DIR_IMAGE . $filename)]]></search>
+            <add position="before"><![CDATA[
+                // PRO_IMAGE_PROXY START
+                $this->load->model('extension/module/pro_image_proxy');
+                if (defined('JOURNAL3_ACTIVE') && isset($type)) {
+                    $preparedImageUrl = $this->model_extension_module_pro_image_proxy
+                        ->prepareUrl($filename, $width, $height, $type);
+                } else {
+                    $preparedImageUrl = $this->model_extension_module_pro_image_proxy
+                        ->prepareUrl($filename, $width, $height);
+                }
+                if (is_string($preparedImageUrl)) {
+                    return $preparedImageUrl;
+                }
+                // PRO_IMAGE_PROXY END
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

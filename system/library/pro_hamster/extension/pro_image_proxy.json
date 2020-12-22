@@ -1,0 +1,14 @@
+{
+  "codename": "pro_image_proxy",
+  "version": "0.2.1",
+  "name": "PRO Image Proxy",
+  "description": "PRO Image Proxy",
+  "author": {
+    "name": "PRO Hamster",
+    "url": "https://prohamster.com/"
+  },
+  "require": {
+    "pro_patch": ">= 0.0.1",
+    "pro_style": ">= 0.0.1"
+  }
+}
