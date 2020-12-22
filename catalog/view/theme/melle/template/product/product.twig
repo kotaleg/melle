@@ -25,12 +25,13 @@
             <div class="row">
                 {% if thumb or images %}
                     <div class="col-lg-5">
-                        <div class="d-none mt-3 product-images">
+                        <div class="mt-3 d-none product-images">
                             <ul class="d-none d-md-block d-flex flex-column flex-shrink-0 justify-content-center p-0 slider-nav">
                                 {% if thumb %}
                                     <li class="prod-card__item-photo"
                                         data-hash="default">
-                                        <img data-lazy="{{ thumb }}"
+                                        <img itemprop="image"
+                                            src="{{ thumb }}"
                                             class="img-fluid" />
                                     </li>
                                 {% endif %}
@@ -38,7 +39,6 @@
                                     <li class="prod-card__item-photo"
                                         data-hash="{{ i.imageHash }}">
                                         <img itemprop="image"
-                                            {% if loop.first %}src="{{ i.popup }}"{% endif %}
                                             data-lazy="{{ i.thumb }}"
                                             class="img-fluid" />
                                     </li>
@@ -46,17 +46,17 @@
                             </ul>
                             <ul class="prod-card__list-big-photo slider-for">
                                 {% if thumb %}
-                                    <li class="prod-card__item-big-photo"
-                                        data-zoom-image="{{ popup }}">
-                                        <img data-lazy="{{ popup }}"
+                                    <li class="prod-card__item-big-photo">
+                                        <img itemprop="image"
+                                            src="{{ popup }}"
+                                            data-zoom-image="{{ popup }}"
                                             class="img-fluid" />
                                     </li>
                                 {% endif %}
                                 {% for i in images %}
                                     <li class="prod-card__item-big-photo">
                                         <img itemprop="image"
-                                            {% if loop.first %}src="{{ i.popup }}"{% endif %}
-                                            data-lazy="{{ i.popup }}"
+                                            src="{{ i.popup }}"
                                             data-zoom-image="{{ i.popup }}"
                                             class="img-fluid" />
                                     </li>
