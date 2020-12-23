@@ -59,6 +59,10 @@ function injectScript(c, a, l) {
 }
 </script>
 
+{% if pagetype == 'checkout' %}
+<script src="{{base}}catalog/view/javascript/jquery/jquery-2.2.4.min.js" type="text/javascript"></script>
+{% endif %}
+
 {% for state in states %}
 <script type="text/javascript">window.__{{state.codename}}__ = {{state.json}};</script>
 {% endfor %}
