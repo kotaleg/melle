@@ -27,6 +27,11 @@ mix.sass(
       ],
       whitelistPatterns: [
         /mm-*/,
+        /pb-*/,
+        /pt-*/,
+        /slider-block/,
+        /melle-blocks/,
+        /melle-block/,
       ],
     },
   })
