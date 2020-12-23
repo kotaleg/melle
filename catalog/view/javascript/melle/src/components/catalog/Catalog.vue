@@ -12,7 +12,7 @@
         ]"
       >
         <a @click="gtmProductClick(i)" :href="p.href">
-          <img :src="p.image" :alt="p.h1" class="img-fluid" />
+          <img :src="p.image" loading="lazy" width="365" height="468" :alt="p.h1" class="img-fluid" />
         </a>
 
         <div v-if="p.special_text" class="p-2 special-text">
