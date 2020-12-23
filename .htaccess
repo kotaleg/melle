@@ -72,11 +72,3 @@ RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
 # REMOVE SLASH AT THE END END
 
 RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
-
-# Exception: Images
-SetEnvIfNoCase REQUEST_URI \.(?:gif|jpg|jpeg|png)$ no-gzip dont-vary
-
-# Drop problematic browsers
-BrowserMatch ^Mozilla/4 gzip-only-text/html
-BrowserMatch ^Mozilla/4\.0[678] no-gzip
-BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
