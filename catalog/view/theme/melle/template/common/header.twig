@@ -9,6 +9,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Accept-CH" content="DPR, Viewport-Width, Width">
 <title>{{ title }}</title>
 <base href="{{ base }}" />
 {% if description %}
@@ -26,6 +27,11 @@
 <link rel="preload" href="{{base}}catalog/view/theme/melle/fonts/CenturyGothic-Bold.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="{{base}}catalog/view/theme/melle/fonts/PTRoubleSans.otf" as="font" type="font/otf" crossorigin>
 <link rel="preload" href="{{base}}catalog/view/theme/melle/fonts/CenturyGothicRegular/CenturyGothicRegular.woff" as="font" type="font/woff" crossorigin>
+
+<link rel="preload" href="{{base}}catalog/view/javascript/jquery/jquery-2.2.4.min.js" as="script">
+<link rel="preload" href="{{base}}catalog/view/javascript/melle/dist/manifest.js{{cache_postfix}}" as="script">
+<link rel="preload" href="{{base}}catalog/view/javascript/melle/dist/vendor.js{{cache_postfix}}" as="script">
+<link rel="preload" href="{{base}}catalog/view/javascript/melle/dist/melle.js{{cache_postfix}}" as="script">
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -49,11 +55,12 @@
 <script src="{{ script }}{{cache_postfix}}" type="text/javascript"></script>
 {% endfor %}
 
+{% if not is_local %}
+
 {% for analytic in analytics %}
 {{ analytic }}
 {% endfor %}
 
-{% if not is_local %}
 <!-- Global sitee tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-110511917-1"></script><script>
   window.dataLayer = window.dataLayer || [];
