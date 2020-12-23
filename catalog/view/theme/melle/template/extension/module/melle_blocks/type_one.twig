@@ -3,7 +3,7 @@
     <div class="py-2">
         {% if image %}
             <a href="{{ link }}">
-                <img src="{{ image }}" alt="{{ text }}" class="img-fluid" />
+                <img loading="lazy" src="{{ image }}" alt="{{ text }}" class="img-fluid" />
             </a>
         {% endif %}
     </div>
