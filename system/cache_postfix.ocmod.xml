@@ -7,11 +7,11 @@
     <author>PRO Hamster</author>
     <link>http://prohamster.com</link>
 
-    <file path="catalog/controller/common/header.php">
+    <file path="catalog/controller/common/{header,footer}.php">
 
         <operation error="skip">
-            <search><![CDATA[$data['base'] = $server;]]></search>
-            <add position="before"><![CDATA[
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
                 /* CACHE_POSTFIX START */
                 if ($this->config->get('developer_sass')) {
                     $cachedPostfix = $this->cache->get('developer_sass.cache_postfix');
