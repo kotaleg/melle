@@ -229,13 +229,6 @@ class ControllerProductProduct extends Controller {
             $this->document->setKeywords($product_info['meta_keyword']);
             $this->document->addLink($this->url->link('product/product', 'product_id=' . $this->request->get['product_id']), 'canonical');
 
-            $this->document->addScript('catalog/view/javascript/melle/query/zoom/jquery.zoom.min.js');
-            $this->document->addScript('catalog/view/javascript/melle/query/slick/slick.min.js');
-            $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick.css');
-            $this->document->addStyle('catalog/view/javascript/melle/query/slick/slick-theme.css');
-            $this->document->addStyle('https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css');
-            $this->document->addScript('https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js');
-
             $data['heading_title'] = $product_info['name'];
 
             $this->load->model('extension/module/melle');
