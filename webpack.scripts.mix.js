@@ -3,36 +3,29 @@ const mix = require('laravel-mix')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 const CODENAME = 'melle'
-const CATALOG_JS_PATH = path.join('catalog/view/javascript', CODENAME)
+const CATALOG_THEME_PATH = path.join('catalog/view/theme', CODENAME)
+const CATALOG_JS_PATH = path.join(CATALOG_THEME_PATH, 'javascript')
 
 mix.js(path.join(CATALOG_JS_PATH, 'src/main.js'), path.join(CATALOG_JS_PATH, 'dist/'+CODENAME+'.js'))
 
 mix.disableNotifications()
 
-mix.setPublicPath(path.join(CATALOG_JS_PATH, 'dist/'))
+mix.setPublicPath(path.join(CATALOG_JS_PATH, 'dist'))
 
-mix.extract([
-  'vue',
-  'vuex',
-  'vue-router',
-  'axios',
-  'vue-recaptcha',
-  'vue-the-mask',
-  'vue-notification',
-  'vue-js-modal',
-  'vue-select',
-  'vue-carousel',
-  'vue-rate-it',
-  'algoliasearch',
-  'vue-instantsearch',
-])
+mix.extract()
 
 if (mix.inProduction()) {
   mix.version();
 }
 
 mix.webpackConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(path.join(CATALOG_JS_PATH, 'src')),
+    },
+  },
   plugins: [
     // new BundleAnalyzerPlugin()
   ],
 })
+
