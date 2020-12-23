@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_disable_sass_compile</name>
+    <code>melle_disable_sass_compile</code>
+    <description>Melle Disable SASS compile</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="system/config/catalog.php">
+        <operation error="skip">
+            <search><![CDATA['startup/sass',]]></search>
+            <add position="replace"><![CDATA[/*'startup/sass',*/]]></add>
+        </operation>
+    </file>
+
+</modification>
