@@ -57,3 +57,6 @@ opt
 system/logs/*
 php.ini*
 catalog/view/javascript/melle/dist*
+catalog/view/theme/melle/javascript/dist*
+catalog/view/theme/melle/stylesheet/compiled/*
+!catalog/view/theme/melle/stylesheet/compiled/.gitkeep
