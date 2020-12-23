@@ -465,8 +465,6 @@ class ControllerExtensionModuleMelle extends Controller
         $state['slider_options'] = $this->model_catalog_super->prepareSliderOptions();
         $state['query_params'] = $this->model_catalog_super->getDefaultFilterQueryParams();
 
-        // $this->document->addScript('catalog/view/javascript/melle/query/scrolloverflow.min.js');
-
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
         return $state;
