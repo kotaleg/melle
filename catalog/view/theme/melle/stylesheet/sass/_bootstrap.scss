@@ -5,11 +5,12 @@ $light-gray-color: #e7e7e7;
 $ocean-color: #00b9bf;
 $orange-color: #e55726;
 
-$body-color: $white-color;
+$body-color:$black-color;
 $primary-button-color: $orange-color;
 $font-family-sans-serif: 'CenturyGothicRegular', sans-serif;
 $font-family-bold: 'CenturyGothic-Bold', sans-serif;
 
+@import '~bootstrap/scss/bootstrap';
 @import 'fonts';
 
 body {
@@ -168,6 +169,8 @@ button {
 @import 'modules/vue_dialog';
 @import 'modules/vue_tooltip';
 @import 'modules/vue_select';
+
+@import '~vue-loading-overlay/dist/vue-loading.min.css';
 
 #info-page {
   img {
