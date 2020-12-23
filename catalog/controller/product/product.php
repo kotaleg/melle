@@ -306,26 +306,29 @@ class ControllerProductProduct extends Controller {
 
             $this->load->model('tool/image');
 
-            if ($product_info['image']) {
-                $data['popup'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true);
-            } else {
-                $data['popup'] = '';
-            }
-
-            if ($product_info['image']) {
-                $data['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_height'), true);
-            } else {
-                $data['thumb'] = '';
-            }
-
             $data['images'] = array();
+
+            if ($product_info['image']) {
+                $data['images'][] = array(
+                    'zoom' => $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width') * 2, $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height') * 2, true),
+                    'popup' => $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true),
+                    'image' => $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), true),
+                    'thumb' => $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), true),
+
+                    /* IVAN MODIFICATION */
+                    'imageHash' => md5($product_info['image']),
+                    /* IVAN MODIFICATION */
+                );
+            }
 
             $results = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
 
             foreach ($results as $result) {
                 $data['images'][] = array(
+                    'zoom' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width') * 2, $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height') * 2, true),
                     'popup' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true),
-                    'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'), true),
+                    'image' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), true),
+                    'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), true),
 
                     /* IVAN MODIFICATION */
                     'imageHash' => md5($result['image']),
