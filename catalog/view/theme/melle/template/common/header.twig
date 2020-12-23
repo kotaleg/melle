@@ -10,12 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Accept-CH" content="DPR, Viewport-Width, Width">
-<title>{{ title }}</title>
-<base href="{{ base }}" />
 {% if description %}
 <meta name="description" content="{{ description }}" />
 {% endif %}
-
 <meta property="og:site_name" content="{{site_name}}" />
 <meta property="og:url" content='{{base}}'/>
 <meta property="og:title" content="{{title}}"/>
@@ -24,18 +21,26 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="{{og.image}}"/>
 
+<meta name="yandex-verification" content="25a6a52c8f079663" />
+
+<title>{{ title }}</title>
+<base href="{{ base }}" />
+
 <link rel="preload" href="{{base}}catalog/view/theme/melle/fonts/CenturyGothic-Bold.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="{{base}}catalog/view/theme/melle/fonts/PTRoubleSans.otf" as="font" type="font/otf" crossorigin>
 <link rel="preload" href="{{base}}catalog/view/theme/melle/fonts/CenturyGothicRegular/CenturyGothicRegular.woff" as="font" type="font/woff" crossorigin>
 
 <link rel="preload" href="{{base}}catalog/view/javascript/jquery/jquery-2.2.4.min.js" as="script">
-<link rel="preload" href="{{base}}catalog/view/javascript/melle/dist/manifest.js{{cache_postfix}}" as="script">
-<link rel="preload" href="{{base}}catalog/view/javascript/melle/dist/vendor.js{{cache_postfix}}" as="script">
-<link rel="preload" href="{{base}}catalog/view/javascript/melle/dist/melle.js{{cache_postfix}}" as="script">
+<link rel="preload" href="{{base}}catalog/view/theme/melle/javascript/dist/manifest.js{{cache_postfix}}" as="script">
+<link rel="preload" href="{{base}}catalog/view/theme/melle/javascript/dist/vendor.js{{cache_postfix}}" as="script">
+<link rel="preload" href="{{base}}catalog/view/theme/melle/javascript/dist/melle.js{{cache_postfix}}" as="script">
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-<link href="{{base}}catalog/view/theme/melle/stylesheet/bootstrap.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
+<link href="{{base}}catalog/view/theme/melle/stylesheet/compiled/bootstrap.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
+
+{% if pagetype == 'product' %}
+<link href="{{base}}catalog/view/theme/melle/javascript/jquery/slick/slick.min.css" rel="stylesheet" type="text/css" media="(min-width: 992px)" />
+<link href="{{base}}catalog/view/theme/melle/javascript/jquery/fancybox/jquery.fancybox.min.css" rel="stylesheet" type="text/css" crossorigin="anonymous" media="(min-width: 992px)" />
+{% endif %}
 
 {% for style in styles %}
 <link href="{{ style.href }}{{cache_postfix}}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
@@ -45,7 +50,14 @@
 <link href="{{ link.href }}" rel="{{ link.rel }}" />
 {% endfor %}
 
-<script src="{{base}}catalog/view/javascript/jquery/jquery-2.2.4.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+function injectStyle(c, l) {
+  n = document.createElement("script"), o = document.getElementsByTagName("link")[0], n.rel = 'stylesheet', n.href = c, o.parentNode.insertBefore(n, o), n.onload = l
+}
+function injectScript(c, a, l) {
+  n = document.createElement("script"), o = document.getElementsByTagName("script")[0], n.async = a, n.src = c, o.parentNode.insertBefore(n, o), n.onload = l
+}
+</script>
 
 {% for state in states %}
 <script type="text/javascript">window.__{{state.codename}}__ = {{state.json}};</script>
@@ -61,112 +73,14 @@
 {{ analytic }}
 {% endfor %}
 
-<!-- Global sitee tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110511917-1"></script><script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'UA-110511917-1');
-</script>
-
 <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+<script async defer>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.defer=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-KWDGTS9');</script>
 <!-- End Google Tag Manager -->
 
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript" >
-    (function (d, w, c) {
-        (w[c] = w[c] || []).push(function() {
-            try {
-                w.yaCounter46407828 = new Ya.Metrika2({
-                    id:46407828,
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true,
-                    webvisor:true,
-                    trackHash:true,
-                    ecommerce:"dataLayer"
-                });
-            } catch(e) { }
-        });
-
-        var n = d.getElementsByTagName("script")[0],
-            s = d.createElement("script"),
-            f = function () { n.parentNode.insertBefore(s, n); };
-        s.type = "text/javascript";
-        s.async = true;
-        s.src = "https://mc.yandex.ru/metrika/tag.js";
-
-        if (w.opera == "[object Opera]") {
-            d.addEventListener("DOMContentLoaded", f, false);
-        } else { f(); }
-    })(document, window, "yandex_metrika_callbacks2");
-</script>
-<noscript>
-    <div>
-        <img src="https://mc.yandex.ru/watch/46407828" style="position:absolute; left:-9999px;" alt="" />
-    </div>
-</noscript>
-<!-- /Yandex.Metrika counter -->
-<meta name="yandex-verification" content="25a6a52c8f079663" />
-
-<script type="text/javascript">
-    var rrPartnerId = "5f75b6b497a52520889ee848";
-    var rrApi = {};
-    var rrApiOnReady = rrApiOnReady || [];
-    rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
-        rrApi.recomMouseDown = rrApi.recomAddToCart = function() {};
-    (function(d) {
-        var ref = d.getElementsByTagName('script')[0];
-        var apiJs, apiJsId = 'rrApi-jssdk';
-        if (d.getElementById(apiJsId)) return;
-        apiJs = d.createElement('script');
-        apiJs.id = apiJsId;
-        apiJs.async = true;
-        apiJs.src = "//cdn.retailrocket.ru/content/javascript/tracking.js";
-        ref.parentNode.insertBefore(apiJs, ref);
-    }(document));
-</script>
-
-{% if success_data != false %}
-<script type="text/javascript">
-(window["rrApiOnReady"] = window["rrApiOnReady"] || []).push(function() {
-    try {
-        rrApi.order({
-            transaction: "{{success_data.order_id}}",
-            items: {{success_data.order_offers}}
-        });
-    } catch(e) {}
-    {% if success_data.email %}
-    try {
-        rrApi.setEmail("{{success_data.email}}", { name: "{{success_data.name}}" });
-    } catch(e) {}
-    {% endif %}
-})
-</script>
-{% endif %}
-
-<!-- Facebook Pixel Code -->
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '942618232893208');
-  fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=942618232893208&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Facebook Pixel Code -->
 {% endif %}
 
 </head>
