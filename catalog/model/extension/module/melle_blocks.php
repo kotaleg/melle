@@ -29,8 +29,8 @@ class ModelExtensionModuleMelleBlocks extends Model
         foreach ($this->getBlocks($moduleId) as $b) {
 
             if (isset($b['image']) && is_file(DIR_IMAGE . $b['image'])) {
-                // $b['image'] = $this->model_tool_image->resize($b['image'], $height, $height);
-                $b['image'] = $this->model_tool_base->formatImageLink($b['image']);
+                list($imageWidth, $imageHeight) = getimagesize(DIR_IMAGE . $b['image']);
+                $b['image'] = $this->model_tool_image->resize($b['image'], $imageWidth, $imageHeight);
             }
 
             if (!empty($b['link']) && mb_strlen($b['link']) > 3) {
