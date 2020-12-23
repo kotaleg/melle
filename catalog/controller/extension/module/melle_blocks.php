@@ -39,7 +39,6 @@ class ControllerExtensionModuleMelleBlocks extends Controller
             $data['moduleId'] = crc32($setting['moduleId']);
 
             $preparedBlocks = $this->extension_model->prepareBlocks($setting['moduleId'], $setting['height']);
-
             $data['blocks'] = $this->renderBlocks($preparedBlocks);
             $data['width'] = $setting['width'];
             $data['height'] = $setting['height'];
@@ -53,29 +52,29 @@ class ControllerExtensionModuleMelleBlocks extends Controller
 
     private function renderBlocks($blocks)
     {
-        $rendered = array();
+        return array_map(function ($b) {
+            return $this->renderBlock($b);
+        }, $blocks);
+    }
 
-        foreach ($blocks as $b) {
-            switch ($b['type']) {
-                case self::BTYPE_1:
-                    $type = 'one';
-                    break;
-                case self::BTYPE_2:
-                    $type = 'two';
-                    break;
-                case self::BTYPE_3:
-                    $type = 'three';
-                    break;
-                case self::BTYPE_4:
-                    $type = 'four';
-                    break;
-            }
-
-            $b['blockId'] = crc32(serialize($b));
-            $rendered[] = $this->model_extension_pro_patch_load->view(
-                    "{$this->route}/type_{$type}", $b);
+    private function renderBlock($block)
+    {
+        switch ($block['type']) {
+            case self::BTYPE_1:
+                $type = 'one';
+                break;
+            case self::BTYPE_2:
+                $type = 'two';
+                break;
+            case self::BTYPE_3:
+                $type = 'three';
+                break;
+            case self::BTYPE_4:
+                $type = 'four';
+                break;
         }
 
-        return $rendered;
+        $block['blockId'] = crc32(serialize($block));
+        return $this->model_extension_pro_patch_load->view("{$this->route}/type_{$type}", $block);
     }
 }
