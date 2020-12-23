@@ -212,12 +212,14 @@ export default {
     // GTM
     this.$store.dispatch('gtm/ecommShittyPush')
 
-    $('.melle_reload_cart').on('click', () => {
-      this.updateCartDataRequest()
-    })
-    $('.melle_clear_cart').on('click', () => {
-      this.clearCartRequest()
-    })
+    if (typeof jQuery == 'function') {
+        jQuery('.melle_reload_cart').on('click', () => {
+            this.updateCartDataRequest()
+        })
+        jQuery('.melle_clear_cart').on('click', () => {
+            this.clearCartRequest()
+        })
+    }
 
     // REMOVE PRERENDERED CONTENT
     let prerender = document.getElementById('rendered-header-content')
