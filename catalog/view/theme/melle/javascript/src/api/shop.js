@@ -10,8 +10,12 @@ export default {
       codename = Vue.prototype.$codename + codename
     }
     if (!isNil(window['__' + codename + '__'])) {
-      cb(window['__' + codename + '__'])
+      try {
+        const json = JSON.parse(window['__' + codename + '__'])
+        cb(json)
+      } catch {}
     }
+    cb({})
   },
   makeRequest(data, cb) {
     const url = data.url

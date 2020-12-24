@@ -64,7 +64,7 @@ function injectScript(c, a, l) {
 {% endif %}
 
 {% for state in states %}
-<script type="text/javascript">window.__{{state.codename}}__ = {{state.json}};</script>
+<script type="text/javascript">window.__{{state.codename}}__ = '{{state.json}}';</script>
 {% endfor %}
 
 {% for script in scripts %}
