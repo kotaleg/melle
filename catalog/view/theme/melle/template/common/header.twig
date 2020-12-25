@@ -38,8 +38,8 @@
 <link href="{{base}}catalog/view/theme/melle/stylesheet/compiled/bootstrap.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
 
 {% if pagetype == 'product' %}
-<link href="{{base}}catalog/view/theme/melle/javascript/jquery/slick/slick.min.css" rel="stylesheet" type="text/css" media="(min-width: 992px)" />
-<link href="{{base}}catalog/view/theme/melle/javascript/jquery/fancybox/jquery.fancybox.min.css" rel="stylesheet" type="text/css" crossorigin="anonymous" media="(min-width: 992px)" />
+<link href="{{base}}catalog/view/theme/melle/javascript/jquery/slick/slick.min.css" rel="stylesheet" type="text/css" media="screen and (min-width: 992px)" />
+<link href="{{base}}catalog/view/theme/melle/javascript/jquery/fancybox/jquery.fancybox.min.css" rel="stylesheet" type="text/css" crossorigin="anonymous" media="screen and (min-width: 992px)" />
 {% endif %}
 
 {% for style in styles %}
@@ -77,13 +77,19 @@ function injectScript(c, a, l) {
 {{ analytic }}
 {% endfor %}
 
-{# <!-- Google Tag Manager -->
+<!-- Google Tag Manager -->
 <script async defer>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.defer=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-KWDGTS9');</script>
-<!-- End Google Tag Manager --> #}
+<!-- End Google Tag Manager -->
+
+{# YANDEX START #}
+<script async defer>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.defer=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");ym('46407828', "init", {});</script>
+{# YANDEX END #}
 
 {% endif %}
 

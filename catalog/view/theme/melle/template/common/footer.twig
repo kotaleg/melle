@@ -123,7 +123,6 @@
 <script src="{{base}}catalog/view/theme/melle/javascript/dist/manifest.js{{cache_postfix}}" type="text/javascript" defer></script>
 <script src="{{base}}catalog/view/theme/melle/javascript/dist/vendor.js{{cache_postfix}}" type="text/javascript" defer></script>
 <script src="{{base}}catalog/view/theme/melle/javascript/dist/melle.js{{cache_postfix}}" type="text/javascript" defer></script>
-{# <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&amp;render=explicit" async defer></script> #}
 
 {# OLD JS START #}
 <script>
@@ -142,7 +141,6 @@ $(this).after('<ul class="dropdown-menu"></ul>');$(this).siblings('ul.dropdown-m
 </script>
 {# OLD JS END #}
 
-{# MOBILE MENU START #}
 <script>
 $(window).on('load', function() {
     if (window.matchMedia('(max-width: 992px)').matches) {
@@ -150,6 +148,21 @@ $(window).on('load', function() {
             jQuery().mmenu&&(jQuery("nav#mobile-menu").mmenu({extensions:["fx-panels-zoom","fx-listitems-slide","multiline","listview-large"],navbar:{title:"Меню"}},{language:"ru"}),jQuery("nav#mobile-menu").css("display",""));
         })
     }
+
+    {% if pagetype == 'product' %}
+    $('.product-images').removeClass('d-none').addClass('d-flex');
+    if (window.matchMedia('(min-width: 992px)').matches) {
+        injectScript('{{base}}catalog/view/theme/melle/javascript/jquery/zoom/jquery.zoom.min.js', false, function() {
+            jQuery().zoom&&($(document).on("gallery.zoom.init",".prod-card__item-big-photo",function(){$(this).zoom()}),$(".prod-card__item-big-photo").length>0&&$(".prod-card__item-big-photo").trigger("gallery.zoom.init"));
+        })
+        injectScript('{{base}}catalog/view/theme/melle/javascript/jquery/slick/slick.min.js', false, function() {
+            jQuery().slick&&($(".slider-for").slick({lazyLoad:'ondemand',slidesToShow:1,slidesToScroll:1,arrows:!1,fade:!0,asNavFor:".slider-nav"}),$(".slider-nav").slick({lazyLoad:'ondemand',slidesPerRow:1,slidesToShow:2,slidesToScroll:1,asNavFor:".slider-for",dots:!1,focusOnSelect:!0,vertical:!0,adaptiveHeight:!0,centerMode:!0,responsive:[{breakpoint:1024,settings:{}},{breakpoint:768,settings:{vertical:!1,arrows:!1}}]}));
+        })
+        injectScript('{{base}}catalog/view/theme/melle/javascript/jquery/fancybox/jquery.fancybox.min.js', false, function() {
+            jQuery().fancybox&&$("[data-fancybox]").fancybox({});
+        })
+    }
+    {% endif %}
 });
 </script>
 {# MOBILE MENU END #}
@@ -157,20 +170,6 @@ $(window).on('load', function() {
 {% if pagetype == 'checkout' %}
 <script src="{{base}}catalog/view/javascript/bootstrap/js/bootstrap.min.js"></script>
 {% endif %}
-
-{% if pagetype == 'product' %}
-<script type="text/javascript">
-$( window ).on('load', function() {
-    $('.product-images').removeClass('d-none').addClass('d-flex');
-    setTimeout(function() {
-        jQuery().zoom&&$(window).width()>1200&&($(document).on("gallery.zoom.init",".prod-card__item-big-photo",function(){$(this).zoom()}),$(".prod-card__item-big-photo").length>0&&$(".prod-card__item-big-photo").trigger("gallery.zoom.init"));
-        jQuery().slick&&($(".slider-for").slick({lazyLoad:'ondemand',slidesToShow:1,slidesToScroll:1,arrows:!1,fade:!0,asNavFor:".slider-nav"}),$(".slider-nav").slick({lazyLoad:'ondemand',slidesPerRow:1,slidesToShow:2,slidesToScroll:1,asNavFor:".slider-for",dots:!1,focusOnSelect:!0,vertical:!0,adaptiveHeight:!0,centerMode:!0,responsive:[{breakpoint:1024,settings:{}},{breakpoint:768,settings:{vertical:!1,arrows:!1}}]}));
-        jQuery().fancybox&&$("[data-fancybox]").fancybox({});
-    }, 1000);
-})
-</script>
-{% endif %}
-
 
 {% if not is_local %}
 
@@ -185,27 +184,6 @@ rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
 
 (function(w,d){
     setTimeout(function(){
-        {# YANDEX START #}
-        {# (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-        (w, d, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-        ym('46407828', "init", {}); #}
-        {# YANDEX END #}
-
-        {# FACEBOOK START #}
-        {# !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(w, d,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '942618232893208');
-        fbq('track', 'PageView'); #}
-        {# FACEBOOK END #}
-
         {# RETAIL-ROKET START #}
         (function(d) {
             var ref = d.getElementsByTagName('script')[0];
@@ -263,7 +241,7 @@ rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
 {% endif %}
 
 {% if success_data != false %}
-<script type="text/javascript" defer>
+<script type="text/javascript">
 (window["rrApiOnReady"] = window["rrApiOnReady"] || []).push(function() {
     try {
         rrApi.order({
