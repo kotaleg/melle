@@ -32,6 +32,9 @@ mix.sass(
         /slider-block/,
         /melle-blocks/,
         /melle-block/,
+        /size-radio/,
+        /color-radio/,
+        /ais-*/,
       ],
     },
   })
