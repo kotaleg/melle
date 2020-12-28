@@ -1,17 +1,17 @@
 import Vue from 'vue'
-import { has } from 'lodash'
 import notify from '@/components/partial/notify'
 
 export default {
   getInlineState(codename = false, cb) {
+    let code
     if (codename === false) {
-      codename = Vue.prototype.$codename
+      code = Vue.prototype.$codename
     } else {
-      codename = Vue.prototype.$codename + codename
+      code = Vue.prototype.$codename + codename
     }
-    if (typeof window['__' + codename + '__'] == 'string') {
+    if (typeof window['__' + code + '__'] == 'string') {
       try {
-        const json = JSON.parse(window['__' + codename + '__'])
+        const json = JSON.parse(window['__' + code + '__'])
         cb(json)
       } catch {}
     }
@@ -27,7 +27,7 @@ export default {
         cb(res)
       })
       .catch((error) => {
-        if (has(error.response, 'data')) {
+        if ('data' in error.response) {
           notify.messageHandler(error.response.data)
         }
         cb(false)
@@ -43,7 +43,7 @@ export default {
         cb(res)
       })
       .catch((error) => {
-        if (has(error.response, 'data')) {
+        if ('data' in error.response) {
           notify.messageHandler(error.response.data)
         }
         cb(false)
