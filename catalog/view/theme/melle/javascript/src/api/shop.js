@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isNil, has } from 'lodash'
+import { has } from 'lodash'
 import notify from '@/components/partial/notify'
 
 export default {
@@ -9,7 +9,7 @@ export default {
     } else {
       codename = Vue.prototype.$codename + codename
     }
-    if (!isNil(window['__' + codename + '__'])) {
+    if (typeof window['__' + codename + '__'] == 'string') {
       try {
         const json = JSON.parse(window['__' + codename + '__'])
         cb(json)
