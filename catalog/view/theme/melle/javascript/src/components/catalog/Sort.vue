@@ -7,7 +7,7 @@
         >
           <span class="sub-title mr-3">сортировать по:</span>
           <v-select
-            class="d-inline"
+            class="d-inline-block no-search"
             placeholder="Сортировать по"
             maxHeight="200px"
             :searchable="false"

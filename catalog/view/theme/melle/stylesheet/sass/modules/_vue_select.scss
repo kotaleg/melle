@@ -48,4 +48,8 @@
   &.unsearchable input[type='search'] {
     opacity: 1 !important;
   }
+
+  &.no-search input[type='search'] {
+    display: none !important;
+  }
 }
