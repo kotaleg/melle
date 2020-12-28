@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { isObject } from 'lodash'
-import notify from './../components/partial/notify'
+import notify from '@/components/partial/notify'
 
 Vue.prototype.$http = axios
 

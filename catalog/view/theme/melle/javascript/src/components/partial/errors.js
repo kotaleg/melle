@@ -1,12 +1,10 @@
-import { has as __has } from 'lodash'
-
 export default class Errors {
   constructor() {
     this.errors = {}
   }
 
   has(field) {
-    return __has(this.errors, field)
+    return field in this.errors
   }
 
   any() {
@@ -14,7 +12,7 @@ export default class Errors {
   }
 
   first(field) {
-    if (__has(this.errors, field)) {
+    if (this.has(field)) {
       return this.errors[field]
     }
   }
@@ -24,7 +22,7 @@ export default class Errors {
   }
 
   clear(field) {
-    if (field) {
+    if (this.has(field)) {
       delete this.errors[field]
       return
     }

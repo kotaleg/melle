@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { has, clone } from 'lodash'
 
 import shop from '@/api/shop'
 import notify from '@/components/partial/notify'
@@ -52,8 +51,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit('clearFormErrors')
 
-      let form = clone(state.form)
-      form['product_id'] = state.product_id
+      let form = Object.assign({}, state.form)
+      form.product_id = state.product_id
 
       shop.makeRequest(
         {
@@ -64,11 +63,11 @@ const actions = {
           this.dispatch('header/setLoadingStatus', false)
           notify.messageHandler(res.data, '_header')
 
-          if (has(res.data, 'form_error')) {
+          if ('form_error' in res.data) {
             commit('setFormErrors', res.data.form_error)
           }
 
-          if (has(res.data, 'sent') && res.data.sent === true) {
+          if ('sent' in res.data && res.data.sent === true) {
             resolve(true)
           }
         }
