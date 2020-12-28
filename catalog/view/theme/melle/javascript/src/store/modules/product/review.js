@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import { has, clone } from 'lodash'
 
-import shop from '../../../api/shop'
-import notify from '../../../components/partial/notify'
-import Errors from '../../../components/partial/errors'
+import shop from '@/api/shop'
+import notify from '@/components/partial/notify'
+import Errors from '@/components/partial/errors'
 
 // initial state
 const state = {

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { isNil, has } from 'lodash'
-import notify from '../components/partial/notify'
+import notify from '@/components/partial/notify'
 
 export default {
   getInlineState(codename = false, cb) {

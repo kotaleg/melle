@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import shop from '../../../api/shop'
+import shop from '@/api/shop'
 
 // initial state
 const state = {
