@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isEmpty, isNumber, forEach, clone, trim, has } from 'lodash'
+import { isEmpty, isNumber, forEach, trim, has } from 'lodash'
 
 export default {
   initQuery(to, from) {
@@ -25,7 +25,7 @@ export default {
     return { storeQuery, storePath, filterQuery }
   },
   prepareFullQuery(filter_data) {
-    let query = clone(Vue.prototype.$storeQuery)
+    let query = Object.assign({}, Vue.prototype.$storeQuery)
 
     forEach(filter_data, (v, k) => {
       if (this.getDefaultQueryParams().includes(k)) {

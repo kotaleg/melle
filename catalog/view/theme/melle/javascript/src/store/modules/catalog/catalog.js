@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isArray, isString, has, clone, debounce } from 'lodash'
+import { isArray, isString, has, debounce } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -99,7 +99,7 @@ const actions = {
       dispatch('header/setLoadingStatus', true, { root: true })
       dispatch('header/setSidebarLoadingStatus', true, { root: true })
 
-      let filter_data = clone(rootState.filter.filter_data)
+      let filter_data = Object.assign({}, rootState.filter.filter_data)
       if (
         !has(payload, 'reload') ||
         (has(payload, 'reload') && payload.reload !== true)

@@ -185,7 +185,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters, clone } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import Stickyfill from 'stickyfilljs'
 
 export default {

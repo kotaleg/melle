@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isUndefined, has, clone } from 'lodash'
+import { has } from 'lodash'
 
 import shop from '../../../api/shop'
 import notify from '../../../components/partial/notify'
@@ -100,7 +100,7 @@ const actions = {
         this.dispatch('header/setSidebarLoadingStatus', false)
         notify.messageHandler(res.data, '_header')
 
-        let removed_items = clone(getters.getProductsForGTM)
+        let removed_items = Object.assign({}, getters.getProductsForGTM)
 
         dispatch('updateCartDataRequest')
 
@@ -157,7 +157,7 @@ const actions = {
         this.dispatch('header/setSidebarLoadingStatus', false)
         notify.messageHandler(res.data, '_header')
 
-        let removed_item = clone(getters.getProductForGTM(cart_id))
+        let removed_item = Object.assign({}, getters.getProductForGTM(cart_id))
 
         dispatch('updateCartDataRequest')
 
