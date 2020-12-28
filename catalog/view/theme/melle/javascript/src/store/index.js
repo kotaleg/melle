@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import pathify from 'vuex-pathify'
 
 // HEADER
 import header from './modules/header/header'
@@ -59,4 +60,5 @@ export default new Vuex.Store({
     search,
   },
   strict: debug,
+  plugins: [ pathify.plugin ],
 })

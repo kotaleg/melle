@@ -4646,6 +4646,13 @@ melody-extension-core@^1.7.5:
     lodash "^4.12.0"
     shortid "^2.2.6"
 
+melody-idom@^1.1.0:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/melody-idom/-/melody-idom-1.7.5.tgz#fdd425476fa963c549272ffc6c2842a84c316dcd"
+  integrity sha512-CsMg+vPyaIs9Wl/pTEgevQs+DfPzEpsNnHcaZNBGgQo3GvLItVgrg3Z8z3obVkPikRrHyRnwBPWIWiRyeh6KHg==
+  dependencies:
+    lodash "^4.12.0"
+
 melody-parser@^1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/melody-parser/-/melody-parser-1.7.5.tgz#6f10e02f194159792a2f83d51e8790ba6ce71141"
@@ -4654,6 +4661,13 @@ melody-parser@^1.7.5:
     he "^1.1.0"
     lodash "^4.12.0"
     melody-code-frame "^1.7.5"
+
+melody-runtime@^1.1.0:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/melody-runtime/-/melody-runtime-1.7.5.tgz#af6c93017b9874df5bd81168d75adc20ac5e9730"
+  integrity sha512-SmkH57Y6FYn+NP15dES85zmhYsjsvVmvh3euLeMuAPWwqqSm28AIZ9btPpkDUCDu/L7JAQ8dTaflbpeDgBwnPQ==
+  dependencies:
+    lodash "^4.12.0"
 
 melody-traverse@^1.7.5:
   version "1.7.5"
@@ -7325,7 +7339,7 @@ vue-carousel@^0.18.0:
     regenerator-runtime "^0.12.1"
     vue "^2.5.17"
 
-vue-class-component@^7.1.0:
+vue-class-component@^7.1.0, vue-class-component@^7.2.6:
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
   integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
@@ -7499,6 +7513,13 @@ vuejs-datepicker@^1.5.4:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/vuejs-datepicker/-/vuejs-datepicker-1.6.2.tgz#83c1e8fd4108e7f1d01c061a7e344918f25e47ae"
   integrity sha512-PkC4vxzFBo7i6FSCUAJfnaWOx6VkKbOqxijSGHHlWxh8FIUKEZVtFychkonVWtK3iwWfhmYtqHcwsmgxefLpLQ==
+
+vuex-pathify@^1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/vuex-pathify/-/vuex-pathify-1.4.5.tgz#9a98e84d4e41dc236495568f65dec7de721ff395"
+  integrity sha512-i21nW9cEt3Qx3ieTk9lLxDfBkOEEB1nL9tQDRsSOkOYWZuJ+KiX/1RL+/Yb85EODsuKS9tHWJ5EHI5MImThmgg==
+  dependencies:
+    vue-class-component "^7.2.6"
 
 vuex@^3.0.1:
   version "3.6.0"

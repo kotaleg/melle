@@ -50,13 +50,16 @@
     "vue-the-mask": "^0.11.1",
     "vue2-datepicker": "^2.10.0",
     "vuejs-datepicker": "^1.5.4",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-pathify": "^1.4.5"
   },
   "devDependencies": {
     "babel-plugin-lodash": "^3.3.4",
     "bootstrap": "^4.5.3",
     "cross-env": "^7.0.3",
     "laravel-mix-purgecss": "^5",
+    "melody-idom": "^1.1.0",
+    "melody-runtime": "^1.1.0",
     "path": "^0.12.7",
     "prettier": "^2.2.1",
     "prettier-plugin-twig-melody": "^0.4.6",
