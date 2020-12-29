@@ -100,7 +100,7 @@ const actions = {
     )
   },
 
-  oneClickRequest({ state, rootState, getters }, payload) {
+  oneClickRequest({ state, rootState }, payload) {
     this.dispatch('header/setLoadingStatus', true)
     shop.makeRequest(
       {
@@ -121,7 +121,7 @@ const actions = {
     )
   },
 
-  getProductPreviewDataRequest({ state, rootState, commit }, productId) {
+  getProductPreviewDataRequest({ dispatch, rootState, commit }, productId) {
     this.dispatch('header/setLoadingStatus', true)
     shop.makeRequest(
       {
