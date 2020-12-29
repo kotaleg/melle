@@ -11,7 +11,7 @@
           p.znachek_class,
         ]"
       >
-        <a @click="gtmProductClick(i)" :href="p.href">
+        <a @click="openProductPreview(p.product_id)" href="javascript:void(0)">
           <img :src="p.image" loading="lazy" width="365" height="468" :alt="p.h1" class="img-fluid" />
         </a>
 
@@ -69,14 +69,19 @@
         <b>ПОКАЗАТЬ ЕЩЁ</b>
       </button>
     </div>
+
+    <product-preview-modal dir="ltr" :width="750" :scrollable="false" />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import ProductPreviewModal from '@/components/modal/ProductPreviewModal.vue'
 
 export default {
-  components: {},
+  components: {
+    ProductPreviewModal,
+  },
   computed: {
     ...mapGetters('catalog', [
       'canLoadMore',
@@ -99,6 +104,12 @@ export default {
     gtmProductClick(i) {
       let product = this.getProductForGTM(i)
       this.productClick({ page_type: false, product })
+    },
+
+    openProductPreview(productId) {
+      if (window.matchMedia('(min-width: 992px)').matches) {
+        this.$modal.show('product-preview-modal', { productId })
+      }
     },
   },
   mounted() {
