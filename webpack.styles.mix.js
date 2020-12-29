@@ -35,6 +35,7 @@ mix.sass(
         /size-radio/,
         /color-radio/,
         /ais-*/,
+        /loading-*/,
         /filter/,
       ],
     },
