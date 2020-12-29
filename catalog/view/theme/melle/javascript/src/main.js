@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Notifications from 'vue-notification'
 import VueTheMask from 'vue-the-mask'
 import PrettyCheck from 'pretty-checkbox-vue/check'
-import VTooltip from 'v-tooltip'
 import VModal from 'vue-js-modal'
 import vSelect from 'vue-select'
 
@@ -21,7 +20,6 @@ Vue.prototype.$codename = 'melle'
 
 Vue.use(Notifications)
 Vue.use(VueTheMask)
-Vue.use(VTooltip)
 Vue.use(VModal, { dialog: true })
 Vue.component('p-check', PrettyCheck)
 Vue.component('v-select', vSelect)
