@@ -132,6 +132,7 @@ const actions = {
         this.dispatch('header/setLoadingStatus', false)
         if (has(res.data, 'data')) {
           commit('SET_PRODUCT_PREVIEW', res.data.data)
+          dispatch('getProductPreviewStockRequest', {productId})
         }
         notify.messageHandler(res.data, '_header')
       }

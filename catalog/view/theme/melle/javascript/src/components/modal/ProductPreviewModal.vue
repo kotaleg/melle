@@ -257,9 +257,6 @@ export default {
       this.params = event.params || {}
       this.$emit('before-opened', event)
       this.getProductPreviewDataRequest(this.params.productId)
-      this.getProductPreviewStockRequest({
-        productId: this.params.productId,
-      })
     },
 
     beforeClosed(event) {
