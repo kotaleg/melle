@@ -109,9 +109,9 @@ class ControllerExtensionModuleMelleProduct extends Controller
         $json['imageHash'] = 'default';
 
         if ($productInfo['image'] && is_file(DIR_IMAGE . $productInfo['image'] )) {
-            $json['image'] = $this->model_tool_image->resize($productInfo['image'], 400, 600, true);
+            $json['image'] = $this->model_tool_image->resize($productInfo['image'], 340, 450, true);
         } else {
-            $json['image'] = $this->model_tool_image->resize('no_image.png', 400, 600, true);
+            $json['image'] = $this->model_tool_image->resize('no_image.png', 340, 450, true);
         }
 
         $defaultValues = $this->model_extension_module_super_offers->getDefaultValues($productId, $productInfo);
@@ -178,7 +178,7 @@ class ControllerExtensionModuleMelleProduct extends Controller
 
         if ($activeCombination) {
             if ($activeCombination['image'] && is_file(DIR_IMAGE . $activeCombination['image'])) {
-                $json['data']['image'] = $this->model_tool_image->resize($activeCombination['image'], 400, 600, true);
+                $json['data']['image'] = $this->model_tool_image->resize($activeCombination['image'], 340, 450, true);
             }
             $json['imageHash'] = $activeCombination['imageHash'];
 
