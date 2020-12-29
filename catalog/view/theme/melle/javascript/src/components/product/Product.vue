@@ -23,9 +23,11 @@
                 type="radio"
                 @click="
                   radioHandler({
-                    o_key: o_key,
-                    ov_key: ov_key,
-                    status: !ov.selected,
+                    optionId: o.option_id,
+                    productOptionId: o.product_option_id,
+                    optionValueId: ov.option_value_id,
+                    productOptionValueId: ov.product_option_value_id,
+                    selected: !ov.selected,
                   })
                 "
                 :name="[`ShopCartItem[${o.class}]`]"
@@ -41,18 +43,18 @@
                 <img
                   :src="ov.image"
                   :class="[`${o.class}-image`]"
-                  v-tooltip="{ content: ov.name }"
+                  :title="ov.name"
                 />
               </span>
             </div>
           </label>
 
           <a
-            v-if="size_list && o.class == 'size'"
+            v-if="sizeList && o.class == 'size'"
             id="size-list"
             data-fancybox=""
             class="d-none d-sm-block"
-            :href="size_list"
+            :href="sizeList"
             >таблица<br />размеров</a
           >
         </div>
@@ -83,39 +85,39 @@
         </button>
 
         <span
-          v-if="in_stock"
-          v-show="quantity >= getActiveMaxQuantity"
+          v-if="inStock"
+          v-show="quantity >= maxQuantity"
           class="product-max-count"
         >
           доступно:
-          <span>{{ getActiveMaxQuantity }}</span>
+          <span>{{ maxQuantity }}</span>
         </span>
       </div>
     </div>
 
     <div
-      v-if="in_stock"
+      v-if="inStock"
       class="align-items-center d-flex justify-content-start my-3"
     >
       <div>
         <span v-if="isSpecial" class="price-old"
-          >{{ getActivePrice }} <span class="ruble-sign">Р</span></span
+          >{{ price }} <span class="ruble-sign">Р</span></span
         >
         <span v-if="isSpecial" class="ml-3 price"
-          >{{ getSpecial }}
-          <span v-if="zvezdochka" class="ruble-container">
+          >{{ special }}
+          <span v-if="star" class="ruble-container">
             <span class="ruble-sign">Р</span
             ><span class="ruble-zvezdochka">*</span>
           </span>
           <span v-else class="ruble-sign">Р</span>
         </span>
 
-        <span v-if="zvezdochka" class="ml-3 special-text-info">{{
-          special_text
+        <span v-if="star" class="ml-3 special-text-info">{{
+          specialText
         }}</span>
 
         <span v-if="!isSpecial" class="price"
-          >{{ getActivePrice }} <span class="ruble-sign">Р</span></span
+          >{{ price }} <span class="ruble-sign">Р</span></span
         >
       </div>
       <div
@@ -129,10 +131,10 @@
       </div>
     </div>
 
-    <div v-if="in_stock" class="d-flex flex-row justify-content-between">
+    <div v-if="inStock" class="d-flex flex-row justify-content-between">
       <a
         id="add_trigger_button"
-        v-if="getProductCountForCurrentSelectedOptions <= 0"
+        v-if="countInCart <= 0"
         @click="addToCart()"
         href="javascript:void(0);"
         class="add-button p-2 p-sm-3 w-100 text-center"
@@ -149,7 +151,7 @@
         >
           <span class="m-auto"
             >в корзине
-            {{ getProductCountForCurrentSelectedOptions }}
+            {{ countInCart }}
             шт.<br />перейти</span
           >
         </div>
@@ -185,60 +187,56 @@
 </template>
 
 <script>
-import { forEach, isEqual } from 'lodash'
+import { isEqual } from 'lodash'
 import { mapState, mapActions, mapGetters } from 'vuex'
+import { get, sync } from 'vuex-pathify'
 
-import OneClickModal from './../modal/OneClickModal.vue'
+import OneClickModal from '@/components/modal/OneClickModal.vue'
 
 export default {
   components: {
     'one-click-modal': OneClickModal,
   },
   computed: {
-    ...mapGetters('product', [
-      'getRating',
-      'isSpecial',
-      'getSpecial',
-      'getActiveMaxQuantity',
-      'getFormValue',
-      'getStateValue',
-      'getActivePrice',
-      'getActiveImageHash',
-      'getOptionsForCart',
-    ]),
-    ...mapState('cart', {
-      checkoutLink: 'checkout_link',
-      cartProducts: 'products',
-    }),
-    ...mapState('product', [
-      'product_id',
+    ...get('product', [
+      'productId',
+      'name',
+      'images',
+      'quantity',
       'options',
-      'size_list',
-      'zvezdochka',
-      'special_text',
       'reviewCount',
       'ratingValue',
-      'in_stock',
+      'ratingArray',
+      'sizeList',
     ]),
 
-    getProductCountForCurrentSelectedOptions() {
-      const optionsForCart = this.getOptionsForCart
+    inStock: get('product/stock@inStock'),
+    getSpecial: get('product/stock@special'),
+    isSpecial: get('product/stock@isSpecial'),
+    specialText: get('product/stock@specialText'),
+    star: get('product/stock@star'),
+    price: sync('product/stock@price'),
+    special: sync('product/stock@special'),
+    maxQuantity: get('product/stock@maxQuantity'),
+    imageHash: get('product/stock@imageHash'),
+    optionsForCart: get('product/stock@optionsForCart'),
+    checkoutLink: get('cart/checkout_link'),
+    cartProducts: get('cart/products'),
 
+    countInCart() {
       for (const i in this.cartProducts) {
         const cartProduct = this.cartProducts[i]
         const optionsForCompare = cartProduct.optionsForCompare
-
-        if (isEqual(optionsForCart, optionsForCompare)) {
+        if (isEqual(this.optionsForCart, optionsForCompare)) {
           return cartProduct.quantity
         }
       }
-
       return 0
     },
 
     currentImageHash() {
       const currentImages = document.querySelectorAll(
-        "li[data-hash='" + this.getActiveImageHash + "']"
+        "li[data-hash='" + this.imageHash + "']"
       )
 
       let clickCount = 0
@@ -246,42 +244,47 @@ export default {
         const defaultImages = document.querySelectorAll(
           "li[data-hash='default']"
         )
-        forEach(defaultImages, (value) => {
+        for (const image of defaultImages) {
           if (clickCount === 0) {
             value.click()
           }
-        })
+        }
       } else {
-        forEach(currentImages, (value) => {
+        for (const image of currentImages) {
           if (clickCount === 0) {
             value.click()
           }
-        })
+        }
       }
 
-      return this.getActiveImageHash
-    },
-
-    quantity: {
-      get() {
-        return this.getStateValue('quantity')
-      },
-      set(v) {
-        this.updateQuantity(v)
-      },
+      return this.imageHash
     },
   },
   methods: {
     ...mapActions('product', [
       'quantityHandler',
-      'updateQuantity',
       'radioHandler',
       'addToCartRequest',
+      'getProductStockRequest',
     ]),
     ...mapActions('header', ['enableElement']),
 
+    radioHandler(data) {
+      if (!this.inStock) {
+        return
+      }
+      this.getProductStockRequest({
+        productId: this.productId,
+        options: this.options,
+        ...data
+      })
+    },
     addToCart() {
-      this.addToCartRequest()
+      this.addToCartRequest({
+        product_id: this.productId,
+        quantity: this.quantity,
+        options: this.optionsForCart,
+      })
     },
     buyOneClick() {
       this.$modal.show('one-click-modal', { source: 'buy-one-click' })
@@ -294,10 +297,12 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('product/initData')
+    this.$store.dispatch('product/INIT_DATA')
   },
   mounted() {
-    this.$store.dispatch('product/selectFirstCombination')
+    this.getProductStockRequest({
+      productId: this.productId,
+    })
 
     // REMOVE PRERENDERED CONTENT
     let prerender = document.getElementById('rendered-product-content')
