@@ -255,46 +255,55 @@ class ControllerExtensionModuleMelle extends Controller
             // REVIEW
             $this->initProductReview($product_id);
 
-            $state['product_id'] = $product_id;
+            $state['productId'] = $product_id;
             $state['name'] = $product_info['name'];
             $state['manufacturer'] = $product_info['manufacturer'];
-            $state['current_category'] = $this->model_tool_base->getCurrentCategoryName();
+            $state['currentCategory'] = $this->model_tool_base->getCurrentCategoryName();
             $state['quantity'] = 1;
 
             $this->load->model('extension/module/size_list');
-            $state['size_list'] = $this->model_extension_module_size_list->getSizeList($product_id);
+            $state['sizeList'] = $this->model_extension_module_size_list->getSizeList($product_id);
 
-            $state['default_values'] = $this->model_extension_module_super_offers->getDefaultValues($product_id, $product_info);
-            $state['in_stock'] = ((int) $state['default_values']['max_quantity'] > 0) ? true : false;
-            $state['is_options_for_product'] = (bool)$this->model_extension_module_super_offers->isOptionsForProduct($product_id);
+            $defaultValues = $this->model_extension_module_super_offers->getDefaultValues($product_id, $product_info);
 
             $state['options'] = $this->model_extension_module_super_offers->getOptions($product_id, $state['in_stock']);
-            $state['full_combinations'] = $this->model_extension_module_super_offers->getFullCombinations($product_id);
+            $fullCombinations = $this->model_extension_module_super_offers->getFullCombinations($product_id);
 
             // SPECIAL TEXT
-            $state['special_text'] = $this->model_extension_total_pro_discount->getSpecialText($product_id, false);
-            if (strstr($state['special_text'], '*')) {
-                $state['zvezdochka'] = true;
-                $state['special_text'] = trim(str_replace('*', '', $state['special_text']));
+            $state['star'] = false;
+            $state['specialText'] = $this->model_extension_total_pro_discount->getSpecialText($product_id, false);
+            if (strstr($state['specialText'], '*')) {
+                $state['star'] = true;
+                $state['specialText'] = trim(str_replace('*', '', $state['specialText']));
             }
 
             $this->load->model('catalog/review');
             $state['reviewCount'] = (int) $this->model_catalog_review->getTotalReviewsByProductId($product_id);
-            $state['ratingValue'] = (float) $state['default_values']['rating'];
+            $state['ratingValue'] = (float) $defaultValues['rating'];
+
+            $state['ratingArray'] = (array) array();
+            for ($i=0; $i < 5; $i++) {
+                if ($defaultValues['rating'] > $i) {
+                    $state['ratingArray'][] = true;
+                    continue;
+                }
+                $state['ratingArray'][] = false;
+            }
 
             /* RETAIL R START */
             $this->load->model('extension/module/offer_id');
-            $state['full_combinations'] = array_map(function($combination) {
+            $fullCombinations = array_map(function($combination) {
                 $combination['rr_product_id'] = $this->model_extension_module_offer_id->createAndReturnId($combination['import_id']);
                 return $combination;
-            }, $state['full_combinations']);
+            }, $fullCombinations);
 
-            $this->request->get['rr_product_id'] = $this->get_rr_product_id($state['full_combinations']);
+            $this->request->get['rr_product_id'] = $this->get_rr_product_id($fullCombinations);
             /* RETAIL R END */
         }
 
-        $state['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add', '', true);
-        $state['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_oneclick', '', true);
+        $state['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add');
+        $state['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_oneclick');
+        $state['getProductStock'] = $this->model_extension_pro_patch_url->ajax('extension/module/melle_product/getProductPreviewStock');
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
@@ -390,6 +399,10 @@ class ControllerExtensionModuleMelle extends Controller
         $state['design_col'] = true;
         $state['current_category'] = $this->model_tool_base->getCurrentCategoryName();
         $state['get_link'] = $this->model_extension_pro_patch_url->ajax('product/category/melle_get', '', true);
+        $state['getProductPreviewData'] = $this->model_extension_pro_patch_url
+            ->ajax("extension/module/melle_product/getProductPreviewData", '', true);
+        $state['getProductPreviewStock'] = $this->model_extension_pro_patch_url
+            ->ajax("extension/module/melle_product/getProductPreviewStock", '', true);
 
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
