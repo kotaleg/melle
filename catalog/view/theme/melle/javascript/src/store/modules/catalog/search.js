@@ -1,7 +1,6 @@
 import Vue from 'vue'
 
-import shop from '../../../api/shop'
-import notify from '../../../components/partial/notify'
+import shop from '@/api/shop'
 
 // initial state
 const state = {

@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import { isArray, isString, has, debounce } from 'lodash'
 
-import shop from '../../../api/shop'
-import notify from '../../../components/partial/notify'
+import shop from '@/api/shop'
+import notify from '@/components/partial/notify'
 
-import filterHelper from '../../../router/filterHelper'
-import router from '../../../router/index'
+import filterHelper from '@/router/filterHelper'
+import router from '@/router/index'
 
 // initial state
 const state = {
