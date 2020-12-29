@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import {isObject, has} from 'lodash'
 import notify from '@/components/partial/notify'
 
 export default {
@@ -27,7 +28,7 @@ export default {
         cb(res)
       })
       .catch((error) => {
-        if ('data' in error.response) {
+        if (isObject(error.response) && has(error.response, 'data')) {
           notify.messageHandler(error.response.data)
         }
         cb(false)
@@ -43,7 +44,7 @@ export default {
         cb(res)
       })
       .catch((error) => {
-        if ('data' in error.response) {
+        if (isObject(error.response) && has(error.response, 'data')) {
           notify.messageHandler(error.response.data)
         }
         cb(false)
