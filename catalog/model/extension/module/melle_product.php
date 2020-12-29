@@ -77,7 +77,7 @@ class ModelExtensionModuleMelleProduct extends Controller
                 }
             }
         }
-        sort($activeOptions);
+        asort($activeOptions);
         return $optionsForCart;
     }
 
