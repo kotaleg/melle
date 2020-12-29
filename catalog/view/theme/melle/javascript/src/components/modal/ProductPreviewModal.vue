@@ -14,6 +14,7 @@
     @closed="$emit('closed', $event)"
   >
     <div id="product-page" class="dialog-content">
+      <div class="close-button" @click="closeModal"></div>
       <div class="row">
         <div class="col-sm-6">
           <div class="align-items-center d-flex h-100">
@@ -267,13 +268,8 @@ export default {
       this.$emit('before-closed', event)
     },
 
-    click(i, event, source = 'click') {
-      const button = this.buttons[i]
-      if (button && typeof button.handler === 'function') {
-        button.handler(i, event)
-      } else {
-        this.$modal.hide('product-preview-modal')
-      }
+    closeModal() {
+      this.$modal.hide('product-preview-modal')
     },
   },
 }
