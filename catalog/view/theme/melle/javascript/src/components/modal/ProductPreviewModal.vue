@@ -214,7 +214,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('product', ['getProductPreviewDataRequest', 'getProductPreviewStockRequest', 'addToCartRequest']),
+    ...mapActions('product', ['getProductPreviewDataRequest', 'getProductPreviewStockRequest', 'addToCartRequest', 'CLEAR_PREVIEW']),
 
     radioHandler(data) {
       this.getProductPreviewStockRequest({
@@ -263,6 +263,7 @@ export default {
       window.removeEventListener('keyup', this.onKeyUp)
       this.params = {}
       this.$emit('before-closed', event)
+      this.CLEAR_PREVIEW()
     },
 
     closeModal() {

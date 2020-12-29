@@ -179,7 +179,11 @@ const actions = {
       }
     )
   },
-
+  CLEAR_PREVIEW({ commit }) {
+    commit('SET_PRODUCT_PREVIEW_OPTIONS', [])
+    commit('SET_PRODUCT_PREVIEW_STOCK', {})
+    commit('SET_PRODUCT_PREVIEW_IMAGE', false)
+  },
 }
 
 // mutations
