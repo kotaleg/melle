@@ -52,7 +52,7 @@ class ControllerExtensionEventDBlogModule extends Controller
 
         $insert['menus'][] = array(
             'id'       => 'menu-blog',
-            'icon'     => 'fa fa-newspaper-o fa-fw',
+            'icon'     => ' fa-newspaper-o fa-fw',
             'name'     => $this->language->get('text_blog'),
             'href'     => '',
             'children' => $d_blog_module
