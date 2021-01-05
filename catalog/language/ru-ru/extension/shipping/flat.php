@@ -1,5 +1,5 @@
 <?php
 // Text
 $_['text_title']       = 'Доставка курьерской службой';
-$_['text_description'] = '';
+$_['text_description'] = 'Доставка курьерской службой';
 
