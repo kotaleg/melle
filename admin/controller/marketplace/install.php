@@ -140,7 +140,8 @@ class ControllerMarketplaceInstall extends Controller {
                     'image/catalog/',
                     'admin',
                     'admin/controller/tool',
-                    'admin/model/tool'
+                    'admin/model/tool',
+                    'catalog/controller/event'
                 );
 
                 // First we need to do some checks
