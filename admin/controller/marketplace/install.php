@@ -138,10 +138,6 @@ class ControllerMarketplaceInstall extends Controller {
                     'system/config/',
                     'system/library/',
                     'image/catalog/',
-                    'admin',
-                    'admin/controller/tool',
-                    'admin/model/tool',
-                    'catalog/controller/event'
                 );
 
                 // First we need to do some checks
