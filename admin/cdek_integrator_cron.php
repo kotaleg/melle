@@ -3,16 +3,19 @@
 define('VERSION', '3.0.2.0');
 
 // Configuration
-if (is_file('config.php')) {
-	require_once('config.php');
+$config_file = 'config.php';
+if (isset($_SERVER['SERVER_ADDR'])) {
+    if (isset($_SERVER['SERVER_NAME'])
+    && strpos($_SERVER['SERVER_NAME'], '.test')) {
+        $config_file = 'config.local.php';
+    } elseif (in_array($_SERVER['SERVER_ADDR'], array('::1'))) {
+        $config_file = 'config.local.php';
+    }
 }
 
-// Install
-if (!defined('DIR_APPLICATION')) {
-	header('Location: ../install/index.php');
-	exit;
+if (is_file($config_file)) {
+    require_once($config_file);
 }
-
 
 $_SERVER['SERVER_PORT'] = 443;
 // Startup
