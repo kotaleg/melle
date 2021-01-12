@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>melle_cdek</name>
+    <code>melle_cdek</code>
+    <description>PRO Algolia Melle</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/event/cdekshipping.php">
+        <operation error="skip">
+            <search><![CDATA[$this->document->addScript(]]></search>
+            <add position="replace"><![CDATA[// $this->document->addScript(]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/melle/template/common/simple_footer.twig">
+        <operation error="skip">
+            <search><![CDATA[{{ footer }}]]></search>
+            <add position="before"><![CDATA[
+                <!-- IVAN MOD START -->
+                <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&ns=cdekymap" type="text/javascript" async defer></script>
+                <script src="catalog/view/javascript/sdek.js"></script>
+                <!-- IVAN MOD END -->
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>
