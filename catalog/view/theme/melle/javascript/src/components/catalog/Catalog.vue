@@ -11,7 +11,8 @@
           p.znachek_class,
         ]"
       >
-        <a @click="openProductPreview(p.product_id)" href="javascript:void(0)">
+        <a click="gtmProductClick(i)"
+              :href="p.href">
           <img :src="p.image" loading="lazy" width="365" height="468" :alt="p.h1" class="img-fluid" />
         </a>
 
@@ -46,8 +47,7 @@
               {{ getPrice(i) }} <span class="ruble-sign">Р</span></span
             >
             <a
-              @click="gtmProductClick(i)"
-              :href="p.href"
+              @click="openProductPreview(p.product_id)" href="javascript:void(0)"
               class="btn btn-primary px-4"
               >Купить</a
             >
