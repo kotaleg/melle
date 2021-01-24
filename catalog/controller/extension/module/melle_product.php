@@ -181,6 +181,7 @@ class ControllerExtensionModuleMelleProduct extends Controller
                 $json['data']['image'] = $this->model_tool_image->resize($activeCombination['image'], 340, 450, true);
             }
             $json['imageHash'] = $activeCombination['imageHash'];
+            $json['stock']['imageHash'] = $activeCombination['imageHash'];
 
             $json['stock']['price'] = $activeCombination['price'];
             $json['stock']['maxQuantity'] = (int) $activeCombination['quantity'];

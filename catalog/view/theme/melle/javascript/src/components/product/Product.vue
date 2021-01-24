@@ -235,24 +235,29 @@ export default {
     },
 
     currentImageHash() {
-      const currentImages = document.querySelectorAll(
-        "li[data-hash='" + this.imageHash + "']"
-      )
+      const isDesktop = window.matchMedia('(min-width: 992px)').matches
+      console.log(isDesktop)
 
-      let clickCount = 0
-      if (currentImages.length === 0) {
-        const defaultImages = document.querySelectorAll(
-          "li[data-hash='default']"
-        )
-        for (const image of defaultImages) {
-          if (clickCount === 0) {
-            value.click()
-          }
+      if (isDesktop) {
+        const newImagePreview = document.getElementById(`product-preview-${this.imageHash}`)
+        if (newImagePreview) {
+          newImagePreview.click()
         }
       } else {
-        for (const image of currentImages) {
-          if (clickCount === 0) {
-            value.click()
+        const newImage = document.getElementById(`product-image-${this.imageHash}`)
+        if (newImage && !newImage.classList.contains('d-block')) {
+          const allImages = document.querySelectorAll('li.prod-card__item-big-photo')
+          for (const i of allImages) {
+            if (i.classList.contains('d-block')) {
+              i.classList.remove('d-block')
+            }
+          }
+          newImage.classList.add('d-block')
+          const imgTags = newImage.querySelectorAll(':scope img')
+          for (const imgTag of imgTags) {
+            if (!imgTag.src) {
+              imgTag.src = imgTag.dataset.lazy
+            }
           }
         }
       }

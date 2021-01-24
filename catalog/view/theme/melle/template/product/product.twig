@@ -28,7 +28,8 @@
                         <div class="mt-3 d-none product-images product-images-trigger">
                             <ul class="d-none d-md-flex flex-column flex-shrink-0 justify-content-center p-0 slider-nav">
                                 {% for i in images %}
-                                    <li class="prod-card__item-photo"
+                                    <li id="product-preview-{{ i.imageHash }}"
+                                        class="prod-card__item-photo"
                                         data-hash="{{ i.imageHash }}">
                                         {% if loop.first %}
                                         <img itemprop="image"
@@ -44,7 +45,7 @@
                             </ul>
                             <ul class="p-0 pl-md-3 prod-card__list-big-photo slider-for">
                                 {% for i in images %}
-                                    <li class="prod-card__item-big-photo {% if loop.first %}d-block{% endif %}">
+                                    <li id="product-image-{{ i.imageHash }}" class="prod-card__item-big-photo {% if loop.first %} d-block{% endif %}">
                                         {% if loop.first %}
                                         <picture>
                                             <source media="(min-width: 800px)" srcset="{{ i.popup }} 1x, {{ i.popup }} 2x">
