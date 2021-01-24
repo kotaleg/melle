@@ -161,6 +161,19 @@ $(window).on('load', function() {
         injectScript('{{base}}catalog/view/theme/melle/javascript/jquery/fancybox/jquery.fancybox.min.js', false, function() {
             jQuery().fancybox&&$("[data-fancybox]").fancybox({});
         })
+    } else {
+        $('.prod-card__item-big-photo').on('touchstart', function() {
+            var next = $(this).next();
+            if (next.length == 0) {
+                next = $('.prod-card__item-big-photo').first()
+            }
+            next.find('img').each(function(i,e) {
+                var el = $(e);
+                el.attr('src', el.attr('data-lazy'));
+            });
+            $(this).removeClass('d-block');
+            next.addClass('d-block');
+        });
     }
     {% endif %}
 });

@@ -236,7 +236,6 @@ export default {
 
     currentImageHash() {
       const isDesktop = window.matchMedia('(min-width: 992px)').matches
-      console.log(isDesktop)
 
       if (isDesktop) {
         const newImagePreview = document.getElementById(`product-preview-${this.imageHash}`)
