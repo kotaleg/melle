@@ -187,28 +187,26 @@ $(window).on('load', function() {
 {% if not is_local %}
 
 <script type="text/javascript" async defer>
-{# RETAIL-ROKET START #}
-var rrPartnerId = "5f75b6b497a52520889ee848";
-var rrApi = {};
-var rrApiOnReady = rrApiOnReady || [];
-rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
-    rrApi.recomMouseDown = rrApi.recomAddToCart = function() {};
-{# RETAIL-ROKET END #}
+{# LEADHIT START #}
+var _lh_params = {
+    "popup": false
+};
+lh_clid = "5b0820b0e694aa2943a30dab";
+{# LEADHIT END #}
 
 (function(w,d){
     setTimeout(function(){
-        {# RETAIL-ROKET START #}
-        (function(d) {
-            var ref = d.getElementsByTagName('script')[0];
-            var apiJs, apiJsId = 'rrApi-jssdk';
-            if (d.getElementById(apiJsId)) return;
-            apiJs = d.createElement('script');
-            apiJs.id = apiJsId;
-            apiJs.async = true;
-            apiJs.src = "//cdn.retailrocket.ru/content/javascript/tracking.js";
-            ref.parentNode.insertBefore(apiJs, ref);
-        }(d));
-        {# RETAIL-ROKET END #}
+        {# LEADHIT START #}
+
+        (function() {
+            var lh = document.createElement('script');
+            lh.type = 'text/javascript';
+            lh.async = true;
+            lh.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'track.leadhit.io/track.js?ver=' + Math.floor(Date.now() / 100000).toString();
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(lh, s);
+        })();
+        {# LEADHIT END #}
 
         {# JIVOSITE START #}
         (function(){
@@ -232,28 +230,61 @@ rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
 })(window, document);
 </script>
 
-{# RETAIL-ROKET START #}
-{% if pagetype == 'product' %}
-    {% if rr_product_id %}
-        <script type="text/javascript">
-        (window["rrApiOnReady"] = window["rrApiOnReady"] || []).push(function() {
-            try{ rrApi.view({{rr_product_id}}); } catch(e) {}
-        })
-        </script>
-    {% endif %}
-{% endif %}
-
-{% if pagetype == 'category' %}
-    {% if rr_category_id %}
-        <script type="text/javascript">
-        (window["rrApiOnReady"] = window["rrApiOnReady"] || []).push(function() {
-            try { rrApi.categoryView({{rr_category_id}}); } catch(e) {}
-        })
-        </script>
-    {% endif %}
-{% endif %}
-
+{# LEADHIT START #}
 {% if success_data != false %}
+<script type="text/javascript">
+  (function () {
+    function readCookie(name) {
+      if (document.cookie.length > 0) {
+        offset = document.cookie.indexOf(name + "=");
+        if (offset != -1) {
+          offset = offset + name.length + 1;
+          tail = document.cookie.indexOf(";", offset);
+          if (tail == -1) tail = document.cookie.length;
+          return unescape(document.cookie.substring(offset, tail));
+        }
+      }
+      return null;
+    }
+
+    var lh_clid = '5b0820b0e694aa2943a30dab';
+    var order_id = '{{success_data.order_id}}';
+    var cart_sum = '{{success_data.total}}';
+    var order_offers = [];
+
+    var uid = readCookie('_lhtm_u');
+    var vid = readCookie('_lhtm_r').split('|')[1];
+    var url = encodeURIComponent(window.location.href);
+    var path = "https://track.leadhit.io/stat/lead_form?f_orderid=" + order_id + "&url=" + url + "&action=lh_orderid&uid=" + uid + "&vid=" + vid + "&ref=direct&f_cart_sum=" + cart_sum + "&clid=" + lh_clid;
+
+    var sc = document.createElement("script");
+    sc.type = 'text/javascript';
+    var headID = document.getElementsByTagName("head")[0];
+    sc.src = path;
+    headID.appendChild(sc);
+
+    if (Array.isArray(order_offers) && order_offers.length > 0) {
+      var requestBody = {
+        'order_id': order_id,
+        'cart_sum': cart_sum,
+        'vid': vid,
+        'uid': uid,
+        'clid': lh_clid,
+        'offers': order_offers
+      };
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://track.leadhit.io/stat/lead_order', true);
+      xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+      xhr.onreadystatechange = function () {
+        if (this.readyState != 4) return;
+        console.log('order sended');
+      };
+      xhr.send(JSON.stringify(requestBody));
+    }
+  })();
+</script>
+
+
 <script type="text/javascript">
 (window["rrApiOnReady"] = window["rrApiOnReady"] || []).push(function() {
     try {
@@ -270,7 +301,7 @@ rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
 })
 </script>
 {% endif %}
-{# RETAIL-ROKET END #}
+{# LEADHIT END #}
 
 {# YANDEX START #}
 <noscript>

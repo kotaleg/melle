@@ -99,31 +99,18 @@ class ControllerCommonFooter extends Controller {
                 $data['success_data']['name'] = $orderInfo['firstname'] . $orderInfo['lastname'];
             }
 
+            if (isset($orderInfo['total'])) {
+                $data['success_data']['total'] = number_format($orderInfo['total'], 2);
+            }
+
             $order_offers = array();
             foreach ($this->model_checkout_order->getOrderProducts($data['success_data']['order_id']) as $p) {
-                $orderProductCombination = $this->model_extension_module_super_offers
-                    ->getFirstCombinationForOrderProduct(
-                        $data['success_data']['order_id'],
-                        $p['order_product_id'],
-                        $p['product_id']
-                    );
-
-                if (!isset($orderProductCombination['import_id'])) {
-                    continue;
-                }
-
-                $this->load->model('extension/module/offer_id');
-                $orderProductOfferId = $this->model_extension_module_offer_id
-                    ->createAndReturnId($orderProductCombination['import_id']);
-
-                if (!$orderProductOfferId) {
-                    continue;
-                }
-
                 $order_offers[] = array(
-                    'id' => (int) $orderProductOfferId,
+                    'url' => (string) $this->url->link('product/product', 'product_id=' . (int)$p['product_id'], true),
+                    'name' => (string) $p['name'],
                     'price' => (float) $p['price'],
-                    'qnt' => (int) $p['quantity'],
+                    'count' => (int) $p['quantity'],
+                    'currency' => 'RUB'
                 );
             }
 
