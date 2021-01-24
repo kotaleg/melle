@@ -162,7 +162,7 @@ $(window).on('load', function() {
             jQuery().fancybox&&$("[data-fancybox]").fancybox({});
         })
     } else {
-        $('.prod-card__item-big-photo').on('touchstart', function() {
+        $('.prod-card__item-big-photo').on('touchmove', function() {
             var next = $(this).next();
             if (next.length == 0) {
                 next = $('.prod-card__item-big-photo').first()
