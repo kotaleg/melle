@@ -28,7 +28,7 @@
           <search />
         </div>
 
-        <a href="javascript:void(0)" class="d-none d-lg-block">Доставка</a>
+        <a href="https://melle.online/dostavka-i-oplata" class="d-none d-lg-block">Доставка</a>
         <a
           href="https://melle.online/opt/"
           target="_blank"
