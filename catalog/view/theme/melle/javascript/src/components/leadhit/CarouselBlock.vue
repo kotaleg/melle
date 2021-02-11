@@ -15,7 +15,7 @@
     class="other-products"
   >
     <slide v-for="(p, i) in items" :key="i">
-      <div class="text-center product-item slider-item mr-3 mr-sm-0">
+      <div class="text-center product-item slider-item mr-3">
         <a :href="p.url" class="link">
           <img :src="p.picture" :alt="p.name" />
         </a>
@@ -52,12 +52,6 @@ export default {
   components: {
     Carousel,
     Slide,
-  },
-  computed: {},
-  methods: {
-    getStars(rating) {
-      return [true, true, true, true, true]
-    },
   },
 }
 </script>
