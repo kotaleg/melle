@@ -75,12 +75,6 @@
           <span v-html="total.title"></span>:
           <span>{{ total.text }} <span class="ruble-sign">Р</span></span>
         </div>
-        <div class="cart-total text-center">
-          <span>ИТОГО: </span
-          ><span class="boldPrice"
-            >{{ total }} <span class="ruble-sign">Р</span></span
-          >
-        </div>
         <div class="mt-2">
           <a :href="checkout_link" class="btn btn-primary">Оформить заказ</a>
         </div>
