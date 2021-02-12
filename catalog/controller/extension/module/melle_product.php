@@ -121,6 +121,7 @@ class ControllerExtensionModuleMelleProduct extends Controller
         $json['stock']['inStock'] = ((int) $defaultValues['max_quantity'] > 0) ? true : false;
         $json['stock']['special'] = $defaultValues['special'];
         $json['stock']['isSpecial'] = false;
+        $json['stock']['specialText'] = $this->model_extension_total_pro_discount->getSpecialText($productId, false);
 
         $json['stock']['star'] = false;
         if ($defaultValues['special'] != false) {
