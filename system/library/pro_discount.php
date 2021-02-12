@@ -83,9 +83,9 @@ class pro_discount
     public function updateCartProductUsed($product_id, $count)
     {
         if (isset($this->session->data["{$this->codename}_cart"][$product_id]['u'])) {
-            $this->session->data["{$this->codename}_cart"][$product_id]['u'] += $used;
+            $this->session->data["{$this->codename}_cart"][$product_id]['u'] += $count;
         } else {
-            $this->session->data["{$this->codename}_cart"][$product_id]['u'] = $used;
+            $this->session->data["{$this->codename}_cart"][$product_id]['u'] = $count;
         }
     }
 
@@ -243,10 +243,8 @@ class pro_discount
             $cq = $this->getCartProductQuantity($product_id);
             if ($cq !== False && $cq > 0) {
                 if ($cq >= $discount['start_count']) {
-                    $div = $cq % $discount['start_count'];
                     $used = $this->getCartProductUsed($product_id);
-
-                    $available_count = ($cq - $div) - $used;
+                    $available_count = $cq - $used;
                 }
             }
         }
@@ -311,6 +309,8 @@ class pro_discount
     public function fixTotal($products_data)
     {
         foreach ($products_data as $pd_key => $pd) {
+            $products_data[$pd_key]['original_price'] = $pd['price'];
+            $products_data[$pd_key]['original_total'] = $pd['total'];
 
             if (isset($pd['product_id']) && isset($pd['quantity'])) {
 
@@ -339,6 +339,9 @@ class pro_discount
                                 } else {
                                     $products_data[$pd_key]['total'] += $pd['price'];
                                 }
+                            }
+                            if ($pd['quantity'] <= $special['available_count']) {
+                                $products_data[$pd_key]['price'] = $special['special'];
                             }
                         } else {
                             $products_data[$pd_key]['price'] = $special['special'];
