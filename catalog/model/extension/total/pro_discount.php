@@ -42,6 +42,8 @@ class ModelExtensionTotalProDiscount extends Model
                 'value'      => $skidosik,
                 'sort_order' => $this->config->get("total_{$this->codename}_sort_order"),
             );
+
+            $total['total'] -= $skidosik;
         }
     }
 
