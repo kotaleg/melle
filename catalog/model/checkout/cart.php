@@ -15,6 +15,8 @@ class ModelCheckoutCart extends Model
             $this->load->model('tool/image');
             $this->load->model('catalog/manufacturer');
 
+            $state['total'] = 0;
+
             $products = $this->cart->getProducts();
 
             foreach ($products as $product) {
@@ -58,6 +60,7 @@ class ModelCheckoutCart extends Model
 
                     $price = $this->model_tool_base->formatMoney($unit_price, 0);
                     $total = $this->model_tool_base->formatMoney($unit_price * $product['quantity'], 0);
+                    $state['total'] += (float) ($unit_price * $product['quantity']);
                 } else {
                     $price = false;
                     $total = false;
@@ -131,7 +134,6 @@ class ModelCheckoutCart extends Model
             array_multisort($sort_order, SORT_ASC, $totals);
         }
 
-        $state['total'] = 0;
         $state['totals'] = array();
 
         foreach ($totals as $total) {
