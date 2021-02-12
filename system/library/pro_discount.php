@@ -361,7 +361,7 @@ class pro_discount
         $customer_id = $this->customer->getId();
 
         $product_info = $this->getProduct($product_id);
-        if (!$product_info) { return $special; }
+        if (!$product_info) { return $price; }
 
         foreach ($discounts as $k => $discount) {
 
