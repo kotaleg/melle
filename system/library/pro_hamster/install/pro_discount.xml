@@ -29,31 +29,6 @@
 
     </file>
 
-    <!-- <file path="catalog/controller/startup/seo_url.php">
-
-        <operation>
-            <search><![CDATA[if ($url[0] == 'information_id') {]]></search>
-            <add position="before"><![CDATA[
-                /* PRO DISCOUNT START */
-                if ($url[0] == 'discount_id') {
-                    $this->request->get['discount_id'] = $url[1];
-                }
-                /* PRO DISCOUNT END */
-            ]]></add>
-        </operation>
-
-        <operation>
-            <search><![CDATA[} elseif (isset($this->request->get['information_id'])) {]]></search>
-            <add position="before"><![CDATA[
-                /* PRO DISCOUNT START */
-                } elseif (isset($this->request->get['discount_id'])) {
-                    $this->request->get['route'] = 'extension/total/pro_discount/catalog';
-                /* PRO DISCOUNT END */
-            ]]></add>
-        </operation>
-
-    </file> -->
-
     <file path="system/library/cart/cart.php">
         <operation error="skip">
             <search><![CDATA[$this->weight = $registry->get('weight');]]></search>
@@ -69,6 +44,19 @@
                     if (!isset($this->tax)) {
                         $this->tax = $registry->get('tax');
                     }
+                }
+                /* PRO DISCOUNT END */
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search><![CDATA[$total += $product['total'];]]></search>
+            <add position="replace"><![CDATA[
+                /* PRO DISCOUNT START */
+                if (isset($product['original_total']) && is_numeric($product['original_total'])) {
+                    $total  +=  $product['original_total'];
+                } else {
+                    $total  +=  $product['total'];
                 }
                 /* PRO DISCOUNT END */
             ]]></add>
