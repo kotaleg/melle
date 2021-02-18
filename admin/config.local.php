@@ -1,11 +1,11 @@
 <?php
 // HTTP
-define('HTTP_SERVER', 'http://oc.test/302/melle-store/admin/');
-define('HTTP_CATALOG', 'http://oc.test/302/melle-store/');
+define('HTTP_SERVER', 'https://oc.test/302/melle-store/admin/');
+define('HTTP_CATALOG', 'https://oc.test/302/melle-store/');
 
 // HTTPS
-define('HTTPS_SERVER', 'http://oc.test/302/melle-store/admin/');
-define('HTTPS_CATALOG', 'http://oc.test/302/melle-store/');
+define('HTTPS_SERVER', 'https://oc.test/302/melle-store/admin/');
+define('HTTPS_CATALOG', 'https://oc.test/302/melle-store/');
 
 // HTTP OPT
 define('HTTP_OPT', HTTPS_CATALOG.'opt/');

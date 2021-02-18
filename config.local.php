@@ -1,9 +1,9 @@
 <?php
 // HTTP
-define('HTTP_SERVER', 'http://oc.test/302/melle-store/');
+define('HTTP_SERVER', 'https://oc.test/302/melle-store/');
 
 // HTTPS
-define('HTTPS_SERVER', 'http://oc.test/302/melle-store/');
+define('HTTPS_SERVER', 'https://oc.test/302/melle-store/');
 
 // HTTP OPT
 // define('HTTP_OPT', HTTPS_SERVER.'opt/');
