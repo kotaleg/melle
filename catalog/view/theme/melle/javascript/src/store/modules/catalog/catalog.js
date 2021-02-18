@@ -9,6 +9,7 @@ import router from '@/router/index'
 
 // initial state
 const state = {
+  breadcrumbs: [],
   products: [],
   product_total: 0,
 
