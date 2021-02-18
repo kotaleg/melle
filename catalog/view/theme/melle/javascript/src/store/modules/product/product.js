@@ -7,6 +7,20 @@ import notify from '@/components/partial/notify'
 
 // initial state
 const state = {
+  breadcrumbs: [],
+  images: [],
+  znachek: '',
+  description: '',
+  manufacturer: '',
+  manufacturers: '',
+  den: '',
+  sostav: '',
+  extra_description: '',
+  extra_description_hidden: '',
+  add_to_cart: '',
+  buy_one_click: '',
+  getProductStock: '',
+
   productId: false,
   name: '',
   manufacturer: '',
@@ -57,6 +71,37 @@ const actions = {
     shop.getInlineState('_product', (data) => {
       commit('SET_DATA', data)
     })
+  },
+  FETCH_DATA({ commit, dispatch, rootState }, productId) {
+    this.dispatch('header/setLoadingStatus', true)
+    shop.makeRequest(
+      {
+        url: rootState.catalog.getProductFullData,
+        productId,
+      },
+      (res) => {
+        this.dispatch('header/setLoadingStatus', false)
+        if (has(res.data, 'data')) {
+          commit('SET_DATA', res.data.data)
+          dispatch('getProductStockRequest', {productId})
+        }
+        notify.messageHandler(res.data, '_header')
+      }
+    )
+  },
+  CLEAR_DATA({ commit }) {
+    commit('SET_PRODUCT_ID', false)
+    commit('SET_IMAGES', [])
+    commit('SET_OPTIONS', [])
+  },
+  ENABLE_IMAGE({ commit, state }, index) {
+    for (const i in state.images) {
+      if (i == index) {
+        commit('SET_IMAGE_STATUS', {index: i, status: true})
+      } else {
+        commit('SET_IMAGE_STATUS', {index: i, status: false})
+      }
+    }
   },
   quantityHandler({ commit, state }, operation) {
     let q = state.quantity
@@ -201,6 +246,9 @@ const mutations = {
   },
   SET_PRODUCT_PREVIEW_STOCK(state, data) {
     Vue.set(state.productPreview, 'stock', data)
+  },
+  SET_IMAGE_STATUS(state, payload) {
+    Vue.set(state.images[payload.index], 'enabled', payload.status)
   },
   SET_DATA(state, data) {
     for (let d in data) {
