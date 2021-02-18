@@ -266,7 +266,7 @@ class ControllerExtensionModuleMelle extends Controller
 
             $defaultValues = $this->model_extension_module_super_offers->getDefaultValues($product_id, $product_info);
 
-            $state['options'] = $this->model_extension_module_super_offers->getOptions($product_id, $state['in_stock']);
+            $state['options'] = $this->model_extension_module_super_offers->getOptions($product_id, false);
             $fullCombinations = $this->model_extension_module_super_offers->getFullCombinations($product_id);
 
             // SPECIAL TEXT
@@ -388,10 +388,13 @@ class ControllerExtensionModuleMelle extends Controller
         $this->document->addState($state['id'], json_encode($state));
     }
 
-    public function initCatalog()
+    public function initCatalog($data)
     {
         // VARIABLE
         $state['id'] = "{$this->codename}_catalog";
+
+        $state['heading_title'] = isset($data['heading_title']) ? $data['heading_title'] : '';
+        $state['breadcrumbs'] = isset($data['breadcrumbs']) ? $data['breadcrumbs'] : [];
 
         $this->load->model('catalog/super');
         $state = array_merge($state, $this->model_catalog_super->getProducts());
@@ -401,6 +404,8 @@ class ControllerExtensionModuleMelle extends Controller
         $state['get_link'] = $this->model_extension_pro_patch_url->ajax('product/category/melle_get', '', true);
         $state['getProductPreviewData'] = $this->model_extension_pro_patch_url
             ->ajax("extension/module/melle_product/getProductPreviewData", '', true);
+        $state['getProductFullData'] = $this->model_extension_pro_patch_url
+            ->ajax("extension/module/melle_product/getProductFullData", '', true);
         $state['getProductPreviewStock'] = $this->model_extension_pro_patch_url
             ->ajax("extension/module/melle_product/getProductPreviewStock", '', true);
 

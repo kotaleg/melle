@@ -23,6 +23,161 @@ class ControllerExtensionModuleMelleProduct extends Controller
         $this->extension_model = $this->{'model_'.str_replace("/", "_", $this->route)};
     }
 
+    public function getProductFullData()
+    {
+        $parsed = $this->model_extension_pro_patch_json
+            ->parseJson(file_get_contents('php://input'));
+
+        $json = array();
+        $this->response->addHeader('Content-Type: application/json');
+
+        if (!isset($parsed['productId'])) {
+            $json['error'][] = 'Обязательный параметр productId отсутствует';
+            return $this->response->setOutput(json_encode($json));
+        }
+
+        $this->load->model('tool/image');
+        $this->load->language('product/product');
+        $this->load->model('catalog/product');
+        $this->load->model('extension/module/super_offers');
+        $this->load->model('extension/total/pro_discount');
+        $this->load->model('extension/module/pro_recently');
+
+        $productId = (int) $parsed['productId'];
+        $productInfo = $this->model_catalog_product->getProduct($productId);
+
+        if (!$productInfo) {
+            $json['error'][] = 'Мы не нашли продукта с указаным ID';
+            return $this->response->setOutput(json_encode($json));
+        }
+
+        $json['data']['productId'] = $productId;
+        $json['data']['name'] = $productInfo['h1'];
+        $json['data']['manufacturer'] = $productInfo['manufacturer'];
+        $json['data']['manufacturers'] = $this->model_extension_pro_patch_url
+            ->ajax('product/search', 'manufacturers=' . $productInfo['manufacturer_id']);
+        $json['data']['currentCategory'] = $this->model_tool_base->getCurrentCategoryName();
+        $json['data']['quantity'] = 1;
+
+        $json['data']['description'] = html_entity_decode($productInfo['description'], ENT_QUOTES, 'UTF-8');
+
+        $this->load->model('extension/module/size_list');
+        $json['data']['sizeList'] = $this->model_extension_module_size_list->getSizeList($productId);
+
+        $this->load->model('extension/module/pro_znachek');
+        $json['data']['znachek'] = $this->model_extension_module_pro_znachek->getZnachek($productInfo['znachek'], true);
+
+        $defaultValues = $this->model_extension_module_super_offers->getDefaultValues($productId, $productInfo);
+
+        $json['data']['options'] = $this->model_extension_module_super_offers->getOptions($productId, false);
+        $fullCombinations = $this->model_extension_module_super_offers->getFullCombinations($productId);
+
+        // SPECIAL TEXT
+        $json['data']['star'] = false;
+        $json['data']['specialText'] = $this->model_extension_total_pro_discount->getSpecialText($productId, false);
+
+        if (strstr($json['data']['specialText'], '*')) {
+            $json['data']['star'] = true;
+            $json['data']['specialText'] = trim(str_replace('*', '', $json['data']['specialText']));
+        }
+
+        $this->load->model('catalog/review');
+        $json['data']['reviewCount'] = (int) $this->model_catalog_review->getTotalReviewsByProductId($productId);
+        $json['data']['ratingValue'] = (float) $defaultValues['rating'];
+
+        $json['data']['ratingArray'] = (array) array();
+        for ($i=0; $i < 5; $i++) {
+            if ($defaultValues['rating'] > $i) {
+                $json['data']['ratingArray'][] = true;
+                continue;
+            }
+            $json['data']['ratingArray'][] = false;
+        }
+
+        /* EXTRA DESCRIPTION START */
+        $this->load->model('extension/module/extra_description');
+
+        $data['extra_description'] = html_entity_decode(
+            $this->model_extension_module_extra_description
+                ->getDescription($productId),
+            ENT_QUOTES, 'UTF-8');
+
+        $html_dom = new d_simple_html_dom();
+        $html_dom->load($data['extra_description'], $lowercase = true, $stripRN = false, $defaultBRText = DEFAULT_BR_TEXT);
+
+        $extraDescriptionPCount = 0;
+        $data['extra_description_hidden'] = '';
+        foreach($html_dom->find('p') as $id => $element) {
+            if (utf8_strlen(strip_tags($element->innertext)) > 0) {
+                $extraDescriptionPCount++;
+            }
+            if ($extraDescriptionPCount > 3) {
+                $data['extra_description_hidden'] .= (string) $element->outertext;
+                $element->outertext = '';
+            }
+        }
+        $data['extra_description'] = (string) $html_dom;
+        /* EXTRA DESCRIPTION END */
+
+        $json['data']['sostav'] = false;
+        $json['data']['den'] = false;
+
+        foreach ($this->model_catalog_product->getProductAttributes($productId) as $group) {
+            if (strcmp(trim($group['name']), 'Атрибуты') === 0) {
+                foreach ($group['attribute'] as $attr) {
+                    if (strcmp(trim($attr['name']), 'Состав') === 0) {
+                        $json['data']['sostav'] = $attr['text'];
+                    }
+                    if (strcmp(trim($attr['name']), 'Ден') === 0) {
+                        $json['data']['den'] = $attr['text'];
+                    }
+                }
+            }
+        }
+
+        $json['data']['images'] = array();
+
+        if ($productInfo['image'] && is_file(DIR_IMAGE . $productInfo['image'])) {
+            $json['data']['images'][] = array(
+                'zoom' => $this->model_tool_image->resize($productInfo['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width') * 2, $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height') * 2, true),
+                'popup' => $this->model_tool_image->resize($productInfo['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true),
+                'image' => $this->model_tool_image->resize($productInfo['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), true),
+                'thumb' => $this->model_tool_image->resize($productInfo['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), true),
+                'enabled' => true,
+            );
+        }
+
+        foreach ($this->model_catalog_product->getProductImages($productId) as $result) {
+            if (!is_file(DIR_IMAGE . $result['image'])) {
+                continue;
+            }
+
+            $json['data']['images'][] = array(
+                'zoom' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width') * 2, $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height') * 2, true),
+                'popup' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true),
+                'image' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), true),
+                'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), true),
+                'enabled' => false,
+            );
+        }
+
+        if (empty($json['data']['images'])) {
+            $json['data']['images'][] = array(
+                'zoom' => $this->model_tool_image->resize('no_image.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width') * 2, $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height') * 2, true),
+                'popup' => $this->model_tool_image->resize('no_image.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true),
+                'image' => $this->model_tool_image->resize('no_image.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), true),
+                'thumb' => $this->model_tool_image->resize('no_image.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), true),
+                'enabled' => true,
+            );
+        }
+
+        $json['data']['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add');
+        $json['data']['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_oneclick');
+        $json['data']['getProductStock'] = $this->model_extension_pro_patch_url->ajax('extension/module/melle_product/getProductPreviewStock');
+
+        $this->response->setOutput(json_encode($json));
+    }
+
     public function getProductPreviewData()
     {
         $parsed = $this->model_extension_pro_patch_json
