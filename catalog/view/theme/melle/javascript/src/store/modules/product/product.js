@@ -73,6 +73,7 @@ const actions = {
     })
   },
   FETCH_DATA({ commit, dispatch, rootState }, productId) {
+    dispatch('CLEAR_DATA')
     this.dispatch('header/setLoadingStatus', true)
     shop.makeRequest(
       {
@@ -91,6 +92,7 @@ const actions = {
   },
   CLEAR_DATA({ commit }) {
     commit('SET_PRODUCT_ID', false)
+    commit('SET_NAME', '')
     commit('SET_IMAGES', [])
     commit('SET_OPTIONS', [])
   },
