@@ -4,6 +4,7 @@ import VueTheMask from 'vue-the-mask'
 import PrettyCheck from 'pretty-checkbox-vue/check'
 import VModal from 'vue-js-modal'
 import vSelect from 'vue-select'
+import ZoomOnHover from "vue-zoom-on-hover"
 
 import router from './router'
 import filterHelper from './router/filterHelper'
@@ -20,9 +21,16 @@ Vue.prototype.$codename = 'melle'
 
 Vue.use(Notifications)
 Vue.use(VueTheMask)
+Vue.use(ZoomOnHover)
 Vue.use(VModal, { dialog: true })
 Vue.component('p-check', PrettyCheck)
 Vue.component('v-select', vSelect)
+
+Vue.directive('focus', {
+  inserted: function (el) {
+    el.focus()
+  }
+})
 
 import Header from './components/header/Header.vue';
 Vue.component('melle-header', Header)
