@@ -48,6 +48,7 @@
     "vue-sticky": "^3.3.4",
     "vue-sticky-directive": "^0.0.9",
     "vue-the-mask": "^0.11.1",
+    "vue-zoom-on-hover": "^1.0.5",
     "vue2-datepicker": "^2.10.0",
     "vuejs-datepicker": "^1.5.4",
     "vuex": "^3.0.1",
