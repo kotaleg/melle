@@ -188,7 +188,7 @@
 
 <script>
 import { isEqual } from 'lodash'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import { get, sync } from 'vuex-pathify'
 
 import OneClickModal from '@/components/modal/OneClickModal.vue'
@@ -304,9 +304,11 @@ export default {
     this.$store.dispatch('product/INIT_DATA')
   },
   mounted() {
-    this.getProductStockRequest({
-      productId: this.productId,
-    })
+    if (this.productId) {
+      this.getProductStockRequest({
+        productId: this.productId,
+      })
+    }
 
     // REMOVE PRERENDERED CONTENT
     let prerender = document.getElementById('rendered-product-content')
