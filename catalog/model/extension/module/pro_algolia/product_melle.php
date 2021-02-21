@@ -27,7 +27,7 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         return \pro_algolia\id::generateIdForProduct((int) $productId);
     }
 
-    public function prepareData($productId)
+    public function prepareData($productId, $objectMaxSize)
     {
         $productData = $this->model_catalog_product->getProduct($productId);
 
@@ -99,30 +99,45 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         $material = $this->getAttributeValue($productData['product_id'], 'материал');
         $den = $this->getAttributeValue($productData['product_id'], 'ден');
 
-        return array(
+        $finalData = array(
             'productId' => (int) $productId,
-
             'name' => $productData['name'],
             'h1' => $h1,
-            'productAltNames' => $productAltNames,
-            'productCombinationNames' => $productCombinationNames,
-            'productPrintNames' => $productPrintNames,
-
-            'description' => html_entity_decode($productData['description'], ENT_QUOTES, 'UTF-8'),
-            'smallDescription' => html_entity_decode($smallDescription, ENT_QUOTES, 'UTF-8'),
-
-            'manufacturer' => $manufacturer,
-            'manufacturerAltNames' => $manufacturerAltNames,
-
             'image' => $image,
-
             'price' => $this->getPrice($price),
             'special' => $this->getPrice($special),
             'specialText' => $specialText,
-
             'material' => $material,
             'den' => (int) $den,
+            'manufacturer' => $manufacturer,
         );
+
+        // most valuable fields on top
+        $extraFields = array(
+            'description' => html_entity_decode($productData['description'], ENT_QUOTES, 'UTF-8'),
+            'productAltNames' => $productAltNames,
+            'productCombinationNames' => $productCombinationNames,
+            'productPrintNames' => $productPrintNames,
+            'smallDescription' => html_entity_decode($smallDescription, ENT_QUOTES, 'UTF-8'),
+            'manufacturerAltNames' => $manufacturerAltNames,
+        );
+
+        if ($objectMaxSize) {
+            $newFinalData = $finalData;
+            $finalDataBytesCount = pro_algolia\hash::countBytesInItemData($newFinalData);
+
+            while ($finalDataBytesCount < $objectMaxSize) {
+                $nextField = array_pop(array_reverse(array_keys($extraFields)));
+                $newFinalData[$nextField] = $extraFields[$nextField];
+                unset($extraFields[$nextField]);
+
+                $finalDataBytesCount = pro_algolia\hash::countBytesInItemData($newFinalData);
+            }
+
+            $finalData = $newFinalData;
+        }
+
+        return $finalData;
     }
 
     private function getManufacturerAltNamesById($manufacturerId)

@@ -19,10 +19,10 @@
         </operation>
 
         <operation error="skip">
-            <search><![CDATA[return $this->model_extension_module_pro_algolia_product->prepareData($itemId);]]></search>
+            <search><![CDATA[return $this->model_extension_module_pro_algolia_product->prepareData($itemId, $objectMaxSize);]]></search>
             <add position="replace"><![CDATA[
                 /* IVAN MOD START */
-                return $this->model_extension_module_pro_algolia_product_melle->prepareData($itemId);
+                return $this->model_extension_module_pro_algolia_product_melle->prepareData($itemId, $objectMaxSize);
                 /* IVAN MOD END */
             ]]></add>
         </operation>

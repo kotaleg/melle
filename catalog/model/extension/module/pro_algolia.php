@@ -179,7 +179,7 @@ class ModelExtensionModulePROAlgolia extends Model
 
                     // algolia has a restriction on the object size
                     // by default no more then 10KB
-                    $itemDataBytesCount = $this->countBytesInItemData($itemData);
+                    $itemDataBytesCount = pro_algolia\hash::countBytesInItemData($itemData);
                     if ($objectMaxSize && $itemDataBytesCount > $objectMaxSize) {
                         $this->updateQueueStatus($next['_id'], pro_algolia\constant::ERROR);
                         $this->addToQueueLog(
@@ -417,17 +417,13 @@ class ModelExtensionModulePROAlgolia extends Model
 
     private function prepareDataForItem($itemType, $itemId)
     {
+        $objectMaxSize = (int) $this->setting['object_max_size'];
+
         switch ($itemType) {
             case \pro_algolia\constant::PRODUCT:
                 $this->load->model("{$this->route}/product");
-                return $this->model_extension_module_pro_algolia_product->prepareData($itemId);
+                return $this->model_extension_module_pro_algolia_product->prepareData($itemId, $objectMaxSize);
                 break;
         }
-    }
-
-    private function countBytesInItemData($data)
-    {
-        $json = json_encode($data);
-        return ini_get('mbstring.func_overload') ? mb_strlen($json , '8bit') : strlen($json);
     }
 }

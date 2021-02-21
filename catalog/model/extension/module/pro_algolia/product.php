@@ -27,7 +27,7 @@ class ModelExtensionModulePROAlgoliaProduct extends Model
         return \pro_algolia\id::generateIdForProduct((int) $productId);
     }
 
-    public function prepareData($productId)
+    public function prepareData($productId, $objectMaxSize)
     {
         $productData = $this->model_catalog_product->getProduct($productId);
 
