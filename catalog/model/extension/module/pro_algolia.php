@@ -417,7 +417,8 @@ class ModelExtensionModulePROAlgolia extends Model
 
     private function prepareDataForItem($itemType, $itemId)
     {
-        $objectMaxSize = (int) $this->setting['object_max_size'];
+        // we should leave some space just in case
+        $objectMaxSize = (int) $this->setting['object_max_size'] * 0.95;
 
         switch ($itemType) {
             case \pro_algolia\constant::PRODUCT:
