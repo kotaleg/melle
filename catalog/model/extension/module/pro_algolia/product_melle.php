@@ -123,18 +123,13 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         );
 
         if ($objectMaxSize) {
-            $newFinalData = $finalData;
-            $finalDataBytesCount = pro_algolia\hash::countBytesInItemData($newFinalData);
-
-            while ($finalDataBytesCount < $objectMaxSize) {
-                $nextField = array_pop(array_reverse(array_keys($extraFields)));
-                $newFinalData[$nextField] = $extraFields[$nextField];
-                unset($extraFields[$nextField]);
-
-                $finalDataBytesCount = pro_algolia\hash::countBytesInItemData($newFinalData);
+            foreach ($extraFields as $key => $value) {
+                $finalData[$key] = $value;
+                $finalDataBytesCount = pro_algolia\hash::countBytesInItemData($finalData);
+                if ($finalDataBytesCount > $objectMaxSize) {
+                    unset($finalData[$key]);
+                }
             }
-
-            $finalData = $newFinalData;
         }
 
         return $finalData;
