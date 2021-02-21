@@ -49,12 +49,6 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
         $h1 = (isset($productData['h1'])) ? $productData['h1'] : '';
         $smallDescription = (isset($productData['small_description'])) ? $productData['small_description'] : '';
 
-        /* EXTRA DESCRIPTION START */
-        $this->load->model('extension/module/extra_description');
-        $extraDescription = $this->model_extension_module_extra_description
-            ->getDescription($productId);
-        /* EXTRA DESCRIPTION END */
-
         $manufacturer = utf8_strtolower($productData['manufacturer']);
 
         $manufacturerAltNames = array_map(function($row) {
