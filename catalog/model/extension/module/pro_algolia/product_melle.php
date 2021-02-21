@@ -116,7 +116,6 @@ class ModelExtensionModulePROAlgoliaProductMelle extends Model
 
             'description' => html_entity_decode($productData['description'], ENT_QUOTES, 'UTF-8'),
             'smallDescription' => html_entity_decode($smallDescription, ENT_QUOTES, 'UTF-8'),
-            'extraDescription' => html_entity_decode($extraDescription, ENT_QUOTES, 'UTF-8'),
 
             'manufacturer' => $manufacturer,
             'manufacturerAltNames' => $manufacturerAltNames,
