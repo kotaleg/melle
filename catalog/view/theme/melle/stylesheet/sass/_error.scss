@@ -1,14 +1,14 @@
 .main-page--error {
   height: 700px;
   background-size: cover;
-  background-image: url(./../image/404_s.jpg);
+  background-image: url(./../../image/404_s.jpg);
 
   @media (min-width: 768px) {
-    background-image: url(./../image/404_m.jpg);
+    background-image: url(./../../image/404_m.jpg);
   }
 
   @media (min-width: 992px) {
-    background-image: url(./../image/404.jpg);
+    background-image: url(./../../image/404.jpg);
   }
 }
 
