@@ -22,8 +22,8 @@
           <div class="col-lg-5">
             <div class="mt-3 d-flex product-images product-images-trigger">
                 <ul class="d-none d-md-flex flex-column flex-shrink-0 justify-content-center p-0 slider-nav">
-                  <li v-for="(image, index) in images" :key="`preview-${index}`" @click="ENABLE_IMAGE(index)"
-                      class="prod-card__item-photo"
+                  <li v-for="(image, index) in images" :key="`preview-${index}`" v-show="Math.abs(index - enabledImageIndex) <= 2" @click="ENABLE_IMAGE(index)"
+                      :class="['prod-card__item-photo', {'active': image.enabled}]"
                       :data-hash="image.imageHash">
                       <img itemprop="image"
                           :src="image.thumb"
@@ -112,6 +112,14 @@ export default {
       'extra_description',
       'extra_description_hidden',
     ]),
+    enabledImageIndex() {
+      for (const key in this.images) {
+        if (this.images[key].enabled) {
+          return key
+        }
+      }
+      return 0
+    },
   },
   created() {
     if (this.$route.query.product_id) {

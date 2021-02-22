@@ -231,6 +231,10 @@
   display: none;
 }
 
+.prod-card__item-photo.active:after {
+  display: none;
+}
+
 .prod-card__list-big-photo {
   overflow: hidden;
   list-style: none;
