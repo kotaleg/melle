@@ -114,7 +114,11 @@ export default {
     ]),
   },
   created() {
-    this.$store.dispatch('product/FETCH_DATA', this.$route.params.productId)
+    if (this.$route.query.product_id) {
+      this.$store.dispatch('product/FETCH_DATA', this.$route.query.product_id)
+    } else {
+      this.$store.dispatch('product/FETCH_DATA', this.$route.params.productId)
+    }
   },
   methods: {
     ...mapActions('product', [

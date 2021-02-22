@@ -11,7 +11,7 @@
           p.znachek_class,
         ]"
       >
-        <router-link :to="`/product/${p.product_id}`" click="gtmProductClick(i)">
+        <router-link :to="p.router_link" @click="gtmProductClick(i)">
           <img :src="p.image" loading="lazy" width="365" height="468" :alt="p.h1" class="img-fluid" />
         </router-link>
 
@@ -22,7 +22,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div @click="gtmProductClick(i)" class="my-4">
-              <router-link :to="`/product/${p.product_id}`" class="title">{{ p.h1 }}</router-link>
+              <router-link :to="p.router_link" class="title">{{ p.h1 }}</router-link>
             </div>
           </div>
           <div
@@ -52,7 +52,7 @@
             >
           </div>
 
-          <router-link v-else :to="`/product/${p.product_id}`" class="btn btn-primary btn-block w-75 m-auto">Скоро в продаже</router-link>
+          <router-link v-else :to="p.router_link" class="btn btn-primary btn-block w-75 m-auto">Скоро в продаже</router-link>
         </div>
       </div>
     </div>

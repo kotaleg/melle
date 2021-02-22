@@ -50,9 +50,16 @@ class ModelCatalogSuper extends Model
                 $href = $this->model_extension_pro_patch_url->ajax('product/product', 'product_id=' . (int)$p['product_id']);
             }
 
+            $routerLink = "product/{$p['product_id']}";
+            if ($this->config->get('config_seo_url')) {
+                $routerLink = 'product/' . str_replace(HTTPS_SERVER, '', $href);
+            }
+            $routerLink .= "?product_id={$p['product_id']}";
+
             $d_ = array(
                 'product_id' => $p['product_id'],
                 'href' => $href,
+                'router_link' => $routerLink,
                 'name' => $p['name'],
                 'h1' => $p['h1'],
                 'manufacturer' => $p['manufacturer'],
