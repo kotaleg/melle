@@ -120,7 +120,7 @@
                   <span v-else class="ruble-sign">Р</span>
                 </span>
                 <span v-if="!isSpecial" class="price">{{ price }} <span class="ruble-sign">Р</span></span>
-                <div v-if="star" class="special-text-info">{{specialText}}</div>
+                <div v-if="star && specialText" class="special-text-info">{{specialText}}</div>
               </div>
             </div>
 
