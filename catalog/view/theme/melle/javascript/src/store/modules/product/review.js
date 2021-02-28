@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import { has } from 'lodash'
 import shop from '@/api/shop'
 import notify from '@/components/partial/notify'
 import Errors from '@/components/partial/errors'
@@ -63,11 +63,11 @@ const actions = {
           this.dispatch('header/setLoadingStatus', false)
           notify.messageHandler(res.data, '_header')
 
-          if ('form_error' in res.data) {
+          if (has(res.data, 'form_error')) {
             commit('setFormErrors', res.data.form_error)
           }
 
-          if ('sent' in res.data && res.data.sent === true) {
+          if (has(res.data, 'sent') && res.data.sent === true) {
             resolve(true)
           }
         }
