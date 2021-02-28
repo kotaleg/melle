@@ -46,7 +46,7 @@
               {{ getPrice(i) }} <span class="ruble-sign">Р</span></span
             >
             <a
-              @click="openProductPreview(p.product_id)" href="javascript:void(0)"
+              @click="openProductPreview(p)" href="javascript:void(0)"
               class="btn btn-primary px-4"
               >Купить</a
             >
@@ -103,9 +103,11 @@ export default {
       this.productClick({ page_type: false, product })
     },
 
-    openProductPreview(productId) {
+    openProductPreview(product) {
       if (window.matchMedia('(min-width: 992px)').matches) {
-        this.$modal.show('product-preview-modal', { productId })
+        this.$modal.show('product-preview-modal', { productId: product.product_id })
+      } else {
+        this.$router.push(product.router_link)
       }
     },
   },
