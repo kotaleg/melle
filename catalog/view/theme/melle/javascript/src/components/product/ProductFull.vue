@@ -22,9 +22,8 @@
           <div class="col-lg-5">
             <div class="mt-3 d-flex product-images product-images-trigger">
                 <ul class="d-none d-md-flex flex-column flex-shrink-0 justify-content-center p-0 slider-nav">
-                  <li v-for="(image, index) in images" :key="`preview-${index}`" v-show="Math.abs(index - enabledImageIndex) <= 2" @click="ENABLE_IMAGE(index)"
-                      :class="['prod-card__item-photo', {'active': image.enabled}]"
-                      :data-hash="image.imageHash">
+                  <li v-for="(image, index) in images" :key="`preview-${index}`" v-show="Math.abs(index - enabledImageIndex) <= 1" @click="ENABLE_IMAGE(index)"
+                      :class="['prod-card__item-photo', {'active': image.enabled}]">
                       <img itemprop="image"
                           :src="image.thumb"
                           class="img-fluid" />
@@ -112,6 +111,7 @@ export default {
       'extra_description',
       'extra_description_hidden',
     ]),
+    imageHash: get('product/stock@imageHash'),
     enabledImageIndex() {
       for (const key in this.images) {
         if (this.images[key].enabled) {
@@ -133,5 +133,14 @@ export default {
       'ENABLE_IMAGE',
     ]),
   },
+  watch: {
+    imageHash: function (imageHash) {
+      for (const key in this.images) {
+        if (imageHash == this.images[key].imageHash) {
+          this.ENABLE_IMAGE(key)
+        }
+      }
+    }
+  }
 }
 </script>
