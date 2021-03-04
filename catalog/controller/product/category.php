@@ -80,7 +80,7 @@ class ControllerProductCategory extends Controller {
                 'href' => $this->url->link('product/category', 'path=' . $this->request->get['path'])
             );
 
-            $catalog_state = $this->load->controller('extension/module/melle/initCatalog');
+            $catalog_state = $this->load->controller('extension/module/melle/initCatalog', $data);
             $data['rcc'] = $this->load->controller('extension/module/melle/renderCatalogContent', $catalog_state);
 
             $filter_state = $this->load->controller('extension/module/melle/initFilter');

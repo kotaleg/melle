@@ -47,7 +47,7 @@ class ControllerExtensionTotalProDiscount extends Controller
                 'href' => $this->url->link($this->route, 'discount_id=' . $discount_id)
             );
 
-            $catalog_state = $this->load->controller('extension/module/melle/initCatalog');
+            $catalog_state = $this->load->controller('extension/module/melle/initCatalog', $data);
             $data['rcc'] = $this->load->controller('extension/module/melle/renderCatalogContent', $catalog_state);
 
             $filter_state = $this->load->controller('extension/module/melle/initFilter');
