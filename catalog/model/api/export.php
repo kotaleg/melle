@@ -1168,6 +1168,167 @@ class ModelApiExport extends Model
         return $json;
     }
 
+    public function actionAliexpressExport()
+    {
+        $file = $this->export_path . 'aliexpress.xml';
+        if (is_file($file)) {
+            @unlink($file);
+        }
+        $this->createPath($file);
+
+        $this->load->model('tool/base');
+        $base_path = $this->model_tool_base->getBase();
+
+        $xmlObject = new \pro_xml\pro_xml('', [
+            'version' => '1.0',
+            'encoding' => 'UTF-8',
+        ]);
+
+        $ymlCatalog = $xmlObject->addChild('yml_catalog', true)
+            ->setAttribute('date', date('Y-m-d H:i'));
+
+        $shop = $ymlCatalog->addChild('shop', true)
+            ->add([
+                'name' => htmlspecialchars($this->config->get('config_meta_title')),
+                'company' => htmlspecialchars($this->config->get('config_meta_title')),
+                'url' => $base_path,
+                'currencies' => [
+                    'currency' => [
+                        '@id' => 'RUR',
+                        '@rate' => '1',
+                        '@plus' => '0'
+                    ],
+            ]]);
+
+        $categories = $shop->addChild('categories', true);
+
+        foreach ($this->getCategories() as $cat) {
+            $categories->addChild(['category' => htmlspecialchars($cat['name'])], true)
+                ->setAttribute('id', $cat['category_id']);
+        }
+
+        $offers = $shop->addChild('offers', true);
+
+        $pcount = 0;
+        $ccount = 0;
+        $no_price_count = 0;
+
+        $this->load->model('catalog/product');
+        $this->load->model('api/import_1c/product');
+        $this->load->model('extension/module/super_offers');
+
+        $products = $this->model_catalog_product->getProducts();
+
+        foreach ($products as $product) {
+
+            $combinations = $this->model_extension_module_super_offers
+                ->getFullCombinations($product['product_id']);
+            $options = $this->model_extension_module_super_offers
+                ->getOptions($product['product_id']);
+
+            foreach ($combinations as $c) {
+
+                $price = $this->tax->calculate(
+                    $c['price'], $product['tax_class_id'], $this->config->get('config_tax'));
+
+                $price = (int) preg_replace('/\s+/', '', $price);
+
+                if ($product['image'] && is_file(DIR_IMAGE.$product['image'])) {
+                    $image = $base_path . 'image/' . $product['image'];
+                } else {
+                    $image = $base_path . 'image/placeholder.png';
+                }
+
+                if (isset($c['image']) && is_file(DIR_IMAGE.$c['image'])) {
+                    $image = $base_path . 'image/' . $c['image'];
+                }
+
+                $offerId = hash('crc32b', hash('sha256', $product['product_id']));
+                $available = ($c['quantity'] >= 3) ? 'true' : 'false';
+
+                $offerData = [
+                    '@id' => $offerId,
+                    '@available' => $available,
+                    'url' => $this->getSeoUrl($product['product_id']),
+                    'price' => $price,
+                    'currencyId' => 'RUR',
+                    'categoryId' => $this->getCloseCat($product['product_id']),
+                    'picture' => $image,
+                ];
+
+                if (!empty($product['manufacturer'])) {
+                    $offerData['vendor'] = htmlspecialchars($product['manufacturer']);
+                }
+
+                $offerData['description'] = 'Описание у товара скоро появится';
+                if (!empty($product['description'])) {
+                    $offerData['description'] = htmlspecialchars(strip_tags($product['description']));
+                }
+
+                $offerData['sales_notes'] = 'мин.сумма заказа: 1000р, мин.партия: 1шт';
+
+                if (isset($product['sku']) && $product['sku']) {
+                    $offerData['shop-sku'] = $product['sku'];
+                }
+
+                if ($c['barcode']) {
+                    $offerData['barcode'] = htmlspecialchars($c['barcode']);
+                }
+
+                $offer = $offers->add([
+                    'offer' => $offerData,
+                ], true);
+
+                /* OPTIONS START */
+                $color = '';
+                $size = '';
+                $optionValues = $this->getOptionValuesForCombination($options, $c);
+
+                foreach ($optionValues as $optionData) {
+                    switch ($optionData['optionClass']) {
+                        case 'color':
+                            $color = $optionData['productOptionName'];
+                            break;
+
+                        case 'size':
+                            $size = $optionData['productOptionName'];
+                            break;
+                    }
+
+                    $offer->add([
+                        'param' => [
+                            '@name' => $optionData['optionName'],
+                            '@' => $optionData['productOptionName'],
+                        ]
+                    ]);
+                }
+                /* OPTIONS END */
+
+                $name = ($product['h1']) ? $product['h1'] : $product['name'];
+                $name = trim(implode(' ', array($name, $color, $size)));
+
+                $offer->addChild(['name' => htmlspecialchars($name)]);
+
+                $ccount++;
+            }
+
+            $pcount++;
+        }
+
+        $f = fopen($file, 'w');
+        fwrite($f, $xmlObject->xml());
+        fclose($f);
+
+        $json['message'][] = "Обработано {$pcount} товаров.";
+        $json['message'][] = "Обработано {$ccount} комбинаций опций.";
+
+        if ($no_price_count) {
+            $json['message'][] = "Товаров без цены {$no_price_count}";
+        }
+
+        return $json;
+    }
+
     private function getYandexOffersDataFromExcel()
     {
         $data = array();
