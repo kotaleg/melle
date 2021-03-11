@@ -1240,7 +1240,7 @@ class ModelApiExport extends Model
 
                 $offerId = hash('crc32b', hash('sha256', $c['import_id']));
                 $groupId = hash('crc32b', hash('sha256', $product['product_id']));
-                $available = ($c['quantity'] >= 3) ? 'true' : 'false';
+                $available = ((int) $c['quantity'] >= 3) ? 'true' : 'false';
 
                 $offerData = [
                     '@id' => $offerId,
@@ -1251,6 +1251,7 @@ class ModelApiExport extends Model
                     'currencyId' => 'RUR',
                     'categoryId' => $this->getCloseCat($product['product_id']),
                     'picture' => $image,
+                    'quantity' => (int) $c['quantity'],
                 ];
 
                 if (!empty($product['manufacturer'])) {
