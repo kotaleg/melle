@@ -3,7 +3,6 @@ class ModelApiExport extends Model
 {
     private $codename = 'export';
     private $route = 'api/export';
-    private $setting_route = 'extension/module/export';
 
     private $export_path;
 
@@ -11,11 +10,7 @@ class ModelApiExport extends Model
     {
         parent::__construct($registry);
 
-        $this->load->model('extension/pro_patch/db');
-        $this->load->model('api/import_1c/progress');
-
         $this->export_path = $this->getRootPath() . 'exports/';
-        $this->extra = $this->model_api_import_1c_progress->getExtra();
     }
 
     private function getRootPath()
