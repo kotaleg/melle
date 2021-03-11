@@ -30,7 +30,7 @@ define('DIR_SESSION', '/Users/ivan/Documents/repos/oc/302/melle-store/system/sto
 define('DB_DRIVER', 'mysqli');
 define('DB_HOSTNAME', '127.0.0.1');
 define('DB_USERNAME', 'root');
-define('DB_PASSWORD', 'root');
+define('DB_PASSWORD', 'pRRw96iG');
 define('DB_DATABASE', 'melle-store');
 define('DB_PORT', '3306');
 define('DB_PREFIX', 'oc_');
