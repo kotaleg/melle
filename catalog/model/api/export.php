@@ -1243,11 +1243,13 @@ class ModelApiExport extends Model
                     $image = $base_path . 'image/' . $c['image'];
                 }
 
-                $offerId = hash('crc32b', hash('sha256', $product['product_id']));
+                $offerId = hash('crc32b', hash('sha256', $c['import_id']));
+                $groupId = hash('crc32b', hash('sha256', $product['product_id']));
                 $available = ($c['quantity'] >= 3) ? 'true' : 'false';
 
                 $offerData = [
                     '@id' => $offerId,
+                    '@gid' => $groupId,
                     '@available' => $available,
                     'url' => $this->getSeoUrl($product['product_id']),
                     'price' => $price,
