@@ -16,10 +16,6 @@ Options -Indexes
 RewriteEngine On
 RewriteBase /
 
-#IMAGE RESIZE
-RewriteRule ^resizeImage/([^.]*)\.(png|jpg|jpeg|gif)$ resize.php?file=$1.$2&%{QUERY_STRING} [NC,L]
-#IMAGE RESIZE
-
 RewriteCond %{HTTP_HOST} ^www\.(.*)$
 RewriteRule ^(.*)$ http://%1/$1 [L,R=301]
 
