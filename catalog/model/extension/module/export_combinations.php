@@ -34,13 +34,13 @@ class ModelExtensionModuleExportCombinations extends Model
     {
         $combinationsData = array();
 
-        foreach ($combinations as $combinationId) {
-            $combinationData = $this->super_offers->getCombination($combinationId);
+        foreach ($combinations as $importId) {
+            $combinationData = $this->super_offers->getCombinationByImportId($importId);
             if (!$combinationData || !isset($combinationData['image'])) {
-                $combinationsData[$combinationId] = false;
+                $combinationsData[$importId] = false;
                 continue;
             }
-            $combinationsData[$combinationId] = array(
+            $combinationsData[$importId] = array(
                 'image' => $combinationData['image'],
             );
         }

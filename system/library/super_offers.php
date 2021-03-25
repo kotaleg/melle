@@ -403,6 +403,14 @@ class super_offers
         return $q->row;
     }
 
+    public function getCombinationByImportId($importId)
+    {
+        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
+            WHERE `import_id` = '". $this->db->escape($importId) ."'");
+
+        return $q->row;
+    }
+
     public function updateCombinationImage($combinationId, $image)
     {
         $this->db->query("UPDATE `" . DB_PREFIX . self::OPTION_COMMBINATION . "`
