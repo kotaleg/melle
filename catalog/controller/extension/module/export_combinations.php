@@ -18,6 +18,7 @@ class ControllerExtensionModuleExportCombinations extends Controller
 
         $this->load->model($this->route);
         $this->load->model('extension/pro_patch/load');
+        $this->load->model('extension/pro_patch/json');
         $this->load->model('extension/pro_patch/language');
         $this->load->model('extension/pro_patch/setting');
 
@@ -31,8 +32,8 @@ class ControllerExtensionModuleExportCombinations extends Controller
 
         $json['codename'] = $this->codename;
 
-        if (isset($parsed['combinations']) && is_array($parsed['combinations'])) {
-            $json = $this->extension_model->fillCombinations();
+        if (is_array($parsed)) {
+            $json = $this->extension_model->fillCombinations($parsed);
         } else {
             $json['message'][] = 'Missing reuired data';
         }
