@@ -390,7 +390,7 @@ class super_offers
     public function getCombinations($start, $limit)
     {
         $q = $this->db->query("SELECT * FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
-            LIMIT " . (int) $start . "," . (int) $limit . "'");
+            LIMIT " . (int) $start . "," . (int) $limit . ";");
 
         return $q->rows;
     }
@@ -401,5 +401,12 @@ class super_offers
             WHERE `combination_id` = '". (int)$combinationId ."'");
 
         return $q->row;
+    }
+
+    public function updateCombinationImage($combinationId, $image)
+    {
+        $this->db->query("UPDATE `" . DB_PREFIX . self::OPTION_COMMBINATION . "`
+            SET `image` = '". $this->db->escape($image) ."'
+            WHERE `combination_id` = '". (int) $combinationId ."' ");
     }
 }
