@@ -25,20 +25,6 @@ class ModelToolOpt extends Model
         }
     }
 
-    public function getMainLoginLink()
-    {
-        if (defined('HTTP_MAIN_ADMIN')) {
-            $this->load->model('user/api');
-
-            $api_info = $this->model_user_api->getApi($this->config->get('config_api_id'));
-
-            if ($api_info && isset($api_info['key'])) {
-                return HTTP_MAIN_ADMIN .
-                    "index.php?route=common/login&ivantoken={$api_info['key']}&user={$this->user->getUserName()}";
-            }
-        }
-    }
-
     public function isValidToken($token)
     {
         if ($token) {
@@ -60,15 +46,6 @@ class ModelToolOpt extends Model
         }
 
         return false;
-    }
-
-    public function isMain()
-    {
-        if (defined('DIR_MAIN')) {
-            if (is_file(DIR_MAIN.'index.php')) {
-                return true;
-            }
-        }
     }
 }
 
