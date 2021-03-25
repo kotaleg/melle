@@ -378,4 +378,28 @@ class super_offers
 
         return null;
     }
+
+    public function getCobinationsCount()
+    {
+        $q = $this->db->query("SELECT COUNT(`combination_id`) AS `total`
+            FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`");
+
+        return (int) $q->row['total'];
+    }
+
+    public function getCombinations($start, $limit)
+    {
+        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
+            LIMIT " . (int) $start . "," . (int) $limit . "'");
+
+        return $q->rows;
+    }
+
+    public function getCombination($combinationId)
+    {
+        $q = $this->db->query("SELECT * FROM `". DB_PREFIX . self::OPTION_COMMBINATION ."`
+            WHERE `combination_id` = '". (int)$combinationId ."'");
+
+        return $q->row;
+    }
 }
