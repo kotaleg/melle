@@ -7,6 +7,7 @@ class ControllerCheckoutSuccess extends Controller {
 
             /* IVAN MODIFICATION START */
             $this->session->data['sp_order_id'] = $this->session->data['order_id'];
+            $data['text_order_number'] = sprintf($this->language->get('text_order_number'), $this->session->data['order_id']);
 
             $this->load->model('checkout/cart');
             $data['final_gtm_data'] = $this->model_checkout_cart->prepareFinalGTMData();
