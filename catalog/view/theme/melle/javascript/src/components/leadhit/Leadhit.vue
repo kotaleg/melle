@@ -35,7 +35,7 @@ export default {
     this.$store.dispatch('leadhit/initData')
   },
   mounted() {
-    this.$store.dispatch('leadhit/getProductsSliceFor', {sourceType: this.sourceType, id: this.id})
+    this.$store.dispatch('leadhit/getProductsSliceFor', {serviceName: this.sourceType, id: this.id})
   },
 }
 </script>
