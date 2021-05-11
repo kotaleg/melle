@@ -34,7 +34,7 @@ const actions = {
           url: state.base_url,
           lead_uid: state.lead_uid,
           clid: state.site_id,
-          serviceName,
+          service_name: serviceName,
           offer_url: window.location.href,
         },
         (res) => {
