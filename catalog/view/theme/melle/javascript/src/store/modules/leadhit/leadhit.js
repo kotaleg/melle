@@ -9,12 +9,7 @@ const state = {
   lead_uid: '',
   site_id: '',
   base_url: '',
-
-  type_hits: '',
-  type_recommend: '',
-
-  hits: [],
-  recommend: [],
+  productsContainer: {},
 }
 
 // getters
@@ -32,14 +27,14 @@ const actions = {
     })
   },
 
-  async getProductsRequest({ commit, state }, service_name) {
+  async getProductsRequest({ state }, serviceName) {
     return new Promise((resolve, reject) => {
       shop.makeGetRequest(
         {
           url: state.base_url,
           lead_uid: state.lead_uid,
           clid: state.site_id,
-          service_name,
+          serviceName,
           offer_url: window.location.href,
         },
         (res) => {
@@ -49,8 +44,8 @@ const actions = {
     })
   },
 
-  async getHits({ commit, state, dispatch }) {
-    const res = await dispatch('getProductsRequest', state.type_hits).catch(
+  async getProductsSliceFor({ commit, dispatch }, payload) {
+    const res = await dispatch('getProductsRequest', payload.serviceName).catch(
       (error) => {
         if (has(error.response, 'data')) {
           console.log(error.response.data)
@@ -59,22 +54,7 @@ const actions = {
     )
 
     if (res && has(res, 'data') && isArray(res.data)) {
-      commit('setValue', { k: 'hits', v: res.data.slice(0, 6) })
-    }
-  },
-
-  async getRecommend({ commit, state, dispatch }) {
-    const res = await dispatch(
-      'getProductsRequest',
-      state.type_recommend
-    ).catch((error) => {
-      if (has(error.response, 'data')) {
-        console.log(error.response.data)
-      }
-    })
-
-    if (res && has(res, 'data') && isArray(res.data)) {
-      commit('setValue', { k: 'recommend', v: res.data.slice(0, 6) })
+      commit('setProductsFor', { k: payload.id, v: res.data.slice(0, 6) })
     }
   },
 }
@@ -88,6 +68,9 @@ const mutations = {
   },
   setValue(state, { k, v }) {
     Vue.set(state, k, v)
+  },
+  setProductsFor(state, { id, products }) {
+    Vue.set(state.productsContainer, id, products)
   },
 }
 

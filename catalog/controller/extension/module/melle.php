@@ -519,9 +519,6 @@ class ControllerExtensionModuleMelle extends Controller
 
         $state = array_merge($state, $this->model_extension_module_leadhit->getSetting());
 
-        $state['type_hits'] = $this->model_extension_module_leadhit->typeHits();
-        $state['type_recommend'] = $this->model_extension_module_leadhit->typeRecommend();
-
         // SET STATE
         $this->document->addState($state['id'], json_encode($state));
         return $state;

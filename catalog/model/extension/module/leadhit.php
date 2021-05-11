@@ -7,9 +7,6 @@ class ModelExtensionModuleLeadhit extends Model
     private $codename = 'leadhit';
     private $route = 'extension/module/leadhit';
 
-    const TYPE_HITS = 'top_offers';
-    const TYPE_RECOMMEND = 'cross_sale';
-
     private $setting = array();
 
     public function __construct($registry)
@@ -30,15 +27,4 @@ class ModelExtensionModuleLeadhit extends Model
     {
         return $this->setting;
     }
-
-    public function typeHits()
-    {
-        return self::TYPE_HITS;
-    }
-
-    public function typeRecommend()
-    {
-        return self::TYPE_RECOMMEND;
-    }
-
 }

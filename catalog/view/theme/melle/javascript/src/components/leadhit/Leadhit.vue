@@ -1,15 +1,19 @@
 <template>
-  <div class="">
+  <div>
     <carousel-block :items="items" />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import CarouselBlock from './CarouselBlock.vue'
 
 export default {
   props: {
+    id: {
+      type: [String],
+      required: true,
+    },
     sourceType: {
       type: [String],
       required: true,
@@ -19,26 +23,19 @@ export default {
     CarouselBlock,
   },
   computed: {
-    ...mapState('leadhit', ['hits', 'recommend']),
+    ...mapState('leadhit', ['productsContainer']),
     items() {
-      if (this.sourceType === 'hits') {
-        return this.hits
-      } else if (this.sourceType === 'recommend') {
-        return this.recommend
+      if (typeof this.productsContainer[this.id] != 'undefined') {
+        return this.productsContainer[this.id]
       }
       return []
     },
   },
-  methods: {},
   created() {
     this.$store.dispatch('leadhit/initData')
   },
   mounted() {
-    if (this.sourceType === 'hits') {
-      this.$store.dispatch('leadhit/getHits')
-    } else if (this.sourceType === 'recommend') {
-      this.$store.dispatch('leadhit/getRecommend')
-    }
+    this.$store.dispatch('leadhit/getProductsSliceFor', {sourceType: this.sourceType, id: this.id})
   },
 }
 </script>
