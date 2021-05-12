@@ -54,7 +54,7 @@ const actions = {
     )
 
     if (res && has(res, 'data') && isArray(res.data)) {
-      commit('setProductsFor', { k: payload.id, v: res.data.slice(0, 6) })
+      commit('setProductsFor', { id: payload.id, products: res.data.slice(0, 6) })
     }
   },
 }
