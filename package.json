@@ -26,6 +26,7 @@
     "md5": "^2.2.1",
     "pretty-checkbox-vue": "^1.1.9",
     "stickyfilljs": "^2.1.0",
+    "uuid": "^8.3.2",
     "v-click-outside": "^2.0.2",
     "v-file-upload": "^3.1.7",
     "v-tooltip": "^2.0.0-rc.33",
