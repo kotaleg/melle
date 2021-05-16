@@ -346,6 +346,10 @@ class pro_discount
                         } else {
                             $products_data[$pd_key]['price'] = $special['special'];
                             $products_data[$pd_key]['total'] = $special['special'] * $pd['quantity'];
+
+                            if ($pd['price'] > 0 && $pd['price'] > $special['special']) {
+                                $this->updateSkidosik((($pd['price'] * $pd['quantity']) - ($special['special'] * $pd['quantity'])));
+                            }
                         }
                     }
                 }
