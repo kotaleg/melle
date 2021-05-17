@@ -100,4 +100,18 @@
 
     </file>
 
+    <file path="catalog/controller/extension/module/melle_product.php">
+        <operation error="skip">
+            <search><![CDATA[$json['data']['description']]]></search>
+            <add position="before"><![CDATA[
+                /* IVAN MOD START */
+                $json['data']['manufacturers'] = $this->model_extension_pro_patch_url->ajax(
+                    'product/search',
+                    'refinementList[manufacturer][0]=' . utf8_strtolower($product_info['manufacturer'])
+                );
+                /* IVAN MOD END */
+            ]]></add>
+        </operation>
+    </file>
+
 </modification>
