@@ -66,10 +66,10 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label" for="input-product-extra-description{{ language.language_id }}">{{ entry_extra_description }}</label>
                     <div class="col-sm-10">
-                      <textarea name="product_extra_description[{{ language.language_id }}][description]" 
-                        placeholder="{{ entry_extra_description }}" id="input-product-extra-description{{ language.language_id }}" 
-                        data-toggle="summernote" 
-                        data-lang="{{ summernote }}" 
+                      <textarea name="product_extra_description[{{ language.language_id }}][description]"
+                        placeholder="{{ entry_extra_description }}" id="input-product-extra-description{{ language.language_id }}"
+                        data-toggle="summernote"
+                        data-lang="{{ summernote }}"
                         class="form-control">{{ product_extra_description[language.language_id] ? product_extra_description[language.language_id].description }}</textarea>
                     </div>
                   </div>
@@ -622,53 +622,27 @@
                           {% for product_option_value in product_option.product_option_value %}
                           <tr id="option-value-row{{ option_value_row }}">
                             <td class="text-left"><select name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][option_value_id]" class="form-control">
-
-
-                                  {% if option_values[product_option.option_id] %}
-
-                                  {% for option_value in option_values[product_option.option_id] %}
-
+                                {% if option_values[product_option.option_id] %}
+                                {% for option_value in option_values[product_option.option_id] %}
                                   {% if option_value.option_value_id == product_option_value.option_value_id %}
-
-
-                                <option value="{{ option_value.option_value_id }}" selected="selected">{{ option_value.name }}</option>
-
-
-                                  {% else %}
-
-
-                                <option value="{{ option_value.option_value_id }}">{{ option_value.name }}</option>
-
-
+                                    <option value="{{ option_value.option_value_id }}" selected="selected">{{ option_value.name }}</option>
                                   {% endif %}
-                                  {% endfor %}
-                                  {% endif %}
-
-
+                                {% endfor %}
+                                {% endif %}
                               </select>
                               <input type="hidden" name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][product_option_value_id]" value="{{ product_option_value.product_option_value_id }}" /></td>
                             <td class="text-right"><input type="text" name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][quantity]" value="{{ product_option_value.quantity }}" placeholder="{{ entry_quantity }}" class="form-control" /></td>
-                            <td class="text-left"><select name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][subtract]" class="form-control">
-
-
-                                  {% if product_option_value.subtract %}
-
-
-                                <option value="1" selected="selected">{{ text_yes }}</option>
-                                <option value="0">{{ text_no }}</option>
-
-
-                                  {% else %}
-
-
-                                <option value="1">{{ text_yes }}</option>
-                                <option value="0" selected="selected">{{ text_no }}</option>
-
-
-                                  {% endif %}
-
-
-                              </select></td>
+                            <td class="text-left">
+                                <select name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][subtract]" class="form-control">
+                                    {% if product_option_value.subtract %}
+                                    <option value="1" selected="selected">{{ text_yes }}</option>
+                                    <option value="0">{{ text_no }}</option>
+                                    {% else %}
+                                    <option value="1">{{ text_yes }}</option>
+                                    <option value="0" selected="selected">{{ text_no }}</option>
+                                    {% endif %}
+                                </select>
+                            </td>
                             <td class="text-right"><select name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][price_prefix]" class="form-control">
 
 
@@ -782,21 +756,6 @@
                           </tfoot>
                         </table>
                       </div>
-                      <select id="option-values{{ option_row }}" style="display: none;">
-
-
-                        {% if option_values[product_option.option_id] %}
-                        {% for option_value in option_values[product_option.option_id] %}
-
-
-                        <option value="{{ option_value.option_value_id }}">{{ option_value.name }}</option>
-
-
-                        {% endfor %}
-                        {% endif %}
-
-
-                      </select>
                       {% endif %} </div>
                     {% set option_row = option_row + 1 %}
                     {% endfor %} </div>
