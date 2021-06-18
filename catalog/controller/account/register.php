@@ -26,6 +26,10 @@ class ControllerAccountRegister extends Controller {
 
             $this->customer->login($this->request->post['email'], $this->request->post['password']);
 
+            /** IVAN MODIFICATION START */
+            $this->session->data['customer_registered_email'] = $this->request->post['email'];
+            /** IVAN MODIFICATION END */
+
             unset($this->session->data['guest']);
 
             $this->response->redirect($this->url->link('account/success'));

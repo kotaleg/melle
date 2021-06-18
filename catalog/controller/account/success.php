@@ -25,7 +25,10 @@ class ControllerAccountSuccess extends Controller {
         if ($this->customer->isLogged()) {
             $data['text_message'] = sprintf($this->language->get('text_message'), $this->url->link('information/contact'));
         } else {
-            $data['text_message'] = sprintf($this->language->get('text_approval'), $this->config->get('config_name'), $this->url->link('information/contact'));
+            /** IVAN MODIFICATION START */
+            $registered_email = isset($this->session->data['customer_registered_email']) ? $this->session->data['customer_registered_email'] : '';
+            $data['text_message'] = sprintf((string)$this->language->get('text_approval'),  $this->config->get('config_name'), $registered_email);
+            /** IVAN MODIFICATION END */
         }
 
         if ($this->cart->hasProducts()) {

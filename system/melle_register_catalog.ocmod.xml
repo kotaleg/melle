@@ -66,7 +66,6 @@
                             }
                         }
 
-
                         if (!isset($json['form_error'])) {
 
                             $ex = explode(" ", trim($parsed['form']['name']));
@@ -93,6 +92,10 @@
                             $this->model_account_customer->deleteLoginAttempts($parsed['form']['email']);
                             $this->customer->login($parsed['form']['email'], $parsed['form']['password']);
                             unset($this->session->data['guest']);
+
+                            /** IVAN MODIFICATION START */
+                            $this->session->data['customer_registered_email'] = $parsed['form']['email'];
+                            /** IVAN MODIFICATION END */
 
                             $json['redirect'] = $this->model_extension_pro_patch_url->ajax('account/success', '', true);
                         }
