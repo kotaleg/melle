@@ -7,7 +7,6 @@ before_script:
 
 deploy_stage:
   stage: deploy
-  # environment: Staging
   only:
     - master
   script:

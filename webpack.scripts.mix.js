@@ -14,7 +14,3 @@ mix.disableNotifications()
 mix.setPublicPath(path.join(CATALOG_JS_PATH, 'dist'))
 
 mix.extract()
-
-if (mix.inProduction()) {
-  mix.version();
-}
