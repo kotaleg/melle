@@ -16,13 +16,13 @@ rm -f ./config.local.php ./admin/config.local.php
 mv ./config.work.php ./config.php
 mv ./admin/config.work.php ./admin/config.php
 
-echo "-- YARN RUN --"
+echo "-- NPM RUN --"
 
 function is_npm_fail()
 {
     if [ "$(grep -c 'Compiled Successfully in' "$1")" -ne 1 ];then
         rm -rf "$1"
-        echo "ERR: YARN SCRIPT FAIL"
+        echo "ERR: NPM SCRIPT FAIL"
         exit 1
     fi
 }
@@ -31,6 +31,8 @@ npm install > .npm-install-result
 
 npm run prod:scripts > .npm-result-scripts
 npm run prod:styles > .npm-result-styles
+is_npm_fail .npm-result-scripts
+is_npm_fail .npm-result-styles
 
 echo "-- CLEAR AFTER --"
 rm -Rf ./.git/
