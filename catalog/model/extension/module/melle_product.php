@@ -77,7 +77,7 @@ class ModelExtensionModuleMelleProduct extends Controller
                 }
             }
         }
-        asort($activeOptions);
+        asort($optionsForCart);
         return $optionsForCart;
     }
 
@@ -94,7 +94,7 @@ class ModelExtensionModuleMelleProduct extends Controller
                 }
             }
         }
-        sort($activeOptions);
+        sort($optionsForOneClick);
         return $optionsForOneClick;
     }
 
