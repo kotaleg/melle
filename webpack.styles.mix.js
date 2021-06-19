@@ -23,7 +23,7 @@ mix.sass(
         path.join(CATALOG_JS_PATH, 'src/**/*.vue'),
         path.join(CATALOG_JS_PATH, 'query/**/*.js'),
       ],
-      whitelistPatterns: [
+      safelist: [
         /mm-*/,
         /pb-*/,
         /pt-*/,
