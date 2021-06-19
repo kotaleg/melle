@@ -27,12 +27,10 @@ function is_npm_fail()
     fi
 }
 
-npm install > .npm-result
+npm install > .npm-install-result
 
 npm run prod:scripts > .npm-result-scripts
 npm run prod:styles > .npm-result-styles
-is_npm_fail .npm-result-scripts
-is_npm_fail .npm-result-styles
 
 echo "-- CLEAR AFTER --"
 rm -Rf ./.git/
