@@ -18,20 +18,21 @@ mv ./admin/config.work.php ./admin/config.php
 
 echo "-- YARN RUN --"
 
-function is_yarn_fail()
+function is_npm_fail()
 {
-    if [ "$(grep -c 'Done in' "$1")" -ne 1 ];then
+    if [ "$(grep -c 'Compiled Successfully in' "$1")" -ne 1 ];then
         rm -rf "$1"
         echo "ERR: YARN SCRIPT FAIL"
         exit 1
     fi
 }
 
-yarn install > .yarn-result
-is_yarn_fail .yarn-result
+npm install > .npm-result
 
-yarn prod > .yarn-result
-is_yarn_fail .yarn-result
+npm run prod:scripts > .npm-result-scripts
+npm run prod:styles > .npm-result-styles
+is_npm_fail .npm-result-scripts
+is_npm_fail .npm-result-styles
 
 echo "-- CLEAR AFTER --"
 rm -Rf ./.git/

@@ -50,8 +50,3 @@ mix.setPublicPath(path.join(CATALOG_THEME_PATH, 'stylesheet/compiled'))
 if (mix.inProduction()) {
   mix.version()
 }
-
-mix.webpackConfig({
-  plugins: [
-  ],
-})
