@@ -39,6 +39,7 @@ class ControllerExtensionModuleMelleProduct extends Controller
         $this->load->model('tool/image');
         $this->load->language('product/product');
         $this->load->model('catalog/product');
+        $this->load->model('catalog/category');
         $this->load->model('extension/module/super_offers');
         $this->load->model('extension/total/pro_discount');
         $this->load->model('extension/module/pro_recently');
@@ -173,6 +174,39 @@ class ControllerExtensionModuleMelleProduct extends Controller
                 'imageHash' => md5('no_image.png'),
             );
         }
+
+        $json['data']['breadcrumbs'] = array();
+
+        $json['data']['breadcrumbs'][] = array(
+            'text' => $this->language->get('text_home'),
+            'href' => $this->url->link('common/home')
+        );
+
+        if (isset($parsed['categoryPath'])) {
+            $path = '';
+            $parts = explode('_', (string) $parsed['categoryPath']);
+
+            foreach ($parts as $path_id) {
+                if (!$path) {
+                    $path = $path_id;
+                } else {
+                    $path .= '_' . $path_id;
+                }
+
+                if ($category_info = $this->model_catalog_category->getCategory($path_id)) {
+                    $json['data']['breadcrumbs'][] = array(
+                        'text' => $category_info['name'],
+                        'href' => $this->model_extension_pro_patch_url->ajax('product/category', 'path=' . $path),
+                    );
+                }
+                unset($category_info);
+            }
+        }
+
+        $json['data']['breadcrumbs'][] = array(
+            'text' => $productInfo['name'],
+            'href' => $this->model_extension_pro_patch_url->ajax('product/product', '&product_id=' . $productId),
+        );
 
         $json['data']['add_to_cart'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_add');
         $json['data']['buy_one_click'] = $this->model_extension_pro_patch_url->ajax('checkout/cart/melle_oneclick');

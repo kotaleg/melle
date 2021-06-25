@@ -72,14 +72,14 @@ const actions = {
       commit('SET_DATA', data)
     })
   },
-  FETCH_DATA({ commit, dispatch, rootState }, productId) {
+  FETCH_DATA({ commit, dispatch, rootState }, payload) {
     dispatch('CLEAR_DATA')
     this.dispatch('header/setLoadingStatus', true)
+
+    payload.url = rootState.catalog.getProductFullData
+
     shop.makeRequest(
-      {
-        url: rootState.catalog.getProductFullData,
-        productId,
-      },
+      payload,
       (res) => {
         this.dispatch('header/setLoadingStatus', false)
         if (has(res.data, 'data')) {

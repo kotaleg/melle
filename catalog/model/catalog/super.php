@@ -54,7 +54,14 @@ class ModelCatalogSuper extends Model
             if ($this->config->get('config_seo_url')) {
                 $routerLink = '/'. str_replace(HTTPS_SERVER, '', $href);
             }
-            $routerLink .= "?product_id={$p['product_id']}";
+
+            $httpQueryData = ['product_id' => $p['product_id']];
+            if (isset($filter_data['path']) && !empty($filter_data['path'])) {
+                $httpQueryData['categoryPath'] = (string) $filter_data['path'];
+            }
+            $httpQuery = http_build_query($httpQueryData);
+
+            $routerLink .= "?{$httpQuery}";
 
             $d_ = array(
                 'product_id' => $p['product_id'],

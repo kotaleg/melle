@@ -10,7 +10,7 @@
             <div class="breadcrumbs">
               <span v-for="(breadcrumb, index) in breadcrumbs" :key="breadcrumb.href">
                 <a :href="breadcrumb.href">{{ breadcrumb.text }}</a>
-                <span v-if="index != breadcrumbs.length-1" class="divider">/</span>
+                <span v-if="index != breadcrumbs.length-1" class="divider"> / </span>
               </span>
             </div>
           </div>
@@ -123,9 +123,13 @@ export default {
   },
   created() {
     if (this.$route.query.product_id) {
-      this.$store.dispatch('product/FETCH_DATA', this.$route.query.product_id)
+      let data = {productId: this.$route.query.product_id}
+      if (this.$route.query.categoryPath) {
+        data.categoryPath = this.$route.query.categoryPath
+      }
+      this.$store.dispatch('product/FETCH_DATA', data)
     } else {
-      this.$store.dispatch('product/FETCH_DATA', this.$route.params.productId)
+      this.$store.dispatch('product/FETCH_DATA', {productId: this.$route.params.productId})
     }
   },
   methods: {

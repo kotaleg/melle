@@ -9,10 +9,8 @@
                 <div class="breadcrumbs">
                     {% for breadcrumb in breadcrumbs %}
                         {% if not loop.last %}
-                            <a href="{{ breadcrumb.href }}">
-                                {{ breadcrumb.text }}
-                            </a>
-                            <span class="divider">/</span>
+                            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                            <span class="divider"> / </span>
                         {% else %}
                             <span>{{ breadcrumb.text }}</span>
                         {% endif %}
