@@ -158,9 +158,6 @@ $(window).on('load', function() {
         injectScript('{{base}}catalog/view/theme/melle/javascript/jquery/slick/slick.min.js', false, function() {
             jQuery().slick&&($(".slider-for").slick({lazyLoad:'ondemand',slidesToShow:1,slidesToScroll:1,arrows:!1,fade:!0,asNavFor:".slider-nav"}),$(".slider-nav").slick({lazyLoad:'ondemand',slidesPerRow:1,slidesToShow:2,slidesToScroll:1,asNavFor:".slider-for",dots:!1,focusOnSelect:!0,vertical:!0,adaptiveHeight:!0,centerMode:!0,responsive:[{breakpoint:1024,settings:{}},{breakpoint:768,settings:{vertical:!1,arrows:!1}}]}));
         })
-        injectScript('{{base}}catalog/view/theme/melle/javascript/jquery/fancybox/jquery.fancybox.min.js', false, function() {
-            jQuery().fancybox&&$("[data-fancybox]").fancybox({});
-        })
     } else {
         $('.prod-card__item-big-photo').on('touchmove', function() {
             var next = $(this).next();

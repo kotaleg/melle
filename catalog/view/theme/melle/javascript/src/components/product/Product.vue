@@ -51,10 +51,9 @@
 
           <a
             v-if="sizeList && o.class == 'size'"
+            @click="showSizeList"
             id="size-list"
-            data-fancybox=""
             class="d-none d-sm-block"
-            :href="sizeList"
             >таблица<br />размеров</a
           >
         </div>
@@ -183,6 +182,7 @@
     <input type="hidden" id="active-image-hash" :value="currentImageHash" />
 
     <one-click-modal dir="ltr" :width="500" :scrollable="false" />
+    <size-list-modal dir="ltr" :width="500" :scrollable="false" />
   </form>
 </template>
 
@@ -192,10 +192,12 @@ import { mapActions } from 'vuex'
 import { get, sync } from 'vuex-pathify'
 
 import OneClickModal from '@/components/modal/OneClickModal.vue'
+import SizeListModal from '@/components/modal/SizeListModal.vue'
 
 export default {
   components: {
     'one-click-modal': OneClickModal,
+    'size-list-modal': SizeListModal,
   },
   computed: {
     ...get('product', [
@@ -295,6 +297,9 @@ export default {
     },
     goToCheckout() {
       window.location = this.checkoutLink
+    },
+    showSizeList() {
+      this.$modal.show('size-list-modal', { url: this.sizeList })
     },
   },
   created() {

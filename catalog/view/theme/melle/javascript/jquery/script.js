@@ -102,12 +102,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* PRODUCT IMAGE END */
-
-    /* FANCY START */
-    if(jQuery().fancybox) {
-        $('[data-fancybox]').fancybox({
-            defaultType: "image",
-        });
-    }
-    /* FANCY END */
 });
