@@ -53,9 +53,8 @@
             v-if="sizeList && o.class == 'size'"
             @click="showSizeList"
             id="size-list"
-            class="d-none d-sm-block"
-            >таблица<br />размеров</a
-          >
+            href="javascript:void(0);"
+            class="d-none d-sm-block">таблица<br />размеров</a>
         </div>
       </div>
     </div>

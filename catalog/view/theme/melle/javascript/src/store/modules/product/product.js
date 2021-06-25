@@ -39,6 +39,7 @@ const state = {
   },
 
   productPreview: {
+    sizeList: false,
     productId: false,
     quantity: 1,
     options: [],

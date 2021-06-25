@@ -13,7 +13,7 @@
     @opened="$emit('opened', $event)"
     @closed="$emit('closed', $event)"
   >
-    <div id="product-page" class="dialog-content">
+    <div v-if="!sizeListVisible" id="product-page" class="dialog-content">
       <div class="close-button" @click="closeModal"></div>
       <div class="row">
         <div class="col-sm-6">
@@ -106,6 +106,7 @@
                   <span>{{ maxQuantity }}</span>
                 </span>
               </div>
+              <a v-if="sizeList" @click="sizeListVisible = true" href="javascript:void(0);" class="d-block size-list-button">таблица <br/> размеров</a>
             </div>
 
             <div v-if="inStock" class="align-items-center d-flex justify-content-start my-3">
@@ -150,12 +151,19 @@
         </div>
       </div>
     </div>
+    <div v-else class="dialog-content size-list-view">
+      <div class="back-button" @click="sizeListVisible = false"></div>
+      <div class="close-button" @click="closeModal"></div>
+      <div class="p-4 text-center">
+        <img :src="sizeList" alt="Таблица размеров" class="img-fluid">
+      </div>
+    </div>
   </modal>
 </template>
 
 <script>
 import {isEqual} from 'lodash'
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import { get, sync } from 'vuex-pathify'
 
 export default {
@@ -178,12 +186,14 @@ export default {
   data() {
     return {
       params: {},
+      sizeListVisible: false,
       defaultButtons: [{ title: 'Закрыть' }],
     }
   },
   computed: {
     productId: get('product/productPreview@productId'),
     name: get('product/productPreview@name'),
+    sizeList: get('product/productPreview@sizeList'),
     image: get('product/productPreview@image'),
     productLink: get('product/productPreview@productLink'),
     quantity: sync('product/productPreview@quantity'),
@@ -268,6 +278,16 @@ export default {
 
     closeModal() {
       this.$modal.hide('product-preview-modal')
+    },
+
+    showSizeList() {
+      console.log('show sl')
+      this.sizeListVisible = true
+    },
+
+    showSizeList() {
+      console.log('show sl')
+      this.sizeListVisible = true
     },
   },
 }

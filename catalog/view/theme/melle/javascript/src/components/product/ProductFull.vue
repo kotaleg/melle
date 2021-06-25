@@ -9,7 +9,8 @@
           <div class="breadcrumbs">
             <div class="breadcrumbs">
               <span v-for="(breadcrumb, index) in breadcrumbs" :key="breadcrumb.href">
-                <a :href="breadcrumb.href">{{ breadcrumb.text }}</a>
+                <a v-if="index != breadcrumbs.length-1" :href="breadcrumb.href">{{ breadcrumb.text }}</a>
+                <span v-else>{{ breadcrumb.text }}</span>
                 <span v-if="index != breadcrumbs.length-1" class="divider"> / </span>
               </span>
             </div>

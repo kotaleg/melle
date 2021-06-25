@@ -267,6 +267,9 @@ class ControllerExtensionModuleMelleProduct extends Controller
 
         $json['data']['productLink'] = $this->model_extension_pro_patch_url->ajax('product/product', 'product_id=' . (int)$productId);
 
+        $this->load->model('extension/module/size_list');
+        $json['data']['sizeList'] = $this->model_extension_module_size_list->getSizeList($productId);
+
         $this->response->setOutput(json_encode($json));
     }
 
