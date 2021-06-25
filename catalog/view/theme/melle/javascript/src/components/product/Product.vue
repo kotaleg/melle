@@ -274,9 +274,6 @@ export default {
     ...mapActions('header', ['enableElement']),
 
     radioHandler(data) {
-      if (!this.inStock) {
-        return
-      }
       this.getProductStockRequest({
         productId: this.productId,
         options: this.options,
