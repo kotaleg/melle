@@ -14,6 +14,7 @@
     @closed="$emit('closed', $event)"
   >
     <div class="dialog-content">
+      <div class="close-button" @click="closeModal"></div>
       <img :src="imageUrl" alt="Таблица Размеров" class="img-fluid">
     </div>
   </modal>
@@ -55,6 +56,10 @@ export default {
     beforeClosed(event) {
       this.params = {}
       this.$emit('before-closed', event)
+    },
+
+    closeModal() {
+      this.$modal.hide('size-list-modal')
     },
   },
 }
