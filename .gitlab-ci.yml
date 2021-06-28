@@ -1,9 +1,13 @@
-image: registry.gitlab.com/pro-hamster/ci-scripts:latest
+default:
+  image: registry.gitlab.com/pro-hamster/ci-scripts:latest
 
 before_script:
   - apt-get -qq update < /dev/null > /dev/null
   - apt-get -qq install p7zip-full < /dev/null > /dev/null
   - apt-get -qq install -y sshpass < /dev/null > /dev/null
+
+stages:
+  - deploy
 
 deploy_stage:
   stage: deploy
