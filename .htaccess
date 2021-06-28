@@ -1,15 +1,9 @@
-# Options +FollowSymlinks
-
 # Prevent Directoy listing
 Options -Indexes
 
-# Order deny,allow
-# Deny from all
-# Allow from 134.249.231.103
-
 # Prevent Direct Access to files
 <FilesMatch "(?i)((\.tpl|.twig|\.ini|\.log|(?<!robots)\.txt))">
- Require all denied
+    Require all denied
 </FilesMatch>
 
 # SEO URL Settings
@@ -25,14 +19,11 @@ RewriteCond %{REQUEST_URI} ^(.+)/$
 RewriteRule ^(.+)/$ http://melle.online/$1 [R=301,L]
 
 #INDEX REDIRECT
-
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
 RewriteRule ^index\.php$ http://melle.online/ [R=301,L]
 
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
 RewriteRule ^index\.html$ http://melle.online/ [R=301,L]
-
-
 #INDEX REDIRECT
 
 # REDIRECTS FROM OLD SITE START
