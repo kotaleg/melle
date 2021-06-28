@@ -85,7 +85,7 @@ const actions = {
         this.dispatch('header/setLoadingStatus', false)
         if (has(res.data, 'data')) {
           commit('SET_DATA', res.data.data)
-          dispatch('getProductStockRequest', {productId})
+          dispatch('getProductStockRequest', {productId: payload.productId})
         }
         notify.messageHandler(res.data, '_header')
       }
