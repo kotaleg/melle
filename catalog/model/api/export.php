@@ -12,6 +12,8 @@ class ModelApiExport extends Model
     {
         parent::__construct($registry);
 
+        $this->load->model('tool/image');
+
         $this->export_path = $this->getRootPath() . 'exports/';
         $this->imageWidth = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width');
         $this->imageHeight = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height');
@@ -22,7 +24,7 @@ class ModelApiExport extends Model
         return dirname(DIR_SYSTEM).'/';
     }
 
-    public function actionCsvlinksExport()
+    public function actionCsvLinksExport()
     {
         $file = $this->export_path . 'seoLinks.csv';
         if (is_file($file)) { @unlink($file); }
@@ -74,7 +76,7 @@ class ModelApiExport extends Model
         return $json;
     }
 
-    public function actionNoconnectedimageExport()
+    public function actionNoConnectedImageExport()
     {
         $file = $this->export_path . 'noConnectedImageLog.csv';
         if (is_file($file)) { @unlink($file); }
@@ -368,7 +370,7 @@ class ModelApiExport extends Model
                 $usedImageCount = 0;
 
                 if ($product['image']) {
-                    $rowData[] = "{$base_path}image/{$product['image']}";
+                    $rowData[] = $this->model_tool_image->resize($product['image'], $this->imageWidth, $this->imageHeight);
                     $usedImageCount++;
                 }
 
@@ -376,9 +378,8 @@ class ModelApiExport extends Model
                     ->getProductImages($this->request->get['product_id']);
 
                 foreach ($productImages as $pImg) {
-                    if ($usedImageCount < $maxImageCount
-                    && isset($pImg['image'])) {
-                        $images[] = "{$base_path}image/{$pImg['image']}";
+                    if (isset($pImg['image']) && ($usedImageCount < $maxImageCount)) {
+                        $rowData[] = $this->model_tool_image->resize($pImg['image'], $this->imageWidth, $this->imageHeight);
                         $usedImageCount++;
                     }
                 }
@@ -519,10 +520,10 @@ class ModelApiExport extends Model
                     $seo_url = $this->getSeoUrl($product_data['product_id']);
                     $breadcrumbs = $this->getBreadcrumbs($product_data['product_id']);
 
-                    if ($product_data['image']) {
-                        $image = $base_path . 'image/' . $product_data['image'];
+                    if ($product_data['image'] && is_file(DIR_IMAGE . $product_data['image'])) {
+                        $image = $this->model_tool_image->resize($product_data['image'], $this->imageWidth, $this->imageHeight);
                     } else {
-                        $image = $base_path . 'image/placeholder.png';
+                        $image = $this->model_tool_image->resize('image/placeholder.png', $this->imageWidth, $this->imageHeight);
                     }
 
                     $this->_str .= "<item>\n<g:id>{$product_data['product_id']}</g:id>\n" .
@@ -632,10 +633,10 @@ class ModelApiExport extends Model
                     $seo_url = $this->getSeoUrl($product_data['product_id']);
                     $cc = $this->getCloseCat($product_data['product_id']);
 
-                    if ($product_data['image']) {
-                        $image = $base_path . 'image/' . $product_data['image'];
+                    if ($product_data['image'] && is_file(DIR_IMAGE . $product_data['image'])) {
+                        $image = $this->model_tool_image->resize($product_data['image'], $this->imageWidth, $this->imageHeight);
                     } else {
-                        $image = $base_path . 'image/placeholder.png';
+                        $image = $this->model_tool_image->resize('image/placeholder.png', $this->imageWidth, $this->imageHeight);
                     }
 
                     $available = ($dp['min_quantity'] > 0) ? 'true' : 'false';
@@ -689,7 +690,7 @@ class ModelApiExport extends Model
         return $json;
     }
 
-    public function actionRetailrocketExport()
+    public function actionRetailRocketExport()
     {
         $file = $this->export_path . 'rr.xml';
         if (is_file($file)) {
@@ -767,14 +768,14 @@ class ModelApiExport extends Model
 
                 $price = (int) preg_replace('/\s+/', '', $price);
 
-                if ($product['image'] && is_file(DIR_IMAGE.$product['image'])) {
-                    $image = $base_path . 'image/' . $product['image'];
+                if ($product['image'] && is_file(DIR_IMAGE . $product['image'])) {
+                    $image = $this->model_tool_image->resize($product['image'], $this->imageWidth, $this->imageHeight);
                 } else {
-                    $image = $base_path . 'image/placeholder.png';
+                    $image = $this->model_tool_image->resize('image/placeholder.png', $this->imageWidth, $this->imageHeight);
                 }
 
-                if (isset($c['image']) && is_file(DIR_IMAGE.$c['image'])) {
-                    $image = $base_path . 'image/' . $c['image'];
+                if (isset($c['image']) && is_file(DIR_IMAGE . $c['image'])) {
+                    $image = $this->model_tool_image->resize($c['image'], $this->imageWidth, $this->imageHeight);
                 }
 
                 $available = ($c['quantity'] > 0) ? 'true' : 'false';
@@ -910,14 +911,14 @@ class ModelApiExport extends Model
 
                 $price = (int) preg_replace('/\s+/', '', $price);
 
-                if ($product['image'] && is_file(DIR_IMAGE.$product['image'])) {
-                    $image = $base_path . 'image/' . $product['image'];
+                if ($product['image'] && is_file(DIR_IMAGE . $product['image'])) {
+                    $image = $this->model_tool_image->resize($product['image'], $this->imageWidth, $this->imageHeight);
                 } else {
-                    $image = $base_path . 'image/placeholder.png';
+                    $image = $this->model_tool_image->resize('image/placeholder.png', $this->imageWidth, $this->imageHeight);
                 }
 
-                if (isset($c['image']) && is_file(DIR_IMAGE.$c['image'])) {
-                    $image = $base_path . 'image/' . $c['image'];
+                if (isset($c['image']) && is_file(DIR_IMAGE . $c['image'])) {
+                    $image = $this->model_tool_image->resize($c['image'], $this->imageWidth, $this->imageHeight);
                 }
 
                 $offerId = hash('crc32b', hash('sha256', $c['import_id']));
@@ -1052,7 +1053,6 @@ class ModelApiExport extends Model
         $no_price_count = 0;
 
         $this->load->model('catalog/product');
-        $this->load->model('tool/image');
         $this->load->model('api/import_1c/product');
         $this->load->model('extension/module/super_offers');
 
@@ -1246,14 +1246,14 @@ class ModelApiExport extends Model
 
                 $price = (int) preg_replace('/\s+/', '', $price);
 
-                if ($product['image'] && is_file(DIR_IMAGE.$product['image'])) {
-                    $image = $base_path . 'image/' . $product['image'];
+                if ($product['image'] && is_file(DIR_IMAGE . $product['image'])) {
+                    $image = $this->model_tool_image->resize($product['image'], $this->imageWidth, $this->imageHeight);
                 } else {
-                    $image = $base_path . 'image/placeholder.png';
+                    $image = $this->model_tool_image->resize('image/placeholder.png', $this->imageWidth, $this->imageHeight);
                 }
 
-                if (isset($c['image']) && is_file(DIR_IMAGE.$c['image'])) {
-                    $image = $base_path . 'image/' . $c['image'];
+                if (isset($c['image']) && is_file(DIR_IMAGE . $c['image'])) {
+                    $image = $this->model_tool_image->resize($c['image'], $this->imageWidth, $this->imageHeight);
                 }
 
                 $offerId = hash('crc32b', hash('sha256', $c['import_id']));
@@ -1407,14 +1407,14 @@ class ModelApiExport extends Model
 
                 $price = (int) preg_replace('/\s+/', '', $price);
 
-                if ($product['image'] && is_file(DIR_IMAGE.$product['image'])) {
-                    $image = $base_path . 'image/' . $product['image'];
+                if ($product['image'] && is_file(DIR_IMAGE . $product['image'])) {
+                    $image = $this->model_tool_image->resize($product['image'], $this->imageWidth, $this->imageHeight);
                 } else {
-                    $image = $base_path . 'image/placeholder.png';
+                    $image = $this->model_tool_image->resize('image/placeholder.png', $this->imageWidth, $this->imageHeight);
                 }
 
-                if (isset($c['image']) && is_file(DIR_IMAGE.$c['image'])) {
-                    $image = $base_path . 'image/' . $c['image'];
+                if (isset($c['image']) && is_file(DIR_IMAGE . $c['image'])) {
+                    $image = $this->model_tool_image->resize($c['image'], $this->imageWidth, $this->imageHeight);
                 }
 
                 $offerId = hash('crc32b', hash('sha256', $c['import_id']));
@@ -1640,14 +1640,14 @@ class ModelApiExport extends Model
 
                 $price = (int) preg_replace('/\s+/', '', $price);
 
-                if ($product['image'] && is_file(DIR_IMAGE.$product['image'])) {
-                    $image = $base_path . 'image/' . $product['image'];
+                if ($product['image'] && is_file(DIR_IMAGE . $product['image'])) {
+                    $image = $this->model_tool_image->resize($product['image'], $this->imageWidth, $this->imageHeight);
                 } else {
-                    $image = $base_path . 'image/placeholder.png';
+                    $image = $this->model_tool_image->resize('image/placeholder.png', $this->imageWidth, $this->imageHeight);
                 }
 
-                if (isset($c['image']) && is_file(DIR_IMAGE.$c['image'])) {
-                    $image = $base_path . 'image/' . $c['image'];
+                if (isset($c['image']) && is_file(DIR_IMAGE . $c['image'])) {
+                    $image = $this->model_tool_image->resize($c['image'], $this->imageWidth, $this->imageHeight);
                 }
 
                 $offerId = hash('crc32b', hash('sha256', $c['import_id']));
