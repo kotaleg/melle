@@ -8,7 +8,7 @@ class ControllerApiExport extends Controller
     private array $setting = [];
     private array $actions = [
         'csv-links' => 'actionCsvLinksExport',
-        'no-connected-image' => 'actionNoconnectedimageExport',
+        'no-connected-image' => 'actionNoConnectedImageExport',
         'retail-rocket' => 'actionRetailRocketExport',
         'shopscript' => 'actionShopscriptExport',
         'seo' => 'actionSeoExport',
@@ -44,7 +44,7 @@ class ControllerApiExport extends Controller
             $time_start = microtime(true);
 
             if (isset($this->request->get['type'])) {
-                if (!in_array($this->request->get['type'], $this->actions)) {
+                if (!array_key_exists($this->request->get['type'], $this->actions)) {
                     $json['error'][] = $this->language->get('error_action');
                 }
 
@@ -63,14 +63,16 @@ class ControllerApiExport extends Controller
                         'extra'  => array(),
                 ));
 
-                try {
-                    $result = $this->extension_model->{$process}($filename);
-                    if (is_array($result)) {
-                        $json = array_merge_recursive($json, $result);
+                if (!isset($json['error'])) {
+                    try {
+                        $result = $this->extension_model->{$process}($filename);
+                        if (is_array($result)) {
+                            $json = array_merge_recursive($json, $result);
+                        }
+                    } catch (\Exception $e) {
+                        $this->log->write(json_encode($e));
+                        $json['error'][] = $this->language->get('error_action');
                     }
-                } catch (\Exception $e) {
-                    $this->log->write(json_encode($e));
-                    $json['error'][] = $this->language->get('error_action');
                 }
 
                 // SAVE TO LOG
