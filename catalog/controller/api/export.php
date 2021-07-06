@@ -5,6 +5,22 @@ class ControllerApiExport extends Controller
     private $route = 'api/export';
     private $setting_route = 'extension/module/export';
 
+    private array $setting = [];
+    private array $actions = [
+        'csv-links' => 'actionCsvLinksExport',
+        'no-connected-image' => 'actionNoconnectedimageExport',
+        'retail-rocket' => 'actionRetailRocketExport',
+        'shopscript' => 'actionShopscriptExport',
+        'seo' => 'actionSeoExport',
+        'aliexpress' => 'actionAliexpressExport',
+        'google' => 'actionGoogleExport',
+        'yandex' => 'actionYandexExport',
+        'yandex-offers' => 'actionYandexOffersExport',
+        'yandex-offers-3' => 'actionYandexOffers3Export',
+        'yandex-offers-all-images' => 'actionYandexOffersAllImagesExport',
+    ];
+    private $extension_model;
+
     function __construct($registry)
     {
         parent::__construct($registry);
@@ -28,14 +44,11 @@ class ControllerApiExport extends Controller
             $time_start = microtime(true);
 
             if (isset($this->request->get['type'])) {
-                $type = $this->db->escape($this->request->get['type']);
-
-                $mode = 'export';
-                if (isset($this->request->get['mode'])) {
-                    $mode = $this->db->escape($this->request->get['mode']);
+                if (!in_array($this->request->get['type'], $this->actions)) {
+                    $json['error'][] = $this->language->get('error_action');
                 }
 
-                $process = 'action' . ucfirst($type) . ucfirst($mode);
+                $process = $this->actions[$this->request->get['type']];
 
                 $filename = isset($this->request->get['filename']) ?
                     $this->db->escape(trim($this->request->get['filename'])) : null;
@@ -44,8 +57,8 @@ class ControllerApiExport extends Controller
                 $this->load->model('api/import_1c/progress');
                 $this->model_api_import_1c_progress->_init(
                     $this->request->get['key'], array(
-                        'type'  => $type,
-                        'mode'  => $mode,
+                        'type'  => $process,
+                        'mode'  => 'export',
                         'filename'  => $filename,
                         'extra'  => array(),
                 ));
