@@ -14,24 +14,12 @@ class ControllerCommonHome extends Controller {
             $this->document->addLink($server, 'canonical');
         }
 
-        // $data['column_left'] = $this->load->controller('common/column_left');
-        // $data['column_right'] = $this->load->controller('common/column_right');
         $data['content_top'] = $this->load->controller('common/content_top');
         $data['content_bottom'] = $this->load->controller('common/content_bottom');
         $data['footer'] = $this->load->controller('common/footer');
         $data['header'] = $this->load->controller('common/header');
 
-        // IMPORT OLD CUSTOMERS
-        // $this->load->model('api/import_1c/customer');
-        // $this->model_api_import_1c_customer->addOldUsers();
-
-        // IMPORT COLOR CUBS
-        // $this->load->model('api/import_1c/option');
-        // $this->model_api_import_1c_option->importColorCubs();
-
-        // IMPORT REDIRECTS
-        // $this->load->model('api/import_1c/seo');
-        // $this->model_api_import_1c_seo->parseRedirects();
+        $this->load->model('tool/image');
 
         $this->response->setOutput($this->load->view('common/home', $data));
     }
