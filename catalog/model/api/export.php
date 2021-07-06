@@ -4,9 +4,9 @@ class ModelApiExport extends Model
     private $codename = 'export';
     private $route = 'api/export';
 
-    private string $export_path;
-    private string $imageWidth;
-    private string $imageHeight;
+    private $export_path;
+    private $imageWidth;
+    private $imageHeight;
 
     function __construct($registry)
     {

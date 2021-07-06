@@ -5,8 +5,8 @@ class ControllerApiExport extends Controller
     private $route = 'api/export';
     private $setting_route = 'extension/module/export';
 
-    private array $setting = [];
-    private array $actions = [
+    private $setting = [];
+    private $actions = [
         'csv-links' => 'actionCsvLinksExport',
         'no-connected-image' => 'actionNoConnectedImageExport',
         'retail-rocket' => 'actionRetailRocketExport',
