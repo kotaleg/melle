@@ -105,7 +105,7 @@ class ControllerExtensionModuleImport1C extends Controller
         $state['upload_seo_file'] = $this->model_extension_pro_patch_url->ajax("{$this->route}/upload_seo_file");
         $state['import_seo_data'] = HTTPS_CATALOG . "index.php?route=api/import_1c&api_token={$state['api_token']}&type=catalog&mode=import&filename=seo.xml";
 
-        $state['exportLinksInCsv'] = HTTPS_CATALOG . "index.php?route=api/export&key={$this->setting['key']}&type=csvlinks";
+        $state['exportLinksInCsv'] = HTTPS_CATALOG . "index.php?route=api/export&key={$this->setting['key']}&type=csv-links";
 
         // SETTING
         $state['setting'] = $this->setting;
