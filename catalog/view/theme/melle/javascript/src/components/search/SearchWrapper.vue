@@ -242,7 +242,7 @@
                 <div
                   class="d-flex align-items-center justify-content-around col-sm-12"
                 >
-                  <div v-if="item.isSpecial">
+                  <div v-if="item.isSpecial" class="position-relative">
                     <span class="price price-old mr-2">
                       {{ item.price }}
                       <span class="ruble-sign">Р</span>

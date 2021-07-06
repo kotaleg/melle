@@ -23,6 +23,34 @@
       color: $white-color;
       background-color: #000;
     }
+
+    @media (min-width: 992px) and (max-width: 1200px) {
+      .price {
+        font-size: 1.7rem;
+      }
+
+      .price-old {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (min-width: 1200px) and (max-width: 1400px) {
+      .price-old {
+        position: absolute;
+        top: -35%;
+        left: 2px;
+      }
+    }
+
+    @media (min-width: 1200px) and (max-width: 1700px) {
+      .price {
+        font-size: 2.0rem;
+      }
+
+      .price-old {
+        font-size: 1.2rem;
+      }
+    }
   }
 }
 

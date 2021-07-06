@@ -29,7 +29,7 @@
             v-if="p.in_stock"
             class="d-flex align-items-center justify-content-around col-sm-12"
           >
-            <div v-if="isSpecial(i)">
+            <div v-if="isSpecial(i)" class="position-relative">
               <span class="price price-old mr-2">
                 {{ getPrice(i) }} <span class="ruble-sign">Р</span>
               </span>
