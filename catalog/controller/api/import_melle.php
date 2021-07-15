@@ -5,6 +5,8 @@ class ControllerApiImportMelle extends Controller
     private $route = 'api/import_melle';
     private $setting_route = 'extension/module/import_melle';
 
+    private $setting = array();
+
     function __construct($registry)
     {
         parent::__construct($registry);
@@ -56,7 +58,7 @@ class ControllerApiImportMelle extends Controller
                         $json = array_merge_recursive($json, $result);
                     }
                 } catch (\Exception $e) {
-                    $this->log->write(json_encode($e));
+                    $this->log->write("{$this->route} {$e->getMessage()}");
                     $json['error'][] = $this->language->get('error_action');
                 }
 

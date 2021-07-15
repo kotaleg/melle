@@ -130,7 +130,7 @@ class ModelApiImport1C extends Model
             $json['success'] = true;
             $json['uploaded'] = true;
         } catch (\Exception $e) {
-            $this->log->write(json_encode($e));
+            $this->log->write("{$this->route} actionCatalogFile {$e->getMessage()}");
             $json['success'] = false;
             $json['error'][] = 'Ошибка при сохраненнии файла';
         }

@@ -48,7 +48,7 @@ class ModelApiImportMelle extends Model
         }
 
         try {
-            
+
             $data = $this->getDataFromManFile($excelFile);
             foreach ($data as $importId => $value) {
                 $manufacturerData = $this->getManufacturerByImportId($importId);
@@ -67,7 +67,7 @@ class ModelApiImportMelle extends Model
             $json['success'] = true;
 
         } catch (\Exception $e) {
-            $this->log->write(json_encode($e));
+            $this->log->write("{$this->route} {$e->getMessage()}");
             $json['success'] = false;
             $json['error'][] = 'Ошибка при обработке файла';
         }
@@ -77,7 +77,7 @@ class ModelApiImportMelle extends Model
 
     private function createTablesForMan()
     {
-        $this->db->query("CREATE TABLE IF NOT EXISTS 
+        $this->db->query("CREATE TABLE IF NOT EXISTS
         `". DB_PREFIX . $this->db->escape(self::MANUFACTURER_ALT_NAME_TABLE) ."` (
             `manufacturerId` int(11) NOT NULL,
             `altName` varchar(255) NOT NULL,
@@ -120,7 +120,7 @@ class ModelApiImportMelle extends Model
 
         $reader = \pro_spreadsheet\reader::createReaderForFile($excelFile);
         $reader->setReadDataOnly(true);
-        
+
         $spreadsheet = $reader->load($excelFile);
         $worksheet = $spreadsheet->getActiveSheet();
 
@@ -159,5 +159,5 @@ class ModelApiImportMelle extends Model
         return $data;
     }
 
-    
+
 }

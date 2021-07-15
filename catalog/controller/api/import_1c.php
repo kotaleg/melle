@@ -48,7 +48,7 @@ class ControllerApiImport1C extends Controller
                         $json = array_merge_recursive($json, $result);
                     }
                 } catch (\Exception $e) {
-                    $this->log->write(json_encode($e));
+                    $this->log->write("{$this->route} {$process} {$e->getMessage()}");
                     $json['error'][] = $this->language->get('error_action');
                 }
 
