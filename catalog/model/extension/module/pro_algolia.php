@@ -65,12 +65,28 @@ class ModelExtensionModulePROAlgolia extends Model
         );
     }
 
+    public function queueSaveAllProducts()
+    {
+        foreach ($this->getProductNotInQueue(\pro_algolia\constant::SAVE) as $productData) {
+            $this->insertItemToQueue(
+                \pro_algolia\constant::PRODUCT,
+                $productData['product_id'],
+                \pro_algolia\constant::SAVE
+            );
+        }
+    }
+
     private function addItemToQueue($itemType, $itemId, $operationType)
     {
         if ($this->isItemInQueue($itemType, $itemId, $operationType)) {
             return;
         }
 
+        return $this->insertItemToQueue($itemType, $itemId, $operationType);
+    }
+
+    private function insertItemToQueue($itemType, $itemId, $operationType)
+    {
         $this->db->query("INSERT INTO `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE ."`
             SET `storeItemId` = '". (int) $itemId ."',
                 `storeItemType` = '". $this->db->escape($itemType) ."',
@@ -100,6 +116,20 @@ class ModelExtensionModulePROAlgolia extends Model
             SET `status` = '". $this->db->escape($status) ."',
                 `updateDate` = NOW()
             WHERE `_id` = '". (int) $queueId ."'");
+    }
+
+    private function getProductNotInQueue($operationType)
+    {
+        return $this->db->query("SELECT p.product_id
+            FROM `". DB_PREFIX . "product` AS p
+            WHERE NOT EXISTS (
+                SELECT *
+                FROM `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE . "` AS q
+                WHERE p.product_id = q.storeItemId
+                AND q.storeItemType = '". \pro_algolia\constant::PRODUCT ."'
+                AND q.operation = '". $this->db->escape($operationType) ."'
+                AND q.status = '". \pro_algolia\constant::UNDEFINED ."'
+            )")->rows;
     }
 
     private function addToQueueLog($type, $message, $queueId = false)
