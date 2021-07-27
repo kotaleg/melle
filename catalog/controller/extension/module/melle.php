@@ -255,6 +255,9 @@ class ControllerExtensionModuleMelle extends Controller
             // REVIEW
             $this->initProductReview($product_id);
 
+            $this->load->model('extension/module/melle_product');
+            $state['images'] = $this->model_extension_module_melle_product->prepareImagesFor($product_id);
+
             $state['productId'] = $product_id;
             $state['name'] = $product_info['name'];
             $state['manufacturer'] = $product_info['manufacturer'];

@@ -19,6 +19,57 @@ class ModelExtensionModuleMelleProduct extends Controller
         $this->load->model('extension/pro_patch/load');
     }
 
+    public function prepareImagesFor($productId)
+    {
+        $images = array();
+
+        $imageWidth = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width');
+        $imageHeight = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height');
+        $imageThumbWidth = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width');
+        $imageThumbHeight = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_height');
+        $imagePopupWidth = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width');
+        $imagePopupHeight = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height');
+
+        $this->load->model('tool/image');
+        $this->load->model('catalog/product');
+        $productInfo = $this->model_catalog_product->getProduct($productId);
+
+        if (isset($productInfo['image']) && $productInfo['image']) {
+            $images[] = array(
+                'zoom' => $this->model_tool_image->resize($productInfo['image'], $imagePopupWidth * 2, $imagePopupHeight * 2, true),
+                'popup' => $this->model_tool_image->resize($productInfo['image'], $imagePopupWidth, $imagePopupHeight, true),
+                'image' => $this->model_tool_image->resize($productInfo['image'], $imageWidth, $imageHeight, true),
+                'thumb' => $this->model_tool_image->resize($productInfo['image'], $imageThumbWidth, $imageThumbHeight, true),
+                'enabled' => true,
+                'imageHash' => md5($productInfo['image']),
+            );
+        }
+
+        foreach ($this->model_catalog_product->getProductImages($productId) as $result) {
+            $images[] = array(
+                'zoom' => $this->model_tool_image->resize($result['image'], $imagePopupWidth * 2, $imagePopupHeight * 2, true),
+                'popup' => $this->model_tool_image->resize($result['image'], $imagePopupWidth, $imagePopupHeight, true),
+                'image' => $this->model_tool_image->resize($result['image'], $imageWidth, $imageHeight, true),
+                'thumb' => $this->model_tool_image->resize($result['image'], $imageThumbWidth, $imageThumbHeight, true),
+                'enabled' => false,
+                'imageHash' => md5($result['image']),
+            );
+        }
+
+        if (empty($images)) {
+            $images[] = array(
+                'zoom' => $this->model_tool_image->resize('no_image.png', $imagePopupWidth * 2, $imagePopupHeight * 2, true),
+                'popup' => $this->model_tool_image->resize('no_image.png', $imagePopupWidth, $imagePopupHeight, true),
+                'image' => $this->model_tool_image->resize('no_image.png', $imageWidth, $imageHeight, true),
+                'thumb' => $this->model_tool_image->resize('no_image.png', $imageThumbWidth, $imageThumbHeight, true),
+                'enabled' => true,
+                'imageHash' => md5('no_image.png'),
+            );
+        }
+
+        return $images;
+    }
+
     public function applyOldOptionsForCurrent($oldOptions, $currentOptions)
     {
         sort($oldOptions);

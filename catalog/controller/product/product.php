@@ -297,54 +297,8 @@ class ControllerProductProduct extends Controller {
                 $data['stock'] = $this->language->get('text_instock');
             }
 
-            $this->load->model('tool/image');
-
-            $data['images'] = array();
-
-            if ($product_info['image'] && is_file(DIR_IMAGE . $product_info['image'])) {
-                $data['images'][] = array(
-                    'zoom' => $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width') * 2, $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height') * 2, true),
-                    'popup' => $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true),
-                    'image' => $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), true),
-                    'thumb' => $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), true),
-
-                    /* IVAN MODIFICATION */
-                    'imageHash' => md5($product_info['image']),
-                    /* IVAN MODIFICATION */
-                );
-            }
-
-            $results = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
-
-            foreach ($results as $result) {
-                if (!is_file(DIR_IMAGE . $result['image'])) {
-                    continue;
-                }
-
-                $data['images'][] = array(
-                    'zoom' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width') * 2, $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height') * 2, true),
-                    'popup' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true),
-                    'image' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), true),
-                    'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), true),
-
-                    /* IVAN MODIFICATION */
-                    'imageHash' => md5($result['image']),
-                    /* IVAN MODIFICATION */
-                );
-            }
-
-            if (empty($data['images'])) {
-                $data['images'][] = array(
-                    'zoom' => $this->model_tool_image->resize('no_image.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width') * 2, $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height') * 2, true),
-                    'popup' => $this->model_tool_image->resize('no_image.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_popup_height'), true),
-                    'image' => $this->model_tool_image->resize('no_image.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), true),
-                    'thumb' => $this->model_tool_image->resize('no_image.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), true),
-
-                    /* IVAN MODIFICATION */
-                    'imageHash' => md5('no_image.png'),
-                    /* IVAN MODIFICATION */
-                );
-            }
+            $this->load->model('extension/module/melle_product');
+            $data['images'] = $this->model_extension_module_melle_product->prepareImagesFor($data['product_id']);
 
             if ($product_info['minimum']) {
                 $data['minimum'] = $product_info['minimum'];

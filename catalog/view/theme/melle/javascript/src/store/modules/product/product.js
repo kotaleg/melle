@@ -30,6 +30,7 @@ const state = {
   options: [],
   images: [],
   stock: {
+    imageHash: null,
     inStock: false,
     isSpecial: false,
     maxQuantity: 1,

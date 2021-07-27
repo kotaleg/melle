@@ -21,21 +21,7 @@
       <div class="col-md-12">
         <div class="row">
           <div class="col-lg-5">
-            <div class="mt-3 d-flex product-images product-images-trigger">
-                <ul class="d-none d-md-flex flex-column flex-shrink-0 justify-content-center p-0 slider-nav">
-                  <li v-for="(image, index) in images" :key="`preview-${index}`" v-show="Math.abs(index - enabledImageIndex) <= 1" @click="ENABLE_IMAGE(index)"
-                      :class="['prod-card__item-photo', {'active': image.enabled}]">
-                      <img itemprop="image"
-                          :src="image.thumb"
-                          class="img-fluid" />
-                  </li>
-                </ul>
-                <ul class="p-0 pl-md-3 prod-card__list-big-photo slider-for">
-                  <li v-for="(image, index) in images" :key="index" :class="['prod-card__item-big-photo', {'d-block': image.enabled}]">
-                    <zoom-on-hover :img-normal="image.image" :img-zoom="image.zoom" />
-                  </li>
-                </ul>
-            </div>
+            <ProductImages />
           </div>
 
           <div class="col-lg-7">
@@ -93,10 +79,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import { get, sync } from 'vuex-pathify'
+import { get } from 'vuex-pathify'
+import ProductImages from '@/components/product/ProductImages'
 
 export default {
+  components: {
+    ProductImages,
+  },
   computed: {
     ...get('product', [
       'productId',
@@ -112,15 +101,6 @@ export default {
       'extra_description',
       'extra_description_hidden',
     ]),
-    imageHash: get('product/stock@imageHash'),
-    enabledImageIndex() {
-      for (const key in this.images) {
-        if (this.images[key].enabled) {
-          return key
-        }
-      }
-      return 0
-    },
   },
   created() {
     if (this.$route.query.product_id) {
@@ -133,19 +113,5 @@ export default {
       this.$store.dispatch('product/FETCH_DATA', {productId: this.$route.params.productId})
     }
   },
-  methods: {
-    ...mapActions('product', [
-      'ENABLE_IMAGE',
-    ]),
-  },
-  watch: {
-    imageHash: function (imageHash) {
-      for (const key in this.images) {
-        if (imageHash == this.images[key].imageHash) {
-          this.ENABLE_IMAGE(key)
-        }
-      }
-    }
-  }
 }
 </script>

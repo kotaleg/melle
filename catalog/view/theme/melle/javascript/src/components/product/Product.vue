@@ -178,8 +178,6 @@
       >
     </div>
 
-    <input type="hidden" id="active-image-hash" :value="currentImageHash" />
-
     <one-click-modal dir="ltr" :width="500" :scrollable="false" />
     <size-list-modal dir="ltr" :width="500" :scrollable="false" />
   </form>
@@ -219,7 +217,6 @@ export default {
     price: sync('product/stock@price'),
     special: sync('product/stock@special'),
     maxQuantity: get('product/stock@maxQuantity'),
-    imageHash: get('product/stock@imageHash'),
     optionsForCart: get('product/stock@optionsForCart'),
     checkoutLink: get('cart/checkout_link'),
     cartProducts: get('cart/products'),
@@ -233,36 +230,6 @@ export default {
         }
       }
       return 0
-    },
-
-    currentImageHash() {
-      const isDesktop = window.matchMedia('(min-width: 992px)').matches
-
-      if (isDesktop) {
-        const newImagePreview = document.getElementById(`product-preview-${this.imageHash}`)
-        if (newImagePreview) {
-          newImagePreview.click()
-        }
-      } else {
-        const newImage = document.getElementById(`product-image-${this.imageHash}`)
-        if (newImage && !newImage.classList.contains('d-block')) {
-          const allImages = document.querySelectorAll('li.prod-card__item-big-photo')
-          for (const i of allImages) {
-            if (i.classList.contains('d-block')) {
-              i.classList.remove('d-block')
-            }
-          }
-          newImage.classList.add('d-block')
-          const imgTags = newImage.querySelectorAll(':scope img')
-          for (const imgTag of imgTags) {
-            if (!imgTag.src) {
-              imgTag.src = imgTag.dataset.lazy
-            }
-          }
-        }
-      }
-
-      return this.imageHash
     },
   },
   methods: {

@@ -44,6 +44,9 @@ Vue.component('melle-product', Product)
 import ProductReview from './components/product/ProductReview.vue';
 Vue.component('melle-product-review', ProductReview)
 
+import ProductImages from './components/product/ProductImages.vue';
+Vue.component('melle-product-images', ProductImages)
+
 import Filter from './components/catalog/Filter.vue';
 Vue.component('melle-catalog-filter', Filter)
 

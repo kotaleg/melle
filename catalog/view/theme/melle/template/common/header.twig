@@ -36,10 +36,8 @@
 <link rel="preload" href="{{base}}catalog/view/theme/melle/javascript/dist/melle.js{{cache_postfix}}" as="script">
 
 <link href="{{base}}catalog/view/theme/melle/stylesheet/compiled/bootstrap.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
-
-{% if pagetype == 'product' %}
-<link href="{{base}}catalog/view/theme/melle/javascript/jquery/slick/slick.min.css" rel="stylesheet" type="text/css" media="screen and (min-width: 992px)" />
-{% endif %}
+<link href="{{base}}catalog/view/theme/melle/stylesheet/vue-slick-carousel.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
+<link href="{{base}}catalog/view/theme/melle/stylesheet/vue-slick-carousel-theme.css{{cache_postfix}}" rel="stylesheet" type="text/css" />
 
 {% for style in styles %}
 <link href="{{ style.href }}{{cache_postfix}}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
