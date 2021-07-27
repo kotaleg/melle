@@ -22,8 +22,9 @@
         :slidesToShow="1"
         :slidesToScroll="1"
         :focusOnSelect="true">
-        <div v-for="image in images" :key="image.imageHash">
-          <zoom-on-hover :img-normal="image.image" :img-zoom="image.zoom" />
+        <div v-for="image in images" :key="image.imageHash" class="text-center">
+          <img :src="image.image" class="img-fluid product-image-raw">
+          <zoom-on-hover :img-normal="image.image" :img-zoom="image.zoom" class="zoomed-container" />
         </div>
       </VueSlickCarousel>
     </div>

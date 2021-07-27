@@ -258,8 +258,20 @@
   }
   .product-images {
     width: 100%;
+    .product-image-raw {
+      display: inline-block;
+    }
+    .zoomed-container {
+      display: none;
+    }
     @media (min-width: 1200px) {
       width: 75%;
+      .product-image-raw {
+        display: none;
+      }
+      .zoomed-container {
+        display: block;
+      }
     }
   }
 }
