@@ -1259,6 +1259,10 @@ class ModelApiExport extends Model
                 $offerId = hash('crc32b', hash('sha256', $c['import_id']));
                 $available = ($c['quantity'] >= 3) ? 'true' : 'false';
 
+                if ($price <= 0 || $c['quantity'] < 3) {
+                    continue;
+                }
+
                 $offerData = [
                     '@id' => $offerId,
                     '@available' => $available,
