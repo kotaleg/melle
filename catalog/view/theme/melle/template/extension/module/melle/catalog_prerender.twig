@@ -5,7 +5,12 @@
     {% for p in products %}
         <div class="col-md-6 col-xl-4 product-item mb-5 text-center">
             <a href="{{ p.href }}">
-                <img loading="lazy" src="{{ p.image }}" width="365" height="468" alt="{{ p.h1 }}" class="img-fluid" />
+                <img loading="lazy"
+                    src="{{ p.image }}"
+                    width="365"
+                    height="468"
+                    alt="{{ p.h1 }}"
+                    class="img-fluid" />
             </a>
 
             {% if p.special_text %}

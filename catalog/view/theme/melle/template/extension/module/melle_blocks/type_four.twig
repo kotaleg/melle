@@ -2,7 +2,10 @@
     class="col-sm-6 col-md-4 melle-block melle-block-{{ type }} text-center">
     {% if image %}
         <a href="{{ link }}">
-            <img loading="lazy" src="{{ image }}" alt="{{ text }}" class="img-fluid" />
+            <img loading="lazy"
+                src="{{ image }}"
+                alt="{{ text }}"
+                class="img-fluid" />
         </a>
     {% endif %}
 </div>
