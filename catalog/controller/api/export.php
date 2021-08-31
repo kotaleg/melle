@@ -16,6 +16,7 @@ class ControllerApiExport extends Controller
         'google' => 'actionGoogleExport',
         'yandex' => 'actionYandexExport',
         'yandex-offers' => 'actionYandexOffersExport',
+        'yandex-offers-split' => 'actionYandexOffersSplitExport',
         'yandex-offers-3' => 'actionYandexOffers3Export',
         'yandex-offers-all-images' => 'actionYandexOffersAllImagesExport',
     ];
