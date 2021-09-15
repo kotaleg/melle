@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>yandex_market_update</name>
+    <code>yandex_market_update</code>
+    <description>Yandex Market Update</description>
+    <version>1.0.0</version>
+    <author><![CDATA[Ivan Stasiuk<br/><a href="https://stasi.uk">Get Help</a>]]> </author>
+    <link>https://stasi.uk</link>
+
+    <file path="catalog/model/api/import_1c.php">
+
+        <operation error="skip">
+            <search><![CDATA[$result = $this->_offersRoutine($parsed);]]></search>
+            <add position="after"><![CDATA[
+                /* YANDEX_MARKET_UPDATE START */
+                $this->load->model('extension/module/yandex_market');
+                $this->model_extension_module_yandex_market->queuePriceUpdate();
+                /* YANDEX_MARKET_UPDATE END */
+            ]]></add>
+        </operation>
+
+    </file>
+
+</modification>
