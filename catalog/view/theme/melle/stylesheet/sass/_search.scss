@@ -67,7 +67,7 @@
       .search-suggestions {
         background: $white-color;
         pointer-events: all;
-        padding: 5px 10px;
+        padding: 0;
 
         @media (min-width: 768px) {
           padding: 5px 10px;
@@ -76,6 +76,8 @@
         .suggestions-item {
           text-decoration: none;
           display: flex;
+          align-items: center;
+          justify-content: space-between;
           font-size: 12px;
           line-height: 1.25;
           color: $black-color;
@@ -83,10 +85,22 @@
           cursor: pointer;
           margin-top: 1px;
           align-items: center;
-          padding: 12px 12px 12px 0;
+          padding: 10px 0px 10px 0;
+
+          img {
+            width: 40px;
+          }
+
+          .price-wrapper {
+            min-width: 40px;
+          }
 
           @media (min-width: 768px) {
             font-size: 16px;
+
+            .price-wrapper {
+              min-width: 50px;
+            }
           }
 
           &:focus,
@@ -141,6 +155,11 @@
 .ais-PoweredBy {
   font-size: 0.7rem;
   text-align: right;
+  padding: 5px;
+
+  @media (min-width: 768px) {
+    padding: 0;
+  }
 }
 
 .ais-Pagination-list {

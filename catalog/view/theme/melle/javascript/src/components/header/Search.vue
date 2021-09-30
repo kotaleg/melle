@@ -43,7 +43,15 @@
                       :href="`${product_link_placeholder}${hit.productId}`"
                       class="suggestions-item"
                     >
+                      <img :src="hit.image" :alt="hit.name" class="mr-2 ml-2">
+
                       <ais-highlight attribute="h1" :hit="hit" />
+
+                      <div class="price-wrapper ml-2">
+                        <span v-if="hit.special > 0">{{ hit.special }}</span>
+                        <span v-else>{{ hit.price }}</span>
+                        <span class="ruble-sign">Р</span>
+                      </div>
                     </a>
                   </div>
                   <ais-powered-by />
