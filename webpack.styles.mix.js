@@ -37,6 +37,7 @@ mix.sass(
         /is-active/,
         /is-full-page/,
         /filter/,
+        /pretty/,
       ],
     },
   })
