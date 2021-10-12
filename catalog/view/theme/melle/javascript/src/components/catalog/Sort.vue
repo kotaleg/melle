@@ -7,7 +7,7 @@
         >
           <span class="sub-title mr-3">сортировать по:</span>
           <v-select
-            class="d-inline-block no-search"
+            class="d-inline-block"
             placeholder="Сортировать по"
             maxHeight="200px"
             :searchable="false"
@@ -46,11 +46,11 @@
 
         <div class="d-flex mt-3">
           <div
-            class="align-items-center d-flex desktop justify-content-end mb-4 w-100"
+            class="align-items-center d-flex desktop mb-4"
           >
             <span class="sub-title mr-3">по:</span>
             <v-select
-              class="d-inline"
+              class="d-inline-block"
               placeholder="Сортировать по"
               maxHeight="200px"
               :searchable="false"

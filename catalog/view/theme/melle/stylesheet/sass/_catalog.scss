@@ -59,8 +59,8 @@
     width: initial;
     @media (min-width: 576px) {
       width: 60%;
+      max-width: 200px;
     }
-    max-width: 200px;
   }
   .flip-sort {
     label {
