@@ -57,6 +57,10 @@
                            <button class="item_minus" role="button" data-onclick="decreaseProductQuantity" data-toggle="tooltip"><span>-</span></button>
                            <input type="text" class="item_col keyPressedNum" data-onchange="changeProductQuantity" {{ quantity_step_as_minimum ? 'onfocus="$(this).blur()" data-minimum="' ~ product['minimum'] ~ '"' : '' }} name="quantity[{{ product['cart_id'] is not empty ? product['cart_id'] : product['key'] }}]" value="{{ product['quantity'] }}">
                            <button class="item_plus" role="button" data-onclick="increaseProductQuantity" data-toggle="tooltip"><span>+</span></button>
+
+                           {% if product['quantity'] == product['max_quantity'] %}
+                           <span class="product-max-count">доступно:<span>{{ product['max_quantity'] }}</span></span>
+                           {% endif %}
                         </div>
                      </td>
                      <td class="basket-orders__total-column">
@@ -154,6 +158,10 @@
                               <button class="item_minus" role="button" data-onclick="decreaseProductQuantity" data-toggle="tooltip"><span>-</span></button>
                               <input type="text" class="item_col keyPressedNum" data-onchange="changeProductQuantity" {{ quantity_step_as_minimum ? 'onfocus="$(this).blur()" data-minimum="' ~ product['minimum'] ~ '"' : '' }} name="quantity[{{ product['cart_id'] is not empty ? product['cart_id'] : product['key'] }}]" value="{{ product['quantity'] }}">
                               <button class="item_plus" role="button" data-onclick="increaseProductQuantity" data-toggle="tooltip"><span>+</span></button>
+
+                              {% if product['quantity'] == product['max_quantity'] %}
+                              <span class="product-max-count">доступно:<span>{{ product['max_quantity'] }}</span></span>
+                              {% endif %}
                            </div>
                         </td>
                         <td class="total">

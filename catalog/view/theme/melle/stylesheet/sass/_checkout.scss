@@ -1,6 +1,16 @@
 .basket-orders {
   font-weight: 900;
   margin: 0;
+
+  .product-max-count {
+    position: absolute;
+    bottom: -20px;
+    white-space: nowrap;
+    color: #6d6b6a;
+    span {
+      color: black;
+    }
+  }
 }
 
 @media (max-width: 767px) {

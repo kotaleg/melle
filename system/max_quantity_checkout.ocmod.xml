@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>max_quantity_checkout</name>
+    <code>max_quantity_checkout</code>
+    <description>Max Quantity Checkout</description>
+    <version>1.0.0</version>
+    <author>PRO Hamster</author>
+    <link>http://prohamster.com</link>
+
+    <file path="catalog/controller/checkout/simplecheckout_cart.php">
+        <operation error="skip">
+            <search><![CDATA['quantity'  => $product['quantity'],]]></search>
+            <add position="after"><![CDATA[
+                /* MAX_QUANTITY_CHECKOUT START */
+                'max_quantity' => isset($product['max_quantity']) ? $product['max_quantity'] : null,
+                /* MAX_QUANTITY_CHECKOUT END */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>
