@@ -167,16 +167,9 @@
           </div>
         </div>
 
-        <div class="filter-buttons d-none">
-          <button type="submit" class="btn show-shitty-results">
-            Показать
-          </button>
-          <button
-            @click="clearSelection"
-            type="button"
-            class="btn clear-shitty-results"
-          >
-            Сбросить
+        <div class="filter-buttons">
+          <button type="submit" class="btn btn-dark btn-block d-block d-sm-none">
+            Применить
           </button>
         </div>
       </form>
