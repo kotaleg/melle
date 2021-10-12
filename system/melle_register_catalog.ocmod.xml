@@ -38,6 +38,10 @@
                             $json['form_error']['email'] = $this->language->get('error_email');
                         }
 
+                        if (utf8_strlen($parsed['form']['email']) <= 0) {
+                            $json['form_error']['email'] = $this->language->get('error_empty');
+                        }
+
                         if ($this->model_account_customer->getTotalCustomersByEmail($parsed['form']['email'])) {
                             $json['form_error']['email'] = $this->language->get('error_exists');
                         }
