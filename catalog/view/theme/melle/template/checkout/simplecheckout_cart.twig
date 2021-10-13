@@ -59,7 +59,7 @@
                            <button class="item_plus" role="button" data-onclick="increaseProductQuantity" data-toggle="tooltip"><span>+</span></button>
 
                            {% if product['quantity'] == product['max_quantity'] %}
-                           <span class="product-max-count">доступно:<span>{{ product['max_quantity'] }}</span></span>
+                           <span class="product-max-count">доступно:<span class="ml-2">{{ product['max_quantity'] }}</span></span>
                            {% endif %}
                         </div>
                      </td>
@@ -160,7 +160,7 @@
                               <button class="item_plus" role="button" data-onclick="increaseProductQuantity" data-toggle="tooltip"><span>+</span></button>
 
                               {% if product['quantity'] == product['max_quantity'] %}
-                              <span class="product-max-count">доступно:<span>{{ product['max_quantity'] }}</span></span>
+                              <span class="product-max-count">доступно:<span class="ml-2">{{ product['max_quantity'] }}</span></span>
                               {% endif %}
                            </div>
                         </td>
