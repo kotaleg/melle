@@ -104,11 +104,6 @@ const actions = {
 
         dispatch('updateCartDataRequest')
 
-        if (has(res.data, 'cleared') && res.data.cleared === true) {
-          // GTM
-          this.dispatch('gtm/removeFromCart', removed_items)
-        }
-
         if (state.is_checkout === true) {
           window.location = state.checkout_link
         }
@@ -160,11 +155,6 @@ const actions = {
         let removed_item = Object.assign({}, getters.getProductForGTM(cart_id))
 
         dispatch('updateCartDataRequest')
-
-        if (has(res.data, 'removed') && res.data.removed === true) {
-          // GTM
-          this.dispatch('gtm/removeFromCart', [removed_item])
-        }
 
         if (state.is_checkout === true) {
           window.location = state.checkout_link

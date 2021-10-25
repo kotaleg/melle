@@ -11,7 +11,7 @@
           p.znachek_class,
         ]"
       >
-        <router-link :to="p.router_link" @click="gtmProductClick(i)">
+        <router-link :to="p.router_link">
           <img :src="p.image" loading="lazy" width="365" height="468" :alt="p.h1" class="img-fluid" />
         </router-link>
 
@@ -21,7 +21,7 @@
 
         <div class="row">
           <div class="col-sm-12">
-            <div @click="gtmProductClick(i)" class="my-4">
+            <div class="my-4">
               <router-link :to="p.router_link" class="title">{{ p.h1 }}</router-link>
             </div>
           </div>
@@ -92,15 +92,9 @@ export default {
   },
   methods: {
     ...mapActions('catalog', ['loadMoreRequest']),
-    ...mapActions('gtm', ['productClick']),
 
     loadMore() {
       this.loadMoreRequest()
-    },
-
-    gtmProductClick(i) {
-      let product = this.getProductForGTM(i)
-      this.productClick({ page_type: false, product })
     },
 
     openProductPreview(product) {
@@ -110,10 +104,6 @@ export default {
         this.$router.push(product.router_link)
       }
     },
-  },
-  mounted() {
-    // GTM
-    this.$store.dispatch('gtm/loadCatalog')
   },
 }
 </script>
