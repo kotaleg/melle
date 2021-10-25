@@ -136,6 +136,9 @@ const actions = {
         this.dispatch('cart/updateCartDataRequest')
 
         if (has(res.data, 'added') && res.data.added === true) {
+          // GTM
+          this.dispatch('gtm/addToCart', getters.getProductForGTM)
+
           // RETAIL R START
           if (has(res.data, 'rr_product_id') && res.data.rr_product_id != null) {
             try { rrApi.addToBasket(res.data.rr_product_id) } catch(e) {}
