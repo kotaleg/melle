@@ -13,8 +13,8 @@
     "prod:scripts": "npm run development:production -- --mix-config=webpack.scripts.mix",
     "prod:styles": "npm run development:production -- --mix-config=webpack.styles.mix",
     "prod": "npm run prod:scripts && npm run prod:styles",
-    "check-pretty": "prettier -l 'catalog/view/{theme/melle/stylesheet/sass/**/,javascript/melle/src/**/,theme/melle/template/**/}*.{js,json,css,scss,vue,twig}'",
-    "pretty": "prettier --write 'catalog/view/{theme/melle/stylesheet/sass/**/,javascript/melle/src/**/,theme/melle/template/**/}*.{js,json,css,scss,vue,twig}'"
+    "check-pretty": "prettier -l 'catalog/view/theme/melle/{stylesheet/sass/**/,javascript/src/**/,template/**/}*.{js,json,css,scss,vue}'",
+    "pretty": "prettier --write 'catalog/view/theme/melle/{stylesheet/sass/**/,javascript/src/**/,template/**/}*.{js,json,css,scss,vue}'"
   },
   "dependencies": {
     "@riophae/vue-treeselect": "^0.4.0",
