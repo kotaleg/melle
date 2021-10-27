@@ -43,7 +43,7 @@
                       :href="`${product_link_placeholder}${hit.productId}`"
                       class="suggestions-item"
                     >
-                      <img :src="hit.image" :alt="hit.name" class="mr-2 ml-2">
+                      <img :src="hit.image" :alt="hit.name" class="mr-2 ml-2" />
 
                       <ais-highlight attribute="h1" :hit="hit" />
 

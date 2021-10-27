@@ -116,9 +116,7 @@
             v-model="newsletter"
             id="register_news"
           ></p-check>
-          <span>
-            Даю согласие на получение рассылки
-          </span>
+          <span> Даю согласие на получение рассылки </span>
         </label>
         <div v-show="fieldHasError('newsletter')" class="invalid-feedback">
           {{ getFieldError('newsletter') }}

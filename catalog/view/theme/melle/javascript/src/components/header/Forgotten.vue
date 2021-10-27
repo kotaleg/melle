@@ -64,7 +64,6 @@ export default {
 
     send() {
       this.sendRequest().then((res) => {
-        console.log(res)
         if (res === true) {
           this.sent = true
         }

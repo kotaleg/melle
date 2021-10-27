@@ -89,14 +89,17 @@
         v-else
         class="align-items-center cart-totals d-flex flex-column p-4 mb-4"
       >
-        <h4 class="cart-empty text-dark">
-          корзина пуста
-        </h4>
+        <h4 class="cart-empty text-dark">корзина пуста</h4>
       </div>
 
       <div
         v-if="hasProducts"
-        class="align-items-center d-flex flex-column flex-sm-row justify-content-between"
+        class="
+          align-items-center
+          d-flex
+          flex-column flex-sm-row
+          justify-content-between
+        "
       >
         <a
           :href="catalog_link"

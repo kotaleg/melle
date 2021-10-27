@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {isObject, has} from 'lodash'
+import { isObject, has } from 'lodash'
 import notify from '@/components/partial/notify'
 
 export default {

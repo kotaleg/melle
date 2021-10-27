@@ -14,7 +14,6 @@ export default {
   mounted() {
     // REMOVE PRERENDERED CONTENT
     let prerender = document.getElementById('rendered-catalog-content')
-    // console.log(prerender)
     if (prerender) {
       prerender.remove()
     }

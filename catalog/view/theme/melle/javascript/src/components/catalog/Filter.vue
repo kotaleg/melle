@@ -68,7 +68,13 @@
         </div>
 
         <div
-          class="filter-manufacturers d-flex flex-wrap align-content-center align-items-center mb-4"
+          class="
+            filter-manufacturers
+            d-flex
+            flex-wrap
+            align-content-center align-items-center
+            mb-4
+          "
         >
           <div
             v-for="(item, i) in getFilterValue('manufacturers')"
@@ -93,7 +99,13 @@
         </div>
 
         <div
-          class="d-flex align-items-center justify-content-between mb-4 text-right"
+          class="
+            d-flex
+            align-items-center
+            justify-content-between
+            mb-4
+            text-right
+          "
         >
           <span class="sub-title">размер:</span>
           <v-select
@@ -110,7 +122,13 @@
         </div>
 
         <div
-          class="d-flex align-items-center justify-content-between mb-4 text-right"
+          class="
+            d-flex
+            align-items-center
+            justify-content-between
+            mb-4
+            text-right
+          "
         >
           <span class="sub-title">цвет:</span>
           <v-select
@@ -127,7 +145,13 @@
         </div>
 
         <div
-          class="d-flex align-items-center justify-content-between mb-4 text-right"
+          class="
+            d-flex
+            align-items-center
+            justify-content-between
+            mb-4
+            text-right
+          "
         >
           <span class="sub-title">материал:</span>
           <v-select
@@ -168,7 +192,10 @@
         </div>
 
         <div class="filter-buttons">
-          <button type="submit" class="btn btn-dark btn-block d-block d-sm-none">
+          <button
+            type="submit"
+            class="btn btn-dark btn-block d-block d-sm-none"
+          >
             Применить
           </button>
         </div>
@@ -311,7 +338,6 @@ export default {
   mounted() {
     // REMOVE PRERENDERED CONTENT
     let prerender = document.getElementById('rendered-filter-content')
-    // console.log(prerender)
     if (prerender) {
       prerender.remove()
     }
@@ -326,10 +352,8 @@ export default {
     const filter = document.querySelectorAll('.sticky-sidebar')
     if (this.isMobile) {
       Stickyfill.add(filter)
-      console.log('STICKY SIDEBAR ENABLED')
     } else {
       Stickyfill.remove(filter)
-      console.log('MAKE YOUR SCREEN WIDER AND REFRESH')
     }
   },
 }

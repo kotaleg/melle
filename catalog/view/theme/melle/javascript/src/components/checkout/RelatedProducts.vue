@@ -19,13 +19,13 @@
         class="other-prod__item checkout-slide"
       >
         <a :href="p.href" class="other-prod__item-link"
-          ><img :src="p.thumb" :alt="p.h1"
+          ><img :src="p.thumb" :alt="p.name"
         /></a>
         <div class="other-prod__item-ivaninfo">
           <div class="row">
             <div class="col-xs-12">
               <h3 class="ivanitemtitle">
-                <a :href="p.href">{{ p.h1 }} </a>
+                <a :href="p.href">{{ p.name }} </a>
               </h3>
             </div>
             <div class="col-xs-7">
@@ -62,7 +62,6 @@ export default {
   mounted() {
     // REMOVE PRERENDERED CONTENT
     let prerender = document.getElementById('rendered-checkout-rp')
-    // console.log(prerender)
     if (prerender) {
       prerender.remove()
     }

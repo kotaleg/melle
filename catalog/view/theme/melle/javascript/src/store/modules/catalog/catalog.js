@@ -7,12 +7,22 @@ import notify from '@/components/partial/notify'
 import filterHelper from '@/router/filterHelper'
 import router from '@/router/index'
 
+function transformItemForGTM(item) {
+  return {
+    id: item.product_id,
+    name: item.name,
+    brand: item.manufacturer,
+    category: state.current_category,
+    price: parseFloat(item.default_values.price.replace(/\s/g, '')),
+    quantity: item.default_values.max_quantity,
+  }
+}
+
 // initial state
 const state = {
   breadcrumbs: [],
   products: [],
   product_total: 0,
-
   design_col: true,
   current_category: '',
   get_link: '',
@@ -42,12 +52,12 @@ const getters = {
   getPrice: (state) => (key) => {
     return state.products[key].default_values.price
   },
-  isSpecial: (state, getters) => (key) => {
-    let t = getters.getSpecial(key)
-    if (isString(t)) {
-      t = t.replace(/\s+/g, '')
+  isSpecial: (state) => (key) => {
+    let specialValue = state.products[key].default_values.special
+    if (isString(specialValue)) {
+      specialValue = parseFloat(specialValue.replace(/\s+/g, ''))
     }
-    return getters.getSpecial(key) !== false && t > 0
+    return specialValue !== false && specialValue > 0
   },
   getSpecial: (state) => (key) => {
     return state.products[key].default_values.special
@@ -55,36 +65,19 @@ const getters = {
   getProductsForGTM: (state) => {
     let products = []
     state.products.forEach((item, i) => {
-      products.push({
-        id: item.product_id,
-        name: item.name,
-        brand: item.manufacturer,
-        category: state.current_category,
-        price: item.default_values.price,
-        position: i,
-        quantity: item.quantity,
-        list: '',
-      })
+      let transformed = transformItemForGTM(item)
+      transformed.position = i + 1
+      products.push(transformed)
     })
     return products
   },
-  getProductForGTM: (state) => (index) => {
-    let product = {}
-    state.products.forEach((item, i) => {
-      if (index === i) {
-        product = {
-          id: item.product_id,
-          name: item.name,
-          brand: item.manufacturer,
-          category: state.current_category,
-          price: item.default_values.price,
-          position: i,
-          quantity: item.quantity,
-          list: '',
-        }
-      }
-    })
-    return product
+  getProductForGTM: (state) => (index, list_title) => {
+    if (has(state.products, index)) {
+      let transformed = transformItemForGTM(state.products[index])
+      transformed.position = index + 1
+      return transformed
+    }
+    return {}
   },
 }
 
@@ -96,7 +89,7 @@ const actions = {
     })
   },
   loadMoreRequest: debounce(
-    ({ commit, state, rootState, rootGetters, dispatch, getters }, payload) => {
+    ({ commit, state, rootState, rootGetters, dispatch }, payload) => {
       dispatch('header/setLoadingStatus', true, { root: true })
       dispatch('header/setSidebarLoadingStatus', true, { root: true })
 
@@ -134,11 +127,9 @@ const actions = {
               !rootGetters['filter/isFilterChanged']
             ) {
               res.data.products.forEach((product) => {
-                // console.log('addProduct');
                 commit('addProduct', product)
               })
             } else {
-              // console.log('setProducts');
               commit('setProducts', res.data.products)
             }
           }
@@ -164,14 +155,7 @@ const actions = {
     },
     500
   ),
-  updateRouterParams({
-    commit,
-    state,
-    rootState,
-    rootGetters,
-    dispatch,
-    getters,
-  }) {
+  updateRouterParams({ rootState }) {
     let query = filterHelper.prepareFullQuery(rootState.filter.filter_data)
     router.push({ path: Vue.prototype.$storePath, query })
   },

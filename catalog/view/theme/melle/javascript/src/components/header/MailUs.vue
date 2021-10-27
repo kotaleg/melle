@@ -110,7 +110,7 @@
           />
         </div>
 
-        <div style="margin-bottom: 25px;">
+        <div style="margin-bottom: 25px">
           <label for="AbstractForm_politic">
             <p-check name="agree" v-model="agree"></p-check>
             <span class="label-content"

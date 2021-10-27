@@ -58,11 +58,12 @@ const state = {
 const getters = {
   getProductForGTM: (state) => {
     return {
-      id: state.productId,
+      id: state.productId.toString(),
       name: state.name,
-      price: state.stock.price,
+      price: parseFloat(state.stock.price.replace(/\s+/g, '')),
       brand: state.manufacturer,
       category: state.currentCategory,
+      quantity: 1,
     }
   },
 }
@@ -80,17 +81,14 @@ const actions = {
 
     payload.url = rootState.catalog.getProductFullData
 
-    shop.makeRequest(
-      payload,
-      (res) => {
-        this.dispatch('header/setLoadingStatus', false)
-        if (has(res.data, 'data')) {
-          commit('SET_DATA', res.data.data)
-          dispatch('getProductStockRequest', {productId: payload.productId})
-        }
-        notify.messageHandler(res.data, '_header')
+    shop.makeRequest(payload, (res) => {
+      this.dispatch('header/setLoadingStatus', false)
+      if (has(res.data, 'data')) {
+        commit('SET_DATA', res.data.data)
+        dispatch('getProductStockRequest', { productId: payload.productId })
       }
-    )
+      notify.messageHandler(res.data, '_header')
+    })
   },
   CLEAR_DATA({ commit }) {
     commit('SET_PRODUCT_ID', false)
@@ -101,9 +99,9 @@ const actions = {
   ENABLE_IMAGE({ commit, state }, index) {
     for (const i in state.images) {
       if (i == index) {
-        commit('SET_IMAGE_STATUS', {index: i, status: true})
+        commit('SET_IMAGE_STATUS', { index: i, status: true })
       } else {
-        commit('SET_IMAGE_STATUS', {index: i, status: false})
+        commit('SET_IMAGE_STATUS', { index: i, status: false })
       }
     }
   },
@@ -140,8 +138,13 @@ const actions = {
           this.dispatch('gtm/addToCart', getters.getProductForGTM)
 
           // RETAIL R START
-          if (has(res.data, 'rr_product_id') && res.data.rr_product_id != null) {
-            try { rrApi.addToBasket(res.data.rr_product_id) } catch(e) {}
+          if (
+            has(res.data, 'rr_product_id') &&
+            res.data.rr_product_id != null
+          ) {
+            try {
+              rrApi.addToBasket(res.data.rr_product_id)
+            } catch (e) {}
           }
           // RETAIL R END
         }
@@ -181,7 +184,7 @@ const actions = {
         this.dispatch('header/setLoadingStatus', false)
         if (has(res.data, 'data')) {
           commit('SET_PRODUCT_PREVIEW', res.data.data)
-          dispatch('getProductPreviewStockRequest', {productId})
+          dispatch('getProductPreviewStockRequest', { productId })
         }
         notify.messageHandler(res.data, '_header')
       }

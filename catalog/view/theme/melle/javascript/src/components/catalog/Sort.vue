@@ -3,7 +3,14 @@
     <div class="d-none d-md-block">
       <div class="d-flex">
         <div
-          class="align-items-center d-flex desktop justify-content-end mb-4 w-100"
+          class="
+            align-items-center
+            d-flex
+            desktop
+            justify-content-end
+            mb-4
+            w-100
+          "
         >
           <span class="sub-title mr-3">сортировать по:</span>
           <v-select
@@ -45,9 +52,7 @@
         <summary class="p-1">Сортировка</summary>
 
         <div class="d-flex mt-3">
-          <div
-            class="align-items-center d-flex desktop mb-4"
-          >
+          <div class="align-items-center d-flex desktop mb-4">
             <span class="sub-title mr-3">по:</span>
             <v-select
               class="d-inline-block"

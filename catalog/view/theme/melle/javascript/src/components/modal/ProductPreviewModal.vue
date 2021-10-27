@@ -19,15 +19,21 @@
         <div class="col-sm-6">
           <div class="align-items-center d-flex h-100">
             <a v-if="image" :href="productLink">
-              <img :src="image" :alt="name" class="img-fluid">
+              <img :src="image" :alt="name" class="img-fluid" />
             </a>
           </div>
         </div>
         <div class="col-sm-6">
           <div>
-            <h1><a :href="productLink">{{name}}</a></h1>
+            <h1>
+              <a :href="productLink">{{ name }}</a>
+            </h1>
 
-            <div v-for="(o, o_key) in options" :key="`option-${o_key}`" class="mb-3">
+            <div
+              v-for="(o, o_key) in options"
+              :key="`option-${o_key}`"
+              class="mb-3"
+            >
               <div class="align-items-center d-flex justify-content-start">
                 <span class="option-selector">{{ o.name }}:</span>
                 <div class="d-flex flex-row flex-wrap justify-content-start">
@@ -37,7 +43,10 @@
                     :class="[
                       'radio-inline text-center my-1 mr-2',
                       `${o.class}-radio`,
-                      { check: ov.selected, disabled: ov.disabled_by_selection },
+                      {
+                        check: ov.selected,
+                        disabled: ov.disabled_by_selection,
+                      },
                     ]"
                   >
                     <div
@@ -61,7 +70,10 @@
                         :placeholder="ov.name"
                         :value="ov.option_value_id"
                         :class="[
-                          { check: ov.selected, disabled: ov.disabled_by_selection },
+                          {
+                            check: ov.selected,
+                            disabled: ov.disabled_by_selection,
+                          },
                         ]"
                       />
 
@@ -85,33 +97,46 @@
                 <button
                   @click="quantityHandler('-')"
                   type="button"
-                  class="p-0 px-2 text-center">
+                  class="p-0 px-2 text-center"
+                >
                   -
                 </button>
-                <input
-                  class="p-0 text-center"
-                  v-model.number="quantity"/>
+                <input class="p-0 text-center" v-model.number="quantity" />
                 <button
                   @click="quantityHandler('+')"
                   type="button"
-                  class="p-0 px-2 text-center">
+                  class="p-0 px-2 text-center"
+                >
                   +
                 </button>
 
                 <span
                   v-if="inStock"
                   v-show="quantity >= maxQuantity"
-                  class="product-max-count">
+                  class="product-max-count"
+                >
                   <span>доступно:</span>
                   <span>{{ maxQuantity }}</span>
                 </span>
               </div>
-              <a v-if="sizeList" @click="sizeListVisible = true" href="javascript:void(0);" class="d-block size-list-button">таблица <br/> размеров</a>
+              <a
+                v-if="sizeList"
+                @click="sizeListVisible = true"
+                href="javascript:void(0);"
+                class="d-block size-list-button"
+                >таблица <br />
+                размеров</a
+              >
             </div>
 
-            <div v-if="inStock" class="align-items-center d-flex justify-content-start my-3">
+            <div
+              v-if="inStock"
+              class="align-items-center d-flex justify-content-start my-3"
+            >
               <div>
-                <span v-if="isSpecial" class="price-old">{{ price }} <span class="ruble-sign">Р</span></span>
+                <span v-if="isSpecial" class="price-old"
+                  >{{ price }} <span class="ruble-sign">Р</span></span
+                >
                 <span v-if="isSpecial" class="ml-3 price">
                   <span>{{ special }}</span>
                   <span v-if="star" class="ruble-container">
@@ -120,8 +145,12 @@
                   </span>
                   <span v-else class="ruble-sign">Р</span>
                 </span>
-                <span v-if="!isSpecial" class="price">{{ price }} <span class="ruble-sign">Р</span></span>
-                <div v-if="star && specialText" class="special-text-info">{{specialText}}</div>
+                <span v-if="!isSpecial" class="price"
+                  >{{ price }} <span class="ruble-sign">Р</span></span
+                >
+                <div v-if="star && specialText" class="special-text-info">
+                  {{ specialText }}
+                </div>
               </div>
             </div>
 
@@ -130,24 +159,30 @@
                 v-if="countInCart <= 0"
                 @click="addToCart()"
                 href="javascript:void(0)"
-                class="add-button p-2 p-sm-3 w-100 text-center">
+                class="add-button p-2 p-sm-3 w-100 text-center"
+              >
                 <span>Добавить<br />В корзину</span>
               </a>
               <div v-else class="d-flex add-button w-100">
                 <div
                   @click="goToCheckout()"
-                  class="count p-2 p-sm-3 d-flex text-center">
-                  <span class="m-auto">в корзине
+                  class="count p-2 p-sm-3 d-flex text-center"
+                >
+                  <span class="m-auto"
+                    >в корзине
                     {{ countInCart }}
-                    шт.<br />перейти</span>
+                    шт.<br />перейти</span
+                  >
                 </div>
-                <div @click="addToCart()" class="plus p-2 p-sm-3 d-flex text-center">
+                <div
+                  @click="addToCart()"
+                  class="plus p-2 p-sm-3 d-flex text-center"
+                >
                   <span class="m-auto">+1 шт.</span>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -155,14 +190,14 @@
       <div class="back-button" @click="sizeListVisible = false"></div>
       <div class="close-button" @click="closeModal"></div>
       <div class="p-4 text-center">
-        <img :src="sizeList" alt="Таблица размеров" class="img-fluid">
+        <img :src="sizeList" alt="Таблица размеров" class="img-fluid" />
       </div>
     </div>
   </modal>
 </template>
 
 <script>
-import {isEqual} from 'lodash'
+import { isEqual } from 'lodash'
 import { mapActions } from 'vuex'
 import { get, sync } from 'vuex-pathify'
 
@@ -224,13 +259,18 @@ export default {
     },
   },
   methods: {
-    ...mapActions('product', ['getProductPreviewDataRequest', 'getProductPreviewStockRequest', 'addToCartRequest', 'CLEAR_PREVIEW']),
+    ...mapActions('product', [
+      'getProductPreviewDataRequest',
+      'getProductPreviewStockRequest',
+      'addToCartRequest',
+      'CLEAR_PREVIEW',
+    ]),
 
     radioHandler(data) {
       this.getProductPreviewStockRequest({
         productId: this.productId,
         options: this.options,
-        ...data
+        ...data,
       })
     },
     addToCart() {
@@ -281,12 +321,10 @@ export default {
     },
 
     showSizeList() {
-      console.log('show sl')
       this.sizeListVisible = true
     },
 
     showSizeList() {
-      console.log('show sl')
       this.sizeListVisible = true
     },
   },

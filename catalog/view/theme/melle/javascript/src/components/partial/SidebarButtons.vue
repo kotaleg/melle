@@ -3,12 +3,16 @@
     <button @click="openSidebar(false)" class="close-button p-0" />
 
     <div
-      class="align-items-center d-flex flex-row justify-content-end panel-buttons"
+      class="
+        align-items-center
+        d-flex
+        flex-row
+        justify-content-end
+        panel-buttons
+      "
     >
       <div v-if="!is_logged">
-        <a @click="enableElement('login')" href="javascript:void(0)">
-          Вход
-        </a>
+        <a @click="enableElement('login')" href="javascript:void(0)"> Вход </a>
         <span>/</span>
         <a @click="enableElement('register')" href="javascript:void(0)"
           >Регистрация</a

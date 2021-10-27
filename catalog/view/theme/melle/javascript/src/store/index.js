@@ -60,5 +60,5 @@ export default new Vuex.Store({
     search,
   },
   strict: debug,
-  plugins: [ pathify.plugin ],
+  plugins: [pathify.plugin],
 })

@@ -54,7 +54,9 @@
             @click="showSizeList"
             id="size-list"
             href="javascript:void(0);"
-            class="d-none d-sm-block">таблица<br />размеров</a>
+            class="d-none d-sm-block"
+            >таблица<br />размеров</a
+          >
         </div>
       </div>
     </div>
@@ -245,7 +247,7 @@ export default {
       this.getProductStockRequest({
         productId: this.productId,
         options: this.options,
-        ...data
+        ...data,
       })
     },
     addToCart() {
@@ -280,7 +282,6 @@ export default {
 
     // REMOVE PRERENDERED CONTENT
     let prerender = document.getElementById('rendered-product-content')
-    // console.log(prerender)
     if (prerender) {
       prerender.remove()
     }

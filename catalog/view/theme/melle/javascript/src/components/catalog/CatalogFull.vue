@@ -5,9 +5,14 @@
         <section class="row">
           <div class="col-md-4 col-lg-6">
             <div class="breadcrumbs">
-              <span v-for="(breadcrumb, index) in breadcrumbs" :key="breadcrumb.href">
+              <span
+                v-for="(breadcrumb, index) in breadcrumbs"
+                :key="breadcrumb.href"
+              >
                 <a :href="breadcrumb.href">{{ breadcrumb.text }}</a>
-                <span v-if="index != breadcrumbs.length-1" class="divider"> / </span>
+                <span v-if="index != breadcrumbs.length - 1" class="divider">
+                  /
+                </span>
               </span>
             </div>
           </div>
@@ -27,7 +32,7 @@
             <details v-if="description" details>
               <summary>Показать полностью</summary>
               <br />
-              <article style="column-count: 2;">{{ description }}</article>
+              <article style="column-count: 2">{{ description }}</article>
             </details>
           </div>
         </section>
@@ -37,7 +42,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import Catalog from './Catalog'
 
 export default {
@@ -47,9 +52,8 @@ export default {
   computed: {
     ...mapState('catalog', ['breadcrumbs', 'description']),
   },
-  methods: {
-  },
-  mounted() {
-  },
+  methods: {},
+  mounted() {},
 }
-</script>s
+</script>
+s

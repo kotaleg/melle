@@ -15,7 +15,7 @@
             <ais-stats>
               <p slot-scope="{ nbHits }">
                 Фильтр
-                <span style="font-size: 10px;"
+                <span style="font-size: 10px"
                   >(Найдено:&nbsp;{{ nbHits }})</span
                 >
               </p>
@@ -240,7 +240,12 @@
                   </div>
                 </div>
                 <div
-                  class="d-flex align-items-center justify-content-around col-sm-12"
+                  class="
+                    d-flex
+                    align-items-center
+                    justify-content-around
+                    col-sm-12
+                  "
                 >
                   <div v-if="item.isSpecial" class="position-relative">
                     <span class="price price-old mr-2">

@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import { has } from 'lodash'
 
-import shop from '../../../api/shop'
-import notify from '../../../components/partial/notify'
+import shop from '@/api/shop'
+import notify from '@/components/partial/notify'
 
 // initial state
 const state = {
@@ -10,9 +10,7 @@ const state = {
   products: [],
   total: 0,
   totals: [],
-
   is_checkout: false,
-
   catalog_link: '',
   checkout_link: '',
 }
@@ -29,8 +27,8 @@ const getters = {
         id: item.product_id,
         name: item.name,
         brand: item.manufacturer,
-        price: item.price,
-        quantity: item.quantity,
+        price: parseFloat(item.price.replace(/\s+/g, '')),
+        quantity: parseInt(item.quantity),
       })
     })
     return products
@@ -43,8 +41,8 @@ const getters = {
           id: item.product_id,
           name: item.name,
           brand: item.manufacturer,
-          price: item.price,
-          quantity: item.quantity,
+          price: parseFloat(item.price.replace(/\s+/g, '')),
+          quantity: parseInt(item.quantity),
         }
       }
     })
@@ -54,13 +52,13 @@ const getters = {
 
 // actions
 const actions = {
-  initData({ commit, state }) {
+  initData({ commit }) {
     shop.getInlineState('_cart', (data) => {
       commit('setData', data)
     })
   },
 
-  updateCartDataRequest({ commit, state, rootState, dispatch, getters }) {
+  updateCartDataRequest({ commit, state }) {
     this.dispatch('header/setSidebarLoadingStatus', true)
     shop.makeRequest(
       {
@@ -90,7 +88,7 @@ const actions = {
     )
   },
 
-  clearCartRequest({ commit, state, rootState, dispatch, getters }) {
+  clearCartRequest({ state, dispatch, getters }) {
     this.dispatch('header/setSidebarLoadingStatus', true)
     shop.makeRequest(
       {
@@ -116,10 +114,7 @@ const actions = {
     )
   },
 
-  updateCartItemRequest(
-    { commit, state, rootState, dispatch, getters },
-    payload
-  ) {
+  updateCartItemRequest({ state, dispatch }, payload) {
     this.dispatch('header/setSidebarLoadingStatus', true)
 
     let quantity_data = {}
@@ -143,10 +138,7 @@ const actions = {
     )
   },
 
-  removeCartItemRequest(
-    { commit, state, rootState, dispatch, getters },
-    cart_id
-  ) {
+  removeCartItemRequest({ state, dispatch, getters }, cart_id) {
     this.dispatch('header/setSidebarLoadingStatus', true)
     shop.makeRequest(
       {

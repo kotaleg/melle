@@ -35,7 +35,10 @@ export default {
     this.$store.dispatch('leadhit/initData')
   },
   mounted() {
-    this.$store.dispatch('leadhit/getProductsSliceFor', {serviceName: this.sourceType, id: this.randomId})
+    this.$store.dispatch('leadhit/getProductsSliceFor', {
+      serviceName: this.sourceType,
+      id: this.randomId,
+    })
   },
 }
 </script>

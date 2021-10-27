@@ -1,5 +1,8 @@
 <template>
-  <div v-if="images.length > 0" class="d-flex align-items-center product-images-container position-relative">
+  <div
+    v-if="images.length > 0"
+    class="d-flex align-items-center product-images-container position-relative"
+  >
     <div class="product-images-nav">
       <VueSlickCarousel
         ref="nav"
@@ -7,9 +10,10 @@
         :slidesToShow="3"
         :vertical="true"
         :infinite="true"
-        :focusOnSelect="true">
+        :focusOnSelect="true"
+      >
         <div v-for="image in images" :key="image.imageHash">
-          <img :src="image.thumb" class="img-fluid">
+          <img :src="image.thumb" class="img-fluid" />
         </div>
       </VueSlickCarousel>
     </div>
@@ -21,10 +25,15 @@
         :vertical="false"
         :slidesToShow="1"
         :slidesToScroll="1"
-        :focusOnSelect="true">
+        :focusOnSelect="true"
+      >
         <div v-for="image in images" :key="image.imageHash" class="text-center">
-          <img :src="image.image" class="img-fluid product-image-raw">
-          <zoom-on-hover :img-normal="image.image" :img-zoom="image.zoom" class="zoomed-container" />
+          <img :src="image.image" class="img-fluid product-image-raw" />
+          <zoom-on-hover
+            :img-normal="image.image"
+            :img-zoom="image.zoom"
+            class="zoomed-container"
+          />
         </div>
       </VueSlickCarousel>
     </div>
@@ -40,17 +49,14 @@ export default {
     VueSlickCarousel,
   },
   computed: {
-    ...get('product', [
-      'productId',
-      'images',
-    ]),
+    ...get('product', ['productId', 'images']),
     imageHash: get('product/stock@imageHash'),
   },
   methods: {
     onBeforeChange(currentPosition, nextPosition) {
       this.$refs.nav.goTo(nextPosition)
       this.$refs.images.goTo(nextPosition)
-    }
+    },
   },
   watch: {
     imageHash: function (imageHash) {
@@ -59,7 +65,7 @@ export default {
           this.$refs.images.goTo(key)
         }
       }
-    }
-  }
+    },
+  },
 }
 </script>

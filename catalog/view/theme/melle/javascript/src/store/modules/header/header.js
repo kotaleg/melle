@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import { isUndefined, has } from 'lodash'
+import { has } from 'lodash'
 
-import shop from '../../../api/shop'
-import notify from '../../../components/partial/notify'
+import shop from '@/api/shop'
+import notify from '@/api/components/partial/notify'
 
 // initial state
 const state = {

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { isArray, has } from 'lodash'
 
-import shop from '../../../api/shop'
+import shop from '@/api/shop'
 
 // initial state
 const state = {
@@ -54,7 +54,10 @@ const actions = {
     )
 
     if (res && has(res, 'data') && isArray(res.data)) {
-      commit('setProductsFor', { id: payload.id, products: res.data.slice(0, 6) })
+      commit('setProductsFor', {
+        id: payload.id,
+        products: res.data.slice(0, 6),
+      })
     }
   },
 }

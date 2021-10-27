@@ -15,7 +15,7 @@
   >
     <div class="dialog-content">
       <div class="close-button" @click="closeModal"></div>
-      <img :src="imageUrl" alt="Таблица Размеров" class="img-fluid">
+      <img :src="imageUrl" alt="Таблица Размеров" class="img-fluid" />
     </div>
   </modal>
 </template>

@@ -11,8 +11,15 @@
           p.znachek_class,
         ]"
       >
-        <router-link :to="p.router_link" @click="gtmProductClick(i)">
-          <img :src="p.image" loading="lazy" width="365" height="468" :alt="p.h1" class="img-fluid" />
+        <router-link :to="p.router_link" @click.native="gtmProductClick(i)">
+          <img
+            :src="p.image"
+            loading="lazy"
+            width="365"
+            height="468"
+            :alt="p.name"
+            class="img-fluid"
+          />
         </router-link>
 
         <div v-if="p.special_text" class="p-2 special-text">
@@ -21,8 +28,13 @@
 
         <div class="row">
           <div class="col-sm-12">
-            <div @click="gtmProductClick(i)" class="my-4">
-              <router-link :to="p.router_link" class="title">{{ p.h1 }}</router-link>
+            <div class="my-4">
+              <router-link
+                :to="p.router_link"
+                @click.native="gtmProductClick(i)"
+                class="title"
+                >{{ p.name }}</router-link
+              >
             </div>
           </div>
           <div
@@ -46,13 +58,19 @@
               {{ getPrice(i) }} <span class="ruble-sign">Р</span></span
             >
             <a
-              @click="openProductPreview(p)" href="javascript:void(0)"
+              @click="openProductPreview(p)"
+              href="javascript:void(0)"
               class="btn btn-primary px-4"
               >Купить</a
             >
           </div>
 
-          <router-link v-else :to="p.router_link" class="btn btn-primary btn-block w-75 m-auto">Скоро в продаже</router-link>
+          <router-link
+            v-else
+            :to="p.router_link"
+            class="btn btn-primary btn-block w-75 m-auto"
+            >Скоро в продаже</router-link
+          >
         </div>
       </div>
     </div>
@@ -88,7 +106,12 @@ export default {
       'isSpecial',
       'getSpecial',
     ]),
-    ...mapState('catalog', ['current_category', 'products', 'product_total']),
+    ...mapState('catalog', [
+      'current_category',
+      'products',
+      'product_total',
+      'heading_title',
+    ]),
   },
   methods: {
     ...mapActions('catalog', ['loadMoreRequest']),
@@ -99,13 +122,15 @@ export default {
     },
 
     gtmProductClick(i) {
-      let product = this.getProductForGTM(i)
-      this.productClick({ page_type: false, product })
+      let product = this.getProductForGTM(i, this.heading_title)
+      this.productClick(product)
     },
 
     openProductPreview(product) {
       if (window.matchMedia('(min-width: 992px)').matches) {
-        this.$modal.show('product-preview-modal', { productId: product.product_id })
+        this.$modal.show('product-preview-modal', {
+          productId: product.product_id,
+        })
       } else {
         this.$router.push(product.router_link)
       }

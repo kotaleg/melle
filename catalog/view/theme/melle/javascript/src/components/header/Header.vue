@@ -10,7 +10,15 @@
       class="d-flex flex-column justify-content-around w-100 header-container"
     >
       <div
-        class="d-flex align-items-center justify-content-between py-2 container-fluid text-white header-top"
+        class="
+          d-flex
+          align-items-center
+          justify-content-between
+          py-2
+          container-fluid
+          text-white
+          header-top
+        "
       >
         <a :href="base" class="logo">
           <img :src="logo" alt="MELLE" class="img-fluid" />
@@ -28,7 +36,11 @@
           <search />
         </div>
 
-        <a href="https://melle.online/dostavka-i-oplata" class="d-none d-lg-block">Доставка</a>
+        <a
+          href="https://melle.online/dostavka-i-oplata"
+          class="d-none d-lg-block"
+          >Доставка</a
+        >
         <a
           href="https://melle.online/opt/"
           target="_blank"
@@ -59,7 +71,15 @@
         class="d-flex flex-row justify-content-between text-white header-bottom"
       >
         <div
-          class="d-flex flex-row justify-content-between align-items-center container-fluid py-2 header-bottom-container"
+          class="
+            d-flex
+            flex-row
+            justify-content-between
+            align-items-center
+            container-fluid
+            py-2
+            header-bottom-container
+          "
         >
           <div class="search search-mobile d-lg-none">
             <search />
@@ -109,7 +129,13 @@
 
         <div
           @click="enableElement('cart')"
-          class="d-flex d-lg-none align-items-center text-center px-3 cart-container"
+          class="
+            d-flex d-lg-none
+            align-items-center
+            text-center
+            px-3
+            cart-container
+          "
         >
           <div>Корзина</div>
         </div>
@@ -209,21 +235,17 @@ export default {
     this.$store.dispatch('gtm/initData')
   },
   mounted() {
-    // GTM
-    this.$store.dispatch('gtm/ecommShittyPush')
-
     if (typeof jQuery == 'function') {
-        jQuery('.melle_reload_cart').on('click', () => {
-            this.updateCartDataRequest()
-        })
-        jQuery('.melle_clear_cart').on('click', () => {
-            this.clearCartRequest()
-        })
+      jQuery('.melle_reload_cart').on('click', () => {
+        this.updateCartDataRequest()
+      })
+      jQuery('.melle_clear_cart').on('click', () => {
+        this.clearCartRequest()
+      })
     }
 
     // REMOVE PRERENDERED CONTENT
     let prerender = document.getElementById('rendered-header-content')
-    // console.log(prerender)
     if (prerender) {
       prerender.remove()
     }
