@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { has } from 'lodash'
 
 import shop from '@/api/shop'
-import notify from '@/api/components/partial/notify'
+import notify from '@/components/partial/notify'
 
 // initial state
 const state = {
