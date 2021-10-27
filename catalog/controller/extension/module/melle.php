@@ -259,7 +259,7 @@ class ControllerExtensionModuleMelle extends Controller
             $state['images'] = $this->model_extension_module_melle_product->prepareImagesFor($product_id);
 
             $state['productId'] = $product_id;
-            $state['name'] = $product_info['name'];
+            $state['name'] = $product_info['h1'];
             $state['manufacturer'] = $product_info['manufacturer'];
             $state['currentCategory'] = $this->model_tool_base->getCurrentCategoryName();
             $state['quantity'] = 1;

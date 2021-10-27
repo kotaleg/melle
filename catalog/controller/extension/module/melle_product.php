@@ -204,7 +204,7 @@ class ControllerExtensionModuleMelleProduct extends Controller
         }
 
         $json['data']['breadcrumbs'][] = array(
-            'text' => $productInfo['name'],
+            'text' => $productInfo['h1'],
             'href' => $this->model_extension_pro_patch_url->ajax('product/product', '&product_id=' . $productId),
         );
 
@@ -243,7 +243,7 @@ class ControllerExtensionModuleMelleProduct extends Controller
         }
 
         $json['data']['productId'] = $productId;
-        $json['data']['name'] = $productInfo['name'];
+        $json['data']['name'] = $productInfo['h1'];
         $json['data']['manufacturer'] = $productInfo['manufacturer'];
         $json['data']['currentCategory'] = $this->model_tool_base->getCurrentCategoryName();
         $json['data']['quantity'] = 1;
