@@ -89,7 +89,7 @@
                 /* PRO_ALGOLIA_MELLE START */
                 $json['data']['manufacturers'] = $this->model_extension_pro_patch_url->ajax(
                     'product/search',
-                    'refinementList[manufacturer][0]=' . utf8_strtolower($product_info['manufacturer'])
+                    'refinementList[manufacturer][0]=' . utf8_strtolower($productInfo['manufacturer'])
                 );
                 /* PRO_ALGOLIA_MELLE END */
             ]]></add>
