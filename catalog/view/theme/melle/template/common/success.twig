@@ -1,5 +1,5 @@
 {{ header }}
-{% if final_gtm_data %}
+{% if final_gtag_data %}
 </section>
 {% endif %}
 <main class="main-page container-fluid">
@@ -24,33 +24,18 @@
          <h1>{{ heading_title }}</h1>
           <p>{{text_order_number}}{{ text_message }}</p>
 
-         {% if final_gtm_data %}
+         {% if final_gtag_data %}
          <script>
-             dataLayer.push({
-               "event": "transaction",
-               "ecommerce": {
-                 "purchase": {
-                   "actionField": {
-                     "id": "{{ final_gtm_data.order_id }}",
-                     "revenue": {{ final_gtm_data.total }},
-                     "tax": {{ final_gtm_data.tax }},
-                     "shipping": {{ final_gtm_data.shipping }}
-                   },
-                   "products": {{ final_gtm_data.products }}
-                 }
-               },
-                 'event': 'gtm-ee-event',
-                 'gtm-ee-event-category': 'Enhanced Ecommerce',
-                 'gtm-ee-event-action': 'Purchase',
-                 'gtm-ee-event-non-interaction': 'False',
-             });
+            if (typeof gtag === 'function') {
+                gtag('event', 'purchase', {{final_gtag_data}});
+            }
          </script>
          {% endif %}
 
       </div>
    </div>
 </main>
-{% if final_gtm_data %}
+{% if final_gtag_data %}
 <section>
 {% endif %}
 {{ footer }}

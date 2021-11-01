@@ -97,9 +97,6 @@ class ControllerExtensionModuleMelle extends Controller
 
         $state['product_link_placeholder'] = $this->model_extension_pro_patch_url->ajax('product/product', '&product_id=', true);
 
-        // GTM EVENTS
-        $this->load->controller('extension/module/melle/initGTM');
-
         // LEADHIT
         $this->load->controller('extension/module/melle/initLeadhit');
 
@@ -134,35 +131,6 @@ class ControllerExtensionModuleMelle extends Controller
         ));
 
         return $this->model_extension_pro_patch_load->view("{$this->route}/header_prerender", $data);
-    }
-
-    public function initGTM()
-    {
-        // VARIABLE
-        $state['id'] = "{$this->codename}_gtm";
-
-        $pt = $this->model_tool_base->getPageType();
-        $state['page_type'] = 'other';
-
-        switch ($pt) {
-            case 'checkout':
-                $state['page_type'] = $pt;
-                break;
-            case 'category':
-                $state['page_type'] = $pt;
-                break;
-            case 'product':
-                $state['page_type'] = $pt;
-                break;
-            case 'search':
-                $state['page_type'] = 'Search Results';
-                break;
-        }
-
-        $state['related_products'] = array();
-
-        // SET STATE
-        $this->document->addState($state['id'], json_encode($state));
     }
 
     public function initCart()

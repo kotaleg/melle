@@ -150,14 +150,15 @@ class ModelCheckoutCart extends Model
         return $state;
     }
 
-    public function prepareFinalGTMData()
+    public function prepareFinalGtagData()
     {
         $data = array(
-            'order_id' => $this->session->data['order_id'],
-            'total' => 0,
+            'transaction_id' => (string) $this->session->data['order_id'],
+            'currency' => 'RUB',
+            'value' => 0,
             'tax' => 0,
             'shipping' => 0,
-            'products' => array(),
+            'items' => array(),
         );
 
         $this->load->model('checkout/order');
@@ -170,20 +171,15 @@ class ModelCheckoutCart extends Model
         foreach ($products as $k => $p) {
             $extra = $this->model_catalog_product->getProduct($p['product_id']);
 
-            $data['products'][] = array(
-                'id' => $p['product_id'],
-                'name' => $p['name'],
-                'brand' => $extra['manufacturer'],
-                'price' => $p['price'],
-                'category' => '',
-                'size' => '',
-                'color' => '',
-                'position' => $k,
-                'quantity' => $p['quantity'],
+            $data['items'][] = array(
+                'id' => (string) $p['product_id'],
+                'name' => (string) $p['name'],
+                'brand' => (string) $extra['manufacturer'],
+                'price' => (float) $p['price'],
+                'list_position' => $k + 1,
+                'quantity' => (int) $p['quantity'],
             );
         }
-
-        $data['products'] = json_encode($data['products']);
 
         // Totals
         $this->load->model('setting/extension');
@@ -231,11 +227,11 @@ class ModelCheckoutCart extends Model
 
         foreach ($totals as $total) {
             if (strcmp($total['code'], 'sub_total') === 0) {
-                $data['total'] = $total['value'];
+                $data['value'] = (float) $total['value'];
             }
 
             if (in_array($total['code'], array('shipping'))) {
-                $data['shipping'] = $total['value'];
+                $data['shipping'] = (float) $total['value'];
             }
         }
 
