@@ -1,22 +1,10 @@
 import Vue from 'vue'
 import { isArray, isString, has, debounce } from 'lodash'
-
 import shop from '@/api/shop'
 import notify from '@/components/partial/notify'
-
 import filterHelper from '@/router/filterHelper'
 import router from '@/router/index'
-
-function transformItemForGTM(item) {
-  return {
-    id: item.product_id,
-    name: item.name,
-    brand: item.manufacturer,
-    category: state.current_category,
-    price: parseFloat(item.default_values.price.replace(/\s/g, '')),
-    quantity: item.default_values.max_quantity,
-  }
-}
+import gtag from '@/plugins/gtag'
 
 // initial state
 const state = {
@@ -62,28 +50,11 @@ const getters = {
   getSpecial: (state) => (key) => {
     return state.products[key].default_values.special
   },
-  getProductsForGTM: (state) => {
-    let products = []
-    state.products.forEach((item, i) => {
-      let transformed = transformItemForGTM(item)
-      transformed.position = i + 1
-      products.push(transformed)
-    })
-    return products
-  },
-  getProductForGTM: (state) => (index, list_title) => {
-    if (has(state.products, index)) {
-      let transformed = transformItemForGTM(state.products[index])
-      transformed.position = index + 1
-      return transformed
-    }
-    return {}
-  },
 }
 
 // actions
 const actions = {
-  initData({ commit, state }) {
+  initData({ commit }) {
     shop.getInlineState('_catalog', (data) => {
       commit('setData', data)
     })
@@ -150,6 +121,12 @@ const actions = {
           dispatch('header/setLoadingStatus', false, { root: true })
           dispatch('header/setSidebarLoadingStatus', false, { root: true })
           notify.messageHandler(res.data, '_header')
+
+          gtag.productImpressions({
+            products: res.data.products,
+            list_name: state.heading_title,
+            category_name: state.current_category,
+          })
         }
       )
     },

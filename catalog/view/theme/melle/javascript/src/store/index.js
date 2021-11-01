@@ -9,7 +9,6 @@ import mail_us from './modules/header/mail_us'
 import login from './modules/header/login'
 import forgotten from './modules/header/forgotten'
 import register from './modules/header/register'
-import gtm from './modules/header/gtm'
 
 // ACCOUNT
 import account from './modules/account/account'
@@ -47,7 +46,6 @@ export default new Vuex.Store({
     mail_us,
     forgotten,
     register,
-    gtm,
     account,
     product,
     review,

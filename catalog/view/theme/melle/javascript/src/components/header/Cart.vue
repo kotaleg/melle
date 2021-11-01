@@ -144,8 +144,8 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-
 import SidebarButtons from '../partial/SidebarButtons.vue'
+import gtag from '@/plugins/gtag'
 
 export default {
   components: {
@@ -190,8 +190,7 @@ export default {
     },
   },
   mounted() {
-    // GTM
-    this.$store.dispatch('gtm/openCheckoutPage')
+    gtag.viewCart({ products: this.products })
   },
 }
 </script>

@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import { has } from 'lodash'
-
+import { has, clone } from 'lodash'
 import shop from '@/api/shop'
 import notify from '@/components/partial/notify'
+import gtag from '@/plugins/gtag'
 
 // initial state
 const state = {
@@ -19,34 +19,6 @@ const state = {
 const getters = {
   hasProducts: (state) => {
     return state.count > 0 ? true : false
-  },
-  getProductsForGTM: (state) => {
-    let products = []
-    state.products.forEach((item) => {
-      products.push({
-        id: item.product_id,
-        name: item.name,
-        brand: item.manufacturer,
-        price: parseFloat(item.price.replace(/\s+/g, '')),
-        quantity: parseInt(item.quantity),
-      })
-    })
-    return products
-  },
-  getProductForGTM: (state) => (cart_id) => {
-    let product = {}
-    state.products.forEach((item) => {
-      if (item.cart_id === cart_id) {
-        product = {
-          id: item.product_id,
-          name: item.name,
-          brand: item.manufacturer,
-          price: parseFloat(item.price.replace(/\s+/g, '')),
-          quantity: parseInt(item.quantity),
-        }
-      }
-    })
-    return product
   },
 }
 
@@ -88,7 +60,7 @@ const actions = {
     )
   },
 
-  clearCartRequest({ state, dispatch, getters }) {
+  clearCartRequest({ state, dispatch }) {
     this.dispatch('header/setSidebarLoadingStatus', true)
     shop.makeRequest(
       {
@@ -98,13 +70,12 @@ const actions = {
         this.dispatch('header/setSidebarLoadingStatus', false)
         notify.messageHandler(res.data, '_header')
 
-        let removed_items = Object.assign({}, getters.getProductsForGTM)
+        const removed_items = clone(state.products)
 
         dispatch('updateCartDataRequest')
 
         if (has(res.data, 'cleared') && res.data.cleared === true) {
-          // GTM
-          this.dispatch('gtm/removeFromCart', removed_items)
+          gtag.removeFromCart({ products: removed_items })
         }
 
         if (state.is_checkout === true) {
@@ -138,7 +109,7 @@ const actions = {
     )
   },
 
-  removeCartItemRequest({ state, dispatch, getters }, cart_id) {
+  removeCartItemRequest({ state, dispatch }, cart_id) {
     this.dispatch('header/setSidebarLoadingStatus', true)
     shop.makeRequest(
       {
@@ -149,13 +120,14 @@ const actions = {
         this.dispatch('header/setSidebarLoadingStatus', false)
         notify.messageHandler(res.data, '_header')
 
-        let removed_item = Object.assign({}, getters.getProductForGTM(cart_id))
+        const removed_items = state.products.filter(
+          (product) => product.cart_id === cart_id
+        )
 
         dispatch('updateCartDataRequest')
 
         if (has(res.data, 'removed') && res.data.removed === true) {
-          // GTM
-          this.dispatch('gtm/removeFromCart', [removed_item])
+          gtag.removeFromCart({ products: removed_items })
         }
 
         if (state.is_checkout === true) {

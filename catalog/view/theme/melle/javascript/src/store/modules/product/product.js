@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import { make } from 'vuex-pathify'
 import { has } from 'lodash'
-
 import shop from '@/api/shop'
 import notify from '@/components/partial/notify'
+import gtag from '@/plugins/gtag'
 
 // initial state
 const state = {
@@ -55,22 +55,11 @@ const state = {
 }
 
 // getters
-const getters = {
-  getProductForGTM: (state) => {
-    return {
-      id: state.productId.toString(),
-      name: state.name,
-      price: parseFloat(state.stock.price.replace(/\s+/g, '')),
-      brand: state.manufacturer,
-      category: state.currentCategory,
-      quantity: 1,
-    }
-  },
-}
+const getters = {}
 
 // actions
 const actions = {
-  INIT_DATA({ commit, state }) {
+  INIT_DATA({ commit }) {
     shop.getInlineState('_product', (data) => {
       commit('SET_DATA', data)
     })
@@ -134,8 +123,18 @@ const actions = {
         this.dispatch('cart/updateCartDataRequest')
 
         if (has(res.data, 'added') && res.data.added === true) {
-          // GTM
-          this.dispatch('gtm/addToCart', getters.getProductForGTM)
+          gtag.addToCart({
+            product: {
+              product_id: state.productId.toString(),
+              name: state.name,
+              manufacturer: state.manufacturer,
+              default_values: {
+                price: state.stock.price,
+                max_quantity: 1,
+              },
+            },
+            category_name: state.currentCategory,
+          })
 
           // RETAIL R START
           if (

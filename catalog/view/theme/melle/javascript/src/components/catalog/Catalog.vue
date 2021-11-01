@@ -11,7 +11,7 @@
           p.znachek_class,
         ]"
       >
-        <router-link :to="p.router_link" @click.native="gtmProductClick(i)">
+        <router-link :to="p.router_link" @click.native="productClick(p)">
           <img
             :src="p.image"
             loading="lazy"
@@ -31,7 +31,7 @@
             <div class="my-4">
               <router-link
                 :to="p.router_link"
-                @click.native="gtmProductClick(i)"
+                @click.native="productClick(p)"
                 class="title"
                 >{{ p.name }}</router-link
               >
@@ -68,6 +68,7 @@
           <router-link
             v-else
             :to="p.router_link"
+            @click.native="productClick(p)"
             class="btn btn-primary btn-block w-75 m-auto"
             >Скоро в продаже</router-link
           >
@@ -92,6 +93,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import ProductPreviewModal from '@/components/modal/ProductPreviewModal.vue'
+import gtag from '@/plugins/gtag'
 
 export default {
   components: {
@@ -102,7 +104,6 @@ export default {
       'canLoadMore',
       'getRating',
       'getPrice',
-      'getProductForGTM',
       'isSpecial',
       'getSpecial',
     ]),
@@ -115,18 +116,26 @@ export default {
   },
   methods: {
     ...mapActions('catalog', ['loadMoreRequest']),
-    ...mapActions('gtm', ['productClick']),
 
     loadMore() {
       this.loadMoreRequest()
     },
 
-    gtmProductClick(i) {
-      let product = this.getProductForGTM(i, this.heading_title)
-      this.productClick(product)
+    productClick(product) {
+      gtag.productClick({
+        product,
+        list_name: this.heading_title,
+        category_name: this.current_category,
+      })
     },
 
     openProductPreview(product) {
+      gtag.productClick({
+        product,
+        list_name: this.heading_title,
+        category_name: this.current_category,
+      })
+
       if (window.matchMedia('(min-width: 992px)').matches) {
         this.$modal.show('product-preview-modal', {
           productId: product.product_id,
@@ -137,8 +146,11 @@ export default {
     },
   },
   mounted() {
-    // GTM
-    this.$store.dispatch('gtm/loadCatalog')
+    gtag.productImpressions({
+      products: this.products,
+      list_name: this.heading_title,
+      category_name: this.current_category,
+    })
   },
 }
 </script>

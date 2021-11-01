@@ -1,169 +1,99 @@
 import { isString, has } from 'lodash'
 
 const isGtag = typeof gtag === 'function'
-const isGtagProductData = typeof gtag_product_data === 'object'
 
-function findProductById(productId) {
-  for (let key in gtag_product_data) {
-    const product_data = gtag_product_data[key]
-    if (
-      typeof product_data['id'] === 'string' &&
-      product_data['id'] === productId
-    ) {
-      return product_data
-    }
-  }
-}
-
-function filterProductItem(item) {
-  return has(item, 'productId') && has(item, 'name')
-}
-
-function transformProductItem(item) {
-  const prepared = { id: item.productId, name: item.name }
-
-  if (has(item, 'h1')) {
-    prepared.name = item.h1
+function transformProduct({ product, list_name, category_name }) {
+  let data = {
+    id: product.product_id,
+    name: product.name,
   }
 
-  if (has(item, 'manufacturer')) {
-    prepared.brand = item.manufacturer
+  if (has(product, 'manufacturer')) {
+    data.brand = product.manufacturer
   }
 
-  if (has(item, 'stock.price') && isString(item.stock.price)) {
-    const priceValue = parseFloat(item.stock.price.replace(/\s/g, ''))
-    prepared.price = priceValue
-  }
-
-  if (has(item, 'stock.maxQuantity')) {
-    prepared.quantity = item.stock.maxQuantity
-  }
-
-  return prepared
-}
-
-function filterProductListItem(item) {
-  return has(item, 'product_id') && has(item, 'name')
-}
-
-function transformProductListItem(item) {
-  const prepared = { id: item.product_id, name: item.name }
-
-  if (has(item, 'h1')) {
-    prepared.name = item.h1
-  }
-
-  if (has(item, 'manufacturer')) {
-    prepared.brand = item.manufacturer
+  if (has(product, 'default_values.max_quantity')) {
+    data.quantity = parseInt(product.default_values.max_quantity)
   }
 
   if (
-    has(item, 'default_values.price') &&
-    isString(item.default_values.price)
+    has(product, 'default_values.price') &&
+    isString(product.default_values.price)
   ) {
-    const priceValue = parseFloat(item.default_values.price.replace(/\s/g, ''))
-    prepared.price = priceValue
+    data.price = parseFloat(product.default_values.price.replace(/\s/g, ''))
   }
 
-  if (has(item, 'default_values.max_quantity')) {
-    prepared.quantity = item.default_values.max_quantity
+  if (list_name) {
+    data.list_name = list_name
   }
 
-  return prepared
-}
-
-function filterSearchItem(item) {
-  return has(item, 'productId') && has(item, 'name')
-}
-
-function transformSearchItem(item) {
-  const prepared = {
-    item_id: item.productId,
-    item_name: item.name,
-    currency: 'RUR',
+  if (category_name) {
+    data.category = category_name
   }
 
-  if (has(item, 'h1') && item.h1) {
-    prepared.name = item.h1
-  }
-
-  if (has(item, 'price') && item.price > 0) {
-    prepared.price = item.price
-  }
-
-  if (has(item, 'special') && item.special !== false && item.special > 0) {
-    prepared.price = item.special
-  }
-
-  return prepared
+  return data
 }
 
 export default {
-  productClickRaw(productId) {
+  productClick({ product, list_name = '', category_name = '' }) {
     if (!isGtag) {
       return
     }
 
     gtag('event', 'select_content', {
       content_type: 'product',
-      items: [{ id: productId }],
+      items: [transformProduct({ product, list_name, category_name })],
     })
   },
-  productClick(product) {
+  productImpressions({ products, list_name = '', category_name = '' }) {
     if (!isGtag) {
       return
     }
 
-    const transformed_items = [product]
-      .filter((item) => filterProductListItem(item))
-      .map((item) => transformProductListItem(item))
-
-    gtag('event', 'select_content', {
-      content_type: 'product',
-      items: transformed_items,
+    gtag('event', 'view_item_list', {
+      items: products.map((product, index) => {
+        let transformed = transformProduct({
+          product,
+          list_name,
+          category_name,
+        })
+        transformed.list_position = index + 1
+        return transformed
+      }),
     })
   },
-  productView(product) {
+  viewProduct({ product }) {
     if (!isGtag) {
       return
     }
 
-    const transformed_items = [product]
-      .filter((item) => filterProductItem(item))
-      .map((item) => transformProductItem(item))
-
-    gtag('event', 'view_item', { items: transformed_items })
+    gtag('event', 'view_item', { items: [transformProduct({ product })] })
   },
-  search(searchTerm) {
+  addToCart({ product, category_name = '' }) {
     if (!isGtag) {
       return
     }
 
-    gtag('event', 'search', { search_term: searchTerm })
+    gtag('event', 'add_to_cart', {
+      items: [transformProduct({ product, category_name })],
+    })
   },
-  viewSearchResults(items) {
+  removeFromCart({ products }) {
     if (!isGtag) {
       return
     }
 
-    const transformed_items = items
-      .filter((item) => filterSearchItem(item))
-      .map((item) => transformSearchItem(item))
-
-    gtag('event', 'view_search_results', { items: transformed_items })
+    gtag('event', 'remove_from_cart', {
+      items: products.map((product) => transformProduct({ product })),
+    })
   },
-  searchResultClick(item) {
+  viewCart({ products }) {
     if (!isGtag) {
       return
     }
 
-    const transformed_items = [item]
-      .filter((item) => filterSearchItem(item))
-      .map((item) => transformSearchItem(item))
-
-    gtag('event', 'select_content', {
-      content_type: 'product',
-      items: transformed_items,
+    gtag('event', 'begin_checkout', {
+      items: products.map((product) => transformProduct({ product })),
     })
   },
 }
