@@ -86,6 +86,8 @@ class ModelToolBase extends Model
 
     public function getCurrentCategoryName()
     {
+        $this->load->model('catalog/category');
+
         $categoryPath = '';
 
         if (isset($this->request->get['path'])) {
