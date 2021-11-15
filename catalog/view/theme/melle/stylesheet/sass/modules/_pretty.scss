@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2017 Lokesh rajendran
  */
-
+/* purgecss start ignore */
 .pretty * {
   box-sizing: border-box;
 }
@@ -78,3 +78,4 @@
 .pretty.p-default input:checked ~ .state label:after {
   background-color: #bdc3c7 !important;
 }
+/* purgecss end ignore */
