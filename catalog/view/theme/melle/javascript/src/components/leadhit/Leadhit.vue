@@ -6,7 +6,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { v4 as uuidv4 } from 'uuid'
+import { nanoid } from 'nanoid'
 import CarouselBlock from './CarouselBlock.vue'
 
 export default {
@@ -22,7 +22,7 @@ export default {
   computed: {
     ...mapState('leadhit', ['productsContainer']),
     randomId() {
-      return uuidv4()
+      return nanoid()
     },
     items() {
       if (typeof this.productsContainer[this.randomId] != 'undefined') {
