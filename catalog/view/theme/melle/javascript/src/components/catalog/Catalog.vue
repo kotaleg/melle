@@ -86,18 +86,18 @@
       </button>
     </div>
 
-    <product-preview-modal dir="ltr" :width="750" :scrollable="false" />
+    <!-- <product-preview-modal dir="ltr" :width="750" :scrollable="false" /> -->
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import ProductPreviewModal from '@/components/modal/ProductPreviewModal.vue'
+// import ProductPreviewModal from '@/components/modal/ProductPreviewModal.vue'
 import gtag from '@/plugins/gtag'
 
 export default {
   components: {
-    ProductPreviewModal,
+    // ProductPreviewModal,
   },
   computed: {
     ...mapGetters('catalog', [

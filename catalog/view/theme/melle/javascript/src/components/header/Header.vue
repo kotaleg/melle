@@ -5,6 +5,7 @@
       position="bottom right"
     />
     <loading :active.sync="is_loading" :is-full-page="true" />
+    <product-preview-modal dir="ltr" :width="750" :scrollable="false" />
 
     <div
       class="d-flex flex-column justify-content-around w-100 header-container"
@@ -177,19 +178,20 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import Loading from 'vue-loading-overlay'
-
-import Search from './Search.vue'
-import Sidebar from './Sidebar.vue'
-import Cart from './Cart.vue'
-import Login from './Login.vue'
-import Register from './Register.vue'
-import Forgotten from './Forgotten.vue'
-import Filter from './Filter.vue'
+import Search from '@/components/header/Search.vue'
+import Sidebar from '@/components/header/Sidebar.vue'
+import Cart from '@/components/header/Cart.vue'
+import Login from '@/components/header/Login.vue'
+import Register from '@/components/header/Register.vue'
+import Forgotten from '@/components/header/Forgotten.vue'
+import Filter from '@/components/header/Filter.vue'
+import ProductPreviewModal from '@/components/modal/ProductPreviewModal.vue'
 
 export default {
   components: {
     Loading,
     Search,
+    ProductPreviewModal,
     'header-sidebar': Sidebar,
     'h-login': Login,
     'h-register': Register,
