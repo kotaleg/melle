@@ -250,7 +250,7 @@ class ControllerCommonFileManager extends Controller {
                         $json['error'] = $this->language->get('error_filetype');
                     }
 
-                    $filename = sha1($filename) . ".{$extension}";
+                    $filename = sha1(uniqid('', true)) . ".{$extension}";
 
                     // Allowed file mime types
                     $allowed = array(
