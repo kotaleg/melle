@@ -244,9 +244,13 @@ class ControllerCommonFileManager extends Controller {
                         'png'
                     );
 
-                    if (!in_array(utf8_strtolower(utf8_substr(strrchr($filename, '.'), 1)), $allowed)) {
+                    $extension = utf8_strtolower(utf8_substr(strrchr($filename, '.'), 1));
+
+                    if (!in_array($extension, $allowed)) {
                         $json['error'] = $this->language->get('error_filetype');
                     }
+
+                    $filename = sha1($filename) . ".{$extension}";
 
                     // Allowed file mime types
                     $allowed = array(
@@ -271,7 +275,7 @@ class ControllerCommonFileManager extends Controller {
 
                 if (!$json) {
                     move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
-                    
+
                     // IVAN MOD START
                     $imagePath = $directory . '/' . $filename;
                     // IVAN MOD END
@@ -286,8 +290,7 @@ class ControllerCommonFileManager extends Controller {
             if (isset($imagePath)) {
                 $this->load->model('tool/image');
                 $json['path'] = utf8_substr($imagePath, utf8_strlen(DIR_IMAGE));
-                $json['thumb'] = $this->model_tool_image->resize(
-                    utf8_substr($imagePath, utf8_strlen(DIR_IMAGE)), 100, 100);
+                $json['thumb'] = $this->model_tool_image->resize(utf8_substr($imagePath, utf8_strlen(DIR_IMAGE)), 100, 100);
             }
             // IVAN MOD END
         }
