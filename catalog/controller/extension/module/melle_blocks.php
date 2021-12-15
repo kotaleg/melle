@@ -8,13 +8,6 @@ class ControllerExtensionModuleMelleBlocks extends Controller
     private $route = 'extension/module/melle_blocks';
     private $type = 'module';
 
-    private $setting = array();
-
-    const BTYPE_1 = 'type-1';
-    const BTYPE_2 = 'type-2';
-    const BTYPE_3 = 'type-3';
-    const BTYPE_4 = 'type-4';
-
     public function __construct($registry)
     {
         parent::__construct($registry);
@@ -33,9 +26,9 @@ class ControllerExtensionModuleMelleBlocks extends Controller
         if (!isset($setting['moduleId'])) { return; }
 
         $cacheKey = "melle.melle_blocks.module_id{$setting['moduleId']}." . serialize($setting);
-        // $data = $this->cache->get($cacheKey);
+        $data = $this->cache->get($cacheKey);
 
-        // if (!$data) {
+        if (!$data) {
             $data['moduleId'] = crc32($setting['moduleId']);
 
             $preparedBlocks = $this->extension_model->prepareBlocks($setting['moduleId'], $setting['height']);
@@ -45,7 +38,7 @@ class ControllerExtensionModuleMelleBlocks extends Controller
             $data['backgroundColor'] = $setting['backgroundColor'];
 
             $this->cache->set($cacheKey, $data);
-        // }
+        }
 
         return $this->model_extension_pro_patch_load->view($this->route, $data);
     }
@@ -60,16 +53,16 @@ class ControllerExtensionModuleMelleBlocks extends Controller
     private function renderBlock($block)
     {
         switch ($block['type']) {
-            case self::BTYPE_1:
+            case \melle_blocks\constant::BTYPE_1:
                 $type = 'one';
                 break;
-            case self::BTYPE_2:
+            case \melle_blocks\constant::BTYPE_2:
                 $type = 'two';
                 break;
-            case self::BTYPE_3:
+            case \melle_blocks\constant::BTYPE_3:
                 $type = 'three';
                 break;
-            case self::BTYPE_4:
+            case \melle_blocks\constant::BTYPE_4:
                 $type = 'four';
                 break;
         }

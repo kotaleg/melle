@@ -7,16 +7,7 @@ class ModelExtensionModuleMelleBlocks extends Model
     private $codename = 'melle_blocks';
     private $route = 'extension/module/melle_blocks';
 
-    const BLOCK_TABLE = 'melleb_block';
-
-    const BTYPE_1 = 'type-1';
-    const BTYPE_2 = 'type-2';
-    const BTYPE_3 = 'type-3';
-    const BTYPE_4 = 'type-4';
-
-    const WIDTH_TYPES = [
-        1,2,3,4,5,6,7,8,9,10,11,12,
-    ];
+    private $setting = array();
 
     public function __construct($registry)
     {
@@ -32,7 +23,7 @@ class ModelExtensionModuleMelleBlocks extends Model
 
     public function createTables()
     {
-        $this->db->query("CREATE TABLE IF NOT EXISTS `". DB_PREFIX . self::BLOCK_TABLE ."` (
+        $this->db->query("CREATE TABLE IF NOT EXISTS `". DB_PREFIX . \melle_blocks\constant::BLOCK_TABLE ."` (
             `_id` int(11) NOT NULL AUTO_INCREMENT,
 
             `moduleId` int(11) NOT NULL,
@@ -53,7 +44,7 @@ class ModelExtensionModuleMelleBlocks extends Model
 
     public function dropTables()
     {
-        $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . self::BLOCK_TABLE ."`");
+        $this->db->query("DROP TABLE IF EXISTS `". DB_PREFIX . \melle_blocks\constant::BLOCK_TABLE ."`");
     }
 
     public function getScriptFiles()
@@ -63,7 +54,7 @@ class ModelExtensionModuleMelleBlocks extends Model
         } else { $rand = ''; }
 
         $scripts = array();
-        $scripts[] = "view/javascript/{$this->codename}/dist/{$this->codename}.js{$rand}";
+        $scripts[] = "view/javascript/{$this->codename}/dist/main.js{$rand}";
 
         return $scripts;
     }
@@ -75,7 +66,7 @@ class ModelExtensionModuleMelleBlocks extends Model
                 'id' => $item,
                 'label' => "{$item}/12",
             );
-        }, self::WIDTH_TYPES);
+        }, \melle_blocks\constant::WIDTH_TYPES);
     }
 
     public function prepareItem($moduleId)
@@ -147,7 +138,7 @@ class ModelExtensionModuleMelleBlocks extends Model
     private function getBlocks($moduleId)
     {
         $q = $this->db->query("SELECT *
-            FROM `". DB_PREFIX . self::BLOCK_TABLE ."`
+            FROM `". DB_PREFIX . \melle_blocks\constant::BLOCK_TABLE ."`
             WHERE `moduleId` = '" . (int)$moduleId . "'
             ORDER BY `sortOrder` ASC");
 
@@ -160,7 +151,7 @@ class ModelExtensionModuleMelleBlocks extends Model
 
         $types = array();
         $types[] = array(
-            'type' => self::BTYPE_1,
+            'type' => \melle_blocks\constant::BTYPE_1,
             'typeDescription' => 'Картинка с подписью 25%',
             'typeWidth' => 25,
 
@@ -172,7 +163,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             'sortOrder' => 1,
         );
         $types[] = array(
-            'type' => self::BTYPE_2,
+            'type' => \melle_blocks\constant::BTYPE_2,
             'typeDescription' => 'Широкий блок с текстом 100%',
             'typeWidth' => 100,
 
@@ -184,7 +175,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             'sortOrder' => 1,
         );
         $types[] = array(
-            'type' => self::BTYPE_3,
+            'type' => \melle_blocks\constant::BTYPE_3,
             'typeDescription' => 'Картинка без подписи 50%',
             'typeWidth' => 50,
 
@@ -196,7 +187,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             'sortOrder' => 1,
         );
         $types[] = array(
-            'type' => self::BTYPE_4,
+            'type' => \melle_blocks\constant::BTYPE_4,
             'typeDescription' => 'Картинка без подписи 33.3%',
             'typeWidth' => 33.3333333333333,
 
@@ -228,7 +219,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             $json['error'][] = 'Какое то хреновое имя';
         }
 
-        if (!in_array($data['width'], self::WIDTH_TYPES)) {
+        if (!in_array($data['width'], \melle_blocks\constant::WIDTH_TYPES)) {
             $json['error'][] = 'Некоректно заданна шрина';
         }
 
@@ -300,7 +291,7 @@ class ModelExtensionModuleMelleBlocks extends Model
 
     private function removeBlocks($moduleId)
     {
-        $this->db->query("DELETE FROM `". DB_PREFIX . self::BLOCK_TABLE ."`
+        $this->db->query("DELETE FROM `". DB_PREFIX . \melle_blocks\constant::BLOCK_TABLE ."`
             WHERE `moduleId` = '" . (int)$moduleId . "'");
 
         $this->cache->delete('melle.melle_blocks');
@@ -315,7 +306,7 @@ class ModelExtensionModuleMelleBlocks extends Model
         if ($usedIds) {
             $ids = $this->model_extension_pro_patch_db->prepareSqlParents($usedIds);
 
-            $this->db->query("DELETE FROM `". DB_PREFIX . self::BLOCK_TABLE ."`
+            $this->db->query("DELETE FROM `". DB_PREFIX . \melle_blocks\constant::BLOCK_TABLE ."`
                 WHERE `moduleId` NOT IN (" . $ids . ")");
         }
 
@@ -342,7 +333,7 @@ class ModelExtensionModuleMelleBlocks extends Model
 
     private function saveBlock($moduleId, $block)
     {
-        $this->db->query("INSERT INTO `". DB_PREFIX . $this->db->escape(self::BLOCK_TABLE) ."`
+        $this->db->query("INSERT INTO `". DB_PREFIX . $this->db->escape(\melle_blocks\constant::BLOCK_TABLE) ."`
             SET `moduleId` = '". (int)$moduleId ."',
                 `type` = '". $this->db->escape($block['type']) ."',
                 `link` = '". $this->db->escape($block['link']) ."',

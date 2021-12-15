@@ -7,13 +7,6 @@ class ModelExtensionModuleMelleBlocks extends Model
     private $codename = 'melle_blocks';
     private $route = 'extension/module/melle_blocks';
 
-    const BLOCK_TABLE = 'melleb_block';
-
-    const BTYPE_1 = 'type-1';
-    const BTYPE_2 = 'type-2';
-    const BTYPE_3 = 'type-3';
-    const BTYPE_4 = 'type-4';
-
     public function __construct($registry)
     {
         parent::__construct($registry);
@@ -55,7 +48,7 @@ class ModelExtensionModuleMelleBlocks extends Model
     private function getBlocks($moduleId)
     {
         $q = $this->db->query("SELECT *
-            FROM `". DB_PREFIX . self::BLOCK_TABLE ."`
+            FROM `". DB_PREFIX . \melle_blocks\constant::BLOCK_TABLE ."`
             WHERE `moduleId` = '" . (int)$moduleId . "'
             ORDER BY `sortOrder` ASC");
 
