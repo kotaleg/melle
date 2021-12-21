@@ -27,6 +27,7 @@ mix.sass(
         /mm-*/,
         /pb-*/,
         /pt-*/,
+        /btn-*/,
         /slider-block/,
         /melle-blocks/,
         /melle-block/,
