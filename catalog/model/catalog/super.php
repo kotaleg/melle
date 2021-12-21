@@ -41,7 +41,7 @@ class ModelCatalogSuper extends Model
             if ($p['image'] && is_file(DIR_IMAGE . $p['image'])) {
                 $image = $this->model_tool_image->resize($p['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'));
             } else {
-                $image = $this->model_tool_image->resize('placeholder.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'));
+                continue;
             }
 
             if (isset($filter_data['path']) && !empty($filter_data['path'])) {
