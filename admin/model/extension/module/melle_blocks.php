@@ -32,6 +32,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             `image` varchar(255) NOT NULL,
             `text` varchar(255) NOT NULL,
             `buttonText` varchar(255) NOT NULL,
+            `buttonColor` varchar(255) NOT NULL,
             `backgroundColor` varchar(16) NOT NULL,
             `sortOrder` int(3) NOT NULL,
             `status` tinyint(1) NOT NULL,
@@ -67,6 +68,16 @@ class ModelExtensionModuleMelleBlocks extends Model
                 'label' => "{$item}/12",
             );
         }, \melle_blocks\constant::WIDTH_TYPES);
+    }
+
+    public function prepareButtonTypes()
+    {
+        return array_map(function($item) {
+            return array(
+                'id' => $item,
+                'label' => $item,
+            );
+        }, \melle_blocks\constant::BUTTON_TYPES);
     }
 
     public function prepareItem($moduleId)
@@ -160,6 +171,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             'thumb' => $this->model_tool_image->resize('no_image.png', 100, 100),
             'text' => '',
             'buttonText' => '',
+            'buttonColor' => 'success',
             'sortOrder' => 1,
         );
         $types[] = array(
@@ -172,6 +184,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             'thumb' => $this->model_tool_image->resize('no_image.png', 100, 100),
             'text' => '',
             'buttonText' => '',
+            'buttonColor' => 'success',
             'sortOrder' => 1,
         );
         $types[] = array(
@@ -184,6 +197,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             'thumb' => $this->model_tool_image->resize('no_image.png', 100, 100),
             'text' => '',
             'buttonText' => '',
+            'buttonColor' => 'success',
             'sortOrder' => 1,
         );
         $types[] = array(
@@ -196,6 +210,7 @@ class ModelExtensionModuleMelleBlocks extends Model
             'thumb' => $this->model_tool_image->resize('no_image.png', 100, 100),
             'text' => '',
             'buttonText' => '',
+            'buttonColor' => 'success',
             'sortOrder' => 1,
         );
 
@@ -333,13 +348,14 @@ class ModelExtensionModuleMelleBlocks extends Model
 
     private function saveBlock($moduleId, $block)
     {
-        $this->db->query("INSERT INTO `". DB_PREFIX . $this->db->escape(\melle_blocks\constant::BLOCK_TABLE) ."`
+        $this->db->query("INSERT INTO `". DB_PREFIX . \melle_blocks\constant::BLOCK_TABLE ."`
             SET `moduleId` = '". (int)$moduleId ."',
                 `type` = '". $this->db->escape($block['type']) ."',
                 `link` = '". $this->db->escape($block['link']) ."',
                 `image` = '". $this->db->escape($block['image']) ."',
                 `text` = '". $this->db->escape($block['text']) ."',
                 `buttonText` = '". $this->db->escape($block['buttonText']) ."',
+                `buttonColor` = '". $this->db->escape($block['buttonColor']) ."',
                 `sortOrder` = '". (int)$block['sortOrder'] ."',
                 `status` = '". (bool)true ."'");
     }

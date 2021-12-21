@@ -14,4 +14,15 @@ final class constant
     public const WIDTH_TYPES = [
         1,2,3,4,5,6,7,8,9,10,11,12,
     ];
+
+    public const BUTTON_TYPES = [
+        'primary',
+        'secondary',
+        'success',
+        'danger',
+        'warning',
+        'info',
+        'light',
+        'dark',
+    ];
 }

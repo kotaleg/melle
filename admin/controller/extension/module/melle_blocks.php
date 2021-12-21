@@ -117,6 +117,7 @@ class ControllerExtensionModuleMelleBlocks extends Controller
         $state['blocks'] = $this->extension_model->prepareBlocks($moduleId);
         $state['widthCount'] = $this->extension_model->countBlocksWidth($state['blocks']);
         $state['widthTypes'] = $this->extension_model->prepareWidthTypes();
+        $state['buttonTypes'] = $this->extension_model->prepareButtonTypes();
 
         // SET STATE
         return $state;
