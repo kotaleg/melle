@@ -113,13 +113,13 @@
         </operation>
 
         <operation error="skip">
-            <search><![CDATA[$sql .= " ORDER BY p.sort_order DESC";]]></search>
-            <add position="replace"><![CDATA[
+            <search><![CDATA[if (isset($data['sort'])]]></search>
+            <add position="before"><![CDATA[
                 /* CLOSEST_INDEX START */
                 if (strcmp(__FUNCTION__, 'getProducts') === 0) {
-                    $sql .= " ORDER BY closestSortOrder DESC, p.sort_order DESC";
+                    $sql .= " ,closestSortOrder DESC, p.sort_order DESC";
                 } else {
-                    $sql .= " ORDER BY p.sort_order DESC";
+                    $sql .= " ,p.sort_order DESC";
                 }
                 /* CLOSEST_INDEX END */
             ]]></add>
