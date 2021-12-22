@@ -114,7 +114,7 @@
             :class="['d-none d-lg-block menu-item', { active: m.active }]"
           >
             <a :href="m.url">
-              <b>{{ m.title }}</b>
+              {{ m.title }}
             </a>
             <div v-if="m.children.length > 0" class="menu-children p-4 row">
               <div
