@@ -21,9 +21,11 @@
           header-top
         "
       >
-        <a :href="base" class="logo">
-          <img :src="logo" alt="MELLE" class="img-fluid" />
+       <div class="logo-melle">
+          <a :href="base" class="logo">
+          <img :src="https://melle.online/image/catalog/logo-header.svg" alt="MELLE" class="img-fluid" />
         </a>
+        </div>
 
         <a id="menu-trigger" href="#mobile-menu" class="d-lg-none">
           <img
