@@ -19,6 +19,8 @@ header {
     }
     .header-bottom {
       .header-bottom-container {
+        background-color: #ffffff;
+        color: black;
         background-color: $ocean-color;
         position: relative;
 
@@ -46,7 +48,7 @@ header {
         display: none;
         position: absolute;
         max-width: 70%;
-        background-color: $ocean-color;
+        background-color: white;
         font-size: 0.9rem;
 
         @media (min-width: 1200px) {
