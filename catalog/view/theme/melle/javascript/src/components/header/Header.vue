@@ -23,7 +23,7 @@
       >
        <div class="logo-melle">
           <a :href="base" class="logo">
-          <img :src="https://melle.online/image/catalog/logo-header.svg" alt="MELLE" class="img-fluid" />
+          <img src="https://melle.online/image/catalog/logo-header.svg" alt="MELLE" class="img-fluid" />
         </a>
         </div>
 
