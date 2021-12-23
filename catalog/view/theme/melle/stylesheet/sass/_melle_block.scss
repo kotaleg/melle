@@ -1,8 +1,8 @@
 .melle-blocks {
   .btn{
       color: white;
-      background-color: #535353;
-      border-color: #535353;
+      background-color: #535353 !important;
+      border-color: #535353 !important;
     }
   @media (min-width: 1200px) {
     &:nth-child(1) {
