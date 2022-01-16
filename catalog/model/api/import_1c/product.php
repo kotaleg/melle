@@ -673,11 +673,16 @@ class ModelApiImport1CProduct extends Model
             }
         }
 
-        $this->db->query("DELETE FROM " . DB_PREFIX . "product_to_category
-            WHERE product_id = '" . (int)$product_id . "'");
-
         if (isset($data['product_category'])) {
             foreach ($data['product_category'] as $category_id) {
+                $check_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_to_category
+                    WHERE product_id = '" . (int)$product_id . "'
+                    AND category_id = '" . (int)$category_id . "'");
+
+                if ($check_query->num_rows) {
+                    continue;
+                }
+
                 $this->db->query("INSERT INTO " . DB_PREFIX . "product_to_category
                     SET product_id = '" . (int)$product_id . "',
                         category_id = '" . (int)$category_id . "'");
