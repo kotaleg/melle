@@ -60,6 +60,7 @@
                 /* PRO_ALGOLIA_MELLE START */
                 $this->load->model('extension/module/pro_algolia');
                 $this->model_extension_module_pro_algolia->queueSaveAllProducts();
+                $this->model_extension_module_pro_algolia->queueDeleteAllDisabledProducts();
                 /* PRO_ALGOLIA_MELLE END */
             ]]></add>
         </operation>

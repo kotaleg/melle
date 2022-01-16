@@ -76,6 +76,17 @@ class ModelExtensionModulePROAlgolia extends Model
         }
     }
 
+    public function queueDeleteAllDisabledProducts()
+    {
+        foreach ($this->getDisabledProductNotInQueue(\pro_algolia\constant::DELETE) as $productData) {
+            $this->insertItemToQueue(
+                \pro_algolia\constant::PRODUCT,
+                $productData['product_id'],
+                \pro_algolia\constant::DELETE
+            );
+        }
+    }
+
     private function addItemToQueue($itemType, $itemId, $operationType)
     {
         if ($this->isItemInQueue($itemType, $itemId, $operationType)) {
@@ -123,6 +134,21 @@ class ModelExtensionModulePROAlgolia extends Model
         return $this->db->query("SELECT p.product_id
             FROM `". DB_PREFIX . "product` AS p
             WHERE NOT EXISTS (
+                SELECT *
+                FROM `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE . "` AS q
+                WHERE p.product_id = q.storeItemId
+                AND q.storeItemType = '". \pro_algolia\constant::PRODUCT ."'
+                AND q.operation = '". $this->db->escape($operationType) ."'
+                AND q.status = '". \pro_algolia\constant::UNDEFINED ."'
+            )")->rows;
+    }
+
+    private function getDisabledProductNotInQueue($operationType)
+    {
+        return $this->db->query("SELECT p.product_id
+            FROM `". DB_PREFIX . "product` AS p
+            WHERE p.status = 0
+            AND NOT EXISTS (
                 SELECT *
                 FROM `". DB_PREFIX . pro_algolia\constant::QUEUE_TABLE . "` AS q
                 WHERE p.product_id = q.storeItemId
