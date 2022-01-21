@@ -103,8 +103,7 @@ export default {
   },
   methods: {
     searchAction(searchQuery) {
-      let url = this.base + 'index.php?route=product/search'
-      url += '&query=' + encodeURIComponent(searchQuery)
+      const url = `${this.base}index.php?route=product/search&${this.searchIndex}[query]=${encodeURIComponent(searchQuery)}`
       location = url
     },
   },

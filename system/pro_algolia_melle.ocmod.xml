@@ -75,7 +75,8 @@
                 /* PRO_ALGOLIA_MELLE START */
                 $data['manufacturers'] = $this->url->link(
                     'product/search',
-                    'refinementList[manufacturer][0]=' . utf8_strtolower($product_info['manufacturer'])
+                    // prod_PRODUCTS is a haddcoded values of the index
+                    'prod_PRODUCTS[refinementList][manufacturer][0]=' . utf8_strtolower($product_info['manufacturer'])
                 );
                 /* PRO_ALGOLIA_MELLE END */
             ]]></add>
@@ -90,7 +91,8 @@
                 /* PRO_ALGOLIA_MELLE START */
                 $json['data']['manufacturers'] = $this->model_extension_pro_patch_url->ajax(
                     'product/search',
-                    'refinementList[manufacturer][0]=' . utf8_strtolower($productInfo['manufacturer'])
+                    // prod_PRODUCTS is a haddcoded values of the index
+                    'prod_PRODUCTS[refinementList][manufacturer][0]=' . utf8_strtolower($productInfo['manufacturer'])
                 );
                 /* PRO_ALGOLIA_MELLE END */
             ]]></add>
