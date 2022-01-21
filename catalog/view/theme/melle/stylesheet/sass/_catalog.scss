@@ -57,6 +57,14 @@
 .catalog-sort {
   .v-select {
     width: initial;
+    .selected-tag {
+      position: absolute;
+    }
+    .dropdown-toggle {
+      .clear {
+        display: none;
+      }
+    }
     @media (min-width: 576px) {
       width: 60%;
       max-width: 200px;
