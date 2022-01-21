@@ -38,6 +38,7 @@ mix.sass(
         /is-active/,
         /is-full-page/,
         /filter/,
+        /selected-tag/,
       ],
     },
   })
