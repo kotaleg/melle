@@ -82,6 +82,13 @@ class ModelCatalogSuper extends Model
 
             $d_['in_stock'] = ((int) $d_['default_values']['max_quantity'] > 0) ? true : false;
 
+              // HIDE PRODUCTS
+            if (isset($d_['default_values']['price'])) {
+                if ($d_['default_values']['min_quantity'] <= 0) { continue; }
+                if ($d_['default_values']['price'] <= 0) { continue; }
+            } else { continue; }
+
+
             $attribute_groups = $this->model_catalog_product->getProductAttributes($p['product_id']);
 
             $d_['material'] = false;
