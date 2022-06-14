@@ -1,9 +1,6 @@
 <template>
-  <ais-instant-search
-    v-if="searchClient && searchIndex"
-    :index-name="searchIndex"
-    :search-client="searchClient"
-  >
+
+
     <div class="melle-header-autocomplete">
       <ais-autocomplete>
         <div slot-scope="{ currentRefinement, indices, refine }">
@@ -62,50 +59,7 @@
         </div>
       </ais-autocomplete>
     </div>
-  </ais-instant-search>
+
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import algoliasearch from 'algoliasearch/lite'
-import {
-  AisInstantSearch,
-  AisAutocomplete,
-  AisHighlight,
-  AisPoweredBy,
-} from 'vue-instantsearch'
 
-export default {
-  components: {
-    AisInstantSearch,
-    AisAutocomplete,
-    AisHighlight,
-    AisPoweredBy,
-  },
-  computed: {
-    ...mapState('header', ['product_link_placeholder', 'pro_algolia', 'base']),
-    searchIndex() {
-      if (!this.pro_algolia) {
-        return
-      }
-      return this.pro_algolia.indexName
-    },
-    searchClient() {
-      if (!this.pro_algolia) {
-        return
-      }
-
-      return algoliasearch(
-        this.pro_algolia.appId,
-        this.pro_algolia.searchApiKey
-      )
-    },
-  },
-  methods: {
-    searchAction(searchQuery) {
-      const url = `${this.base}index.php?route=product/search&${this.searchIndex}[query]=${encodeURIComponent(searchQuery)}`
-      location = url
-    },
-  },
-}
-</script>
