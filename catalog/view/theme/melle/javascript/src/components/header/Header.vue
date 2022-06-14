@@ -107,7 +107,24 @@
           "
         >
           <div class="search search-mobile d-lg-none">
-            <search />
+
+           <div class="ais-InstantSearch w-100">
+    <div class="melle-header-autocomplete">
+        <div class="ais-Autocomplete">
+            <div>
+                <div class="d-flex align-items-stretch justify-content-start search-bar-wrapper">
+                    <form action="https://melle.online/index.php?route=product/search" class="d-flex align-items-stretch justify-content-start w-100 h-100 search-bar-form">
+                        <div class="d-flex h-100 searchbooster search-input-wrapper">
+                            <input type="hidden" name="route" value="product/search">
+                            <input type="text" name="query" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="255" placeholder="Поиск">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
           </div>
 
           <a :href="phoneLink" class="d-none d-sm-block d-lg-none">{{
