@@ -43,7 +43,7 @@
             <div>
                 <div class="d-flex align-items-stretch justify-content-start search-bar-wrapper">
                     <form action="https://melle.online/index.php?route=product/search" class="d-flex align-items-stretch justify-content-start w-100 h-100 search-bar-form">
-                        <div class="d-flex h-100 search-input-wrapper">
+                        <div class="d-flex h-100 searchbooster search-input-wrapper">
 
             <div class="test-class"></div>
 
@@ -276,4 +276,7 @@ export default {
     }
   },
 }
+// searchbooster script
+
+!function(e,t,n,c,o){e[o]=e[o]||function(){(e[o].a=e[o].a||[]).push(arguments)},e[o].h=c,e[o].n=o,e[o].i=1*new Date,s=t.createElement(n),a=t.getElementsByTagName(n)[0],s.async=1,s.src=c,a.parentNode.insertBefore(s,a)}(window,document,"script","https://cdn2.searchbooster.net/scripts/v2/init.js","searchbooster"),searchbooster({"apiKey":"","apiUrl":"https://api4.searchbooster.io","scriptUrl":"https://cdn2.searchbooster.net/scripts/v2/init.js","offer":{"cart":true},"initialized":(sb)=>{sb.mount({"selector":".searchbooster","widget":"search-popup","options":{"offer":{"cart":true}}});}})
 </script>
