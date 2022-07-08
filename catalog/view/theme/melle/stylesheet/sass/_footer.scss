@@ -38,6 +38,12 @@ footer {
       display: block;
     }
   }
+  .footer-cat{
+
+    @media (max-width: 400px){
+      display: none;
+    }
+  }
 
   .menu-item {
     .menu-children {
