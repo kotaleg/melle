@@ -39,9 +39,10 @@ footer {
     }
   }
   .footer-cat{
+    display: none;
 
-    @media (min-width: 400px){
-      display: none;
+    @media (min-width: 375px){
+      display: block;
     }
   }
 
